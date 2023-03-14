@@ -1,0 +1,13 @@
+@charset "utf-8";
+/* CSS Document */
+
+.button_yellow {
+	background-color: #FFA718;
+	padding: 10px;
+	display: flex;
+	border-radius: 5px;
+}
+
+.button_yellow * {
+	align-items: center;
+}

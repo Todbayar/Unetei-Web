@@ -1,0 +1,43 @@
+@charset "utf-8";
+/* CSS Document */
+.topbar {
+	height: 70px;
+	background: #42c200;
+}
+
+.topbar .wrap {
+	position: relative;
+	margin: auto;
+	width: 100%;
+	height: 100%;
+	display:flex;
+	align-items: center;
+	max-width: 930px;
+}
+
+.topbar .wrap img {
+	margin-left: 10px;
+}
+
+.topbar .wrap .title {
+	color: #FFFFFF;
+	font: normal 20px "Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, "sans-serif";
+}
+
+.topbar .wrap .control {
+	margin-left: auto; 
+	margin-right: 10px;
+	display: flex;
+	align-items: center;
+}
+
+.topbar .wrap .control div {
+	margin-left: 5px;	
+}
+
+@media only screen and (max-width: 720px) {
+	.topbar #removable {
+		display:none;
+	}
+}
+
