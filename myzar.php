@@ -1,4 +1,19 @@
-<div style="padding-top: 0px; width: 100%; background: #A23335">
+<script>
+	$(document).ready(function(){
+		var urlParams = new URLSearchParams(window.location.search);
+		var urlMyzarTab = urlParams.get('myzar');
+		if(urlMyzarTab != null){
+			$(".myzar_tab_" + urlMyzarTab + " i").css('color', '#ffffff');
+			$(".myzar_tab_" + urlMyzarTab + " div").css('color', '#ffffff');
+		}
+	});
+	
+	
+	function myzar_tab(item){
+		if(!location.href.includes(item)) location.href += "&myzar=" + item;
+	}
+</script>
+<div style="padding-top: 0px; width: 100%">
 	<div style="width: 100%; 
 				height: 70px;
 				background: #58d518; 
@@ -8,7 +23,7 @@
 			<i class="fa-solid fa-rectangle-ad" style="font-size: 24px"></i>
 			<div class="removable" style="margin-left: 5px">Миний зарууд</div>
 		</div>
-		<div class="myzar_tab_category" style="display: flex; align-items: center">
+		<div class="myzar_tab_category" style="display: flex; align-items: center" onClick="myzar_tab('category')">
 			<i class="fa-solid fa-list-ol" style="font-size: 24px"></i>
 			<div class="removable" style="margin-left: 5px">Ангилалууд</div>
 		</div>
@@ -25,4 +40,13 @@
 			</div>
 		</div>
 	</div>
+	<?php
+	if(isset($_GET["myzar"])){
+		switch($_GET["myzar"]){
+			case "category":
+				include "myzar_category.php";
+				break;
+		}
+	}
+	?>
 </div>
