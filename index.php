@@ -38,8 +38,7 @@
 			
 			$(document).ready(function(){
 				firebase.auth().onAuthStateChanged(function(user) {
-					if (user) {
-						// User is signed in.
+					if (user) {						
 						var uid = user.uid;
 						var email = user.email;
 						var photoURL = user.photoURL;
@@ -48,7 +47,9 @@
 						var displayName = user.displayName;
 						var providerData = user.providerData;
 						var emailVerified = user.emailVerified;
-						alert(uid + ", " + email + ", " + phoneNumber);
+
+						$("#myzar_phone").text(phoneNumber);
+						$("#myzar_nav").attr("onclick","pagenavigation('myzar')");
 					}
 				});
 												   
