@@ -26,7 +26,7 @@
 }
 
 @media only screen and (max-width: 720px) {
-	.topbar .removable {
+	.removable {
 		display:none;
 	}
 }

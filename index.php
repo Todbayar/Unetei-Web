@@ -24,6 +24,7 @@
 				font-family: "Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, "sans-serif";;
 			}
 		</style>
+		
 		<script>
 			const firebaseConfig = {
 				apiKey: "AIzaSyAJxCfAZKgG4vy_nd6UVX3UKhZAF0iyKl4",
@@ -50,6 +51,7 @@
 
 						$("#myzar_phone").text(phoneNumber);
 						$("#myzar_nav").attr("onclick","pagenavigation('myzar')");
+						$("#myzar_nav").text("Миний зар");
 					}
 				});
 												   
@@ -75,6 +77,9 @@
 				switch($_GET["page"]){
 					case "login":
 						include "login.php";
+						break;
+					case "myzar":
+						include "myzar.php";
 						break;
 				}
 			}
