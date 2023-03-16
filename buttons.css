@@ -5,22 +5,5 @@
 	padding: 10px;
 	display: flex;
 	border-radius: 5px;
-}
-
-.button_yellow * {
 	align-items: center;
-}
-
-.button_chip {
-	background-color: #3E6FC5;
-	padding: 10px;
-	border-radius: 5px;
-	display: flex;	
-	width: 100%;
-	flex:auto;
-}
-
-.button_chip * {
-	align-items: center;
-	display: flex;
 }

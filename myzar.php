@@ -14,11 +14,10 @@
 	}
 </script>
 <div style="padding-top: 0px; width: 100%">
-	<div style="width: 100%; 
-				height: 70px;
+	<div style="height: 70px;
 				background: #58d518; 
 				display:flex;  
-				align-items: stretch; justify-content: space-between">
+				justify-content: space-between">
 		<div class="myzar_tab_advertisement" style="display: flex; align-items: center; margin-left: 20px">
 			<i class="fa-solid fa-rectangle-ad" style="font-size: 24px"></i>
 			<div class="removable" style="margin-left: 5px">Миний зарууд</div>
