@@ -1,4 +1,4 @@
 <?php
 $content = file_get_contents('php://input');
-print_r($content);
+echo "OK, ".$content["file"]["name"];
 ?>

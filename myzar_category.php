@@ -36,46 +36,17 @@
 			myzar_category_add_button_update();
 		});
 		
-		window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('myzar_category_add_submit', {
-			'size': 'invisible',
-			'callback': function(response) {
-				firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
-					
-					var myZarCategoryAddSubmitData = new FormData();
-					myZarCategoryAddSubmitData.append("file", $("#myzar_category_add_icon")[0].files[0]);
-					myZarCategoryAddSubmitData.append("uid", idToken);
-					myZarCategoryAddSubmitData.append("title", $("#myzar_category_add_icon_title").val().trim());
-					
-					const reqMyZarCategoryAddSubmit = new XMLHttpRequest();
-					reqMyZarCategoryAddSubmit.onload = function() {
-						if(this.responseText.includes("OK")){
-							console.log(this.responseText);
-//							$("#myzar_category_add_msg").text(this.responseText);
-//							$("#myzar_category_add_error").text('');
-						}
-						else {
-							$("#myzar_category_add_error").text(this.responseText);
-						}
-					};
-					reqMyZarCategoryAddSubmit.onerror = function(){
-						$("#myzar_category_add_error").text(reqMyZarCategoryAddSubmit.status);
-					};
-					reqMyZarCategoryAddSubmit.open("POST", "myzar_category_add_process.php");
-//					reqMyZarCategoryAddSubmit.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-//					reqMyZarCategoryAddSubmit.setRequestHeader("Content-Type", "multipart/form-data");
-					reqMyZarCategoryAddSubmit.setRequestHeader("X-Requested-With","XMLHttpRequest");
-					reqMyZarCategoryAddSubmit.send(myZarCategoryAddSubmitData);
-					console.log("Sent");
-				}).catch(function(error) {
-					$("#myzar_category_add_error").text(error);
-				});
-			}
-		});
-
-		recaptchaVerifier.render().then(function(widgetId) {
-			window.recaptchaWidgetId = widgetId;
-			myzar_category_add_button_update();
-		});
+//		window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('myzar_category_add_submit', {
+//			'size': 'invisible',
+//			'callback': function(response) {
+//				
+//			}
+//		});
+//
+//		recaptchaVerifier.render().then(function(widgetId) {
+//			window.recaptchaWidgetId = widgetId;
+//			myzar_category_add_button_update();
+//		});
 	});
 	
 	function myzar_category_add_button_update(){
@@ -94,11 +65,37 @@
 		$("#myzar_category_add_icon").trigger("click"); 
 	}
 	
-//	function myzar_category_add_submit(){
-////		alert($('input[type=file]').val());	
-//		//image/svg+xml
-////		alert("file:" + $("#myzar_category_add_icon")[0].files[0].name + ", " + $("#myzar_category_add_icon")[0].files[0].type);
-//	}
+	function myzar_category_add_submit_button(){
+		firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {		
+			var myZarCategoryAddSubmitData = new FormData();
+			myZarCategoryAddSubmitData.append("file", $("#myzar_category_add_icon")[0].files[0]);
+			myZarCategoryAddSubmitData.append("uid", idToken);
+			myZarCategoryAddSubmitData.append("title", $("#myzar_category_add_icon_title").val().trim());
+
+			const reqMyZarCategoryAddSubmit = new XMLHttpRequest();
+			reqMyZarCategoryAddSubmit.onload = function() {
+				if(this.responseText.includes("OK")){
+					console.log(this.responseText);
+//							$("#myzar_category_add_msg").text(this.responseText);
+//							$("#myzar_category_add_error").text('');
+				}
+				else {
+					$("#myzar_category_add_error").text(this.responseText);
+				}
+			};
+			reqMyZarCategoryAddSubmit.onerror = function(){
+				$("#myzar_category_add_error").text(reqMyZarCategoryAddSubmit.status);
+			};
+			reqMyZarCategoryAddSubmit.open("POST", "myzar_category_add_process.php");
+//			reqMyZarCategoryAddSubmit.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			reqMyZarCategoryAddSubmit.setRequestHeader("Content-Type", "multipart/form-data");
+//			reqMyZarCategoryAddSubmit.setRequestHeader("X-Requested-With","XMLHttpRequest");
+			reqMyZarCategoryAddSubmit.send(myZarCategoryAddSubmitData);
+			console.log("Sent");
+		}).catch(function(error) {
+			$("#myzar_category_add_error").text(error);
+		});
+	}
 </script>
 
 <div class="myzar_content_category">
@@ -124,5 +121,5 @@
 	<div id="myzar_category_add_msg" class="msg"></div>
 	<div id="myzar_category_add_error" class="error"></div>
 	<input type="file" name="myzar_category_add_icon" id="myzar_category_add_icon" required="true" accept="image/png, .svg" />
-	<button id="myzar_category_add_submit" disabled class="button_yellow" style="margin-top: 10px; margin-left: auto; margin-right: auto">Илгээх</button>
+	<button id="myzar_category_add_submit" onClick="myzar_category_add_submit_button()" disabled class="button_yellow" style="margin-top: 10px; margin-left: auto; margin-right: auto">Илгээх</button>
 </div>
