@@ -1,21 +1,23 @@
 <style>
 	.popup {
 		background:#E8E8E8;
-		position:relative;
+		position:absolute;
 		border-radius: 10px;
 		padding-bottom: 10px;
-		top: 50px;
+		top: 55%;
 		box-shadow: 5px 5px 5px lightblue;
+		left: 0px;
+		right: 0px;
+		margin-left: auto;
+  		margin-right: auto;
 	}
 	
 	.popup .header {
 		border-top-left-radius: 10px;
 		border-top-right-radius: 10px;
 		background: #42c200;
-		text-align: center;
 		height: 30px;
-		position:relative;
-		
+		text-align: center;
 	}
 </style>
 
@@ -37,7 +39,7 @@
 	</div>
 </div>
 
-<div class="popup" style="margin: auto; width: 240px">
+<div class="popup" style="width: 240px">
 	<div class="header">Ангилал</div>
 	<div style="display: flex; align-items: center; margin: 10px; height: 50px">
 		<img src="image-solid.svg" width="24" height="24" />
