@@ -1,4 +1,6 @@
 <?php
-$content = file_get_contents('php://input');
-echo "OK, ".$content["file"]["name"];
+echo "OK, ";
+echo $_FILES["myfile"]["name"];
+echo $_REQUEST["uid"];
+echo $_REQUEST["title"];
 ?>

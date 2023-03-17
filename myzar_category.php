@@ -68,7 +68,7 @@
 	function myzar_category_add_submit_button(){
 		firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {		
 			var myZarCategoryAddSubmitData = new FormData();
-			myZarCategoryAddSubmitData.append("file", $("#myzar_category_add_icon")[0].files[0]);
+			myZarCategoryAddSubmitData.append("myfile", $("#myzar_category_add_icon")[0].files[0]);
 			myZarCategoryAddSubmitData.append("uid", idToken);
 			myZarCategoryAddSubmitData.append("title", $("#myzar_category_add_icon_title").val().trim());
 
@@ -86,9 +86,9 @@
 			reqMyZarCategoryAddSubmit.onerror = function(){
 				$("#myzar_category_add_error").text(reqMyZarCategoryAddSubmit.status);
 			};
-			reqMyZarCategoryAddSubmit.open("POST", "myzar_category_add_process.php");
+			reqMyZarCategoryAddSubmit.open("POST", "myzar_category_add_process.php", true);
 //			reqMyZarCategoryAddSubmit.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-			reqMyZarCategoryAddSubmit.setRequestHeader("Content-Type", "multipart/form-data");
+//			reqMyZarCategoryAddSubmit.setRequestHeader("Content-Type", "multipart/form-data");
 //			reqMyZarCategoryAddSubmit.setRequestHeader("X-Requested-With","XMLHttpRequest");
 			reqMyZarCategoryAddSubmit.send(myZarCategoryAddSubmitData);
 			console.log("Sent");
