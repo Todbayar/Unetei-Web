@@ -10,3 +10,47 @@
 	max-width: 930px;
 }
 
+.popup {
+	background:#E8E8E8;
+	position:absolute;
+	border-radius: 10px;
+	padding-bottom: 10px;
+	top: 55%;
+	box-shadow: 5px 5px 5px lightblue;
+	left: 0px;
+	right: 0px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.popup .header {
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	background: #42c200;
+	height: 20px;
+	text-align: center;
+	padding: 5px;
+}
+
+.popup .close {
+	position: absolute; 
+	font-size: 20px; 
+	color: #FF4649; 
+	right: -10px; 
+	top: -10px;
+	transform: rotate(45deg);
+	box-shadow: 2px 2px 5px lightblue;
+}
+
+.popup .error {
+	font: normal 12px Gotham, "Helvetica Neue", Helvetica, Arial, "sans-serif";
+	color: #FF4649;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.popup .msg {
+	font: normal 12px Gotham, "Helvetica Neue", Helvetica, Arial, "sans-serif";
+	margin-left: 10px;
+	margin-right: 10px;
+}
