@@ -72,7 +72,46 @@
 	function phoneCodeVerify(){
 		var code = document.getElementById('phoneverificationcode').value;
 		coderesult.confirm(code).then(function(){
-			alert("Boljee");
+			firebase.auth().onAuthStateChanged(function(user) {
+				if (user) {
+					vUserID = user.uid;
+					vUserPhone = user.phoneNumber;
+//					var email = user.email;
+//					var photoURL = user.photoURL;
+//					var isAnonymous = user.isAnonymous;
+//					var displayName = user.displayName;
+//					var providerData = user.providerData;
+//					var emailVerified = user.emailVerified;
+
+					$("#myzar_phone").text(vUserPhone);
+					$("#myzar_nav").attr("onclick","pagenavigation('myzar')");
+					$("#myzar_nav").text("Миний зар");
+
+					const loginSubmit = new XMLHttpRequest();
+					
+					loginSubmit.onload = function() {
+						if(this.responseText.includes("OK")){
+							location.href = "index.php";
+						}
+						else {
+							$("#loginVerificationError").text(this.responseText);
+						}
+					};
+					
+					loginSubmit.onerror = function(){
+						$("#loginVerificationError").text(loginSubmit.status);
+					};
+					
+					loginSubmit.open("POST", "userLogin.php", true);
+					
+					var loginData = new FormData();
+					loginData.append("uid", vUserID);
+					loginData.append("phone", vUserPhone);
+
+//					loginSubmit.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+					loginSubmit.send(loginData);
+				}
+			});
 		}).catch(function(){
 			$("#loginVerificationError").text("Оруулсан баталгаажуулах код буруу байна, та дахин оролдоно уу!");			
 		});

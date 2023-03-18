@@ -35,18 +35,6 @@
 			}
 			myzar_category_add_button_update();
 		});
-		
-//		window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('myzar_category_add_submit', {
-//			'size': 'invisible',
-//			'callback': function(response) {
-//				
-//			}
-//		});
-//
-//		recaptchaVerifier.render().then(function(widgetId) {
-//			window.recaptchaWidgetId = widgetId;
-//			myzar_category_add_button_update();
-//		});
 	});
 	
 	function myzar_category_add_button_update(){
@@ -66,35 +54,25 @@
 	}
 	
 	function myzar_category_add_submit_button(){
-		firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {		
-			var myZarCategoryAddSubmitData = new FormData();
-			myZarCategoryAddSubmitData.append("myfile", $("#myzar_category_add_icon")[0].files[0]);
-			myZarCategoryAddSubmitData.append("uid", idToken);
-			myZarCategoryAddSubmitData.append("title", $("#myzar_category_add_icon_title").val().trim());
+		var myZarCategoryAddSubmitData = new FormData();
+		myZarCategoryAddSubmitData.append("myfile", $("#myzar_category_add_icon")[0].files[0]);
+		myZarCategoryAddSubmitData.append("uid", vUserID);
+		myZarCategoryAddSubmitData.append("title", $("#myzar_category_add_icon_title").val().trim());
 
-			const reqMyZarCategoryAddSubmit = new XMLHttpRequest();
-			reqMyZarCategoryAddSubmit.onload = function() {
-				if(this.responseText.includes("OK")){
-					console.log(this.responseText);
-//							$("#myzar_category_add_msg").text(this.responseText);
-//							$("#myzar_category_add_error").text('');
-				}
-				else {
-					$("#myzar_category_add_error").text(this.responseText);
-				}
-			};
-			reqMyZarCategoryAddSubmit.onerror = function(){
-				$("#myzar_category_add_error").text(reqMyZarCategoryAddSubmit.status);
-			};
-			reqMyZarCategoryAddSubmit.open("POST", "myzar_category_add_process.php", true);
-//			reqMyZarCategoryAddSubmit.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-//			reqMyZarCategoryAddSubmit.setRequestHeader("Content-Type", "multipart/form-data");
-//			reqMyZarCategoryAddSubmit.setRequestHeader("X-Requested-With","XMLHttpRequest");
-			reqMyZarCategoryAddSubmit.send(myZarCategoryAddSubmitData);
-			console.log("Sent");
-		}).catch(function(error) {
-			$("#myzar_category_add_error").text(error);
-		});
+		const reqMyZarCategoryAddSubmit = new XMLHttpRequest();
+		reqMyZarCategoryAddSubmit.onload = function() {
+			if(this.responseText.includes("OK")){
+				console.log(this.responseText);
+			}
+			else {
+				$("#myzar_category_add_error").text(this.responseText);
+			}
+		};
+		reqMyZarCategoryAddSubmit.onerror = function(){
+			$("#myzar_category_add_error").text(reqMyZarCategoryAddSubmit.status);
+		};
+		reqMyZarCategoryAddSubmit.open("POST", "myzar_category_add_process.php", true);
+		reqMyZarCategoryAddSubmit.send(myZarCategoryAddSubmitData);
 	}
 </script>
 
