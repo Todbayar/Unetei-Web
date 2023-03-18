@@ -1,6 +1,7 @@
 <script>
 	var isMyZarCategoryAddIconValid = false;
 	var isMyZarCategoryAddTitleValid = false;
+	var myZarCategorySelectedHier = [];
 	
 	$(document).ready(function(){
 		$("#myzar_category_add_icon").change(function(){
@@ -55,10 +56,11 @@
 	
 	function myzar_category_add_submit_button(){
 		var myZarCategoryAddSubmitData = new FormData();
-		myZarCategoryAddSubmitData.append("myfile", $("#myzar_category_add_icon")[0].files[0]);
-		myZarCategoryAddSubmitData.append("uid", vUserID);
+		myZarCategoryAddSubmitData.append("uid", sessionStorage.getItem("uid"));
+		myZarCategoryAddSubmitData.append("hier", myZarCategorySelectedHier);
+		myZarCategoryAddSubmitData.append("iconfile", $("#myzar_category_add_icon")[0].files[0]);
 		myZarCategoryAddSubmitData.append("title", $("#myzar_category_add_icon_title").val().trim());
-
+		
 		const reqMyZarCategoryAddSubmit = new XMLHttpRequest();
 		reqMyZarCategoryAddSubmit.onload = function() {
 			if(this.responseText.includes("OK")){
@@ -71,7 +73,7 @@
 		reqMyZarCategoryAddSubmit.onerror = function(){
 			$("#myzar_category_add_error").text(reqMyZarCategoryAddSubmit.status);
 		};
-		reqMyZarCategoryAddSubmit.open("POST", "myzar_category_add_process.php", true);
+		reqMyZarCategoryAddSubmit.open("POST", "mysql_myzar_category_add_process.php", true);
 		reqMyZarCategoryAddSubmit.send(myZarCategoryAddSubmitData);
 	}
 </script>

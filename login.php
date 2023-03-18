@@ -96,7 +96,7 @@
 						$("#loginVerificationError").text(loginSubmit.status);
 					};
 					
-					loginSubmit.open("POST", "userLogin.php", true);
+					loginSubmit.open("POST", "mysql_userLogin.php", true);
 					
 					var loginData = new FormData();
 					loginData.append("uid", user.uid);
