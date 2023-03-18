@@ -37,10 +37,18 @@
 			};
 			firebase.initializeApp(firebaseConfig);
 			
-			let vUserID = "";
-			let vUserPhone = "";
-			
-			$(document).ready(function(){								   
+			$(document).ready(function(){
+				firebase.auth().onAuthStateChanged(function(user) {
+					if (user) {
+						$("#myzar_phone").text(user.phoneNumber);
+						$("#myzar_nav").text("Миний зар");
+						$("#myzar_nav").attr("onclick","pagenavigation('myzar')");
+						$("#logoutButton").show();
+						sessionStorage.setItem("uid", user.uid);
+						sessionStorage.setItem("phone", user.phoneNumber);
+					}
+				});
+
 				$(".myzar").hover(function(){
 					$(".dropdown").show();
 				}, function(){

@@ -74,18 +74,12 @@
 		coderesult.confirm(code).then(function(){
 			firebase.auth().onAuthStateChanged(function(user) {
 				if (user) {
-					vUserID = user.uid;
-					vUserPhone = user.phoneNumber;
 //					var email = user.email;
 //					var photoURL = user.photoURL;
 //					var isAnonymous = user.isAnonymous;
 //					var displayName = user.displayName;
 //					var providerData = user.providerData;
 //					var emailVerified = user.emailVerified;
-
-					$("#myzar_phone").text(vUserPhone);
-					$("#myzar_nav").attr("onclick","pagenavigation('myzar')");
-					$("#myzar_nav").text("Миний зар");
 
 					const loginSubmit = new XMLHttpRequest();
 					
@@ -105,8 +99,8 @@
 					loginSubmit.open("POST", "userLogin.php", true);
 					
 					var loginData = new FormData();
-					loginData.append("uid", vUserID);
-					loginData.append("phone", vUserPhone);
+					loginData.append("uid", user.uid);
+					loginData.append("phone", user.phoneNumber);
 
 //					loginSubmit.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 					loginSubmit.send(loginData);
