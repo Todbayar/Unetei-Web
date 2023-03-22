@@ -1,3 +1,6 @@
+<?php
+include "mysql_config.php";
+?>
 <script>
 	var isMyZarCategoryAddIconValid = false;
 	var isMyZarCategoryAddTitleValid = false;
@@ -36,6 +39,8 @@
 			}
 			myzar_category_add_button_update();
 		});
+		
+		myzar_category_fetch_list(1, null);
 	});
 	
 	function myzar_category_add_button_update(){
@@ -76,6 +81,23 @@
 		reqMyZarCategoryAddSubmit.open("POST", "mysql_myzar_category_add_process.php", true);
 		reqMyZarCategoryAddSubmit.send(myZarCategoryAddSubmitData);
 	}
+	
+	function myzar_category_fetch_list(tableID, parentID){
+		var myZarCategoryListData = new FormData();
+		myZarCategoryListData.append("uid", sessionStorage.getItem("uid"));
+		myZarCategoryListData.append("tableID", tableID);
+		myZarCategoryListData.append("parentID", parentID);
+		
+		const reqMyZarCategoryListData = new XMLHttpRequest();
+		reqMyZarCategoryListData.onload = function() {
+			console.log(this.responseText);
+		};
+		reqMyZarCategoryListData.onerror = function(){
+			console.log(reqMyZarCategoryListData.status);
+		};
+		reqMyZarCategoryListData.open("POST", "mysql_myzar_category_list_process.php", true);
+		reqMyZarCategoryListData.send(myZarCategoryListData);
+	}
 </script>
 
 <div class="myzar_content_category">
@@ -84,10 +106,12 @@
 		<div style="margin-left: 5px">Нэмэх</div>
 	</div>
 	<hr/>
-	<div onClick="myzar_category_add_show()" class="button_yellow" style="float: left; margin-left:10px; margin-right: 10px; background: #C4F1FF">
-		<img src="tugrug.png" width="18px" height="18px" />
-		<div style="margin-left: 5px">Нэмэх</div>
-		<i class="fa-solid fa-circle-minus" style="color:#FF4649; margin-left: 10px; font-size: 20px"></i>
+	<div id="myzar_content_category_list">
+		<div class="button_yellow" style="float: left; margin-left:10px; margin-right: 10px; margin-bottom: 10px; background: #C4F1FF">
+			<img src="tugrug.png" width="18px" height="18px" />
+			<div style="margin-left: 5px">Нэмэх</div>
+			<i class="fa-solid fa-circle-minus" style="color:#FF4649; margin-left: 10px; font-size: 20px"></i>
+		</div>
 	</div>
 </div>
 
