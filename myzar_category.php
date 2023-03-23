@@ -94,7 +94,32 @@ include "mysql_config.php";
 			const objMyZarCategoryList = JSON.parse(this.responseText);
 			if(objMyZarCategoryList.length > 0){
 				for(let i=0; i<objMyZarCategoryList.length; i++){
-					$("#myzar_content_category_list").append("<div class=\"button_yellow\" style=\"float: left; margin-left:10px; margin-right: 10px; margin-bottom: 10px; background: #C4F1FF\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"20px\" height=\"20px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div><i class=\"fa-solid fa-circle-minus\" style=\"color:#FF4649; margin-left: 10px; font-size: 20px\"></i></div>");
+					if(tableID < 4){
+						if(objMyZarCategoryList[i].uid == sessionStorage.getItem("uid")){
+							if(objMyZarCategoryList[i].count_category_children > 0){
+								$("#myzar_content_category_list").append("<div class=\"button_yellow\" style=\"float: left; margin-left:10px; margin-right: 10px; margin-bottom: 10px; background: #C4F1FF\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"20px\" height=\"20px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div><i class=\"fa-regular fa-angle-right\" style=\"color:#FF4649; margin-left: 10px; font-size: 20px\"></i></div>");
+							}
+							else {
+								$("#myzar_content_category_list").append("<div class=\"button_yellow\" style=\"float: left; margin-left:10px; margin-right: 10px; margin-bottom: 10px; background: #C4F1FF\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"20px\" height=\"20px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div><i class=\"fa-solid fa-circle-minus\" style=\"color:#FF4649; margin-left: 10px; font-size: 20px\"></i></div>");
+							}
+						}				
+						else {
+							if(objMyZarCategoryList[i].count_category_children > 0){
+								$("#myzar_content_category_list").append("<div class=\"button_yellow\" style=\"float: left; margin-left:10px; margin-right: 10px; margin-bottom: 10px; background: #C4F1FF\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"20px\" height=\"20px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div><i class=\"fa-regular fa-angle-right\" style=\"color:#FF4649; margin-left: 10px; font-size: 20px\"></i></div>");
+							}
+							else {
+								$("#myzar_content_category_list").append("<div class=\"button_yellow\" style=\"float: left; margin-left:10px; margin-right: 10px; margin-bottom: 10px; background: #C4F1FF\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"20px\" height=\"20px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div></div>");
+							}
+						}
+					}
+					else {
+						if(objMyZarCategoryList[i].uid == sessionStorage.getItem("uid")){
+							$("#myzar_content_category_list").append("<div class=\"button_yellow\" style=\"float: left; margin-left:10px; margin-right: 10px; margin-bottom: 10px; background: #C4F1FF\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"20px\" height=\"20px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div><i class=\"fa-solid fa-circle-minus\" style=\"color:#FF4649; margin-left: 10px; font-size: 20px\"></i></div>");
+						}		
+						else {
+							$("#myzar_content_category_list").append("<div class=\"button_yellow\" style=\"float: left; margin-left:10px; margin-right: 10px; margin-bottom: 10px; background: #C4F1FF\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"20px\" height=\"20px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div></div>");
+						}
+					}
 				}
 			}
 		};

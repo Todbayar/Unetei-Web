@@ -7,11 +7,14 @@ $parentID = $_REQUEST["parentID"];
 
 $query = "";
 
-if($tableID == 1){
-	$query = "SELECT * FROM category1 WHERE uid='".$uid."'";
+if($tableID == 1){ 
+	$query = "SELECT *, (SELECT COUNT(*) FROM category2 WHERE parent=category1.id) AS count_category_children  FROM category1";
+}
+else if($tableID == 4){
+	$query = "SELECT *, 0 AS count_category_children  FROM category".$tableID." WHERE parent=".$parentID;
 }
 else {
-	$query = "SELECT * FROM category".$tableID." where uid='".$uid."' AND parent=".$parentID;
+	$query = "SELECT *, (SELECT COUNT(*) FROM category".($tableID+1)." WHERE parent=category".$tableID.".id) AS count_category_children  FROM category".$tableID." WHERE parent=".$parentID;
 }
 
 $arr_list = array();
