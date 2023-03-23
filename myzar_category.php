@@ -91,9 +91,15 @@ include "mysql_config.php";
 		const reqMyZarCategoryListData = new XMLHttpRequest();
 		reqMyZarCategoryListData.onload = function() {
 			console.log(this.responseText);
+			const objMyZarCategoryList = JSON.parse(this.responseText);
+			if(objMyZarCategoryList.length > 0){
+				for(let i=0; i<objMyZarCategoryList.length; i++){
+					$("#myzar_content_category_list").append("<div class=\"button_yellow\" style=\"float: left; margin-left:10px; margin-right: 10px; margin-bottom: 10px; background: #C4F1FF\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"20px\" height=\"20px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div><i class=\"fa-solid fa-circle-minus\" style=\"color:#FF4649; margin-left: 10px; font-size: 20px\"></i></div>");
+				}
+			}
 		};
 		reqMyZarCategoryListData.onerror = function(){
-			console.log(reqMyZarCategoryListData.status);
+			console.log("<error>" + reqMyZarCategoryListData.status);
 		};
 		reqMyZarCategoryListData.open("POST", "mysql_myzar_category_list_process.php", true);
 		reqMyZarCategoryListData.send(myZarCategoryListData);
@@ -106,17 +112,11 @@ include "mysql_config.php";
 		<div style="margin-left: 5px">Нэмэх</div>
 	</div>
 	<hr/>
-	<div id="myzar_content_category_list">
-		<div class="button_yellow" style="float: left; margin-left:10px; margin-right: 10px; margin-bottom: 10px; background: #C4F1FF">
-			<img src="tugrug.png" width="18px" height="18px" />
-			<div style="margin-left: 5px">Нэмэх</div>
-			<i class="fa-solid fa-circle-minus" style="color:#FF4649; margin-left: 10px; font-size: 20px"></i>
-		</div>
-	</div>
+	<div id="myzar_content_category_list"></div>
 </div>
 
-<div id="myzar_category_add_popup" class="popup" style="width: 240px">
-	<i class="fa-solid fa-circle-plus close" onClick="myzar_category_add_close()"></i>
+<div id="myzar_category_add_popup" class="popup" style="width: 240px; display: none">
+	<i class="fa-solid fa-xmark close" onClick="myzar_category_add_close()"></i>
 	<div class="header">Ангилал</div>
 	<div style="display: flex; align-items: center; margin-left: 10px; height: 50px">
 		<img id="myzar_category_add_icon_image" src="image-solid.svg" width="24" height="24" onClick="myzar_category_add_icon_button()" />
@@ -124,6 +124,6 @@ include "mysql_config.php";
 	</div>
 	<div id="myzar_category_add_msg" class="msg"></div>
 	<div id="myzar_category_add_error" class="error"></div>
-	<input type="file" name="myzar_category_add_icon" id="myzar_category_add_icon" required="true" accept="image/png, .svg" />
+	<input type="file" name="myzar_category_add_icon" id="myzar_category_add_icon" required="true" accept="image/png, .svg" style="display: none" />
 	<button id="myzar_category_add_submit" onClick="myzar_category_add_submit_button()" disabled class="button_yellow" style="margin-top: 10px; margin-left: auto; margin-right: auto">Илгээх</button>
 </div>

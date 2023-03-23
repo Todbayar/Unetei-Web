@@ -39,11 +39,11 @@ function CheckTableCreate($pID){
 		$queryTableCreate = "";
 		
 		if($pID == 1){
-			$queryTableCreate = "CREATE TABLE category".$pID." (id int(10) NOT NULL AUTO_INCREMENT PRIMARY KEY, uid varchar(255) NOT NULL, title varchar(30) NOT NULL UNIQUE, icon varchar(255) NOT NULL, status int(1) NOT NULL DEFAULT 0, clicked int(10) NOT NULL DEFAULT 0, active tinyint NOT NULL DEFAULT 0)";
+			$queryTableCreate = "CREATE TABLE category".$pID." (id int(10) NOT NULL AUTO_INCREMENT PRIMARY KEY, uid varchar(255) NOT NULL, title varchar(30) NOT NULL, icon varchar(255) NOT NULL, status int(1) NOT NULL DEFAULT 0, clicked int(10) NOT NULL DEFAULT 0, active tinyint NOT NULL DEFAULT 0)";
 			//status 0=normal, 1=special, 2=vip
 		}
 		else {
-			$queryTableCreate = "CREATE TABLE category".$pID." (id int(10) NOT NULL AUTO_INCREMENT PRIMARY KEY, uid varchar(255) NOT NULL, title varchar(30) NOT NULL UNIQUE, icon varchar(255) NOT NULL, parent int(10) NOT NULL, status int(1) NOT NULL DEFAULT 0, clicked int(10) NOT NULL DEFAULT 0, active tinyint NOT NULL DEFAULT 0)";
+			$queryTableCreate = "CREATE TABLE category".$pID." (id int(10) NOT NULL AUTO_INCREMENT PRIMARY KEY, uid varchar(255) NOT NULL, title varchar(30) NOT NULL, icon varchar(255) NOT NULL, parent int(10) NOT NULL, status int(1) NOT NULL DEFAULT 0, clicked int(10) NOT NULL DEFAULT 0, active tinyint NOT NULL DEFAULT 0)";
 		}
 		$conn->query($queryTableCreate);
 		if ($conn->connect_error) {
@@ -56,28 +56,65 @@ function InsertCategoryEntry($pID, $pUID, $pParentID, $pTitle, $pFile){
 	global $conn;
 	$vNewFile = date("Ymdhis")."_".$pFile["name"];
 	
-	if (move_uploaded_file($pFile["tmp_name"], "user_files/".$vNewFile)) {
-		$queryInsert = "";
-		if(!isset($pParentID)){
-			$queryInsert = "INSERT INTO category".$pID."(uid, title, icon) VALUES('".$pUID."','".$pTitle."','".$vNewFile."')";
+	$IsInsertCategoryOK = true;
+	if(!isset($pParentID)){
+		$IsInsertCategoryOK = IsCategoryExist($pID, $pTitle, $pUID, null);
+	}
+	else {
+		$IsInsertCategoryOK = IsCategoryExist($pID, $pTitle, $pUID, $pParentID);
+	}
+	
+	if($IsInsertCategoryOK){
+		if (move_uploaded_file($pFile["tmp_name"], "user_files/".$vNewFile)) {
+			$queryInsert = "";
+			if(!isset($pParentID)){
+				$queryInsert = "INSERT INTO category".$pID."(uid, title, icon) VALUES('".$pUID."','".$pTitle."','".$vNewFile."')";
+			}
+			else {
+				$queryInsert = "INSERT INTO category".$pID."(uid, title, icon, parent) VALUES('".$pUID."','".$pTitle."','".$vNewFile."',".$pParentID.")";
+			}
+			$resultInsert = $conn->query($queryInsert);
+
+			if ($conn->connect_error) {
+				die("<InsertCategoryEntry>:".$conn->connect_error);
+			}
+
+			if($resultInsert){
+				echo "OK";
+			}
+			else {
+				echo "<InsertCategoryEntry>:insert is failed!";
+			}
+		} else {
+			echo "<InsertCategoryEntry>:image file is failed to be uploaded!";
+		}
+	}
+	else {
+		echo "Таны оруулсан ангилал жагсаалтанд байсан байна!";
+	}
+}
+
+function IsCategoryExist($pID, $pTitle, $pUID, $pParent){
+	global $conn;
+	$queryInsertCheckDuplication = "";
+	if(!isset($pParentID)){
+		$queryInsertCheckDuplication = "SELECT * FROM category".$pID." WHERE title='".$pTitle."' AND uid='".$pUID."'";
+	}
+	else {
+		$queryInsertCheckDuplication = "SELECT * FROM category".$pID." WHERE title='".$pTitle."' AND uid='".$pUID."' AND parent=".$pParentID;
+	}
+	$resultInsertCheckDuplication = $conn->query($queryInsertCheckDuplication);
+	if($resultInsertCheckDuplication){
+		$rowsInsertCheckDuplication = mysqli_num_rows($resultInsertCheckDuplication);
+		if($rowsInsertCheckDuplication == 0){
+			return true;
 		}
 		else {
-			$queryInsert = "INSERT INTO category".$pID."(uid, title, icon, parent) VALUES('".$pUID."','".$pTitle."','".$vNewFile."',".$pParentID.")";
+			return false;
 		}
-		$result = $conn->query($queryInsert);
-		
-		if ($conn->connect_error) {
-			die("<InsertCategoryEntry>:".$conn->connect_error);
-		}
-		
-		if($result){
-			echo "OK";
-		}
-		else {
-			echo "Таны оруулсан ангилал жагсаалтанд байсан байна!";
-		}
-	} else {
-		echo "<InsertCategoryEntry>:image file is failed to be uploaded!";
+	}
+	else {
+		return false;
 	}
 }
 

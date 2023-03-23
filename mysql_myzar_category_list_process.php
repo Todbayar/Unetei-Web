@@ -16,8 +16,14 @@ else {
 
 $arr_list = array();
 $result = $conn->query($query);
-while($row = mysqli_fetch_assoc($result)){
-	$arr_list[] = $row;
+
+if($result){
+	$num_rows = mysqli_num_rows($result);
+	if($num_rows > 0){
+		while($row = mysqli_fetch_assoc($result)){
+			$arr_list[] = $row;
+		}
+	}
 }
 
 echo json_encode($arr_list);

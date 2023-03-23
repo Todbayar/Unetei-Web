@@ -36,9 +36,8 @@
 	position: absolute; 
 	font-size: 20px; 
 	color: #FF4649; 
-	right: -10px; 
-	top: -10px;
-	transform: rotate(45deg);
+	right: 5px; 
+	top: 5px;
 	box-shadow: 2px 2px 5px lightblue;
 }
 
