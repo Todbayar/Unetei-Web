@@ -66,6 +66,8 @@ include "mysql_config.php";
 		myZarCategoryAddSubmitData.append("iconfile", $("#myzar_category_add_icon")[0].files[0]);
 		myZarCategoryAddSubmitData.append("title", $("#myzar_category_add_icon_title").val().trim());
 		
+		console.log("<hier_send>:" + myZarCategorySelectedHier);
+		
 		const reqMyZarCategoryAddSubmit = new XMLHttpRequest();
 		reqMyZarCategoryAddSubmit.onload = function() {
 			if(this.responseText.includes("OK")){
@@ -83,8 +85,11 @@ include "mysql_config.php";
 	}
 	
 	function myzar_category_fetch_list(tableID, parentID, pTitle){
+		console.log("<myzar_category_fetch_list>:" + tableID + ", " + parentID + ", " + pTitle);
+		
 		if(tableID > 1){
-			
+			myZarCategorySelectedHier[tableID-1] = pTitle;
+			$(".myzar_category_container_selected").append("<div id=\"myzar_category_selected_button\" class=\"button_yellow\" style=\"margin-left:10px; margin-bottom: 10px; float: left; background: #58d518\"><i class=\"fa-solid fa-angle-left\" style=\"color: white\"></i><div style=\"margin-left: 5px; color: white\">"+pTitle+"</div><i id=\"myzar_category_selected_add_item_button\" class=\"fa-solid fa-circle-plus\" style=\"margin-left: 5px; color: white\"></i></div>");
 		}
 		else if(tableID == 4){
 			$("#myzar_category_add_button").hide();
@@ -108,18 +113,18 @@ include "mysql_config.php";
 					if(tableID < 4){
 						if(objMyZarCategoryList[i].uid == sessionStorage.getItem("uid")){
 							if(objMyZarCategoryList[i].count_category_children > 0){
-								$("#myzar_content_category_list").append("<div onClick=\"myzar_category_fetch_list("+tableID+1+", "+objMyZarCategoryList[i].id+", '"+objMyZarCategoryList[i].title+"')\" class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: #C4F1FF\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"20px\" height=\"20px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div><i class=\"fa-regular fa-angle-right\" style=\"color:#FF4649; margin-left: 10px; font-size: 20px\"></i></div>");
+								$("#myzar_content_category_list").append("<div onClick=\"myzar_category_fetch_list("+(tableID+1)+", "+objMyZarCategoryList[i].id+", '"+objMyZarCategoryList[i].title+"')\" class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: #C4F1FF\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"20px\" height=\"20px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div><i class=\"fa-regular fa-angle-right\" style=\"color:#FF4649; margin-left: 10px; font-size: 20px\"></i></div>");
 							}
 							else {
-								$("#myzar_content_category_list").append("<div onClick=\"myzar_category_fetch_list("+tableID+1+", "+objMyZarCategoryList[i].id+", '"+objMyZarCategoryList[i].title+"')\" class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: #C4F1FF\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"20px\" height=\"20px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div><i class=\"fa-solid fa-circle-minus\" style=\"color:#FF4649; margin-left: 10px; font-size: 20px\"></i></div>");
+								$("#myzar_content_category_list").append("<div onClick=\"myzar_category_fetch_list("+(tableID+1)+", "+objMyZarCategoryList[i].id+", '"+objMyZarCategoryList[i].title+"')\" class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: #C4F1FF\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"20px\" height=\"20px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div><i class=\"fa-solid fa-circle-minus\" style=\"color:#FF4649; margin-left: 10px; font-size: 20px\"></i></div>");
 							}
 						}				
 						else {
 							if(objMyZarCategoryList[i].count_category_children > 0){
-								$("#myzar_content_category_list").append("<div onClick=\"myzar_category_fetch_list("+tableID+1+", "+objMyZarCategoryList[i].id+", '"+objMyZarCategoryList[i].title+"')\" class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: #C4F1FF\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"20px\" height=\"20px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div><i class=\"fa-regular fa-angle-right\" style=\"color:#FF4649; margin-left: 10px; font-size: 20px\"></i></div>");
+								$("#myzar_content_category_list").append("<div onClick=\"myzar_category_fetch_list("+(tableID+1)+", "+objMyZarCategoryList[i].id+", '"+objMyZarCategoryList[i].title+"')\" class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: #C4F1FF\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"20px\" height=\"20px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div><i class=\"fa-regular fa-angle-right\" style=\"color:#FF4649; margin-left: 10px; font-size: 20px\"></i></div>");
 							}
 							else {
-								$("#myzar_content_category_list").append("<div onClick=\"myzar_category_fetch_list("+tableID+1+", "+objMyZarCategoryList[i].id+", '"+objMyZarCategoryList[i].title+"')\" class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: #C4F1FF\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"20px\" height=\"20px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div></div>");
+								$("#myzar_content_category_list").append("<div onClick=\"myzar_category_fetch_list("+(tableID+1)+", "+objMyZarCategoryList[i].id+", '"+objMyZarCategoryList[i].title+"')\" class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: #C4F1FF\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"20px\" height=\"20px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div></div>");
 							}
 						}
 					}
@@ -143,24 +148,7 @@ include "mysql_config.php";
 </script>
 
 <div class="myzar_content_category">
-	<div class="myzar_category_container_selected" style="float: left; padding-top: 10px; width: 100%;">
-		<div id="myzar_category_selected_button" class="button_yellow" style="margin-left:10px; margin-bottom: 10px; float: left">
-			<i class="fa-solid fa-plus"></i>
-			<div style="margin-left: 5px">Нэмэх</div>
-		</div>
-		<div id="myzar_category_selected_button" class="button_yellow" style="margin-left:10px; margin-bottom: 10px; float: left">
-			<i class="fa-solid fa-plus"></i>
-			<div style="margin-left: 5px">Нэмэх Нэмэх Нэмэх</div>
-		</div>
-		<div id="myzar_category_selected_button" class="button_yellow" style="margin-left:10px; margin-bottom: 10px; float: left">
-			<i class="fa-solid fa-plus"></i>
-			<div style="margin-left: 5px">Нэмэх</div>
-		</div>
-		<div id="myzar_category_selected_button" class="button_yellow" style="margin-left:10px; margin-bottom: 10px; float: left">
-			<i class="fa-solid fa-plus"></i>
-			<div style="margin-left: 5px">Нэмэх Нэмэх Нэмэх</div>
-		</div>
-	</div>
+	<div class="myzar_category_container_selected" style="float: left; padding-top: 10px; width: 100%;"></div>
 	<hr/>
 	<div>
 		<div id="myzar_category_add_button" onClick="myzar_category_add_show()" class="button_yellow" style="margin-left:10px; margin-bottom: 10px; width: 70px; float: left">
