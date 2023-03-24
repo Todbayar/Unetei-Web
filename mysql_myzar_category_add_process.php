@@ -1,35 +1,29 @@
 <?php
 include "mysql_config.php";
 
-$file = $_FILES["iconfile"];
-$uid = $_REQUEST["uid"];
-$title = $_REQUEST["title"];
-$tableID = $_REQUEST["tableID"];
-$parentID = $_REQUEST["parentID"];
-
-if(isset($uid) && isset($title) && isset($file) && isset($tableID) && !isset($parentID)){
-	InsertCategoryEntry(1, $uid, null, $title, $file);
+if(isset($_REQUEST["tableID"]) && isset($_REQUEST["uid"]) && isset($_REQUEST["title"]) && isset($_FILES["iconfile"]) && isset($_REQUEST["parentID"])){
+	InsertCategoryEntry($_REQUEST["tableID"], $_REQUEST["uid"], $_REQUEST["title"], $_FILES["iconfile"], $_REQUEST["parentID"]);
 }
-else if(isset($uid) && isset($title) && isset($file) && isset($tableID) && isset($parentID)){
-	InsertCategoryEntry($tableID, $uid, $parentID, $title, $file);
+else {
+	echo "Ангиллыг нэмхэд алдаа гарлаа!";
 }
 
-function InsertCategoryEntry($pTableID, $pUID, $pParentID, $pTitle, $pFile){
+function InsertCategoryEntry($pTableID, $pUID , $pTitle, $pFile, $pParentID){
 	global $conn;
 	$vNewFile = date("Ymdhis")."_".$pFile["name"];
 	
 	$IsInsertCategoryOK = true;
-	if(!isset($pParentID)){
-		$IsInsertCategoryOK = IsCategoryExist($pTableID, $pTitle, $pUID, null);
+	if($pParentID == 0){
+		$IsInsertCategoryOK = IsCategoryExist($pTableID, $pTitle, null);
 	}
 	else {
-		$IsInsertCategoryOK = IsCategoryExist($pTableID, $pTitle, $pUID, $pParentID);
+		$IsInsertCategoryOK = IsCategoryExist($pTableID, $pTitle, $pParentID);
 	}
 	
 	if($IsInsertCategoryOK){
 		if (move_uploaded_file($pFile["tmp_name"], "user_files/".$vNewFile)) {
 			$queryInsert = "";
-			if(!isset($pParentID)){
+			if($pParentID == 0){
 				$queryInsert = "INSERT INTO category".$pTableID."(uid, title, icon) VALUES('".$pUID."','".$pTitle."','".$vNewFile."')";
 			}
 			else {
@@ -56,14 +50,14 @@ function InsertCategoryEntry($pTableID, $pUID, $pParentID, $pTitle, $pFile){
 	}
 }
 
-function IsCategoryExist($pTableID, $pTitle, $pUID, $pParentID){
+function IsCategoryExist($pTableID, $pTitle, $pParentID){
 	global $conn;
 	$queryCategoryExist = "";
 	if(!isset($pParentID)){
-		$queryCategoryExist = "SELECT * FROM category".$pTableID." WHERE title='".$pTitle."' AND uid='".$pUID."'";
+		$queryCategoryExist = "SELECT * FROM category".$pTableID." WHERE title='".$pTitle."'";
 	}
 	else {
-		$queryCategoryExist = "SELECT * FROM category".$pTableID." WHERE title='".$pTitle."' AND uid='".$pUID."' AND parent=".$pParentID;
+		$queryCategoryExist = "SELECT * FROM category".$pTableID." WHERE title='".$pTitle."' AND parent=".$pParentID;
 	}
 	$resultCategoryExist = $conn->query($queryCategoryExist);
 	if($resultCategoryExist){
@@ -78,16 +72,5 @@ function IsCategoryExist($pTableID, $pTitle, $pUID, $pParentID){
 	else {
 		return false;
 	}
-}
-
-function FetchCategoryIDFromTitle($pTableID, $pUID, $pTitle){
-	global $conn;
-	$queryFetch = "SELECT id FROM category".$pTableID." WHERE uid='".$pUID."' AND title='".$pTitle."'";
-	$resultFetch = $conn->query($queryFetch);
-	if ($conn->connect_error) {
-	  die("<FetchCategoryIDFromTitle>:".$conn->connect_error);
-	}
-	$rowFetch = mysqli_fetch_array($resultFetch);
-	return $rowFetch["id"];
 }
 ?>
