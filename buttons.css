@@ -6,6 +6,7 @@
 	display: flex;
 	border-radius: 5px;
 	align-items: center;
+	cursor: pointer;
 }
 
 .button_pointer {

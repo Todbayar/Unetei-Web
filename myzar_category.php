@@ -105,13 +105,15 @@ include "mysql_config.php";
 			$("#myzar_category_add_button").show();
 		}
 		
+		console.log("<id>:" + categoryTableID + ", " + tableID);
+		
+		if(tableID > 1 && !isNewCategoryEntry){
+			$(".myzar_category_container_selected").append("<div onClick=\"myzar_category_fetch_list("+(tableID-1)+", "+categoryParentID+", '"+title+"', false)\" id=\"myzar_category_selected_button\" class=\"button_yellow\" style=\"margin-left:10px; margin-bottom: 10px; float: left; background: #58d518\"><i class=\"fa-solid fa-angle-left\" style=\"color: white\"></i><div style=\"margin-left: 5px; color: white\">"+title+"</div><i id=\"myzar_category_selected_add_item_button\" class=\"fa-solid fa-circle-plus\" style=\"margin-left: 5px; color: white\"></i></div>");
+		}
+		
 		categoryTableID = tableID;
 		categoryParentID = parentID;
 		categoryTitle = title;
-		
-		if(tableID > 1 && !isNewCategoryEntry){
-			$(".myzar_category_container_selected").append("<div id=\"myzar_category_selected_button\" class=\"button_yellow\" style=\"margin-left:10px; margin-bottom: 10px; float: left; background: #58d518\"><i class=\"fa-solid fa-angle-left\" style=\"color: white\"></i><div style=\"margin-left: 5px; color: white\">"+title+"</div><i id=\"myzar_category_selected_add_item_button\" class=\"fa-solid fa-circle-plus\" style=\"margin-left: 5px; color: white\"></i></div>");
-		}
 		
 		$("#myzar_content_category_list").empty();
 		
