@@ -97,6 +97,10 @@ include "mysql_config.php";
 		reqMyZarCategoryAddSubmit.send(myZarCategoryAddSubmitData);
 	}
 	
+	function myzar_category_remove(id){
+		console.log("<myzar_category_remove>:" + id);
+	}
+	
 	function myzar_category_fetch_list(tableID, parentID, title, isNewCategoryEntry){
 		if(tableID > 4){
 			$("#myzar_category_add_button").hide();
@@ -105,12 +109,8 @@ include "mysql_config.php";
 			$("#myzar_category_add_button").show();
 		}
 		
-		console.log("<id>:" + categoryTableID + ", " + tableID);
-		
 		if(tableID < categoryTableID){
-			console.log("asd");
 			for(let i=tableID; i<=4; i++){
-				console.log("<test>:#myZarSelectCategory" + i);
 				if($("#myZarSelectCategory" + i).length) {
 					$("#myZarSelectCategory" + i).remove();
 				}
@@ -118,7 +118,7 @@ include "mysql_config.php";
 		}
 		
 		if(tableID > 1 && !isNewCategoryEntry && tableID > categoryTableID){
-			$(".myzar_category_container_selected").append("<div id=\"myZarSelectCategory"+(tableID-1)+"\" onClick=\"myzar_category_fetch_list("+(tableID-1)+", "+categoryParentID+", '"+title+"', false)\" id=\"myzar_category_selected_button\" class=\"button_yellow\" style=\"margin-left:10px; margin-bottom: 10px; float: left; background: #58d518\"><i class=\"fa-solid fa-angle-left\" style=\"color: white\"></i><div style=\"margin-left: 5px; color: white\">"+title+"</div><i id=\"myzar_category_selected_add_item_button\" class=\"fa-solid fa-circle-plus\" style=\"margin-left: 5px; color: white\"></i></div>");
+			$(".myzar_category_container_selected").append("<div id=\"myZarSelectCategory"+(tableID-1)+"\" onClick=\"myzar_category_fetch_list("+(tableID-1)+", "+categoryParentID+", '"+title+"', false)\" class=\"button_yellow\" style=\"margin-left:10px; margin-bottom: 10px; float: left; background: #dddddd\"><i class=\"fa-solid fa-angle-left\" style=\"color:#aeaeae\"></i><div style=\"margin-left: 5px\">"+title+"</div><i id=\"myzar_category_selected_add_item_button\" class=\"fa-solid fa-circle-plus\" style=\"margin-left: 5px\"></i></div>");
 		}
 		
 		categoryTableID = tableID;
@@ -139,7 +139,7 @@ include "mysql_config.php";
 					if(tableID <= 4){
 						if(objMyZarCategoryList[i].uid == sessionStorage.getItem("uid")){
 							if(objMyZarCategoryList[i].count_category_children > 0){
-								$("#myzar_content_category_list").append("<div onClick=\"myzar_category_fetch_list("+(tableID+1)+", "+objMyZarCategoryList[i].id+", '"+objMyZarCategoryList[i].title+"', false)\" class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: #C4F1FF\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"20px\" height=\"20px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div><i class=\"fa-regular fa-angle-right\" style=\"color:#FF4649; margin-left: 10px; font-size: 20px\"></i></div>");
+								$("#myzar_content_category_list").append("<div onClick=\"myzar_category_fetch_list("+(tableID+1)+", "+objMyZarCategoryList[i].id+", '"+objMyZarCategoryList[i].title+"', false)\" class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: #C4F1FF\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"20px\" height=\"20px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div><i class=\"fa-solid fa-ellipsis-vertical\" style=\"color:#68ceee; margin-left: 10px; font-size: 20px\"></i></div>");
 							}
 							else {
 								//Don't forget to count its item adv because of preventing to be deleted
@@ -148,20 +148,11 @@ include "mysql_config.php";
 						}				
 						else {
 							if(objMyZarCategoryList[i].count_category_children > 0){
-								$("#myzar_content_category_list").append("<div onClick=\"myzar_category_fetch_list("+(tableID+1)+", "+objMyZarCategoryList[i].id+", '"+objMyZarCategoryList[i].title+"', false)\" class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: #C4F1FF\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"20px\" height=\"20px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div><i class=\"fa-regular fa-angle-right\" style=\"color:#FF4649; margin-left: 10px; font-size: 20px\"></i></div>");
+								$("#myzar_content_category_list").append("<div onClick=\"myzar_category_fetch_list("+(tableID+1)+", "+objMyZarCategoryList[i].id+", '"+objMyZarCategoryList[i].title+"', false)\" class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: #C4F1FF\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"20px\" height=\"20px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div><i class=\"fa-solid fa-ellipsis-vertical\" style=\"color:#68ceee; margin-left: 10px; font-size: 20px\"></i></div>");
 							}
 							else {
 								$("#myzar_content_category_list").append("<div onClick=\"myzar_category_fetch_list("+(tableID+1)+", "+objMyZarCategoryList[i].id+", '"+objMyZarCategoryList[i].title+"', false)\" class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: #C4F1FF\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"20px\" height=\"20px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div></div>");
 							}
-						}
-					}
-					else {
-						if(objMyZarCategoryList[i].uid == sessionStorage.getItem("uid")){
-							//Don't forget to count its item adv because of preventing to be deleted
-							$("#myzar_content_category_list").append("<div class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: #C4F1FF\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"20px\" height=\"20px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div><i class=\"fa-solid fa-circle-minus\" style=\"color:#FF4649; margin-left: 10px; font-size: 20px\"></i></div>");
-						}		
-						else {
-							$("#myzar_content_category_list").append("<div class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: #C4F1FF\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"20px\" height=\"20px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div></div>");
 						}
 					}
 				}
