@@ -107,8 +107,18 @@ include "mysql_config.php";
 		
 		console.log("<id>:" + categoryTableID + ", " + tableID);
 		
-		if(tableID > 1 && !isNewCategoryEntry){
-			$(".myzar_category_container_selected").append("<div onClick=\"myzar_category_fetch_list("+(tableID-1)+", "+categoryParentID+", '"+title+"', false)\" id=\"myzar_category_selected_button\" class=\"button_yellow\" style=\"margin-left:10px; margin-bottom: 10px; float: left; background: #58d518\"><i class=\"fa-solid fa-angle-left\" style=\"color: white\"></i><div style=\"margin-left: 5px; color: white\">"+title+"</div><i id=\"myzar_category_selected_add_item_button\" class=\"fa-solid fa-circle-plus\" style=\"margin-left: 5px; color: white\"></i></div>");
+		if(tableID < categoryTableID){
+			console.log("asd");
+			for(let i=tableID; i<=4; i++){
+				console.log("<test>:#myZarSelectCategory" + i);
+				if($("#myZarSelectCategory" + i).length) {
+					$("#myZarSelectCategory" + i).remove();
+				}
+			}
+		}
+		
+		if(tableID > 1 && !isNewCategoryEntry && tableID > categoryTableID){
+			$(".myzar_category_container_selected").append("<div id=\"myZarSelectCategory"+(tableID-1)+"\" onClick=\"myzar_category_fetch_list("+(tableID-1)+", "+categoryParentID+", '"+title+"', false)\" id=\"myzar_category_selected_button\" class=\"button_yellow\" style=\"margin-left:10px; margin-bottom: 10px; float: left; background: #58d518\"><i class=\"fa-solid fa-angle-left\" style=\"color: white\"></i><div style=\"margin-left: 5px; color: white\">"+title+"</div><i id=\"myzar_category_selected_add_item_button\" class=\"fa-solid fa-circle-plus\" style=\"margin-left: 5px; color: white\"></i></div>");
 		}
 		
 		categoryTableID = tableID;
