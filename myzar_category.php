@@ -98,6 +98,13 @@ include "mysql_config.php";
 	}
 	
 	function myzar_category_fetch_list(tableID, parentID, title, isNewCategoryEntry){
+		if(tableID > 4){
+			$("#myzar_category_add_button").hide();
+		}
+		else if (tableID >= 1 && tableID <= 4) {
+			$("#myzar_category_add_button").show();
+		}
+		
 		categoryTableID = tableID;
 		categoryParentID = parentID;
 		categoryTitle = title;
@@ -117,7 +124,7 @@ include "mysql_config.php";
 			const objMyZarCategoryList = JSON.parse(this.responseText);
 			if(objMyZarCategoryList.length > 0){
 				for(let i=0; i<objMyZarCategoryList.length; i++){
-					if(tableID < 4){
+					if(tableID <= 4){
 						if(objMyZarCategoryList[i].uid == sessionStorage.getItem("uid")){
 							if(objMyZarCategoryList[i].count_category_children > 0){
 								$("#myzar_content_category_list").append("<div onClick=\"myzar_category_fetch_list("+(tableID+1)+", "+objMyZarCategoryList[i].id+", '"+objMyZarCategoryList[i].title+"', false)\" class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: #C4F1FF\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"20px\" height=\"20px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div><i class=\"fa-regular fa-angle-right\" style=\"color:#FF4649; margin-left: 10px; font-size: 20px\"></i></div>");
