@@ -5,7 +5,7 @@ include "mysql_config.php";
 	var isMyZarCategoryAddIconValid = false;
 	var isMyZarCategoryAddTitleValid = false;
 	
-	var categoryTableID, categoryParentID;
+	var categoryTableID, categoryParentID, categoryTitle;
 	
 	$(document).ready(function(){
 		$("#myzar_category_add_icon").change(function(){
@@ -44,7 +44,7 @@ include "mysql_config.php";
 		//================================
 		//		listing categories
 		//================================
-		myzar_category_fetch_list(1, 0);
+		myzar_category_fetch_list(1, 0, null);
 	});
 	
 	function myzar_category_add_button_update(){
@@ -52,6 +52,8 @@ include "mysql_config.php";
 	}
 	
 	function myzar_category_add_show(){
+		$("#myzar_category_add_msg").text("");
+		$("#myzar_category_add_error").text("");
 		$("#myzar_category_add_popup").show();
 	}
 	
@@ -77,7 +79,12 @@ include "mysql_config.php";
 		const reqMyZarCategoryAddSubmit = new XMLHttpRequest();
 		reqMyZarCategoryAddSubmit.onload = function() {
 			if(this.responseText.includes("OK")){
-				console.log(this.responseText);
+				myzar_category_fetch_list(categoryTableID, categoryParentID, categoryTitle, true);
+				$("#myzar_category_add_msg").text("Ангилал амжилттай нэмэгдлээ");
+				$("#myzar_category_add_error").text("");
+				$("#myzar_category_add_icon_title").val("");
+				$("#myzar_category_add_icon").val(null);
+				document.getElementById("myzar_category_add_icon_image").src = "image-solid.svg";
 			}
 			else {
 				$("#myzar_category_add_error").text(this.responseText);
@@ -90,12 +97,13 @@ include "mysql_config.php";
 		reqMyZarCategoryAddSubmit.send(myZarCategoryAddSubmitData);
 	}
 	
-	function myzar_category_fetch_list(tableID, parentID){
+	function myzar_category_fetch_list(tableID, parentID, title, isNewCategoryEntry){
 		categoryTableID = tableID;
 		categoryParentID = parentID;
+		categoryTitle = title;
 		
-		if(tableID > 1){
-			$(".myzar_category_container_selected").append("<div id=\"myzar_category_selected_button\" class=\"button_yellow\" style=\"margin-left:10px; margin-bottom: 10px; float: left; background: #58d518\"><i class=\"fa-solid fa-angle-left\" style=\"color: white\"></i><div style=\"margin-left: 5px; color: white\">title here</div><i id=\"myzar_category_selected_add_item_button\" class=\"fa-solid fa-circle-plus\" style=\"margin-left: 5px; color: white\"></i></div>");
+		if(tableID > 1 && !isNewCategoryEntry){
+			$(".myzar_category_container_selected").append("<div id=\"myzar_category_selected_button\" class=\"button_yellow\" style=\"margin-left:10px; margin-bottom: 10px; float: left; background: #58d518\"><i class=\"fa-solid fa-angle-left\" style=\"color: white\"></i><div style=\"margin-left: 5px; color: white\">"+title+"</div><i id=\"myzar_category_selected_add_item_button\" class=\"fa-solid fa-circle-plus\" style=\"margin-left: 5px; color: white\"></i></div>");
 		}
 		
 		$("#myzar_content_category_list").empty();
@@ -106,26 +114,25 @@ include "mysql_config.php";
 		
 		const reqMyZarCategoryListData = new XMLHttpRequest();
 		reqMyZarCategoryListData.onload = function() {
-			console.log(this.responseText);
 			const objMyZarCategoryList = JSON.parse(this.responseText);
 			if(objMyZarCategoryList.length > 0){
 				for(let i=0; i<objMyZarCategoryList.length; i++){
 					if(tableID < 4){
 						if(objMyZarCategoryList[i].uid == sessionStorage.getItem("uid")){
 							if(objMyZarCategoryList[i].count_category_children > 0){
-								$("#myzar_content_category_list").append("<div onClick=\"myzar_category_fetch_list("+(tableID+1)+", "+objMyZarCategoryList[i].id+")\" class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: #C4F1FF\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"20px\" height=\"20px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div><i class=\"fa-regular fa-angle-right\" style=\"color:#FF4649; margin-left: 10px; font-size: 20px\"></i></div>");
+								$("#myzar_content_category_list").append("<div onClick=\"myzar_category_fetch_list("+(tableID+1)+", "+objMyZarCategoryList[i].id+", '"+objMyZarCategoryList[i].title+"', false)\" class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: #C4F1FF\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"20px\" height=\"20px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div><i class=\"fa-regular fa-angle-right\" style=\"color:#FF4649; margin-left: 10px; font-size: 20px\"></i></div>");
 							}
 							else {
 								//Don't forget to count its item adv because of preventing to be deleted
-								$("#myzar_content_category_list").append("<div onClick=\"myzar_category_fetch_list("+(tableID+1)+", "+objMyZarCategoryList[i].id+")\" class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: #C4F1FF\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"20px\" height=\"20px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div><i class=\"fa-solid fa-circle-minus\" style=\"color:#FF4649; margin-left: 10px; font-size: 20px\"></i></div>");
+								$("#myzar_content_category_list").append("<div onClick=\"myzar_category_fetch_list("+(tableID+1)+", "+objMyZarCategoryList[i].id+", '"+objMyZarCategoryList[i].title+"', false)\" class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: #C4F1FF\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"20px\" height=\"20px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div><i class=\"fa-solid fa-circle-minus\" style=\"color:#FF4649; margin-left: 10px; font-size: 20px\"></i></div>");
 							}
 						}				
 						else {
 							if(objMyZarCategoryList[i].count_category_children > 0){
-								$("#myzar_content_category_list").append("<div onClick=\"myzar_category_fetch_list("+(tableID+1)+", "+objMyZarCategoryList[i].id+")\" class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: #C4F1FF\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"20px\" height=\"20px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div><i class=\"fa-regular fa-angle-right\" style=\"color:#FF4649; margin-left: 10px; font-size: 20px\"></i></div>");
+								$("#myzar_content_category_list").append("<div onClick=\"myzar_category_fetch_list("+(tableID+1)+", "+objMyZarCategoryList[i].id+", '"+objMyZarCategoryList[i].title+"', false)\" class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: #C4F1FF\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"20px\" height=\"20px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div><i class=\"fa-regular fa-angle-right\" style=\"color:#FF4649; margin-left: 10px; font-size: 20px\"></i></div>");
 							}
 							else {
-								$("#myzar_content_category_list").append("<div onClick=\"myzar_category_fetch_list("+(tableID+1)+", "+objMyZarCategoryList[i].id+")\" class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: #C4F1FF\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"20px\" height=\"20px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div></div>");
+								$("#myzar_content_category_list").append("<div onClick=\"myzar_category_fetch_list("+(tableID+1)+", "+objMyZarCategoryList[i].id+", '"+objMyZarCategoryList[i].title+"', false)\" class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: #C4F1FF\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"20px\" height=\"20px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div></div>");
 							}
 						}
 					}
