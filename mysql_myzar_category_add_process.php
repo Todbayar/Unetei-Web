@@ -4,13 +4,15 @@ include "mysql_config.php";
 if(isset($_REQUEST["tableID"]) && isset($_REQUEST["uid"]) && isset($_REQUEST["title"]) && isset($_FILES["iconfile"]) && isset($_REQUEST["parentID"])){
 	InsertCategoryEntry($_REQUEST["tableID"], $_REQUEST["uid"], $_REQUEST["title"], $_FILES["iconfile"], $_REQUEST["parentID"]);
 }
+if(isset($_REQUEST["tableID"]) && isset($_REQUEST["uid"]) && isset($_REQUEST["title"]) && !isset($_FILES["iconfile"]) && isset($_REQUEST["parentID"])){
+	InsertCategoryEntry($_REQUEST["tableID"], $_REQUEST["uid"], $_REQUEST["title"], null, $_REQUEST["parentID"]);
+}
 else {
 	echo "Ангиллыг нэмхэд алдаа гарлаа!";
 }
 
 function InsertCategoryEntry($pTableID, $pUID , $pTitle, $pFile, $pParentID){
 	global $conn;
-	$vNewFile = date("Ymdhis")."_".$pFile["name"];
 	
 	$IsInsertCategoryOK = true;
 	if($pParentID == 0){
@@ -21,13 +23,39 @@ function InsertCategoryEntry($pTableID, $pUID , $pTitle, $pFile, $pParentID){
 	}
 	
 	if($IsInsertCategoryOK){
-		if (move_uploaded_file($pFile["tmp_name"], "user_files/".$vNewFile)) {
+		if(!is_null($pFile)){
+			$vNewFile = date("Ymdhis")."_".$pFile["name"];
+			if (move_uploaded_file($pFile["tmp_name"], "user_files/".$vNewFile)) {
+				$queryInsert = "";
+				if($pParentID == 0){
+					$queryInsert = "INSERT INTO category".$pTableID."(uid, title, icon) VALUES('".$pUID."','".$pTitle."','".$vNewFile."')";
+				}
+				else {
+					$queryInsert = "INSERT INTO category".$pTableID."(uid, title, icon, parent) VALUES('".$pUID."','".$pTitle."','".$vNewFile."',".$pParentID.")";
+				}
+				$resultInsert = $conn->query($queryInsert);
+
+				if ($conn->connect_error) {
+					die("<InsertCategoryEntry>:".$conn->connect_error);
+				}
+
+				if($resultInsert){
+					echo "OK";
+				}
+				else {
+					echo "<InsertCategoryEntry>:insert is failed!";
+				}
+			} else {
+				echo "<InsertCategoryEntry>:image file is failed to be uploaded!";
+			}
+		}
+		else {
 			$queryInsert = "";
 			if($pParentID == 0){
-				$queryInsert = "INSERT INTO category".$pTableID."(uid, title, icon) VALUES('".$pUID."','".$pTitle."','".$vNewFile."')";
+				echo $queryInsert = "INSERT INTO category".$pTableID."(uid, title) VALUES('".$pUID."','".$pTitle."')";
 			}
 			else {
-				$queryInsert = "INSERT INTO category".$pTableID."(uid, title, icon, parent) VALUES('".$pUID."','".$pTitle."','".$vNewFile."',".$pParentID.")";
+				echo $queryInsert = "INSERT INTO category".$pTableID."(uid, title, parent) VALUES('".$pUID."','".$pTitle."',".$pParentID.")";
 			}
 			$resultInsert = $conn->query($queryInsert);
 
@@ -41,8 +69,6 @@ function InsertCategoryEntry($pTableID, $pUID , $pTitle, $pFile, $pParentID){
 			else {
 				echo "<InsertCategoryEntry>:insert is failed!";
 			}
-		} else {
-			echo "<InsertCategoryEntry>:image file is failed to be uploaded!";
 		}
 	}
 	else {

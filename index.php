@@ -8,6 +8,7 @@
 		<script src="https://www.gstatic.com/firebasejs/9.12.1/firebase-app-compat.js"></script>
 		<script src="https://www.gstatic.com/firebasejs/9.12.1/firebase-auth-compat.js"></script>
 		<script src="jquery-3.6.4.min.js"></script>
+		<script src="jquery-ui.js"></script>
 		<script src="https://kit.fontawesome.com/64e3bec699.js" crossorigin="anonymous"></script>
 		<script src="misc.js"></script>
 		
