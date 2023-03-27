@@ -54,6 +54,9 @@
 			case "category":
 				include "myzar_category.php";
 				break;
+			case "item":
+				include "myzar_item.php";
+				break;
 		}
 	}
 	?>
