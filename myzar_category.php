@@ -46,6 +46,7 @@ include "mysql_config.php";
 		myzar_category_fetch_list(1, 0, null);
 		
 		selectedCategories = [];
+		sessionStorage.removeItem("selectedCategoryHier");
 	});
 	
 	function myzar_category_add_button_update(){
@@ -71,7 +72,7 @@ include "mysql_config.php";
 	}
 	
 	function myzar_category_selected_add_item(){
-		sessionStorage.setItem("selectedCategoryHier", selectedCategories);
+		sessionStorage.setItem("selectedCategoryHier", JSON.stringify(selectedCategories));
 		myzar_tab("item");
 	}
 	
@@ -143,7 +144,9 @@ include "mysql_config.php";
 		}
 		
 		if(tableID > 1 && !isNewCategoryEntry && tableID > categoryTableID){
-			selectedCategories[tableID-2] = parentID;
+			const selectedCategory = {id:parentID, tableID:tableID, title:title, icon:icon};
+			selectedCategories[tableID-2] = selectedCategory;
+			
 			if(icon != ''){
 				if(hasChildren){
 					$(".myzar_category_container_selected").append("<div id=\"myZarSelectCategory"+(tableID-1)+"\" class=\"button_yellow\" style=\"margin-left:10px; margin-bottom: 10px; float: left; background: #dddddd\"><div onClick=\"myzar_category_fetch_list("+(tableID-1)+", "+categoryParentID+", '"+title+"', false)\" style=\"display:flex\"><i class=\"fa-solid fa-angle-left\" style=\"color:#aeaeae\"></i><img src=\"./user_files/"+icon+"\" width=\"20px\" height=\"20px\" style=\"margin-left: 5px\" /><div style=\"margin-left: 5px\">"+title+"</div></div></div>");

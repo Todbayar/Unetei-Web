@@ -27,15 +27,15 @@
 				background: #58d518; 
 				display:flex;  
 				justify-content: space-between">
-		<div class="myzar_tab_item" style="display: flex; align-items: center; margin-left: 20px"  onClick="myzar_tab('item')">
+		<div class="myzar_tab_item" style="display: flex; align-items: center; margin-left: 20px; cursor: pointer"  onClick="myzar_tab('item')">
 			<i class="fa-solid fa-rectangle-ad" style="font-size: 24px"></i>
 			<div class="removable" style="margin-left: 5px">Миний зарууд</div>
 		</div>
-		<div class="myzar_tab_category" style="display: flex; align-items: center" onClick="myzar_tab('category')">
+		<div class="myzar_tab_category" style="display: flex; align-items: center; cursor: pointer" onClick="myzar_tab('category')">
 			<i class="fa-solid fa-list-ol" style="font-size: 24px"></i>
 			<div class="removable" style="margin-left: 5px">Ангилалууд</div>
 		</div>
-		<div class="myzar_tab_configuration" style="display: flex; align-items: center">
+		<div class="myzar_tab_configuration" style="display: flex; align-items: center; cursor: pointer">
 			<i class="fa-solid fa-gear" style="font-size: 24px"></i>
 			<div class="removable" style="margin-left: 5px">Тохиргоо</div>
 		</div>
