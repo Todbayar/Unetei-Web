@@ -68,7 +68,7 @@ include "mysql_config.php";
 	}
 	
 	function myzar_category_add_icon_button(){
-		$("#myzar_category_add_icon").trigger("click"); 
+		$("#myzar_category_add_icon").trigger("click");
 	}
 	
 	function myzar_category_selected_add_item(){

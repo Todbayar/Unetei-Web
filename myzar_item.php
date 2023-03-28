@@ -20,6 +20,7 @@
 
 <script>
 	var selectedCategory = [];
+	var selectedImagesIndex = 0;
 	
 	$(document).ready(function(){
 		if(sessionStorage.getItem("selectedCategoryHier") != null){
@@ -34,8 +35,31 @@
 			}
 			$(".myzar_content_add_item").show();
 			sessionStorage.removeItem("selectedCategoryHier");
-		}
+		};
 	});
+	
+	function myzar_item_images_browse(){
+		$("#myzar_item_images_input").trigger("click");
+		$("#myzar_item_images_input").change(function(){
+			var vImageExtensions = ['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml'];
+			var vImages = $(this)[0].files;
+			for(let i=0; i<vImages.length; i++){
+				if($.inArray(vImages[i].type.toLowerCase(), vImageExtensions) > -1){
+					var readerImages = new FileReader();
+					readerImages.onload = function(event) {
+						$("#myzar_item_images").append("<div id=\"images"+selectedImagesIndex+"\" style=\"float:left; width: 121px; height: 121px; margin: 5px; border-radius: 5px; background-color:#dddddd\"><img src=\""+event.target.result+"\" style=\"width: 100%; height: 100%; border-radius: 5px\" /><i onClick=\"myzar_item_images_remove("+selectedImagesIndex+")\" class=\"fa-solid fa-xmark\" style=\"position: relative; float:right; top:-123px; right:4px; color: #FF4649; cursor: pointer\"></i><div>");
+						selectedImagesIndex++;
+					};
+					readerImages.readAsDataURL(vImages[i]);
+				}
+			}
+			$("#myzar_item_images_input").val(null);
+		});
+	}
+	
+	function myzar_item_images_remove(index){
+		$("#images"+index).remove();
+	}
 </script>
 
 <div class="myzar_content_add_item" style="display: none">
@@ -90,9 +114,11 @@
 			</tr>
 		</table>
 		<div style="margin-left: 10px; display: flex">
-			<div style="margin-right: 10px">Зураг:</div>
+			<div style="margin-right: 10px">Зураг:
+				<input type="file" id="myzar_item_images_input" name="myzar_item_images_input[]" required="true" accept="image/png, image/gif, image/jpeg, .svg" multiple style="display: none" />
+			</div>
 			<div id="myzar_item_images">
-				<div class="button_yellow" style="background-color:#dddddd; width: 100px; height: 100px; align-items: center; align-content: center; text-align: center; float: left; margin: 5px">
+				<div onClick="myzar_item_images_browse()" class="button_yellow" style="background-color:#dddddd; width: 100px; height: 100px; align-items: center; align-content: center; text-align: center; float: left; margin: 5px">
 					<i class="fa-solid fa-plus" style="width: 10px; margin: 0 auto"></i>
 				</div>
 			</div>
