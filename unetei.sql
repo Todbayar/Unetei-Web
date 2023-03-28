@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Mar 26, 2023 at 12:32 PM
+-- Generation Time: Mar 28, 2023 at 07:52 AM
 -- Server version: 5.7.40
 -- PHP Version: 8.0.26
 
@@ -31,7 +31,7 @@ DROP TABLE IF EXISTS `category1`;
 CREATE TABLE IF NOT EXISTS `category1` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `uid` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `title` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `title` varchar(80) COLLATE utf8_unicode_ci NOT NULL,
   `icon` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `status` int(1) NOT NULL DEFAULT '0',
   `clicked` int(10) NOT NULL DEFAULT '0',
@@ -69,7 +69,7 @@ DROP TABLE IF EXISTS `category2`;
 CREATE TABLE IF NOT EXISTS `category2` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `uid` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `title` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `title` varchar(80) COLLATE utf8_unicode_ci NOT NULL,
   `icon` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `parent` int(10) NOT NULL,
   `status` int(1) NOT NULL DEFAULT '0',
@@ -102,7 +102,7 @@ DROP TABLE IF EXISTS `category3`;
 CREATE TABLE IF NOT EXISTS `category3` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `uid` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `title` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `title` varchar(80) COLLATE utf8_unicode_ci NOT NULL,
   `icon` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `parent` int(10) NOT NULL,
   `status` int(1) NOT NULL DEFAULT '0',
@@ -136,12 +136,49 @@ DROP TABLE IF EXISTS `category4`;
 CREATE TABLE IF NOT EXISTS `category4` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `uid` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `title` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `title` varchar(80) COLLATE utf8_unicode_ci NOT NULL,
   `icon` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `parent` int(10) NOT NULL,
   `status` int(1) NOT NULL DEFAULT '0',
   `clicked` int(10) NOT NULL DEFAULT '0',
   `active` tinyint(4) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `images`
+--
+
+DROP TABLE IF EXISTS `images`;
+CREATE TABLE IF NOT EXISTS `images` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user` int(10) UNSIGNED NOT NULL,
+  `image` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  UNIQUE KEY `id` (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `item`
+--
+
+DROP TABLE IF EXISTS `item`;
+CREATE TABLE IF NOT EXISTS `item` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `title` varchar(80) COLLATE utf8_unicode_ci NOT NULL,
+  `quality` tinyint(4) NOT NULL COMMENT '0-шинэ, 1-хуучин',
+  `address` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  `price` decimal(10,2) UNSIGNED NOT NULL,
+  `images` int(10) UNSIGNED NOT NULL,
+  `youtube` varchar(2048) COLLATE utf8_unicode_ci NOT NULL,
+  `video` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  `description` text COLLATE utf8_unicode_ci NOT NULL,
+  `city` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  `user` int(10) UNSIGNED NOT NULL,
+  `isactive` tinyint(4) NOT NULL COMMENT '0-inactive,1-active',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
