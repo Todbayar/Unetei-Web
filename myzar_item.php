@@ -16,6 +16,17 @@
 		margin: 0 auto;
 	}
 }
+	
+label.required::after {
+	content: '*';
+	position: absolute;
+/*
+	right: 0;
+	top: -7px;
+*/
+	color: #c00;
+	font-family: 'RobotoRegular'
+}
 </style>
 
 <script>
@@ -63,9 +74,10 @@
 				if($.inArray(vImages[i].type.toLowerCase(), vImageExtensions) > -1){
 					var readerImages = new FileReader();
 					readerImages.onload = function(event) {
-						$("#myzar_item_images").append("<div id=\"images"+selectedImagesIndex+"\" style=\"float:left; width: 121px; height: 121px; margin: 5px; border-radius: 5px; background-color:#dddddd\"><img src=\""+event.target.result+"\" style=\"width: 100%; height: 100%; border-radius: 5px\" /><i onClick=\"myzar_item_images_remove("+selectedImagesIndex+")\" class=\"fa-solid fa-xmark\" style=\"position: relative; float:right; top:-123px; right:4px; color: #FF4649; cursor: pointer\"></i><div>");
+						$("#myzar_item_images").append("<div id=\"images"+selectedImagesIndex+"\" style=\"float:left; width: 121px; height: 121px; margin: 5px; border-radius: 5px; background-color:#dddddd\"><img name=\""+event.target.fileName+"\" src=\""+event.target.result+"\" style=\"width: 100%; height: 100%; border-radius: 5px\" /><i onClick=\"myzar_item_images_remove("+selectedImagesIndex+")\" class=\"fa-solid fa-xmark\" style=\"position: relative; float:right; top:-123px; right:4px; color: #FF4649; cursor: pointer\"></i><div>");
 						selectedImagesIndex++;
 					};
+					readerImages.fileName = vImages[i].name;
 					readerImages.readAsDataURL(vImages[i]);
 				}
 			}
@@ -86,9 +98,10 @@
 				if(vVideo.size <= 500*1024*1024){
 					var readerVideo = new FileReader();
 					readerVideo.onload = function(event) {
-						$("#myzar_item_video").append("<div id=\"video1\" style=\"float:left; width: 121px; height: 121px; margin: 5px; border-radius: 5px; background-color:#dddddd\"><video width=\"100%\" height=\"100%\" controls=\"controls\" preload=\"metadata\" style=\"border-radius: 5px\"><source src=\""+event.target.result+"#t=0.5\" type=\""+vVideo.type+"\"></video><i onClick=\"myzar_item_video_remove(1)\" class=\"fa-solid fa-xmark\" style=\"position: relative; float:right; top:-123px; right:4px; color: #FF4649; cursor: pointer\"></i></div>");
+						$("#myzar_item_video").append("<div id=\"video1\" style=\"float:left; width: 121px; height: 121px; margin: 5px; border-radius: 5px; background-color:#dddddd\"><video name=\""+event.target.fileName+"\" width=\"100%\" height=\"100%\" controls=\"controls\" preload=\"metadata\" style=\"border-radius: 5px\"><source src=\""+event.target.result+"#t=0.5\" type=\""+vVideo.type+"\"></video><i onClick=\"myzar_item_video_remove(1)\" class=\"fa-solid fa-xmark\" style=\"position: relative; float:right; top:-123px; right:4px; color: #FF4649; cursor: pointer\"></i></div>");
 						$("#videoBrowseButton").hide();
 					};
+					readerVideo.fileName = vVideo.name;
 					readerVideo.readAsDataURL(vVideo);
 					$("#myzar_item_video_input").val(null);
 				}
@@ -106,6 +119,42 @@
 		$("#video1").remove();
 		$("#videoBrowseButton").show();
 	}
+	
+	function myzar_item_add_submit(){
+		var vItemAddTitle = $("#myzar_item_title").val();
+		var vItemAddQuality = $("#myzar_item_quality").val();
+		var vItemAddAddress = $("#myzar_item_address").val();
+		var vItemAddPrice = $("#myzar_item_price").val();
+		var vItemAddImages = myzar_item_get_images();
+		var vItemAddYoutube = $("#myzar_item_youtube").val();
+		var vItemAddVideo = myzar_item_get_video();
+		var vItemAddDescription = $("#myzar_item_description").val();
+		var vItemAddCity = $("#myzar_item_city").val();
+		var vItemAddName = $("#myzar_item_name").val();
+		var vItemAddEmail = $("#myzar_item_email").val();
+		
+		
+	}
+	
+	function myzar_item_get_images(){
+		var vImages = [];
+		var vImagesIndex = 0;
+		$("#myzar_item_images div").children("img").filter(function(){
+			vImages[vImagesIndex++] = {name:$(this).attr("name"), data:$(this).attr("src")};
+		});
+		return vImages;
+	}
+		
+	function myzar_item_get_video(){
+		var vVideo;
+		$("#myzar_item_video div").children("video").filter(function(){
+			const vVideoName = $(this).attr("name");
+			$(this).children("source").filter(function(){
+				vVideo = {name:vVideoName, data:$(this).attr("src")};
+			});
+		});
+		return vVideo;
+	}
 </script>
 
 <div class="myzar_content_add_item" style="display: none">
@@ -113,9 +162,9 @@
 	<div class="myzar_content_add_item_container" style="float: left; width: 100%">
 		<table width="100%">
 			<tr>
-				<td width="115px">Зарын гарчиг:</td>
+				<td width="115px"><label class="required">Зарын гарчиг:</label></td>
 				<td>
-					<input id="myzar_item_title" type="text" maxlength="80" style="width: 95%; height: 25px; padding: 5px; font: bold 16px Arial">
+					<input id="myzar_item_title" type="text" maxlength="80" style="width: 95%; height: 25px; padding: 5px; font: normal 16px Arial">
 				</td>
 			</tr>
 			<tr>
@@ -125,9 +174,9 @@
 		</table>
 		<table width="100%">
 			<tr>
-				<td width="115px">Шинэ/хуучин:</td>
+				<td width="115px"><label class="required">Шинэ/хуучин:</label></td>
 				<td>
-					<select id="myzar_item_condition" style="width: 150px; height: 35px; font: bold 16px Arial">
+					<select id="myzar_item_quality" style="width: 150px; height: 35px; font: normal 16px Arial">
 						<option value="" disabled selected>Сонгох</option>
 						<option value="0">Шинэ</option>
 						<option value="1">Хуучин</option>
@@ -139,7 +188,7 @@
 			<tr>
 				<td width="115px">Хаяг байршил:</td>
 				<td>
-					<input id="myzar_item_address" type="text" maxlength="200" style="width: 95%; height: 25px; padding: 5px; font: bold 16px Arial">
+					<input id="myzar_item_address" type="text" maxlength="200" style="width: 95%; height: 25px; padding: 5px; font: normal 16px Arial">
 				</td>
 			</tr>
 			<tr>
@@ -149,9 +198,9 @@
 		</table>
 		<table width="100%">
 			<tr>
-				<td width="115px">Үнэ:</td>
+				<td width="115px"><label class="required">Үнэ:</label></td>
 				<td>
-					<input id="myzar_item_price" placeholder="₮" type="number" maxlength="10" style="width: 200px; height: 25px; padding: 5px; font: bold 16px Arial">
+					<input id="myzar_item_price" placeholder="₮" type="number" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="20" style="width: 200px; height: 25px; padding: 5px; font: normal 16px Arial">
 				</td>
 			</tr>
 			<tr>
@@ -173,7 +222,7 @@
 			<tr>
 				<td width="115px">Youtube URL:</td>
 				<td>
-					<input id="myzar_item_youtube" type="text" maxlength="200" style="width: 95%; height: 25px; padding: 5px; font: bold 16px Arial">
+					<input id="myzar_item_youtube" type="text" maxlength="200" style="width: 95%; height: 25px; padding: 5px; font: normal 16px Arial">
 				</td>
 			</tr>
 			<tr>
@@ -193,9 +242,9 @@
 		</div>
 		<table width="100%">
 			<tr>
-				<td width="115px" valign="top">Тайлбар:</td>
+				<td width="115px" valign="top"><label class="required">Тайлбар:</label></td>
 				<td>
-					<textarea id="myzar_item_description" maxlength="10000" style="width: 95%; height: 100px; padding: 5px; font: bold 14px Arial"></textarea>
+					<textarea id="myzar_item_description" maxlength="10000" style="width: 95%; height: 100px; padding: 5px; font: normal 14px Arial"></textarea>
 				</td>
 			</tr>
 			<tr>
@@ -212,9 +261,9 @@
 		</div>
 		<table width="100%">
 			<tr>
-				<td width="115px">Байрлал:</td>
+				<td width="115px"><label class="required">Байрлал:</label></td>
 				<td>
-					<select id="myzar_item_city" style="width: 200px; height: 35px; font: bold 16px Arial">
+					<select id="myzar_item_city" style="width: 200px; height: 35px; font: normal 16px Arial">
 						<option value="" disabled selected>Сонгох</option>
 						<option value="Улаанбаатар">Улаанбаатар</option>
 						<option value="Архангай">Архангай</option>
@@ -244,9 +293,9 @@
 		</table>
 		<table width="100%">
 			<tr>
-				<td width="115px">Нэр:</td>
+				<td width="115px"><label class="required">Нэр:</label></td>
 				<td>
-					<input id="myzar_item_name" type="text" maxlength="128" style="width: 200px; height: 25px; padding: 5px; font: bold 16px Arial">
+					<input id="myzar_item_name" type="text" maxlength="128" style="width: 85%; height: 25px; padding: 5px; font: normal 16px Arial">
 				</td>
 			</tr>
 			<tr>
@@ -258,7 +307,7 @@
 			<tr>
 				<td width="115px">Имейл хаяг:</td>
 				<td>
-					<input id="myzar_item_email" type="text" maxlength="128" style="width: 200px; height: 25px; padding: 5px; font: bold 16px Arial">
+					<input id="myzar_item_email" type="email" maxlength="128" style="width: 85%; height: 25px; padding: 5px; font: normal 16px Arial">
 				</td>
 			</tr>
 			<tr>
@@ -269,10 +318,10 @@
 		<table width="100%">
 			<tr>
 				<td width="115px">Утас:</td>
-				<td>+97699213557</td>
+				<td style="font: bold 16px Arial">+97699213557</td>
 			</tr>
 		</table>
-		<div class="button_yellow" style="margin-bottom: 10px; margin-top: 10px; height: 30px">
+		<div onClick="myzar_item_add_submit()" class="button_yellow" style="margin-bottom: 10px; margin-top: 10px; height: 30px; font: bold 16px Arial">
 			<div style="margin-left: 5px; width: 100px; margin: 0 auto; text-transform: uppercase">Зар нэмэх</div>
 		</div>
 		<p style="margin-left: 5px; font: normal 14px Arial; color: #9F9F9F">Техникийн тусламжийг <b><?php echo $phone_service; ?></b> дугаарт холбогдож лавлана уу.<br/>"ЗАР НЭМЭХ" товчлуурыг дарснаар та Unetei.mn сайтын үйлчилгээний нөхцөл болон Монгол улсын холбогдох хууль тогтоомжийг хүлээн зөвшөөрч буй болно. Зар нэмэх Сайтын дүрэм, зар нийтлэх журам болон нууцлалын бодлого.</p>

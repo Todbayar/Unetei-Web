@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Mar 28, 2023 at 07:52 AM
+-- Generation Time: Mar 29, 2023 at 10:16 AM
 -- Server version: 5.7.40
 -- PHP Version: 8.0.26
 
@@ -177,7 +177,11 @@ CREATE TABLE IF NOT EXISTS `item` (
   `video` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   `description` text COLLATE utf8_unicode_ci NOT NULL,
   `city` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
-  `user` int(10) UNSIGNED NOT NULL,
+  `user` int(10) UNSIGNED NOT NULL COMMENT 'user id',
+  `category` varchar(200) COLLATE utf8_unicode_ci NOT NULL COMMENT 'ex: c1_12 (category1, row id=12)',
+  `item_viewer` int(10) UNSIGNED DEFAULT NULL,
+  `phone_viewer` int(10) UNSIGNED DEFAULT NULL,
+  `datetime` datetime DEFAULT NULL,
   `isactive` tinyint(4) NOT NULL COMMENT '0-inactive,1-active',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
