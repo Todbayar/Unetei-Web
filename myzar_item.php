@@ -34,7 +34,7 @@
 				}
 			}
 			$(".myzar_content_add_item").show();
-			sessionStorage.removeItem("selectedCategoryHier");
+//			sessionStorage.removeItem("selectedCategoryHier");
 		};
 	});
 	
@@ -59,6 +59,36 @@
 	
 	function myzar_item_images_remove(index){
 		$("#images"+index).remove();
+	}
+	
+	function myzar_item_video_browse(){
+		$("#myzar_item_video_input").trigger("click");
+		$("#myzar_item_video_input").change(function(){
+			var vVideoExtensions = ['video/quicktime', 'video/mp4'];
+			var vVideo = $(this)[0].files[0];
+			if($.inArray(vVideo.type.toLowerCase(), vVideoExtensions) > -1){
+				if(vVideo.size <= 500*1024*1024){
+					var readerVideo = new FileReader();
+					readerVideo.onload = function(event) {
+						$("#myzar_item_video").append("<div id=\"video1\" style=\"float:left; width: 121px; height: 121px; margin: 5px; border-radius: 5px; background-color:#dddddd\"><video width=\"100%\" height=\"100%\" controls=\"controls\" preload=\"metadata\" style=\"border-radius: 5px\"><source src=\""+event.target.result+"#t=0.5\" type=\""+vVideo.type+"\"></video><i onClick=\"myzar_item_video_remove(1)\" class=\"fa-solid fa-xmark\" style=\"position: relative; float:right; top:-123px; right:4px; color: #FF4649; cursor: pointer\"></i></div>");
+						$("#videoBrowseButton").hide();
+					};
+					readerVideo.readAsDataURL(vVideo);
+					$("#myzar_item_video_input").val(null);
+				}
+				else {
+					alert("Файлын хэмжээ 500MB-аас их байна!");
+				}
+			}
+			else {
+				alert("mp4, mov файл биш байна!")
+			}
+		});
+	}
+	
+	function myzar_item_video_remove(index){
+		$("#video1").remove();
+		$("#videoBrowseButton").show();
 	}
 </script>
 
@@ -136,9 +166,11 @@
 			</tr>
 		</table>
 		<div style="margin-left: 10px; display: flex">
-			<div style="margin-right: 10px">Видео:</div>
+			<div style="margin-right: 10px">Видео:
+				<input type="file" id="myzar_item_video_input" name="myzar_item_video_input" required="true" accept="video/quicktime, video/mp4" multiple style="display: none" />
+			</div>
 			<div id="myzar_item_video">
-				<div class="button_yellow" style="background-color:#dddddd; width: 100px; height: 100px; align-items: center; align-content: center; text-align: center; float: left; margin: 5px">
+				<div id="videoBrowseButton" onClick="myzar_item_video_browse()" class="button_yellow" style="background-color:#dddddd; width: 100px; height: 100px; align-items: center; align-content: center; text-align: center; float: left; margin: 5px">
 					<i class="fa-solid fa-plus" style="width: 10px; margin: 0 auto"></i>
 				</div>
 			</div>
