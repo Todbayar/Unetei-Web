@@ -22,6 +22,22 @@
 	var selectedCategory = [];
 	var selectedImagesIndex = 0;
 	
+	function initMap() {
+	  const myLatLng = { lat: 47.919126, lng: 106.917510 };
+	  const map = new google.maps.Map(document.getElementById("map"), {
+		zoom: 4,
+		center: myLatLng,
+	  });
+
+	  new google.maps.Marker({
+		position: myLatLng,
+		map,
+		title: "Hello World!",
+	  });
+	}
+
+	window.initMap = initMap;
+	
 	$(document).ready(function(){
 		if(sessionStorage.getItem("selectedCategoryHier") != null){
 			const selectedCategoryHier = JSON.parse(sessionStorage.getItem("selectedCategoryHier"));
@@ -187,6 +203,13 @@
 				<td style="color: #9F9F9F; font: normal 14px Arial">Тайлбар хэсэгт зарлаж буй бараа, үйлчилгээнийхээ тухай товч тайлбар болон нэмэлт мэдээллээ бичнэ. Tайлбарт утасны дугаар оруулахгүй. Гарчиг болон тайлбар нь хоорондоо уялдаатай байна. Том үсэг болон товчлол ашиглахгүй байхыг хүсэе!</td>
 			</tr>
 		</table>
+		<div style="margin-left: 10px; display: none">
+			<div style="margin-right: 10px">Газрын зураг:</div>
+			<div id="myzar_item_map">
+				<div id="map" style="width: 350px; height: 250px"></div>
+				<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&v=weekly" defer></script>
+			</div>
+		</div>
 		<table width="100%">
 			<tr>
 				<td width="115px">Байрлал:</td>
