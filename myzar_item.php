@@ -147,9 +147,9 @@ label.required::after {
 		var vItemAddQuality = $("#myzar_item_quality").val();
 		var vItemAddAddress = $("#myzar_item_address").val();
 		var vItemAddPrice = $("#myzar_item_price").val();
-		var vItemAddImages = myzar_item_get_images();
+		var vItemAddImages = JSON.stringify(myzar_item_get_images());
 		var vItemAddYoutube = $("#myzar_item_youtube").val();
-		var vItemAddVideo = myzar_item_get_video();
+		var vItemAddVideo = JSON.stringify(myzar_item_get_video());
 		var vItemAddDescription = $("#myzar_item_description").val();
 		var vItemAddCity = $("#myzar_item_city").val();
 		var vItemAddName = $("#myzar_item_name").val();

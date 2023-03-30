@@ -99,4 +99,6 @@ function IsCategoryExist($pTableID, $pTitle, $pParentID){
 		return false;
 	}
 }
+
+mysqli_close($conn);
 ?>
