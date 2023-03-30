@@ -32,6 +32,8 @@ label.required::after {
 <script>
 	var selectedCategory = [];
 	var selectedImagesIndex = 0;
+	var selectedImagesNames = [];
+	var selectedVideoName;
 	
 	function initMap() {
 	  const myLatLng = { lat: 47.919126, lng: 106.917510 };
@@ -72,13 +74,31 @@ label.required::after {
 			var vImages = $(this)[0].files;
 			for(let i=0; i<vImages.length; i++){
 				if($.inArray(vImages[i].type.toLowerCase(), vImageExtensions) > -1){
-					var readerImages = new FileReader();
-					readerImages.onload = function(event) {
-						$("#myzar_item_images").append("<div id=\"images"+selectedImagesIndex+"\" style=\"float:left; width: 121px; height: 121px; margin: 5px; border-radius: 5px; background-color:#dddddd\"><img name=\""+event.target.fileName+"\" src=\""+event.target.result+"\" style=\"width: 100%; height: 100%; border-radius: 5px\" /><i onClick=\"myzar_item_images_remove("+selectedImagesIndex+")\" class=\"fa-solid fa-xmark\" style=\"position: relative; float:right; top:-123px; right:4px; color: #FF4649; cursor: pointer\"></i><div>");
-						selectedImagesIndex++;
+					var myZarItemAddImageSubmitData = new FormData();
+					myZarItemAddImageSubmitData.append("file", vImages[i]);
+					myZarItemAddImageSubmitData.append("index", selectedImagesIndex);
+					
+					const reqMyZarItemImageAddSubmit = new XMLHttpRequest();
+					reqMyZarItemImageAddSubmit.onload = function() {
+						if(!this.responseText.includes("Fail")){
+							var obj = JSON.parse(this.responseText);
+							var index = obj.index;
+							var name = obj.name;
+							var path = obj.path;
+							selectedImagesNames[index] = name;
+							$("#myzar_item_images div#images" + index + " img").remove();
+							$("#myzar_item_images div#images" + index).html("<img name=\""+name+"\" src=\""+path+"/"+name+"\" style=\"width: 100%; height: 100%; border-radius: 5px\" /><i onClick=\"myzar_item_images_remove("+index+")\" class=\"fa-solid fa-xmark\" style=\"position: relative; float:right; top:-123px; right:4px; color: #FF4649; cursor: pointer\"></i>");
+						}
+						else {
+							$("#myzar_item_images div#images" + index).remove();
+						}
 					};
-					readerImages.fileName = vImages[i].name;
-					readerImages.readAsDataURL(vImages[i]);
+					
+					$("#myzar_item_images").append("<div id=\"images"+selectedImagesIndex+"\" style=\"float:left; width: 121px; height: 121px; margin: 5px; border-radius: 5px; background-color:#dddddd\"><img src=\"Loading.gif\" width=\"24px\" height=\"24px\" style=\"margin-left: 48px; margin-top: 48px\" /><div>");
+					selectedImagesIndex++;
+					
+					reqMyZarItemImageAddSubmit.open("POST", "file_upload.php", true);
+					reqMyZarItemImageAddSubmit.send(myZarItemAddImageSubmitData);
 				}
 			}
 			$("#myzar_item_images_input").val(null);
@@ -86,7 +106,19 @@ label.required::after {
 	}
 	
 	function myzar_item_images_remove(index){
-		$("#images"+index).remove();
+		var myZarItemAddImageRemoveSubmitData = new FormData();
+		myZarItemAddImageRemoveSubmitData.append("file", selectedImagesNames[index]);
+
+		const reqMyZarItemImageRemoveSubmit = new XMLHttpRequest();
+		reqMyZarItemImageRemoveSubmit.onload = function() {
+			if(!this.responseText.includes("Fail")){
+				$("#images"+index).remove();
+				selectedImagesNames[index] = "";
+			}
+		};
+
+		reqMyZarItemImageRemoveSubmit.open("POST", "file_remove.php", true);
+		reqMyZarItemImageRemoveSubmit.send(myZarItemAddImageRemoveSubmitData);
 	}
 	
 	function myzar_item_video_browse(){
@@ -96,16 +128,17 @@ label.required::after {
 			var vVideo = $(this)[0].files[0];
 			if($.inArray(vVideo.type.toLowerCase(), vVideoExtensions) > -1){
 				if(vVideo.size <= 500*1024*1024){
-					var readerVideo = new FileReader();
-					readerVideo.onload = function(event) {
-						$("#myzar_item_video div#video1 img").remove();
-						$("#myzar_item_video div#video1").html("<video name=\""+event.target.fileName+"\" width=\"100%\" height=\"100%\" controls=\"controls\" preload=\"metadata\" style=\"border-radius: 5px\"><source src=\""+event.target.result+"#t=0.5\" type=\""+vVideo.type+"\"></video><i onClick=\"myzar_item_video_remove(1)\" class=\"fa-solid fa-xmark\" style=\"position: relative; float:right; top:-123px; right:4px; color: #FF4649; cursor: pointer\"></i>");
-					};
-					readerVideo.fileName = vVideo.name;
-					readerVideo.readAsDataURL(vVideo);
-					$("#myzar_item_video").append("<div id=\"video1\" style=\"float:left; width: 121px; height: 121px; margin: 5px; border-radius: 5px; background-color:#dddddd\"><img src=\"Loading.gif\" width=\"24px\" height=\"24px\" style=\"margin-left: 48px; margin-top: 48px\" /></div>");
-					$("#myzar_item_video_input").val(null);
-					$("#videoBrowseButton").hide();
+//					var readerVideo = new FileReader();
+//					readerVideo.onload = function(event) {
+//						$("#myzar_item_video div#video1 img").remove();
+//						$("#myzar_item_video div#video1").html("<video name=\""+event.target.fileName+"\" width=\"100%\" height=\"100%\" controls=\"controls\" preload=\"metadata\" style=\"border-radius: 5px\"><source src=\""+event.target.result+"#t=0.5\" type=\""+vVideo.type+"\"></video><i onClick=\"myzar_item_video_remove(1)\" class=\"fa-solid fa-xmark\" style=\"position: relative; float:right; top:-123px; right:4px; color: #FF4649; cursor: pointer\"></i>");
+//					};
+//					readerVideo.fileName = vVideo.name;
+//					readerVideo.readAsDataURL(vVideo);
+//					$("#myzar_item_video").append("<div id=\"video1\" style=\"float:left; width: 121px; height: 121px; margin: 5px; border-radius: 5px; background-color:#dddddd\"><img src=\"Loading.gif\" width=\"24px\" height=\"24px\" style=\"margin-left: 48px; margin-top: 48px\" /></div>");
+//					$("#myzar_item_video_input").val(null);
+//					$("#videoBrowseButton").hide();
+					
 				}
 				else {
 					alert("Файлын хэмжээ 500MB-аас их байна!");

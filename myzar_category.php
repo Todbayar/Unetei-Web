@@ -11,8 +11,8 @@ include "mysql_config.php";
 //		$("#myzar_category_add_popup").draggable();
 		
 		$("#myzar_category_add_icon").change(function(){
-			vIconType = $("#myzar_category_add_icon")[0].files[0].type;
-			vIconName = $("#myzar_category_add_icon")[0].files[0].name;
+			const vIconType = $("#myzar_category_add_icon")[0].files[0].type;
+			const vIconName = $("#myzar_category_add_icon")[0].files[0].name;
 			if(vIconType == "image/svg+xml" || vIconType == "image/png"){
 				$("#myzar_category_add_msg").text("Файл:" + vIconName);
 				document.getElementById("myzar_category_add_icon_image").src = URL.createObjectURL($("#myzar_category_add_icon")[0].files[0]);
@@ -87,7 +87,6 @@ include "mysql_config.php";
 		const reqMyZarCategoryAddSubmit = new XMLHttpRequest();
 		reqMyZarCategoryAddSubmit.onload = function() {
 			if(this.responseText.includes("OK")){
-				console.log("OK");
 				myzar_category_fetch_list(categoryTableID, categoryParentID, categoryTitle, true);
 				$("#myzar_category_add_msg").text("Ангилал амжилттай нэмэгдлээ");
 				$("#myzar_category_add_error").text("");
