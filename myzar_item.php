@@ -98,12 +98,14 @@ label.required::after {
 				if(vVideo.size <= 500*1024*1024){
 					var readerVideo = new FileReader();
 					readerVideo.onload = function(event) {
-						$("#myzar_item_video").append("<div id=\"video1\" style=\"float:left; width: 121px; height: 121px; margin: 5px; border-radius: 5px; background-color:#dddddd\"><video name=\""+event.target.fileName+"\" width=\"100%\" height=\"100%\" controls=\"controls\" preload=\"metadata\" style=\"border-radius: 5px\"><source src=\""+event.target.result+"#t=0.5\" type=\""+vVideo.type+"\"></video><i onClick=\"myzar_item_video_remove(1)\" class=\"fa-solid fa-xmark\" style=\"position: relative; float:right; top:-123px; right:4px; color: #FF4649; cursor: pointer\"></i></div>");
-						$("#videoBrowseButton").hide();
+						$("#myzar_item_video div#video1 img").remove();
+						$("#myzar_item_video div#video1").html("<video name=\""+event.target.fileName+"\" width=\"100%\" height=\"100%\" controls=\"controls\" preload=\"metadata\" style=\"border-radius: 5px\"><source src=\""+event.target.result+"#t=0.5\" type=\""+vVideo.type+"\"></video><i onClick=\"myzar_item_video_remove(1)\" class=\"fa-solid fa-xmark\" style=\"position: relative; float:right; top:-123px; right:4px; color: #FF4649; cursor: pointer\"></i>");
 					};
 					readerVideo.fileName = vVideo.name;
 					readerVideo.readAsDataURL(vVideo);
+					$("#myzar_item_video").append("<div id=\"video1\" style=\"float:left; width: 121px; height: 121px; margin: 5px; border-radius: 5px; background-color:#dddddd\"><img src=\"Loading.gif\" width=\"24px\" height=\"24px\" style=\"margin-left: 48px; margin-top: 48px\" /></div>");
 					$("#myzar_item_video_input").val(null);
+					$("#videoBrowseButton").hide();
 				}
 				else {
 					alert("Файлын хэмжээ 500MB-аас их байна!");
@@ -118,22 +120,6 @@ label.required::after {
 	function myzar_item_video_remove(index){
 		$("#video1").remove();
 		$("#videoBrowseButton").show();
-	}
-	
-	function myzar_item_add_submit(){
-		var vItemAddTitle = $("#myzar_item_title").val();
-		var vItemAddQuality = $("#myzar_item_quality").val();
-		var vItemAddAddress = $("#myzar_item_address").val();
-		var vItemAddPrice = $("#myzar_item_price").val();
-		var vItemAddImages = myzar_item_get_images();
-		var vItemAddYoutube = $("#myzar_item_youtube").val();
-		var vItemAddVideo = myzar_item_get_video();
-		var vItemAddDescription = $("#myzar_item_description").val();
-		var vItemAddCity = $("#myzar_item_city").val();
-		var vItemAddName = $("#myzar_item_name").val();
-		var vItemAddEmail = $("#myzar_item_email").val();
-		
-		
 	}
 	
 	function myzar_item_get_images(){
@@ -155,6 +141,52 @@ label.required::after {
 		});
 		return vVideo;
 	}
+	
+	function myzar_item_add_submit(){
+		var vItemAddTitle = $("#myzar_item_title").val();
+		var vItemAddQuality = $("#myzar_item_quality").val();
+		var vItemAddAddress = $("#myzar_item_address").val();
+		var vItemAddPrice = $("#myzar_item_price").val();
+		var vItemAddImages = myzar_item_get_images();
+		var vItemAddYoutube = $("#myzar_item_youtube").val();
+		var vItemAddVideo = myzar_item_get_video();
+		var vItemAddDescription = $("#myzar_item_description").val();
+		var vItemAddCity = $("#myzar_item_city").val();
+		var vItemAddName = $("#myzar_item_name").val();
+		var vItemAddEmail = $("#myzar_item_email").val();
+		
+		if(vItemAddTitle === "") $("#myzar_item_title_error").show();
+		if(vItemAddQuality == null) $("#myzar_item_quality_error").show();
+		if(vItemAddPrice === "") $("#myzar_item_price_error").show();
+		if(vItemAddDescription === "") $("#myzar_item_description_error").show();
+		if(vItemAddCity == null) $("#myzar_item_city_error").show();
+		if(vItemAddName === "") $("#myzar_item_name_error").show();
+		
+		if(vItemAddTitle !== "" && vItemAddQuality != null && vItemAddPrice !== "" && vItemAddDescription !== "" && vItemAddCity != null && vItemAddName !== ""){
+			var myZarItemAddSubmitData = new FormData();
+			myZarItemAddSubmitData.append("title", vItemAddTitle);
+			myZarItemAddSubmitData.append("quality", vItemAddQuality);
+			myZarItemAddSubmitData.append("address", vItemAddAddress);
+			myZarItemAddSubmitData.append("price", vItemAddPrice);
+			myZarItemAddSubmitData.append("images", vItemAddImages);
+			myZarItemAddSubmitData.append("youtube", vItemAddYoutube);
+			myZarItemAddSubmitData.append("video", vItemAddVideo);
+			myZarItemAddSubmitData.append("description", vItemAddDescription);
+			myZarItemAddSubmitData.append("city", vItemAddCity);
+			myZarItemAddSubmitData.append("name", vItemAddName);
+			myZarItemAddSubmitData.append("email", vItemAddEmail);
+			
+			const reqMyZarItemAdd = new XMLHttpRequest();
+			reqMyZarItemAdd.onload = function() {
+				console.log(this.responseText);
+			};
+			reqMyZarItemAdd.onerror = function(){
+				console.log("<error>:" + reqMyZarItemAdd.status);
+			};
+			reqMyZarItemAdd.open("POST", "mysql_myzar_item_add_process.php", true);
+			reqMyZarItemAdd.send(myZarItemAddSubmitData);
+		}
+	}
 </script>
 
 <div class="myzar_content_add_item" style="display: none">
@@ -169,7 +201,10 @@ label.required::after {
 			</tr>
 			<tr>
 				<td></td>
-				<td style="color: #9F9F9F; font: normal 14px Arial">Ижил зар оруулахыг хориглоно. Гарчигт хэрэглэхийг хориглосон үгсийг ашиглахгүй байна уу. Жишээ нь: хямдралтай, яаралтай, түрээслүүлнэ, хямдхан, гэх мэт.</td>
+				<td style="color: #9F9F9F; font: normal 14px Arial">
+					<div id="myzar_item_title_error" style="display: none; color: #FF4649">Хоосон байж болохгүй!</div>
+					Ижил зар оруулахыг хориглоно. Гарчигт хэрэглэхийг хориглосон үгсийг ашиглахгүй байна уу. Жишээ нь: хямдралтай, яаралтай, түрээслүүлнэ, хямдхан, гэх мэт.
+				</td>
 			</tr>
 		</table>
 		<table width="100%">
@@ -182,6 +217,10 @@ label.required::after {
 						<option value="1">Хуучин</option>
 					</select>
 				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td style="font: normal 14px Arial"><div id="myzar_item_quality_error" style="display: none; color: #FF4649">Сонголт хийнэ үү!</div></td>
 			</tr>
 		</table>
 		<table width="100%">
@@ -205,7 +244,10 @@ label.required::after {
 			</tr>
 			<tr>
 				<td></td>
-				<td style="color: #9F9F9F; font: normal 14px Arial">Үнийн дүнг бүх тэгтэй нь оруулна уу. Жишээ нь: 12 саяыг 12000000 гэж оруулна уу.</td>
+				<td style="color: #9F9F9F; font: normal 14px Arial">
+					<div id="myzar_item_price_error" style="display: none; color: #FF4649">Хоосон байж болохгүй!</div>
+					Үнийн дүнг бүх тэгтэй нь оруулна уу. Жишээ нь: 12 саяыг 12000000 гэж оруулна уу.
+				</td>
 			</tr>
 		</table>
 		<div style="margin-left: 10px; display: flex">
@@ -249,7 +291,10 @@ label.required::after {
 			</tr>
 			<tr>
 				<td></td>
-				<td style="color: #9F9F9F; font: normal 14px Arial">Тайлбар хэсэгт зарлаж буй бараа, үйлчилгээнийхээ тухай товч тайлбар болон нэмэлт мэдээллээ бичнэ. Tайлбарт утасны дугаар оруулахгүй. Гарчиг болон тайлбар нь хоорондоо уялдаатай байна. Том үсэг болон товчлол ашиглахгүй байхыг хүсэе!</td>
+				<td style="color: #9F9F9F; font: normal 14px Arial">
+					<div id="myzar_item_description_error" style="display: none; color: #FF4649">Хоосон байж болохгүй!</div>
+					Тайлбар хэсэгт зарлаж буй бараа, үйлчилгээнийхээ тухай товч тайлбар болон нэмэлт мэдээллээ бичнэ. Tайлбарт утасны дугаар оруулахгүй. Гарчиг болон тайлбар нь хоорондоо уялдаатай байна. Том үсэг болон товчлол ашиглахгүй байхыг хүсэе!
+				</td>
 			</tr>
 		</table>
 		<div style="margin-left: 10px; display: none">
@@ -290,6 +335,10 @@ label.required::after {
 					</select>
 				</td>
 			</tr>
+			<tr>
+				<td></td>
+				<td style="font: normal 14px Arial"><div id="myzar_item_city_error" style="display: none; color: #FF4649">Сонголт хийнэ үү!</div></td>
+			</tr>
 		</table>
 		<table width="100%">
 			<tr>
@@ -300,7 +349,10 @@ label.required::after {
 			</tr>
 			<tr>
 				<td></td>
-				<td style="color: #9F9F9F; font: normal 14px Arial">Нэр хэсэгт хориглох зүйлс!: ганцхан үсэг, дан тоо, тэмдэгт, мөн худалдагч, админ, нэр, зарын эзэн, хэрэглэгч, user, apple, samsung, iphone, galaxy, lexus, toyota, г. м. үгсийг оруулхыг хориглоно.</td>
+				<td style="color: #9F9F9F; font: normal 14px Arial">
+					<div id="myzar_item_name_error" style="display: none; color: #FF4649">Хоосон байж болохгүй!</div>
+					Нэр хэсэгт хориглох зүйлс!: ганцхан үсэг, дан тоо, тэмдэгт, мөн худалдагч, админ, нэр, зарын эзэн, хэрэглэгч, user, apple, samsung, iphone, galaxy, lexus, toyota, г. м. үгсийг оруулхыг хориглоно.
+				</td>
 			</tr>
 		</table>
 		<table width="100%">
@@ -312,7 +364,9 @@ label.required::after {
 			</tr>
 			<tr>
 				<td></td>
-				<td style="color: #9F9F9F; font: normal 14px Arial">Таны зарын тухай ирсэн мессэжний тухай мэдэгдэл очих болно.</td>
+				<td style="color: #9F9F9F; font: normal 14px Arial">
+					Таны зарын тухай ирсэн мессэжний тухай мэдэгдэл очих болно.
+				</td>
 			</tr>
 		</table>
 		<table width="100%">
