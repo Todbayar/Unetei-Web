@@ -31,14 +31,17 @@
 			<i class="fa-solid fa-rectangle-ad" style="font-size: 24px"></i>
 			<div class="removable" style="margin-left: 5px">Миний зарууд</div>
 		</div>
+		<hr/>
 		<div class="myzar_tab_category" style="display: flex; align-items: center; cursor: pointer" onClick="myzar_tab('category')">
 			<i class="fa-solid fa-list-ol" style="font-size: 24px"></i>
 			<div class="removable" style="margin-left: 5px">Ангилалууд</div>
 		</div>
+		<hr/>
 		<div class="myzar_tab_configuration" style="display: flex; align-items: center; cursor: pointer">
 			<i class="fa-solid fa-gear" style="font-size: 24px"></i>
 			<div class="removable" style="margin-left: 5px">Тохиргоо</div>
 		</div>
+		<hr/>
 		<div class="myzar_tab_credit" style="display: flex; align-items: center; margin-right: 20px">
 			<div class="removable" style="margin-right: 5px">Таны дансанд:</div>
 			<div class="myzar_tab_credit_amount">0 ₮</div>
