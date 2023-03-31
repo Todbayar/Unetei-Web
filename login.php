@@ -84,11 +84,12 @@
 					const loginSubmit = new XMLHttpRequest();
 					
 					loginSubmit.onload = function() {
-						if(this.responseText.includes("OK")){
+						if(!this.responseText.includes("Fail")){
+							sessionStorage.setItem("userID", this.responseText);
 							location.href = "index.php";
 						}
 						else {
-							$("#loginVerificationError").text(this.responseText);
+							$("#loginVerificationError").text("Нэвтрэх үед алдаа гарлаа!");
 						}
 					};
 					

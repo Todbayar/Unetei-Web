@@ -55,6 +55,7 @@ label.required::after {
 		if(sessionStorage.getItem("selectedCategoryHier") != null){
 			const selectedCategoryHier = JSON.parse(sessionStorage.getItem("selectedCategoryHier"));
 			for(let i=0; i<selectedCategoryHier.length; i++){
+				selectedCategory[i] = selectedCategoryHier[i].id;
 				if(selectedCategoryHier[i].icon != ""){
 					$(".myzar_content_add_item_selected_categories").append("<div class=\"button_yellow\" style=\"margin-left:10px; margin-bottom: 10px; float: left; background: #dddddd; height:18px\"><div style=\"display:flex\"><img src=\"./user_files/"+selectedCategoryHier[i].icon+"\" width=\"20px\" height=\"20px\" style=\"margin-left: 5px\" /><div style=\"margin-left: 5px\">"+selectedCategoryHier[i].title+"</div></div></div>");
 				}
@@ -127,18 +128,38 @@ label.required::after {
 			var vVideoExtensions = ['video/quicktime', 'video/mp4'];
 			var vVideo = $(this)[0].files[0];
 			if($.inArray(vVideo.type.toLowerCase(), vVideoExtensions) > -1){
-				if(vVideo.size <= 500*1024*1024){
-//					var readerVideo = new FileReader();
-//					readerVideo.onload = function(event) {
-//						$("#myzar_item_video div#video1 img").remove();
-//						$("#myzar_item_video div#video1").html("<video name=\""+event.target.fileName+"\" width=\"100%\" height=\"100%\" controls=\"controls\" preload=\"metadata\" style=\"border-radius: 5px\"><source src=\""+event.target.result+"#t=0.5\" type=\""+vVideo.type+"\"></video><i onClick=\"myzar_item_video_remove(1)\" class=\"fa-solid fa-xmark\" style=\"position: relative; float:right; top:-123px; right:4px; color: #FF4649; cursor: pointer\"></i>");
-//					};
-//					readerVideo.fileName = vVideo.name;
-//					readerVideo.readAsDataURL(vVideo);
-//					$("#myzar_item_video").append("<div id=\"video1\" style=\"float:left; width: 121px; height: 121px; margin: 5px; border-radius: 5px; background-color:#dddddd\"><img src=\"Loading.gif\" width=\"24px\" height=\"24px\" style=\"margin-left: 48px; margin-top: 48px\" /></div>");
-//					$("#myzar_item_video_input").val(null);
-//					$("#videoBrowseButton").hide();
+				if(vVideo.size <= 500*1024*1024){					
+					var myZarItemAddVideoSubmitData = new FormData();
+					myZarItemAddVideoSubmitData.append("file", vVideo);
+					myZarItemAddVideoSubmitData.append("index", 1);
 					
+					const reqMyZarItemVideoAddSubmit = new XMLHttpRequest();
+					reqMyZarItemVideoAddSubmit.onload = function() {
+						console.log("<myzar_item_video_browse>:" + this.responseText);
+						if(!this.responseText.includes("Fail")){
+							var obj = JSON.parse(this.responseText);
+							var index = obj.index;
+							var name = obj.name;
+							var path = obj.path;
+							selectedVideoName = name;
+							$("#myzar_item_video div#video1 img").remove();
+							$("#myzar_item_video div#video1").html("<video name=\""+name+"\" width=\"100%\" height=\"100%\" controls=\"controls\" preload=\"metadata\" style=\"border-radius: 5px\"><source src=\""+path+"/"+name+"#t=0.5\" type=\""+vVideo.type+"\"></video><i onClick=\"myzar_item_video_remove()\" class=\"fa-solid fa-xmark\" style=\"position: relative; float:right; top:-123px; right:4px; color: #FF4649; cursor: pointer\"></i>");
+						}
+						else {
+							$("#myzar_item_video div#video1").remove();
+							$("#videoBrowseButton").show();
+						}
+					};
+					
+					reqMyZarItemVideoAddSubmit.onerror = function(){
+						console.log("<myzar_item_video_browse>:" + reqMyZarItemVideoAddSubmit.status + ", " + reqMyZarItemVideoAddSubmit.statusText);
+					};
+					
+					$("#videoBrowseButton").hide();
+					$("#myzar_item_video").append("<div id=\"video1\" style=\"float:left; width: 121px; height: 121px; margin: 5px; border-radius: 5px; background-color:#dddddd\"><img src=\"Loading.gif\" width=\"24px\" height=\"24px\" style=\"margin-left: 48px; margin-top: 48px\" /><div>");
+					
+					reqMyZarItemVideoAddSubmit.open("POST", "file_upload.php", true);
+					reqMyZarItemVideoAddSubmit.send(myZarItemAddVideoSubmitData);
 				}
 				else {
 					alert("Файлын хэмжээ 500MB-аас их байна!");
@@ -147,32 +168,25 @@ label.required::after {
 			else {
 				alert("mp4, mov файл биш байна!")
 			}
+			$("#myzar_item_video_input").val(null);
 		});
 	}
 	
-	function myzar_item_video_remove(index){
-		$("#video1").remove();
-		$("#videoBrowseButton").show();
-	}
-	
-	function myzar_item_get_images(){
-		var vImages = [];
-		var vImagesIndex = 0;
-		$("#myzar_item_images div").children("img").filter(function(){
-			vImages[vImagesIndex++] = {name:$(this).attr("name"), data:$(this).attr("src")};
-		});
-		return vImages;
-	}
-		
-	function myzar_item_get_video(){
-		var vVideo;
-		$("#myzar_item_video div").children("video").filter(function(){
-			const vVideoName = $(this).attr("name");
-			$(this).children("source").filter(function(){
-				vVideo = {name:vVideoName, data:$(this).attr("src")};
-			});
-		});
-		return vVideo;
+	function myzar_item_video_remove(){
+		var myZarItemAddVideoRemoveSubmitData = new FormData();
+		myZarItemAddVideoRemoveSubmitData.append("file", selectedVideoName);
+
+		const reqMyZarItemVideoRemoveSubmit = new XMLHttpRequest();
+		reqMyZarItemVideoRemoveSubmit.onload = function() {
+			if(!this.responseText.includes("Fail")){
+				selectedVideoName = "";
+				$("#video1").remove();
+				$("#videoBrowseButton").show();
+			}
+		};
+
+		reqMyZarItemVideoRemoveSubmit.open("POST", "file_remove.php", true);
+		reqMyZarItemVideoRemoveSubmit.send(myZarItemAddVideoRemoveSubmitData);
 	}
 	
 	function myzar_item_add_submit(){
@@ -180,9 +194,9 @@ label.required::after {
 		var vItemAddQuality = $("#myzar_item_quality").val();
 		var vItemAddAddress = $("#myzar_item_address").val();
 		var vItemAddPrice = $("#myzar_item_price").val();
-		var vItemAddImages = JSON.stringify(myzar_item_get_images());
+		var vItemAddImages = JSON.stringify(selectedImagesNames);
 		var vItemAddYoutube = $("#myzar_item_youtube").val();
-		var vItemAddVideo = JSON.stringify(myzar_item_get_video());
+		var vItemAddVideo = selectedVideoName;
 		var vItemAddDescription = $("#myzar_item_description").val();
 		var vItemAddCity = $("#myzar_item_city").val();
 		var vItemAddName = $("#myzar_item_name").val();
@@ -197,6 +211,8 @@ label.required::after {
 		
 		if(vItemAddTitle !== "" && vItemAddQuality != null && vItemAddPrice !== "" && vItemAddDescription !== "" && vItemAddCity != null && vItemAddName !== ""){
 			var myZarItemAddSubmitData = new FormData();
+			myZarItemAddSubmitData.append("uid", sessionStorage.getItem("uid"));
+			myZarItemAddSubmitData.append("category", "c" + selectedCategory.length + "_" + selectedCategory[selectedCategory.length-1]);
 			myZarItemAddSubmitData.append("title", vItemAddTitle);
 			myZarItemAddSubmitData.append("quality", vItemAddQuality);
 			myZarItemAddSubmitData.append("address", vItemAddAddress);

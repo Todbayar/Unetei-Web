@@ -3,7 +3,7 @@ include "mysql_config.php";
 $uID = $_REQUEST["uid"];
 $uPhone = $_REQUEST["phone"];
 if(isset($uID) && isset($uPhone)){
-	$query = "SELECT * FROM user WHERE uid='".$uID."'";
+	$query = "SELECT id FROM user WHERE uid='".$uID."'";
 	$result = $conn->query($query);
 	if ($result->num_rows > 0) {
 		echo "OK";
