@@ -64,7 +64,7 @@ label.required::after {
 				}
 			}
 			$(".myzar_content_add_item").show();
-//			sessionStorage.removeItem("selectedCategoryHier");
+			sessionStorage.removeItem("selectedCategoryHier");
 		};
 	});
 	
@@ -227,7 +227,19 @@ label.required::after {
 			
 			const reqMyZarItemAdd = new XMLHttpRequest();
 			reqMyZarItemAdd.onload = function() {
-				console.log(this.responseText);
+				if(this.responseText == "Fail 55"){
+					alert("Уг гарчиг бүхий зар таны зарын жагсаалтанд байна!");
+				}
+				else if(this.responseText == "Fail 52"){
+					alert("Зарыг нэмэх боломжгүй байна!");
+				}
+				else if(this.responseText == "Fail 44"){
+					alert("Зарын зургийг оруулах боломжгй байна!");
+				}
+				else {
+					//adv number, success
+					location.reload();
+				}
 			};
 			reqMyZarItemAdd.onerror = function(){
 				console.log("<error>:" + reqMyZarItemAdd.status);

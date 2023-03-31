@@ -233,7 +233,7 @@ include "mysql_config.php";
 	<div class="myzar_category_container_selected" style="float: left; padding-top: 10px; width: 100%;"></div>
 	<hr/>
 	<div>
-		<div id="myzar_category_add_button" onClick="myzar_category_add_show()" class="button_yellow" style="margin-left:10px; margin-bottom: 10px; width: 70px; float: left">
+		<div id="myzar_category_add_button" onClick="myzar_category_add_show()" class="button_yellow" style="margin-left:10px; margin-bottom: 10px; width: 70px; float: left; height: 18px">
 			<i class="fa-solid fa-plus"></i>
 			<div style="margin-left: 5px">Нэмэх</div>
 		</div>

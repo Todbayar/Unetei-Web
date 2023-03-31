@@ -15,34 +15,45 @@ $city = $_REQUEST["city"];
 $name = (isset($_REQUEST["name"]) && preg_match("/^[a-zA-Z-' ]*$/",$_REQUEST["name"])) ? $_REQUEST["name"] : "";
 $email = (isset($_REQUEST["email"]) && filter_var($_REQUEST["email"], FILTER_VALIDATE_EMAIL)) ? $_REQUEST["email"] : "";
 
-$queryItem = "INSERT INTO item (title, quality, address, price, youtube, video, description, city, user, category, item_viewer, phone_viewer, datetime, isactive) VALUES ('".$title."', ".$quality.", '".$address."', ".$price.", '".$youtube."', '".$video."', '".$description."', '".$city."', '".$uid."', '".$category."', 0, 0, '".date("Y-m-d h:i:s")."', 0)";
-$resultItem = $conn->query($queryItem);
-if($resultItem){
-	$itemID = mysqli_insert_id($conn);
-	if($images != null){
-		$isImagesInsert = false;
-		foreach($images as $image){
-			$queryImages = "INSERT INTO images (user, item, image) VALUES ('".$uid."', ".$itemID.", '".$image."')";
-			if($conn->query($queryImages)){
-				$isImagesInsert = true;
+$queryUpdateUser = "UPDATE user SET name='".$name."', email='".$email."', city='' WHERE uid='".$uid."'";
+$conn->query($queryUpdateUser);
+
+$queryDuplication = "SELECT * FROM item WHERE title='".$title."' AND user='".$uid."' AND category='".$category."'";
+$resultDuplication = $conn->query($queryDuplication);
+$isDuplication = mysqli_num_rows($resultDuplication);
+if($isDuplication == 0){
+	$queryItem = "INSERT INTO item (title, quality, address, price, youtube, video, description, city, user, category, item_viewer, phone_viewer, datetime, isactive) VALUES ('".$title."', ".$quality.", '".$address."', ".$price.", '".$youtube."', '".$video."', '".$description."', '".$city."', '".$uid."', '".$category."', 0, 0, '".date("Y-m-d h:i:s")."', 0)";
+	$resultItem = $conn->query($queryItem);
+	if($resultItem){
+		$itemID = mysqli_insert_id($conn);
+		if($images != null){
+			$isImagesInsert = false;
+			foreach($images as $image){
+				$queryImages = "INSERT INTO images (user, item, image) VALUES ('".$uid."', ".$itemID.", '".$image."')";
+				if($conn->query($queryImages)){
+					$isImagesInsert = true;
+				}
+				else {
+					$isImagesInsert = false;
+				}
+			}
+			if($isImagesInsert){
+				echo $itemID;
 			}
 			else {
-				$isImagesInsert = false;
+				echo "Fail 44";
 			}
 		}
-		if($isImagesInsert){
-			echo $itemID;
-		}
 		else {
-			echo "Fail 37";
+			echo $itemID;
 		}
 	}
 	else {
-		echo $itemID;
+		echo "Fail 52";
 	}
 }
 else {
-	echo "Fail 45";
+	echo "Fail 55";
 }
 
 mysqli_close($conn);
