@@ -16,13 +16,11 @@ $(document).ready(function(){
 });
 	
 function myzar_list_item_tab(state){
-	if(!location.href.includes(state)){
-		if(location.href.includes("&state=")){
-		   location.href = location.href.substring(0, location.href.lastIndexOf("&state=")) + "&state=" + state;
-		}
-		else {
-			location.href += "&state=" + state;
-		}
+	if(location.href.includes("&state=")){
+	   location.href = location.href.substring(0, location.href.lastIndexOf("&state=")) + "&state=" + state;
+	}
+	else {
+		location.href += "&state=" + state;
 	}
 }
 </script>
