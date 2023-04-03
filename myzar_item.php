@@ -100,6 +100,12 @@ function myzar_list_item_tab(state){
 </div>
 
 <div class="myzar_content_list_items">
+	<?php
+	echo $queryFetchListItems = "SELECT * FROM item WHERE user='".$_SESSION["uid"]."'";	
+	if($_GET["myzar"] == "item" && $_GET["state"] == "all"){
+		
+	}
+	?>
 	<div class="myzar_content_list_item">
 		<table class="myzar_content_list_item_top" style="display: flex">
 			<tr>

@@ -1,4 +1,4 @@
-<?php
+<?php session_start();
 include "mysql_config.php";
 $uID = $_REQUEST["uid"];
 $uPhone = $_REQUEST["phone"];
@@ -7,12 +7,14 @@ if(isset($uID) && isset($uPhone)){
 	$result = $conn->query($query);
 	if ($result->num_rows > 0) {
 		echo "OK";
+		$_SESSION["uid"] = $uID;
 	}
 	else {
 		$query = "INSERT INTO user (uid, phone, role, status) values ('".$uID."','".$uPhone."', 0, 1)";
 		if ($conn->query($query) === TRUE) {
 			echo "OK";
-		} 
+			$_SESSION["uid"] = $uID;
+		}
 		else {
 			echo "<userLogin.php>:error-18:".$conn->error;
 		}
