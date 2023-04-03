@@ -8,7 +8,7 @@
 }
 	
 .myzar_content_list_item .myzar_content_list_item_top {
-	padding: 10px;
+	padding: 4px;
 }
 	
 .myzar_content_list_item .myzar_content_list_item_top img {
@@ -22,7 +22,6 @@
 .myzar_content_list_item .myzar_content_list_item_bottom {
 	float:left;
 	background: #f3f3f3; 
-	margin-top: 10px;
 	width: 100%;
 }
 	
@@ -73,15 +72,24 @@
 
 <div class="myzar_content_list_items">
 	<div class="myzar_content_list_item">
-		<div class="myzar_content_list_item_top" style="display: flex">
-			<img src="user_files/20230331024721_20230327_094525.jpg" />
-			<div class="myzar_content_list_item_detail" style="margin-left: 10px">
-				<div class="myzar_content_list_item_title" style="font: bold 16px Arial">Dell optiplex 3020 дан процессор (380,000 ₮)</div>
-				<div class="myzar_content_list_item_expire" style="font: normal 14px Arial; color: #6ab001">Дуусах огноо: 2023-04-21, 18:00. Шинэчлэхэд 3 өдөр дутуу.</div>
-				<div class="myzar_content_list_item_category" style="font: normal 14px Arial; color: #999999">Компьютер сэлбэг хэрэгсэл <i class="fas fa-angle-right" style="font-size: 12px"></i> Суурин компьютер Процессор, сервер</div>
-				<div class="myzar_content_list_item_more" style="font: normal 13px Arial; color: #666666">Нийтэлсэн: 2023-02-09, #6931181, Үзсэн : <i class="fa-solid fa-eye"></i> 48 <i class="fa-solid fa-phone"></i> 1</div>
-			</div>
-		</div>
+		<table class="myzar_content_list_item_top" style="display: flex">
+			<tr>
+				<td valign="top" rowspan="2">
+					<img src="user_files/20230331024721_20230327_094525.jpg" />
+				</td>
+				<td valign="top" style="padding-left: 5px">
+					<div class="myzar_content_list_item_title" style="font: bold 16px Arial">Dell optiplex 3020 дан процессор (380,000 ₮)</div>
+					<div class="myzar_content_list_item_expire" style="font: normal 14px Arial; color: #6ab001">Дуусах огноо: 2023-04-21, 18:00. Шинэчлэхэд 3 өдөр дутуу.</div>
+					<div class="myzar_content_list_item_category" style="font: normal 14px Arial; color: #999999">Компьютер сэлбэг хэрэгсэл <i class="fas fa-angle-right" style="font-size: 12px"></i> Суурин компьютер Процессор, сервер</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="padding-left: 5px">
+					<div class="myzar_content_list_item_more" style="font: normal 13px Arial; color: #666666">Нийтэлсэн: 2023-02-09, <i class="fa-solid fa-hashtag"></i>6931181, Үзсэн : <i class="fa-solid fa-eye"></i> 48 <i class="fa-solid fa-phone"></i> 1</div>
+				</td>
+			</tr>
+			<div class="myzar_content_list_item_detail" style="margin-left: 10px"></div>
+		</table>
 		<div class="myzar_content_list_item_bottom">
 			<div class="button_yellow" style="float: left; font-size: 14px; margin: 5px">
 				<div style="margin-left: 5px">Онцгой зар болгох</div>
