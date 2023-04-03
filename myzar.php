@@ -1,27 +1,28 @@
 <script>
-	$(document).ready(function(){
-		var urlParams = new URLSearchParams(window.location.search);
-		var urlMyzarTab = urlParams.get('myzar');
-		if(urlMyzarTab != null){
-			$(".myzar_tab_" + urlMyzarTab + " i").css('color', '#ffffff');
-			$(".myzar_tab_" + urlMyzarTab + " div").css('color', '#ffffff');
+$(document).ready(function(){
+	var urlParams = new URLSearchParams(window.location.search);
+	var urlMyzarTab = urlParams.get('myzar');
+	if(urlMyzarTab != null){
+		$(".myzar_tab_" + urlMyzarTab + " i").css('color', '#ffffff');
+		$(".myzar_tab_" + urlMyzarTab + " div").css('color', '#ffffff');
+	}
+	else {
+		myzar_tab("item");
+	}
+});
+
+function myzar_tab(name){
+	if(!location.href.includes(name)){
+		if(location.href.includes("&myzar=")){
+		   location.href = location.href.substring(0, location.href.lastIndexOf("&myzar=")) + "&myzar=" + name;
 		}
 		else {
-			myzar_tab("item");
-		}
-	});
-	
-	function myzar_tab(name){
-		if(!location.href.includes(name)){
-			if(location.href.includes("&myzar=")){
-			   location.href = location.href.substring(0, location.href.lastIndexOf("&myzar=")) + "&myzar=" + name;
-			}
-			else {
-				location.href += "&myzar=" + name;
-			}
+			location.href += "&myzar=" + name;
 		}
 	}
+}
 </script>
+
 <div style="padding-top: 0px; width: 100%">
 	<div style="height: 50px; background: #58d518; display:flex;  justify-content: space-between">
 		<div class="myzar_tab_item" style="display: flex; align-items: center; margin-left: 20px; cursor: pointer"  onClick="myzar_tab('item')">
