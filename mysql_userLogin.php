@@ -1,27 +1,38 @@
-<?php session_start();
+<?php
 include "mysql_config.php";
+
+date_default_timezone_set("Asia/Ulaanbaatar");
+
 $uID = $_REQUEST["uid"];
 $uPhone = $_REQUEST["phone"];
+
 if(isset($uID) && isset($uPhone)){
-	$query = "SELECT id FROM user WHERE uid='".$uID."'";
+	$query = "SELECT * FROM user WHERE uid='".$uID."'";
 	$result = $conn->query($query);
 	if ($result->num_rows > 0) {
-		echo "OK";
-		$_SESSION["uid"] = $uID;
+		SaveCookie();
+		echo $_COOKIE["uid"];
 	}
 	else {
 		$query = "INSERT INTO user (uid, phone, role, status) values ('".$uID."','".$uPhone."', 0, 1)";
 		if ($conn->query($query) === TRUE) {
-			echo "OK";
-			$_SESSION["uid"] = $uID;
+			Cookie();
+			echo $_COOKIE["uid"];
 		}
 		else {
-			echo "<userLogin.php>:error-18:".$conn->error;
+			echo "Fail";
 		}
 	}
 }
 else {
-	echo "<userLogin.php>:error-23";
+	echo "Fail";
+}
+
+function SaveCookie(){
+	global $uID, $uPhone;
+	$cookieTime = time() + (86400 * 30);	//30 day, 86400=1
+	setcookie("uid", $uID, $cookieTime, "/");
+	setcookie("phone", $uPhone, $cookieTime, "/");
 }
 
 $conn->close();

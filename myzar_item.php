@@ -11,7 +11,7 @@ $(document).ready(function(){
 		$(".myzar_tab_list_item_" + urlMyzarItemListState + " div").css('color', '#ffffff');
 	}
 	else {
-		myzar_list_item_tab("all");
+//		myzar_list_item_tab("all");
 	}
 });
 	
@@ -101,8 +101,8 @@ function myzar_list_item_tab(state){
 
 <div class="myzar_content_list_items">
 	<?php
-	echo $queryFetchListItems = "SELECT * FROM item WHERE user='".$_SESSION["uid"]."'";	
-	if($_GET["myzar"] == "item" && $_GET["state"] == "all"){
+	echo $queryFetchListItems = "SELECT * FROM item WHERE user='".$_COOKIE["uid"]."'";	
+	if((isset($_GET["myzar"]) && $_GET["myzar"] == "item") && (isset($_GET["state"]) && $_GET["state"] == "all")){
 		
 	}
 	?>

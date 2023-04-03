@@ -3,9 +3,11 @@ function pagenavigation(page){
 }
 
 function logout(){
-	firebase.auth().signOut();
-	sessionStorage.removeItem("uid");
-	sessionStorage.removeItem("phone");
-//	sessionStorage.clear();
-	location.href = "index.php";
+	const reqLogout = new XMLHttpRequest();
+	reqLogout.onload = function() {
+		firebase.auth().signOut();
+		location.href = "./";
+	};
+	reqLogout.open("POST", "logout.php", true);
+	reqLogout.send();
 }

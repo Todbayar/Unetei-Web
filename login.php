@@ -85,8 +85,7 @@
 					
 					loginSubmit.onload = function() {
 						if(!this.responseText.includes("Fail")){
-							sessionStorage.setItem("userID", this.responseText);
-							location.href = "index.php";
+							location.href = "./";
 						}
 						else {
 							$("#loginVerificationError").text("Нэвтрэх үед алдаа гарлаа!");

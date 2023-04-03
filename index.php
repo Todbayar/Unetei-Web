@@ -1,4 +1,3 @@
-<?php session_start(); ?>
 <!doctype html>
 <html>
 	<head>
@@ -27,39 +26,40 @@
 			}
 		</style>
 		
-		<script>
-			const firebaseConfig = {
-				apiKey: "AIzaSyAJxCfAZKgG4vy_nd6UVX3UKhZAF0iyKl4",
-				authDomain: "unetei-bc717.firebaseapp.com",
-				projectId: "unetei-bc717",
-				storageBucket: "unetei-bc717.appspot.com",
-				messagingSenderId: "834168591977",
-				appId: "1:834168591977:web:ee2f1d66da1dcd0e33b4f8",
-				measurementId: "G-Q1YLJDB3KC"
-			};
-			firebase.initializeApp(firebaseConfig);
-			
-			$(document).ready(function(){
-				firebase.auth().onAuthStateChanged(function(user) {
-					if (user) {
-						$("#myzar_phone").text(user.phoneNumber);
-						$("#myzar_nav").text("Миний зар");
-						$("#myzar_nav").attr("onclick","pagenavigation('myzar')");
-						$("#logoutButton").show();
-						sessionStorage.setItem("uid", user.uid);
-						sessionStorage.setItem("phone", user.phoneNumber);
-					}
-				});
-
-				$(".myzar").hover(function(){
-					$(".dropdown").show();
-				}, function(){
-					$(".dropdown").hide();
-				});
-			});
-		</script>
 	</head>
 
+	<script>
+		const firebaseConfig = {
+			apiKey: "AIzaSyAJxCfAZKgG4vy_nd6UVX3UKhZAF0iyKl4",
+			authDomain: "unetei-bc717.firebaseapp.com",
+			projectId: "unetei-bc717",
+			storageBucket: "unetei-bc717.appspot.com",
+			messagingSenderId: "834168591977",
+			appId: "1:834168591977:web:ee2f1d66da1dcd0e33b4f8",
+			measurementId: "G-Q1YLJDB3KC"
+		};
+		firebase.initializeApp(firebaseConfig);
+		
+		$(document).ready(function(){
+			<?php
+			if(isset($_COOKIE["uid"]) && isset($_COOKIE["phone"])){
+				?>
+				$("#myzar_phone").text("+"<?php echo $_COOKIE["phone"]; ?>);
+				$("#myzar_nav").text("Миний зар");
+				$("#myzar_nav").attr("onclick","pagenavigation('myzar')");
+				$("#logoutButton").show();
+				<?php
+			}
+			?>
+
+			$(".myzar").hover(function(){
+				$(".dropdown").show();
+			}, function(){
+				$(".dropdown").hide();
+			});
+		});
+	</script>
+	
 	<body>
 		<div class="topbar">
 			<div class="wrap">
