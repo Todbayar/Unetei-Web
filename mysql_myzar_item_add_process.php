@@ -22,7 +22,7 @@ $queryDuplication = "SELECT * FROM item WHERE title='".$title."' AND userID=".$u
 $resultDuplication = $conn->query($queryDuplication);
 $isDuplication = mysqli_num_rows($resultDuplication);
 if($isDuplication == 0){
-	$queryItem = "INSERT INTO item (title, quality, address, price, youtube, video, description, city, userID, category, item_viewer, phone_viewer, datetime, expire_days, isactive) VALUES ('".$title."', ".$quality.", '".$address."', ".$price.", '".$youtube."', '".$video."', '".$description."', '".$city."', ".$userID.", '".$category."', 0, 0, '".date("Y-m-d h:i:s")."', 7, 0)";
+	$queryItem = "INSERT INTO item (title, quality, address, price, youtube, video, description, city, userID, category, item_viewer, phone_viewer, datetime, expire_days, isactive) VALUES ('".$title."', ".$quality.", '".$address."', ".$price.", '".$youtube."', '".$video."', '".$description."', '".$city."', ".$userID.", '".$category."', 0, 0, '".date("Y-m-d h:i:s")."', 7, 1)";
 	$resultItem = $conn->query($queryItem);
 	if($resultItem){
 		$itemID = mysqli_insert_id($conn);
