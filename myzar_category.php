@@ -79,13 +79,13 @@ include "mysql_config.php";
 	function myzar_category_add_submit_button(){
 		var myZarCategoryAddSubmitData = new FormData();
 		myZarCategoryAddSubmitData.append("tableID", categoryTableID);
-		myZarCategoryAddSubmitData.append("uid", sessionStorage.getItem("uid"));
 		myZarCategoryAddSubmitData.append("title", $("#myzar_category_add_icon_title").val().trim());
 		myZarCategoryAddSubmitData.append("iconfile", $("#myzar_category_add_icon")[0].files[0]);
 		myZarCategoryAddSubmitData.append("parentID", categoryParentID);
 		
 		const reqMyZarCategoryAddSubmit = new XMLHttpRequest();
 		reqMyZarCategoryAddSubmit.onload = function() {
+			console.log("<myzar_category_add_submit_button>:" + this.responseText);
 			if(this.responseText.includes("OK")){
 				myzar_category_fetch_list(categoryTableID, categoryParentID, categoryTitle, true);
 				$("#myzar_category_add_msg").text("Ангилал амжилттай нэмэгдлээ");
@@ -145,6 +145,8 @@ include "mysql_config.php";
 		if(tableID > 1 && !isNewCategoryEntry && tableID > categoryTableID){
 			const selectedCategory = {id:parentID, tableID:tableID, title:title, icon:icon};
 			selectedCategories[tableID-2] = selectedCategory;
+			
+			$("#myZarSelectCategory"+(categoryTableID-1)+" #myzar_category_selected_add_item_button").hide();	//removing item add button from previos selected category
 			
 			if(icon != ''){
 				if(hasChildren){

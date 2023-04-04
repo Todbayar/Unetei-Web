@@ -1,11 +1,11 @@
 <?php
 include "mysql_config.php";
 
-if(isset($_REQUEST["tableID"]) && isset($_REQUEST["uid"]) && isset($_REQUEST["title"]) && isset($_FILES["iconfile"]) && isset($_REQUEST["parentID"])){
-	InsertCategoryEntry($_REQUEST["tableID"], $_REQUEST["uid"], $_REQUEST["title"], $_FILES["iconfile"], $_REQUEST["parentID"]);
+if(isset($_REQUEST["tableID"]) && isset($_REQUEST["title"]) && isset($_FILES["iconfile"]) && isset($_REQUEST["parentID"])){
+	InsertCategoryEntry($_REQUEST["tableID"], $_COOKIE["userID"], $_REQUEST["title"], $_FILES["iconfile"], $_REQUEST["parentID"]);
 }
-if(isset($_REQUEST["tableID"]) && isset($_REQUEST["uid"]) && isset($_REQUEST["title"]) && !isset($_FILES["iconfile"]) && isset($_REQUEST["parentID"])){
-	InsertCategoryEntry($_REQUEST["tableID"], $_REQUEST["uid"], $_REQUEST["title"], null, $_REQUEST["parentID"]);
+if(isset($_REQUEST["tableID"]) && isset($_REQUEST["title"]) && !isset($_FILES["iconfile"]) && isset($_REQUEST["parentID"])){
+	InsertCategoryEntry($_REQUEST["tableID"], $_COOKIE["userID"], $_REQUEST["title"], null, $_REQUEST["parentID"]);
 }
 else {
 	echo "Ангиллыг нэмхэд алдаа гарлаа!";
@@ -28,10 +28,10 @@ function InsertCategoryEntry($pTableID, $pUID , $pTitle, $pFile, $pParentID){
 			if (move_uploaded_file($pFile["tmp_name"], "user_files/".$vNewFile)) {
 				$queryInsert = "";
 				if($pParentID == 0){
-					$queryInsert = "INSERT INTO category".$pTableID."(uid, title, icon) VALUES('".$pUID."','".$pTitle."','".$vNewFile."')";
+					$queryInsert = "INSERT INTO category".$pTableID."(userID, title, icon) VALUES('".$pUID."','".$pTitle."','".$vNewFile."')";
 				}
 				else {
-					$queryInsert = "INSERT INTO category".$pTableID."(uid, title, icon, parent) VALUES('".$pUID."','".$pTitle."','".$vNewFile."',".$pParentID.")";
+					$queryInsert = "INSERT INTO category".$pTableID."(userID, title, icon, parent) VALUES('".$pUID."','".$pTitle."','".$vNewFile."',".$pParentID.")";
 				}
 				$resultInsert = $conn->query($queryInsert);
 
@@ -52,10 +52,10 @@ function InsertCategoryEntry($pTableID, $pUID , $pTitle, $pFile, $pParentID){
 		else {
 			$queryInsert = "";
 			if($pParentID == 0){
-				echo $queryInsert = "INSERT INTO category".$pTableID."(uid, title) VALUES('".$pUID."','".$pTitle."')";
+				echo $queryInsert = "INSERT INTO category".$pTableID."(userID, title) VALUES('".$pUID."','".$pTitle."')";
 			}
 			else {
-				echo $queryInsert = "INSERT INTO category".$pTableID."(uid, title, parent) VALUES('".$pUID."','".$pTitle."',".$pParentID.")";
+				echo $queryInsert = "INSERT INTO category".$pTableID."(userID, title, parent) VALUES('".$pUID."','".$pTitle."',".$pParentID.")";
 			}
 			$resultInsert = $conn->query($queryInsert);
 

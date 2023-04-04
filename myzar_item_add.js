@@ -1,7 +1,7 @@
 var selectedCategory = [];
 var selectedImagesIndex = 0;
 var selectedImagesNames = [];
-var selectedVideoName;
+var selectedVideoName = "";
 
 function initMap() {
   const myLatLng = { lat: 47.919126, lng: 106.917510 };
@@ -56,7 +56,7 @@ function myzar_item_images_browse(){
 						var path = obj.path;
 						selectedImagesNames[index] = name;
 						$("#myzar_item_images div#images" + index + " img").remove();
-						$("#myzar_item_images div#images" + index).html("<img name=\""+name+"\" src=\""+path+"/"+name+"\" style=\"width: 100%; height: 100%; border-radius: 5px\" /><i onClick=\"myzar_item_images_remove("+index+")\" class=\"fa-solid fa-xmark\" style=\"position: relative; float:right; top:-123px; right:4px; color: #FF4649; cursor: pointer\"></i>");
+						$("#myzar_item_images div#images" + index).html("<img name=\""+name+"\" src=\""+path+"/"+name+"\" style=\"width: 100%; height: 100%; border-radius: 5px; object-fit: cover\" /><i onClick=\"myzar_item_images_remove("+index+")\" class=\"fa-solid fa-xmark\" style=\"position: relative; float:right; top:-123px; right:4px; color: #FF4649; cursor: pointer\"></i>");
 					}
 					else {
 						$("#myzar_item_images div#images" + index).remove();
@@ -179,7 +179,6 @@ function myzar_item_add_submit(){
 
 	if(vItemAddTitle !== "" && vItemAddQuality != null && vItemAddPrice !== "" && vItemAddDescription !== "" && vItemAddCity != null && vItemAddName !== ""){
 		var myZarItemAddSubmitData = new FormData();
-		myZarItemAddSubmitData.append("uid", sessionStorage.getItem("uid"));
 		myZarItemAddSubmitData.append("category", "c" + selectedCategory.length + "_" + selectedCategory[selectedCategory.length-1]);
 		myZarItemAddSubmitData.append("title", vItemAddTitle);
 		myZarItemAddSubmitData.append("quality", vItemAddQuality);
@@ -195,7 +194,7 @@ function myzar_item_add_submit(){
 
 		const reqMyZarItemAdd = new XMLHttpRequest();
 		reqMyZarItemAdd.onload = function() {
-			if(this.responseText == "Fail 55"){
+			if(this.responseText == "Fail 56"){
 				alert("Уг гарчиг бүхий зар таны зарын жагсаалтанд байна!");
 			}
 			else if(this.responseText == "Fail 52"){
