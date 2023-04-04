@@ -20,10 +20,12 @@ function initMap() {
 window.initMap = initMap;
 
 $(document).ready(function(){
+	selectedImagesIndex = 0;
 	if(sessionStorage.getItem("selectedCategoryHier") != null) myzar_item_categories(JSON.parse(sessionStorage.getItem("selectedCategoryHier")));
 });
 
 function myzar_item_categories(hierCategories){
+	$(".myzar_content_add_item_selected_categories").empty();
 	const selectedCategoryHier = hierCategories;
 	for(let i=0; i<selectedCategoryHier.length; i++){
 		selectedCategory[i] = selectedCategoryHier[i].id;
@@ -77,11 +79,13 @@ function myzar_item_images_browse(){
 }
 
 function myzar_item_images_remove(index){
+	console.log("<myzar_item_images_remove>:" + selectedImagesNames[index] + ", " + index);
 	var myZarItemAddImageRemoveSubmitData = new FormData();
 	myZarItemAddImageRemoveSubmitData.append("file", selectedImagesNames[index]);
 
 	const reqMyZarItemImageRemoveSubmit = new XMLHttpRequest();
 	reqMyZarItemImageRemoveSubmit.onload = function() {
+		console.log(this.responseText);
 		if(!this.responseText.includes("Fail")){
 			$("#images"+index).remove();
 			selectedImagesNames[index] = "";

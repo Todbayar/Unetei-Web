@@ -31,6 +31,7 @@ label.required::after {
 </style>
 
 <div class="myzar_content_add_item" style="display: none">
+	<input id="myzar_item_id" type="number" maxlength="255" style="display: none">
 	<div class="myzar_content_add_item_selected_categories" style="margin-top: 10px; float: left; width: 100%"></div>
 	<div class="myzar_content_add_item_container" style="float: left; width: 100%">
 		<table width="100%">
@@ -216,7 +217,7 @@ label.required::after {
 				<td style="font: bold 16px Arial">+97699213557</td>
 			</tr>
 		</table>
-		<div onClick="myzar_item_add_submit()" class="button_yellow" style="margin-bottom: 10px; margin-top: 10px; height: 30px; font: bold 16px Arial">
+		<div id="myzar_item_button" onClick="myzar_item_add_submit()" class="button_yellow" style="margin-bottom: 10px; margin-top: 10px; height: 30px; font: bold 16px Arial">
 			<div style="margin-left: 5px; width: 100px; margin: 0 auto; text-transform: uppercase">Зар нэмэх</div>
 		</div>
 		<p style="margin-left: 5px; font: normal 14px Arial; color: #9F9F9F">Техникийн тусламжийг <b><?php echo $phone_service; ?></b> дугаарт холбогдож лавлана уу.<br/>"ЗАР НЭМЭХ" товчлуурыг дарснаар та Unetei.mn сайтын үйлчилгээний нөхцөл болон Монгол улсын холбогдох хууль тогтоомжийг хүлээн зөвшөөрч буй болно. Зар нэмэх Сайтын дүрэм, зар нийтлэх журам болон нууцлалын бодлого.</p>
