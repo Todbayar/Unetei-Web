@@ -167,7 +167,10 @@ mysqli_free_result($resultFetchListItemsStateCountInActive);
 		<table class="myzar_content_list_item_top" style="display: flex">
 			<tr>
 				<td valign="top" rowspan="2">
-					<img src="user_files/<?php echo $rowFetchListItems["image"]; ?>" />
+					<div class="myzar_item_list_image">						
+						<img src="user_files/<?php echo $rowFetchListItems["image"]; ?>" />
+						<i style="position: absolute; left: 12px; color: white; opacity: 0.73; font-size: 13px"><i class="fa-solid fa-camera"></i> <?php echo $rowFetchListItems["count_images"]; ?></i>
+					</div>
 				</td>
 				<td valign="top" style="padding-left: 5px">
 					<div class="myzar_content_list_item_title" style="font: bold 16px Arial"><?php echo $rowFetchListItems["title"]." (".number_format($rowFetchListItems["price"])." ₮)"; ?></div>
