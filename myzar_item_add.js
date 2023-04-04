@@ -20,21 +20,23 @@ function initMap() {
 window.initMap = initMap;
 
 $(document).ready(function(){
-	if(sessionStorage.getItem("selectedCategoryHier") != null){
-		const selectedCategoryHier = JSON.parse(sessionStorage.getItem("selectedCategoryHier"));
-		for(let i=0; i<selectedCategoryHier.length; i++){
-			selectedCategory[i] = selectedCategoryHier[i].id;
-			if(selectedCategoryHier[i].icon != ""){
-				$(".myzar_content_add_item_selected_categories").append("<div class=\"button_yellow\" style=\"margin-left:10px; margin-bottom: 10px; float: left; background: #dddddd; height:18px\"><div style=\"display:flex\"><img src=\"./user_files/"+selectedCategoryHier[i].icon+"\" width=\"20px\" height=\"20px\" style=\"margin-left: 5px\" /><div style=\"margin-left: 5px\">"+selectedCategoryHier[i].title+"</div></div></div>");
-			}
-			else {
-				$(".myzar_content_add_item_selected_categories").append("<div class=\"button_yellow\" style=\"margin-left:10px; margin-bottom: 10px; float: left; background: #dddddd; height:18px\"><div style=\"display:flex\"><div style=\"margin-left: 5px\">"+selectedCategoryHier[i].title+"</div></div></div>");
-			}
-		}
-		$(".myzar_content_add_item").show();
-//		sessionStorage.removeItem("selectedCategoryHier");
-	};
+	if(sessionStorage.getItem("selectedCategoryHier") != null) myzar_item_categories(JSON.parse(sessionStorage.getItem("selectedCategoryHier")));
 });
+
+function myzar_item_categories(hierCategories){
+	const selectedCategoryHier = hierCategories;
+	for(let i=0; i<selectedCategoryHier.length; i++){
+		selectedCategory[i] = selectedCategoryHier[i].id;
+		if(selectedCategoryHier[i].icon != ""){
+			$(".myzar_content_add_item_selected_categories").append("<div class=\"button_yellow\" style=\"margin-left:10px; margin-bottom: 10px; float: left; background: #dddddd; height:18px\"><div style=\"display:flex\"><img src=\"./user_files/"+selectedCategoryHier[i].icon+"\" width=\"20px\" height=\"20px\" style=\"margin-left: 5px\" /><div style=\"margin-left: 5px\">"+selectedCategoryHier[i].title+"</div></div></div>");
+		}
+		else {
+			$(".myzar_content_add_item_selected_categories").append("<div class=\"button_yellow\" style=\"margin-left:10px; margin-bottom: 10px; float: left; background: #dddddd; height:18px\"><div style=\"display:flex\"><div style=\"margin-left: 5px\">"+selectedCategoryHier[i].title+"</div></div></div>");
+		}
+	}
+	$(".myzar_content_add_item").show();
+//		sessionStorage.removeItem("selectedCategoryHier");
+}
 
 function myzar_item_images_browse(){
 	$("#myzar_item_images_input").trigger("click");

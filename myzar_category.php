@@ -85,7 +85,6 @@ include "mysql_config.php";
 		
 		const reqMyZarCategoryAddSubmit = new XMLHttpRequest();
 		reqMyZarCategoryAddSubmit.onload = function() {
-			console.log("<myzar_category_add_submit_button>:" + this.responseText);
 			if(this.responseText.includes("OK")){
 				myzar_category_fetch_list(categoryTableID, categoryParentID, categoryTitle, true);
 				$("#myzar_category_add_msg").text("Ангилал амжилттай нэмэгдлээ");
@@ -182,7 +181,7 @@ include "mysql_config.php";
 			if(objMyZarCategoryList.length > 0){
 				for(let i=0; i<objMyZarCategoryList.length; i++){
 					if(tableID <= 4){
-						if(objMyZarCategoryList[i].uid == sessionStorage.getItem("uid")){
+						if(objMyZarCategoryList[i].userID == <?php echo $_COOKIE["userID"] ?>){
 							if(objMyZarCategoryList[i].count_category_children > 0){
 								if(objMyZarCategoryList[i].icon != null){
 									$("#myzar_content_category_list").append("<div onClick=\"myzar_category_fetch_list("+(tableID+1)+", "+objMyZarCategoryList[i].id+", '"+objMyZarCategoryList[i].title+"', '"+objMyZarCategoryList[i].icon+"', true, false)\" class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: #C4F1FF; height:18px\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"20px\" height=\"20px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div><i class=\"fa-solid fa-ellipsis-vertical\" style=\"color:#68ceee; margin-left: 10px; font-size: 20px\"></i></div>");

@@ -3,30 +3,6 @@
 
 <?php include "mysql_config.php"; ?>
 
-<script>
-$(document).ready(function(){
-	var urlParams = new URLSearchParams(window.location.search);
-	var urlMyzarItemListState = urlParams.get('state');
-	if(urlMyzarItemListState != null){
-		$(".myzar_tab_list_item_" + urlMyzarItemListState + " img").attr("src", "myzar_tab_list_item_" + urlMyzarItemListState + "_white.png");
-		$(".myzar_tab_list_item_" + urlMyzarItemListState + " i").css('color', '#ffffff');
-		$(".myzar_tab_list_item_" + urlMyzarItemListState + " div").css('color', '#ffffff');
-	}
-	else {
-		myzar_list_item_tab("all");
-	}
-});
-	
-function myzar_list_item_tab(state){
-	if(location.href.includes("&state=")){
-	   location.href = location.href.substring(0, location.href.lastIndexOf("&state=")) + "&state=" + state;
-	}
-	else {
-		location.href += "&state=" + state;
-	}
-}
-</script>
-
 <style>
 .myzar_content_list_items {
 	float: left;
@@ -68,6 +44,50 @@ function myzar_list_item_tab(state){
 	}
 }
 </style>
+
+<script>
+var tmpItem = new Object();
+
+$(document).ready(function(){
+	var urlParams = new URLSearchParams(window.location.search);
+	var urlMyzarItemListState = urlParams.get('state');
+	if(urlMyzarItemListState != null){
+		$(".myzar_tab_list_item_" + urlMyzarItemListState + " img").attr("src", "myzar_tab_list_item_" + urlMyzarItemListState + "_white.png");
+		$(".myzar_tab_list_item_" + urlMyzarItemListState + " i").css('color', '#ffffff');
+		$(".myzar_tab_list_item_" + urlMyzarItemListState + " div").css('color', '#ffffff');
+	}
+	else {
+		myzar_list_item_tab("all");
+	}
+});
+	
+function myzar_list_item_tab(state){
+	if(location.href.includes("&state=")){
+	   location.href = location.href.substring(0, location.href.lastIndexOf("&state=")) + "&state=" + state;
+	}
+	else {
+		location.href += "&state=" + state;
+	}
+}
+	
+function myzar_category_selected_item_edit(id){
+	var myZarItemListReqData = new FormData();
+	myZarItemListReqData.append("id", id);
+
+	const reqMyZarItemListData = new XMLHttpRequest();
+	reqMyZarItemListData.onload = function() {
+		console.log("<reqMyZarItemListData>:" + this.responseText);
+		const resultItemData = JSON.parse(this.responseText);
+		myzar_item_categories(resultItemData.categories);
+//		$("#")
+	};
+	reqMyZarItemListData.onerror = function() {
+		console.log("<error>:" + reqMyZarItemListData.status);
+	};
+	reqMyZarItemListData.open("POST", "mysql_myzar_item_list_process.php", true);
+	reqMyZarItemListData.send(myZarItemListReqData);
+}
+</script>
 
 <?php
 $queryFetchListItemsStateCountAll = "SELECT * FROM item WHERE userID=".$_COOKIE["userID"];
@@ -216,7 +236,7 @@ mysqli_free_result($resultFetchListItemsStateCountInActive);
 			<div class="button_yellow" style="float: left; background: #a0cf0a; font-size: 14px; margin: 5px">
 				<div style="margin-left: 5px; color: white">Шинэчлэх</div>
 			</div>
-			<div class="button_yellow" style="float: left; background: transparent; font-size: 14px; margin: 5px">
+			<div onClick="myzar_category_selected_item_edit(<?php echo $rowFetchListItems["id"]; ?>)" class="button_yellow" style="float: left; background: transparent; font-size: 14px; margin: 5px">
 				<div style="margin-left: 5px; color: #0086bf">Зараа засах</div>
 			</div>
 			<div class="button_yellow" style="float: left; background: transparent; font-size: 14px; margin: 5px">
