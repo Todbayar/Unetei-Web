@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Mar 29, 2023 at 10:16 AM
+-- Generation Time: Apr 05, 2023 at 07:49 AM
 -- Server version: 5.7.40
 -- PHP Version: 8.0.26
 
@@ -30,34 +30,21 @@ SET time_zone = "+00:00";
 DROP TABLE IF EXISTS `category1`;
 CREATE TABLE IF NOT EXISTS `category1` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
-  `uid` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `userID` int(10) NOT NULL,
   `title` varchar(80) COLLATE utf8_unicode_ci NOT NULL,
   `icon` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `status` int(1) NOT NULL DEFAULT '0',
-  `clicked` int(10) NOT NULL DEFAULT '0',
+  `category_viewer` int(10) NOT NULL DEFAULT '0',
   `active` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `category1`
 --
 
-INSERT INTO `category1` (`id`, `uid`, `title`, `icon`, `status`, `clicked`, `active`) VALUES
-(1, 'lRm664LM9ggwA8iyExDDXVqDifN2', 'Хувцас хэрэглэл', '20230326104411_clotheshanger2.png', 0, 0, 0),
-(2, 'lRm664LM9ggwA8iyExDDXVqDifN2', 'Үл хөдлөх', '20230326112450_realestate.png', 0, 0, 0),
-(3, 'lRm664LM9ggwA8iyExDDXVqDifN2', 'Авто машин', '20230326112637_Bevel-And-Emboss-Car-Car-orange.256.png', 0, 0, 0),
-(4, 'lRm664LM9ggwA8iyExDDXVqDifN2', 'Ажлын зар', '20230326112817_Double-J-Design-Diagram-Free-Suitcase.128.png', 0, 0, 0),
-(5, 'lRm664LM9ggwA8iyExDDXVqDifN2', 'Хүүхдийн бараа', '20230326112936_kidcloth.png', 0, 0, 0),
-(6, 'lRm664LM9ggwA8iyExDDXVqDifN2', 'Компьютер сэлбэг хэрэгсэл', '20230326113055_Icons-Land-Vista-Hardware-Devices-Portable-Computer.256.png', 0, 0, 0),
-(7, 'lRm664LM9ggwA8iyExDDXVqDifN2', 'Утас, дугаар', '20230326113237_Designcontest-Ecommerce-Business-Iphone.256.png', 0, 0, 0),
-(9, 'lRm664LM9ggwA8iyExDDXVqDifN2', 'Цахилгаан бараа', '20230326113639_Julie-Henriksen-Kitchen-Rotating-Stand-Mixer.512.png', 0, 0, 0),
-(10, 'lRm664LM9ggwA8iyExDDXVqDifN2', 'Гэр ахуйн бараа', '20230326114022_red-sofa-furniture-icon-png-4.png', 0, 0, 0),
-(11, 'lRm664LM9ggwA8iyExDDXVqDifN2', 'Төхөөрөмж, материал, түлш', '20230326114208_Treetog-Junior-Tool-box.256.png', 0, 0, 0),
-(12, 'lRm664LM9ggwA8iyExDDXVqDifN2', 'Амралт, спорт, хобби', '20230326114317_Kevin-Andersson-Sportset-Basketball.128.png', 0, 0, 0),
-(13, 'lRm664LM9ggwA8iyExDDXVqDifN2', 'Эрүүл мэнд, гоо сайхан, хүнс', '20230326114649_4773193.png', 0, 0, 0),
-(14, 'lRm664LM9ggwA8iyExDDXVqDifN2', 'Мал амьтан, ургамал', '20230326115021_Google-Noto-Emoji-Animals-Nature-22215-dog.512.png', 0, 0, 0),
-(15, 'lRm664LM9ggwA8iyExDDXVqDifN2', 'Үйлчилгээ', '20230326120006_6568544.png', 0, 0, 0);
+INSERT INTO `category1` (`id`, `userID`, `title`, `icon`, `status`, `category_viewer`, `active`) VALUES
+(1, 1, 'Компьютер сэлбэг хэрэгсэл', '20230404012333_Media-Design-Hydropro-V2-My-Computer.512.png', 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -68,29 +55,22 @@ INSERT INTO `category1` (`id`, `uid`, `title`, `icon`, `status`, `clicked`, `act
 DROP TABLE IF EXISTS `category2`;
 CREATE TABLE IF NOT EXISTS `category2` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
-  `uid` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `userID` int(10) NOT NULL,
   `title` varchar(80) COLLATE utf8_unicode_ci NOT NULL,
   `icon` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `parent` int(10) NOT NULL,
   `status` int(1) NOT NULL DEFAULT '0',
-  `clicked` int(10) NOT NULL DEFAULT '0',
+  `category_viewer` int(10) NOT NULL DEFAULT '0',
   `active` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `category2`
 --
 
-INSERT INTO `category2` (`id`, `uid`, `title`, `icon`, `parent`, `status`, `clicked`, `active`) VALUES
-(1, 'lRm664LM9ggwA8iyExDDXVqDifN2', 'Эмэгтэй хувцас', NULL, 1, 0, 0, 0),
-(2, 'lRm664LM9ggwA8iyExDDXVqDifN2', 'Эрэгтэй хувцас', NULL, 1, 0, 0, 0),
-(3, 'lRm664LM9ggwA8iyExDDXVqDifN2', 'Гутал, пүүз', NULL, 1, 0, 0, 0),
-(4, 'lRm664LM9ggwA8iyExDDXVqDifN2', 'Малгай, цүнх', NULL, 1, 0, 0, 0),
-(5, 'lRm664LM9ggwA8iyExDDXVqDifN2', 'Гоёл чимэглэл, бугуйн цаг', NULL, 1, 0, 0, 0),
-(6, 'lRm664LM9ggwA8iyExDDXVqDifN2', 'Ажлын хувцас', NULL, 1, 0, 0, 0),
-(7, 'lRm664LM9ggwA8iyExDDXVqDifN2', 'Бусад', NULL, 1, 0, 0, 0),
-(8, 'lRm664LM9ggwA8iyExDDXVqDifN2', 'Суурин компьютер', '20230326120144_Media-Design-Hydropro-V2-My-Computer.512.png', 6, 0, 0, 0);
+INSERT INTO `category2` (`id`, `userID`, `title`, `icon`, `parent`, `status`, `category_viewer`, `active`) VALUES
+(1, 1, 'Notebook', NULL, 1, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -101,30 +81,22 @@ INSERT INTO `category2` (`id`, `uid`, `title`, `icon`, `parent`, `status`, `clic
 DROP TABLE IF EXISTS `category3`;
 CREATE TABLE IF NOT EXISTS `category3` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
-  `uid` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `userID` int(10) NOT NULL,
   `title` varchar(80) COLLATE utf8_unicode_ci NOT NULL,
   `icon` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `parent` int(10) NOT NULL,
   `status` int(1) NOT NULL DEFAULT '0',
-  `clicked` int(10) NOT NULL DEFAULT '0',
+  `category_viewer` int(10) NOT NULL DEFAULT '0',
   `active` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `category3`
 --
 
-INSERT INTO `category3` (`id`, `uid`, `title`, `icon`, `parent`, `status`, `clicked`, `active`) VALUES
-(1, 'lRm664LM9ggwA8iyExDDXVqDifN2', 'Гадуур хувцас', NULL, 2, 0, 0, 0),
-(2, 'lRm664LM9ggwA8iyExDDXVqDifN2', 'Гэрийн өмсгөл', NULL, 2, 0, 0, 0),
-(3, 'lRm664LM9ggwA8iyExDDXVqDifN2', 'Дотуур хувцас', NULL, 2, 0, 0, 0),
-(4, 'lRm664LM9ggwA8iyExDDXVqDifN2', 'Дээл', NULL, 2, 0, 0, 0),
-(5, 'lRm664LM9ggwA8iyExDDXVqDifN2', 'Костюм, зангиа', NULL, 2, 0, 0, 0),
-(6, 'lRm664LM9ggwA8iyExDDXVqDifN2', 'Өмд', NULL, 2, 0, 0, 0),
-(7, 'lRm664LM9ggwA8iyExDDXVqDifN2', 'Спорт өмсгөл', NULL, 2, 0, 0, 0),
-(8, 'lRm664LM9ggwA8iyExDDXVqDifN2', 'Цамц', NULL, 2, 0, 0, 0),
-(9, 'lRm664LM9ggwA8iyExDDXVqDifN2', 'Футболк', NULL, 2, 0, 0, 0);
+INSERT INTO `category3` (`id`, `userID`, `title`, `icon`, `parent`, `status`, `category_viewer`, `active`) VALUES
+(3, 1, 'HP', NULL, 1, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -135,12 +107,12 @@ INSERT INTO `category3` (`id`, `uid`, `title`, `icon`, `parent`, `status`, `clic
 DROP TABLE IF EXISTS `category4`;
 CREATE TABLE IF NOT EXISTS `category4` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
-  `uid` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `userID` int(10) NOT NULL,
   `title` varchar(80) COLLATE utf8_unicode_ci NOT NULL,
   `icon` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `parent` int(10) NOT NULL,
   `status` int(1) NOT NULL DEFAULT '0',
-  `clicked` int(10) NOT NULL DEFAULT '0',
+  `category_viewer` int(10) NOT NULL DEFAULT '0',
   `active` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -154,10 +126,23 @@ CREATE TABLE IF NOT EXISTS `category4` (
 DROP TABLE IF EXISTS `images`;
 CREATE TABLE IF NOT EXISTS `images` (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `user` int(10) UNSIGNED NOT NULL,
+  `userID` int(10) NOT NULL COMMENT 'user id',
+  `item` int(10) NOT NULL COMMENT 'item id',
   `image` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
-  UNIQUE KEY `id` (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  UNIQUE KEY `id` (`id`),
+  UNIQUE KEY `image` (`image`)
+) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `images`
+--
+
+INSERT INTO `images` (`id`, `userID`, `item`, `image`) VALUES
+(12, 1, 1, '20230405105025_6.jpg'),
+(11, 1, 1, '20230405105025_5.jpg'),
+(14, 2, 2, '20230405014628_holy-spirit-fire-dove-wind.jpg'),
+(15, 1, 3, '20230405032443_11.jpg'),
+(16, 1, 3, '20230405032443_12.jpg');
 
 -- --------------------------------------------------------
 
@@ -172,19 +157,31 @@ CREATE TABLE IF NOT EXISTS `item` (
   `quality` tinyint(4) NOT NULL COMMENT '0-шинэ, 1-хуучин',
   `address` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   `price` decimal(10,2) UNSIGNED NOT NULL,
-  `images` int(10) UNSIGNED NOT NULL,
   `youtube` varchar(2048) COLLATE utf8_unicode_ci NOT NULL,
   `video` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   `description` text COLLATE utf8_unicode_ci NOT NULL,
   `city` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
-  `user` int(10) UNSIGNED NOT NULL COMMENT 'user id',
+  `name` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `phone` varchar(12) COLLATE utf8_unicode_ci NOT NULL,
+  `email` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `userID` int(10) NOT NULL COMMENT 'user id',
   `category` varchar(200) COLLATE utf8_unicode_ci NOT NULL COMMENT 'ex: c1_12 (category1, row id=12)',
   `item_viewer` int(10) UNSIGNED DEFAULT NULL,
   `phone_viewer` int(10) UNSIGNED DEFAULT NULL,
   `datetime` datetime DEFAULT NULL,
-  `isactive` tinyint(4) NOT NULL COMMENT '0-inactive,1-active',
+  `expire_days` int(10) NOT NULL,
+  `isactive` tinyint(4) NOT NULL COMMENT '0-inactive, 1-review, 2-archive, 3-dismiss, 4-active',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `item`
+--
+
+INSERT INTO `item` (`id`, `title`, `quality`, `address`, `price`, `youtube`, `video`, `description`, `city`, `name`, `phone`, `email`, `userID`, `category`, `item_viewer`, `phone_viewer`, `datetime`, `expire_days`, `isactive`) VALUES
+(1, 'Dell optiplex 3020 дан процессор', 0, 'Баянгол', '380000.00', 'https://www.youtube.com/embed/bRl5N_M9AvA', '20230405034449_20230329_104447.mp4', 'Dell Optiplex 3020 асуудалгүй шинэ процессор.\r\n4-р үеийн i3 @ 3.40GHz\r\nHDD: 500GB\r\nRam:8GB\r\nГар, mouse', 'Улаанбаатар', 'Todbayar', '+97695905811', 'atodko0513@gmail.com', 1, 'c3_3', 0, 0, '2023-04-05 03:44:54', 7, 1),
+(2, 'Dell optiplex 3020 дан процессор', 1, 'Сонгино хайрхан', '1200000.00', '', '', 'Ok', 'Улаанбаатар', 'Tod', '+97699114547', '', 2, 'c3_3', 0, 0, '2023-04-05 03:43:14', 7, 1),
+(3, 'Hp', 1, 'narnii horoolol', '1800000.00', '', '', 'i5-7r uy\r\n\r\n16gb ram\r\n\r\n256gb sdd hard + 500gb hard\r\n\r\ngtx1050', 'Улаанбаатар', '', '+97689000025', '', 1, 'c3_3', 0, 0, '2023-04-05 03:25:29', 7, 1);
 
 -- --------------------------------------------------------
 
@@ -213,8 +210,8 @@ CREATE TABLE IF NOT EXISTS `user` (
 --
 
 INSERT INTO `user` (`id`, `uid`, `name`, `email`, `phone`, `city`, `topup`, `role`, `status`) VALUES
-(1, 'lRm664LM9ggwA8iyExDDXVqDifN2', NULL, NULL, '+97699213557', NULL, NULL, 0, 1),
-(2, 'ui8fkPgY9gdcVTTCZe5F9DtLORy2', NULL, NULL, '+97699114547', NULL, NULL, 0, 1);
+(1, 'lRm664LM9ggwA8iyExDDXVqDifN2', 'Todbayar', 'atodko0513@gmail.com', '+97699213557', 'Улаанбаатар', NULL, 3, 1),
+(2, 'ui8fkPgY9gdcVTTCZe5F9DtLORy2', 'Tod', '', '+97699114547', 'Улаанбаатар', NULL, 0, 1);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
