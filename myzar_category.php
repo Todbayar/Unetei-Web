@@ -231,6 +231,7 @@ include "mysql_config.php";
 </script>
 
 <div class="myzar_content_category">
+	<div id="information" style="margin-top: 10px; margin-left: 10px; display: flex; font-size: 16px; align-content: center"><div class="removable">Мэдээлэл</div><i class="fa-solid fa-circle-info" style="color: #FFA718; margin-left: 5px"></i><div style="margin-left: 5px">:</div><i class="fa-solid fa-circle-plus" style="margin-left: 5px; color: #878787"></i><div style="color: #878787; margin-left: 5px">Ангиллаа сонгож нэмэх тэмдэг дээр даран зараа оруулна уу.</div></div>
 	<div class="myzar_category_container_selected" style="float: left; padding-top: 10px; width: 100%;"></div>
 	<hr/>
 	<div>
@@ -244,7 +245,7 @@ include "mysql_config.php";
 
 <div id="myzar_category_add_popup" class="popup" style="width: 240px; display: none">
 	<i class="fa-solid fa-xmark close" onClick="myzar_category_add_close()"></i>
-	<div class="header">Ангилал</div>
+	<div class="header">Ангилал нэмэх</div>
 	<div style="display: flex; align-items: center; margin-left: 10px; height: 50px">
 		<img id="myzar_category_add_icon_image" src="image-solid.svg" width="24" height="24" onClick="myzar_category_add_icon_button()" />
 		<input id="myzar_category_add_icon_title" type="text" maxlength="30" placeholder="Бичих..." style="margin-left: 5px" />

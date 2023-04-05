@@ -212,6 +212,8 @@ function myzar_item_add_submit(){
 			}
 			else {
 				//adv number, success
+				$("#information").css("display", "flex");
+				
 				location.reload();
 			}
 		};

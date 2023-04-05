@@ -30,6 +30,8 @@ label.required::after {
 }
 </style>
 
+<div id="information" style="display: none; margin: 10px auto; font-size: 16px; align-content: center; width: 100%"><div class="removable">Мэдээлэл</div><i id="type" class="fa-solid fa-circle-info" style="margin-left: 5px"></i><div style="margin-left: 5px">:</div><i id="icon" class="fa-solid fa-circle-plus" style="margin-left: 5px; color: #878787; display: none"></i><div id="message" style="color: #878787; margin-left: 5px"></div><div id="timer" style="color: #878787; margin-left: 5px"></div></div>
+
 <div class="myzar_content_add_item" style="display: none">
 	<input id="myzar_item_id" type="number" maxlength="255" style="display: none">
 	<div class="myzar_content_add_item_selected_categories" style="margin-top: 10px; float: left; width: 100%"></div>

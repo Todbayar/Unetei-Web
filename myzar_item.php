@@ -1,4 +1,6 @@
 <script src="myzar_item_add.js"></script>
+<script src="misc.js"></script>
+
 <?php include "myzar_item_form.php"; ?>
 
 <?php include "mysql_config.php"; ?>
@@ -46,8 +48,6 @@
 </style>
 
 <script>
-var tmpItem = new Object();
-
 $(document).ready(function(){
 	var urlParams = new URLSearchParams(window.location.search);
 	var urlMyzarItemListState = urlParams.get('state');
@@ -165,7 +165,14 @@ function myzar_item_edit_submit(id){
 				alert("Зарыг нэмэх боломжгүй байна!");
 			}
 			else {
-				location.reload();
+				$(".myzar_content_add_item").hide();
+				sessionStorage.removeItem("selectedCategoryHier");
+				
+				var eventInfo = new CustomEvent("timerDone");
+				window.addEventListener('timerDone', function(){
+					location.reload();
+				});
+				information("success", "fa-solid fa-file-pen", "Зар амжилттай засагдаж, шалгагдаж байна.", 6, eventInfo);
 			}
 		};
 		reqMyZarItemEdit.onerror = function(){
