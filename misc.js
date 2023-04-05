@@ -37,7 +37,7 @@ function information(type, icon, message, timer, event){
 		$("#information #timer").html(timer);
 		var intervalTimer = setInterval(function() {
 			timer = timer - 1;
-			$("#information #timer").html(timer);
+			$("#information #timer").html("Түр хүлээнэ үү... (" + timer + "сек)");
 			if(timer == 1){
 				clearInterval(intervalTimer);
 				if(event != null) window.dispatchEvent(event);

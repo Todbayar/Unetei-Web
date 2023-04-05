@@ -211,10 +211,14 @@ function myzar_item_add_submit(){
 				alert("Зарын зургийг оруулах боломжгй байна!");
 			}
 			else {
-				//adv number, success
-				$("#information").css("display", "flex");
+				$(".myzar_content_add_item").hide();
+				sessionStorage.removeItem("selectedCategoryHier");
 				
-				location.reload();
+				var eventInfo = new CustomEvent("timerDone");
+				window.addEventListener('timerDone', function(){
+					location.reload();
+				});
+				information("success", "fa-solid fa-file-pen", "Зар амжилттай <b>нэмэгдэж</b>, шалгагдаж байна.", 6, eventInfo);
 			}
 		};
 		reqMyZarItemAdd.onerror = function(){

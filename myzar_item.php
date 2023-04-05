@@ -172,7 +172,7 @@ function myzar_item_edit_submit(id){
 				window.addEventListener('timerDone', function(){
 					location.reload();
 				});
-				information("success", "fa-solid fa-file-pen", "Зар амжилттай засагдаж, шалгагдаж байна.", 6, eventInfo);
+				information("success", "fa-solid fa-file-pen", "Зар амжилттай <b>засагдаж</b>, шалгагдаж байна.", 6, eventInfo);
 			}
 		};
 		reqMyZarItemEdit.onerror = function(){
