@@ -76,7 +76,6 @@ function myzar_category_selected_item_edit(id){
 
 	const reqMyZarItemListData = new XMLHttpRequest();
 	reqMyZarItemListData.onload = function() {
-		console.log(this.responseText);
 		const resultItemData = JSON.parse(this.responseText);
 		myzar_item_categories(resultItemData.categories);
 		$("#myzar_item_id").val(resultItemData.id)
@@ -89,7 +88,6 @@ function myzar_category_selected_item_edit(id){
 		$("#myzar_item_city").val(resultItemData.city);
 		$("#myzar_item_name").val(resultItemData.name);
 		$("#myzar_item_email").val(resultItemData.email);
-		console.log("phone:" + resultItemData.phone);
 		$("#myzar_item_phone").val(resultItemData.phone.substring(4));
 		$("#myzar_item_button div").html("Хадгалах");
 		$("#myzar_item_button").attr("onClick", "myzar_item_edit_submit("+id+")");
