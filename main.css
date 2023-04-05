@@ -16,11 +16,13 @@
 	border-radius: 10px;
 	padding-bottom: 10px;
 	top: 23vh;
-	box-shadow: 5px 5px 5px lightblue;
+/*	box-shadow: 5px 5px 5px lightblue;*/
 	left: 0px;
 	right: 0px;
 	margin-left: auto;
 	margin-right: auto;
+	opacity: 1.0;
+	width: 240px;
 }
 
 .popup .header {
@@ -32,13 +34,40 @@
 	padding: 5px;
 }
 
+.popup .message {
+	padding: 5px;
+	height: 50px;
+	width: 230px;
+	text-overflow: ellipsis;
+	overflow: hidden;
+/*	white-space: nowrap;*/
+	text-align: center;
+	vertical-align: middle; 
+	display: table-cell;
+}
+
+.popup .action {
+	margin-top: 5px;
+	display: flex;
+}
+
+.popup .action button {
+	margin-left: auto; 
+	margin-right: auto;
+}
+
+.popup .action button i {
+	margin-right: 5px;
+}
+
 .popup .close {
 	position: absolute; 
 	font-size: 20px; 
-	color: #FF4649; 
+/*	color: #FF4649; */
+	color: #256d00;
 	right: 5px; 
 	top: 5px;
-	box-shadow: 2px 2px 5px lightblue;
+/*	box-shadow: 2px 2px 5px lightblue;*/
 }
 
 .popup .error {

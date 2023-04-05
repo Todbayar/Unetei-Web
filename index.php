@@ -24,6 +24,16 @@
 				margin: 0;
 				font-family: "Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, "sans-serif";;
 			}
+			.confirmation {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+/*				background-color: black;*/
+/*				opacity: 0.73;*/
+				top: 0;
+				left: 0;
+				background: url(background.png) repeat;
+			}
 		</style>
 		
 	</head>
@@ -83,6 +93,28 @@
 				include "home.php";
 			}
 			?>
+			</div>
+		</div>
+		<!--here comes footer-->
+		<div class="confirmation yesno" style="display: none">
+			<div class="popup">
+				<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('confirmation yesno')[0].style.display='none'"></i>
+				<div class="header">Мэдэгдэл</div>
+				<div class="message"></div>
+				<div class="action">
+					<button id="yes" class="button_yellow"><i class="fa-solid fa-check"></i>Тийм</button>
+					<button id="no" class="button_yellow"><i class="fa-solid fa-xmark"></i>Үгүй</button>
+				</div>
+			</div>
+		</div>
+		<div class="confirmation ok" style="display: none">
+			<div class="popup">
+				<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('confirmation ok')[0].style.display='none'"></i>
+				<div class="header">Мэдэгдэл</div>
+				<div class="message"></div>
+				<div class="action">
+					<button id="yes" class="button_yellow"><i class="fa-solid fa-check"></i>За</button>
+				</div>
 			</div>
 		</div>
 	</body>
