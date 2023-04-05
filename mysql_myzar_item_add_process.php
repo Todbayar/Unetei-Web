@@ -15,7 +15,7 @@ $city = $_REQUEST["city"];
 $name = (isset($_REQUEST["name"]) && preg_match("/^[a-zA-Z-' ]*$/",$_REQUEST["name"])) ? $_REQUEST["name"] : "";
 $email = (isset($_REQUEST["email"]) && filter_var($_REQUEST["email"], FILTER_VALIDATE_EMAIL)) ? $_REQUEST["email"] : "";
 
-$queryUpdateUser = "UPDATE user SET name='".$name."', email='".$email."', city='' WHERE id=".$userID;
+$queryUpdateUser = "UPDATE user SET name='".$name."', email='".$email."', city='".$city."' WHERE id=".$userID;
 $conn->query($queryUpdateUser);
 
 $queryDuplication = "SELECT * FROM item WHERE title='".$title."' AND userID=".$userID." AND category='".$category."'";

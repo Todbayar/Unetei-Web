@@ -89,7 +89,7 @@ function myzar_category_selected_item_edit(id){
 		$("#myzar_item_name").val(resultItemData.name);
 		$("#myzar_item_email").val(resultItemData.email);
 		$("#myzar_item_button div").html("Хадгалах");
-		$("#myzar_item_button").attr("onClick", "myzar_item_edit_submit()");
+		$("#myzar_item_button").attr("onClick", "myzar_item_edit_submit("+id+")");
 		
 		$("#myzar_item_images").find(".selectedimage").each(function(i, el){
 			$(el).remove();
@@ -123,8 +123,57 @@ function myzar_category_selected_item_edit(id){
 	reqMyZarItemListData.send(myZarItemListReqData);
 }
 	
-function myzar_item_edit_submit(){
-	console.log("<myzar_item_edit_submit>");
+function myzar_item_edit_submit(id){
+	var vItemEditTitle = $("#myzar_item_title").val();
+	var vItemEditQuality = $("#myzar_item_quality").val();
+	var vItemEditAddress = $("#myzar_item_address").val();
+	var vItemEditPrice = $("#myzar_item_price").val();
+	var vItemEditImages = JSON.stringify(selectedImagesNames);
+	var vItemEditYoutube = $("#myzar_item_youtube").val();
+	var vItemEditVideo = selectedVideoName;
+	var vItemEditDescription = $("#myzar_item_description").val();
+	var vItemEditCity = $("#myzar_item_city").val();
+	var vItemEditName = $("#myzar_item_name").val();
+	var vItemEditEmail = $("#myzar_item_email").val();
+
+	if(vItemEditTitle === "") $("#myzar_item_title_error").show();
+	if(vItemEditQuality == null) $("#myzar_item_quality_error").show();
+	if(vItemEditPrice === "") $("#myzar_item_price_error").show();
+	if(vItemEditDescription === "") $("#myzar_item_description_error").show();
+	if(vItemEditCity == null) $("#myzar_item_city_error").show();
+	if(vItemEditName === "") $("#myzar_item_name_error").show();
+
+	if(vItemEditTitle !== "" && vItemEditQuality != null && vItemEditPrice !== "" && vItemEditDescription !== "" && vItemEditCity != null && vItemEditName !== ""){
+		var myZarItemEditSubmitData = new FormData();
+		myZarItemEditSubmitData.append("itemID", id);
+		myZarItemEditSubmitData.append("category", "c" + selectedCategory.length + "_" + selectedCategory[selectedCategory.length-1]);
+		myZarItemEditSubmitData.append("title", vItemEditTitle);
+		myZarItemEditSubmitData.append("quality", vItemEditQuality);
+		myZarItemEditSubmitData.append("address", vItemEditAddress);
+		myZarItemEditSubmitData.append("price", vItemEditPrice);
+		myZarItemEditSubmitData.append("images", vItemEditImages);
+		myZarItemEditSubmitData.append("youtube", vItemEditYoutube);
+		myZarItemEditSubmitData.append("video", vItemEditVideo);
+		myZarItemEditSubmitData.append("description", vItemEditDescription);
+		myZarItemEditSubmitData.append("city", vItemEditCity);
+		myZarItemEditSubmitData.append("name", vItemEditName);
+		myZarItemEditSubmitData.append("email", vItemEditEmail);
+
+		const reqMyZarItemEdit = new XMLHttpRequest();
+		reqMyZarItemEdit.onload = function() {
+			if(this.responseText == "Fail"){
+				alert("Зарыг нэмэх боломжгүй байна!");
+			}
+			else {
+				location.reload();
+			}
+		};
+		reqMyZarItemEdit.onerror = function(){
+			console.log("<error>:" + reqMyZarItemEdit.status);
+		};
+		reqMyZarItemEdit.open("POST", "mysql_myzar_item_edit_process.php", true);
+		reqMyZarItemEdit.send(myZarItemEditSubmitData);
+	}
 }
 </script>
 

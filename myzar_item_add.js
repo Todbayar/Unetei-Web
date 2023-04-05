@@ -89,6 +89,7 @@ function myzar_item_images_remove(index){
 		if(!this.responseText.includes("Fail")){
 			$("#images"+index).remove();
 			selectedImagesNames[index] = "";
+			selectedImagesNames.splice(index, 1);
 		}
 	};
 
