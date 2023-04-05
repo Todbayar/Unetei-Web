@@ -176,7 +176,8 @@ function myzar_item_add_submit(){
 	var vItemAddCity = $("#myzar_item_city").val();
 	var vItemAddName = $("#myzar_item_name").val();
 	var vItemAddEmail = $("#myzar_item_email").val();
-
+	var vItemAddPhone = $("#myzar_item_phone").val();
+	
 	if(vItemAddTitle === "") $("#myzar_item_title_error").show();
 	if(vItemAddQuality == null) $("#myzar_item_quality_error").show();
 	if(vItemAddPrice === "") $("#myzar_item_price_error").show();
@@ -198,17 +199,18 @@ function myzar_item_add_submit(){
 		myZarItemAddSubmitData.append("city", vItemAddCity);
 		myZarItemAddSubmitData.append("name", vItemAddName);
 		myZarItemAddSubmitData.append("email", vItemAddEmail);
-
+		myZarItemAddSubmitData.append("phone", "+976"+vItemAddPhone);
+		
 		const reqMyZarItemAdd = new XMLHttpRequest();
 		reqMyZarItemAdd.onload = function() {
-			if(this.responseText == "Fail 56"){
+			if(this.responseText == "Fail 60"){
 				alert("Уг гарчиг бүхий зар таны зарын жагсаалтанд байна!");
 			}
-			else if(this.responseText == "Fail 52"){
+			else if(this.responseText == "Fail 56"){
 				alert("Зарыг нэмэх боломжгүй байна!");
 			}
-			else if(this.responseText == "Fail 44"){
-				alert("Зарын зургийг оруулах боломжгй байна!");
+			else if(this.responseText == "Fail 48"){
+				alert("Зарын зургийг оруулах боломжгүй байна!");
 			}
 			else {
 				$(".myzar_content_add_item").hide();

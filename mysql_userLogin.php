@@ -6,13 +6,15 @@ date_default_timezone_set("Asia/Ulaanbaatar");
 $uID = $_REQUEST["uid"];
 $uPhone = $_REQUEST["phone"];
 $userID = 0;
+$uRole = 0;
 
 if(isset($uID) && isset($uPhone)){
-	$query = "SELECT id FROM user WHERE uid='".$uID."'";
+	$query = "SELECT * FROM user WHERE uid='".$uID."'";
 	$result = $conn->query($query);
 	if ($result->num_rows > 0) {
 		$row = mysqli_fetch_array($result);
 		$userID = $row["id"];
+		$uRole = $row["role"];
 		SaveCookie();
 		echo $_COOKIE["userID"];
 	}
@@ -34,11 +36,12 @@ else {
 }
 
 function SaveCookie(){
-	global $uID, $uPhone, $userID;
+	global $uID, $uPhone, $userID, $uRole;
 	$cookieTime = time() + (86400 * 30);	//30 day, 86400=1
 	setcookie("userID", $userID, $cookieTime, "/");
 	setcookie("uid", $uID, $cookieTime, "/");
 	setcookie("phone", $uPhone, $cookieTime, "/");
+	setcookie("role", $uRole, $cookieTime, "/");
 }
 
 $conn->close();

@@ -216,7 +216,23 @@ label.required::after {
 		<table width="100%">
 			<tr>
 				<td width="115px">Утас:</td>
-				<td style="font: bold 16px Arial">+97699213557</td>
+				<td valign="middle" align="left">
+					<div style="align-content: center; align-items: center">
+						<label style="margin-right: 5px; font: bold 16px Arial">+976</label>
+						<?php
+						if($_COOKIE["role"] == 0){
+						?>
+						<input id="myzar_item_phone" type="number" maxlength="12" style="width:60%; height: 25px; padding: 5px; font: normal 16px Arial" disabled value="<?php echo substr($_COOKIE["phone"], 4); ?>">
+						<?php
+						}
+						else {
+						?>
+						<input id="myzar_item_phone" type="number" maxlength="12" style="width:60%; height: 25px; padding: 5px; font: normal 16px Arial" value="<?php echo substr($_COOKIE["phone"], 4); ?>">
+						<?php
+						}
+						?>
+					</div>
+				</td>
 			</tr>
 		</table>
 		<div id="myzar_item_button" onClick="myzar_item_add_submit()" class="button_yellow" style="margin-bottom: 10px; margin-top: 10px; height: 30px; font: bold 16px Arial">

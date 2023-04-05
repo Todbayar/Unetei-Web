@@ -14,15 +14,19 @@ $description = $_REQUEST["description"];
 $city = $_REQUEST["city"];
 $name = (isset($_REQUEST["name"]) && preg_match("/^[a-zA-Z-' ]*$/",$_REQUEST["name"])) ? $_REQUEST["name"] : "";
 $email = (isset($_REQUEST["email"]) && filter_var($_REQUEST["email"], FILTER_VALIDATE_EMAIL)) ? $_REQUEST["email"] : "";
+$phone = (isset($_REQUEST["phone"])) ? $_REQUEST["phone"] : "";
 
-$queryUpdateUser = "UPDATE user SET name='".$name."', email='".$email."', city='".$city."' WHERE id=".$userID;
-$conn->query($queryUpdateUser);
+//$queryUpdateUser = "UPDATE user SET name='".$name."', email='".$email."', city='".$city."' WHERE id=".$userID;
+//$conn->query($queryUpdateUser);
 
 $queryDuplication = "SELECT * FROM item WHERE title='".$title."' AND userID=".$userID." AND category='".$category."'";
 $resultDuplication = $conn->query($queryDuplication);
 $isDuplication = mysqli_num_rows($resultDuplication);
 if($isDuplication == 0){
-	$queryItem = "INSERT INTO item (title, quality, address, price, youtube, video, description, city, userID, category, item_viewer, phone_viewer, datetime, expire_days, isactive) VALUES ('".$title."', ".$quality.", '".$address."', ".$price.", '".$youtube."', '".$video."', '".$description."', '".$city."', ".$userID.", '".$category."', 0, 0, '".date("Y-m-d h:i:s")."', 7, 1)";
+	if($_COOKIE["role"] == 0){
+		$phone = $_COOKIE["phone"];
+	}
+	$queryItem = "INSERT INTO item (title, quality, address, price, youtube, video, description, city, name, phone, email, userID, category, item_viewer, phone_viewer, datetime, expire_days, isactive) VALUES ('".$title."', ".$quality.", '".$address."', ".$price.", '".$youtube."', '".$video."', '".$description."', '".$city."', '".$name."', '".$phone."', '".$email."', ".$userID.", '".$category."', 0, 0, '".date("Y-m-d h:i:s")."', 7, 1)";
 	$resultItem = $conn->query($queryItem);
 	if($resultItem){
 		$itemID = mysqli_insert_id($conn);
@@ -41,7 +45,7 @@ if($isDuplication == 0){
 				echo $itemID;
 			}
 			else {
-				echo "Fail 44";
+				echo "Fail 48";
 			}
 		}
 		else {
@@ -49,11 +53,11 @@ if($isDuplication == 0){
 		}
 	}
 	else {
-		echo "Fail 52";
+		echo "Fail 56";
 	}
 }
 else {
-	echo "Fail 56";
+	echo "Fail 60";
 }
 
 mysqli_close($conn);

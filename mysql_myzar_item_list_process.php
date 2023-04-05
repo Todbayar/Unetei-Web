@@ -5,9 +5,9 @@ $query = "SELECT * FROM item WHERE id=".$_REQUEST["id"];
 $result = $conn->query($query);
 $row = mysqli_fetch_array($result);
 
-$queryUser = "SELECT * FROM user WHERE id=".$row["userID"];
-$resultUser = $conn->query($queryUser);
-$rowUser = mysqli_fetch_array($resultUser);
+//$queryUser = "SELECT * FROM user WHERE id=".$row["userID"];
+//$resultUser = $conn->query($queryUser);
+//$rowUser = mysqli_fetch_array($resultUser);
 
 $arrImages = array();
 $queryImages = "SELECT * FROM images WHERE item=".$_REQUEST["id"];
@@ -56,8 +56,9 @@ $response->youtube = $row["youtube"];
 $response->video = $row["video"];
 $response->description = $row["description"];
 $response->city = $row["city"];
-$response->name = $rowUser["name"];
-$response->email = $rowUser["email"];
+$response->name = $row["name"];
+$response->email = $row["email"];
+$response->phone = $row["phone"];
 
 echo json_encode($response);
 ?>

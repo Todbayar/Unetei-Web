@@ -16,11 +16,16 @@ $description = $_REQUEST["description"];
 $city = $_REQUEST["city"];
 $name = (isset($_REQUEST["name"]) && preg_match("/^[a-zA-Z-' ]*$/",$_REQUEST["name"])) ? $_REQUEST["name"] : "";
 $email = (isset($_REQUEST["email"]) && filter_var($_REQUEST["email"], FILTER_VALIDATE_EMAIL)) ? $_REQUEST["email"] : "";
+$phone = (isset($_REQUEST["phone"])) ? $_REQUEST["phone"] : "";
 
-$queryUpdateUser = "UPDATE user SET name='".$name."', email='".$email."', city='".$city."' WHERE id=".$userID;
-$conn->query($queryUpdateUser);
+//$queryUpdateUser = "UPDATE user SET name='".$name."', email='".$email."', city='".$city."' WHERE id=".$userID;
+//$conn->query($queryUpdateUser);
 
-$queryUpdateItem = "UPDATE item SET title='".$title."', quality=".$quality.", address='".$address."', price=".$price.", youtube='".$youtube."', video='".$video."', description='".$description."', city='".$city."', category='".$category."', datetime='".date("Y-m-d h:i:s")."', isactive=1 WHERE id=".$itemID;
+if($_COOKIE["role"] == 0){
+	$phone = $_COOKIE["phone"];
+}
+
+$queryUpdateItem = "UPDATE item SET title='".$title."', quality=".$quality.", address='".$address."', price=".$price.", youtube='".$youtube."', video='".$video."', description='".$description."', city='".$city."', name='".$name."', phone='".$phone."', email='".$email."', category='".$category."', datetime='".date("Y-m-d h:i:s")."', isactive=1 WHERE id=".$itemID;
 if($conn->query($queryUpdateItem)){
 	if(!is_null($images)){		
 		$countImageEditDone = count($images);

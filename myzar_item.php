@@ -76,6 +76,7 @@ function myzar_category_selected_item_edit(id){
 
 	const reqMyZarItemListData = new XMLHttpRequest();
 	reqMyZarItemListData.onload = function() {
+		console.log(this.responseText);
 		const resultItemData = JSON.parse(this.responseText);
 		myzar_item_categories(resultItemData.categories);
 		$("#myzar_item_id").val(resultItemData.id)
@@ -88,6 +89,8 @@ function myzar_category_selected_item_edit(id){
 		$("#myzar_item_city").val(resultItemData.city);
 		$("#myzar_item_name").val(resultItemData.name);
 		$("#myzar_item_email").val(resultItemData.email);
+		console.log("phone:" + resultItemData.phone);
+		$("#myzar_item_phone").val(resultItemData.phone.substring(4));
 		$("#myzar_item_button div").html("Хадгалах");
 		$("#myzar_item_button").attr("onClick", "myzar_item_edit_submit("+id+")");
 		
@@ -135,7 +138,8 @@ function myzar_item_edit_submit(id){
 	var vItemEditCity = $("#myzar_item_city").val();
 	var vItemEditName = $("#myzar_item_name").val();
 	var vItemEditEmail = $("#myzar_item_email").val();
-
+	var vItemEditPhone = $("#myzar_item_phone").val();
+	
 	if(vItemEditTitle === "") $("#myzar_item_title_error").show();
 	if(vItemEditQuality == null) $("#myzar_item_quality_error").show();
 	if(vItemEditPrice === "") $("#myzar_item_price_error").show();
@@ -158,7 +162,8 @@ function myzar_item_edit_submit(id){
 		myZarItemEditSubmitData.append("city", vItemEditCity);
 		myZarItemEditSubmitData.append("name", vItemEditName);
 		myZarItemEditSubmitData.append("email", vItemEditEmail);
-
+		myZarItemEditSubmitData.append("phone", "+976"+vItemEditPhone);
+		
 		const reqMyZarItemEdit = new XMLHttpRequest();
 		reqMyZarItemEdit.onload = function() {
 			if(this.responseText == "Fail"){
