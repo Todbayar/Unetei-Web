@@ -22,7 +22,8 @@
 				border: 0;
 				padding: 0;
 				margin: 0;
-				font-family: "Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, "sans-serif";;
+				font-family: "Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, "sans-serif";
+/*				overflow-y: hidden;*/
 			}
 			.confirmation {
 				position: absolute;
@@ -57,7 +58,7 @@
 				$("#myzar_phone").text("+"<?php echo $_COOKIE["phone"]; ?>);
 				$("#myzar_nav").text("Миний зар");
 				$("#myzar_nav").attr("onclick","pagenavigation('myzar')");
-				$("#logoutButton").show();
+				$("#logoutButton").css("display", "flex");
 				<?php
 			}
 			?>
@@ -98,7 +99,7 @@
 		<!--here comes footer-->
 		<div class="confirmation yesno" style="display: none">
 			<div class="popup">
-				<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('confirmation yesno')[0].style.display='none'"></i>
+				<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('confirmation yesno')[0].style.display='none'; javascript:document.body.style.overflowY='auto'"></i>
 				<div class="header">Мэдэгдэл</div>
 				<div class="message"></div>
 				<div class="action">
@@ -109,7 +110,7 @@
 		</div>
 		<div class="confirmation ok" style="display: none">
 			<div class="popup">
-				<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('confirmation ok')[0].style.display='none'"></i>
+				<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('confirmation ok')[0].style.display='none'; javascript:document.body.style.overflowY='auto'"></i>
 				<div class="header">Мэдэгдэл</div>
 				<div class="message"></div>
 				<div class="action">
