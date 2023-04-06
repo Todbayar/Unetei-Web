@@ -114,7 +114,7 @@
 				<div class="header">Мэдэгдэл</div>
 				<div class="message"></div>
 				<div class="action">
-					<button id="yes" class="button_yellow"><i class="fa-solid fa-check"></i>За</button>
+					<button id="ok" class="button_yellow"><i class="fa-solid fa-check"></i>За</button>
 				</div>
 			</div>
 		</div>

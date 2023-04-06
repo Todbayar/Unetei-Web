@@ -12,7 +12,7 @@ $youtube = $_REQUEST["youtube"];
 $video = (isset($_REQUEST["video"]) && $_REQUEST["video"] !== "" && $_REQUEST["video"] !== "undefined") ? $_REQUEST["video"] : "";
 $description = $_REQUEST["description"];
 $city = $_REQUEST["city"];
-$name = (isset($_REQUEST["name"]) && preg_match("/^[a-zA-Z-' ]*$/",$_REQUEST["name"])) ? $_REQUEST["name"] : "";
+$name = $_REQUEST["name"];
 $email = (isset($_REQUEST["email"]) && filter_var($_REQUEST["email"], FILTER_VALIDATE_EMAIL)) ? $_REQUEST["email"] : "";
 $phone = (isset($_REQUEST["phone"])) ? $_REQUEST["phone"] : "";
 

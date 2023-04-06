@@ -21,7 +21,10 @@ window.initMap = initMap;
 
 $(document).ready(function(){
 	selectedImagesIndex = 0;
-	if(sessionStorage.getItem("selectedCategoryHier") != null) myzar_item_categories(JSON.parse(sessionStorage.getItem("selectedCategoryHier")));
+	if(sessionStorage.getItem("selectedCategoryHier") != null) {
+		myzar_item_categories(JSON.parse(sessionStorage.getItem("selectedCategoryHier")));
+		sessionStorage.removeItem("selectedCategoryHier");
+	}
 });
 
 function myzar_item_categories(hierCategories){
@@ -79,13 +82,11 @@ function myzar_item_images_browse(){
 }
 
 function myzar_item_images_remove(index){
-	console.log("<myzar_item_images_remove>:" + selectedImagesNames[index] + ", " + index);
 	var myZarItemAddImageRemoveSubmitData = new FormData();
 	myZarItemAddImageRemoveSubmitData.append("file", selectedImagesNames[index]);
 
 	const reqMyZarItemImageRemoveSubmit = new XMLHttpRequest();
 	reqMyZarItemImageRemoveSubmit.onload = function() {
-		console.log(this.responseText);
 		if(!this.responseText.includes("Fail")){
 			$("#images"+index).remove();
 			selectedImagesNames[index] = "";
@@ -110,7 +111,6 @@ function myzar_item_video_browse(){
 
 				const reqMyZarItemVideoAddSubmit = new XMLHttpRequest();
 				reqMyZarItemVideoAddSubmit.onload = function() {
-					console.log("<myzar_item_video_browse>:" + this.responseText);
 					if(!this.responseText.includes("Fail")){
 						var obj = JSON.parse(this.responseText);
 						var index = obj.index;
@@ -178,14 +178,16 @@ function myzar_item_add_submit(){
 	var vItemAddEmail = $("#myzar_item_email").val();
 	var vItemAddPhone = $("#myzar_item_phone").val();
 	
-	if(vItemAddTitle === "") $("#myzar_item_title_error").show();
+	const pattern = /^[а-яА-Яa-zA-ZөӨүҮ\s]+$/i;
+	
+	if(vItemAddTitle === "" || !pattern.test(vItemAddTitle)) $("#myzar_item_title_error").show();
 	if(vItemAddQuality == null) $("#myzar_item_quality_error").show();
 	if(vItemAddPrice === "") $("#myzar_item_price_error").show();
 	if(vItemAddDescription === "") $("#myzar_item_description_error").show();
 	if(vItemAddCity == null) $("#myzar_item_city_error").show();
-	if(vItemAddName === "") $("#myzar_item_name_error").show();
+	if(vItemAddName === "" || !pattern.test(vItemAddName)) $("#myzar_item_name_error").show();
 
-	if(vItemAddTitle !== "" && vItemAddQuality != null && vItemAddPrice !== "" && vItemAddDescription !== "" && vItemAddCity != null && vItemAddName !== ""){
+	if((vItemAddTitle !== "" && pattern.test(vItemAddTitle)) && vItemAddQuality != null && vItemAddPrice !== "" && vItemAddDescription !== "" && vItemAddCity != null && (vItemAddName !== "" && pattern.test(vItemAddName))){
 		var myZarItemAddSubmitData = new FormData();
 		myZarItemAddSubmitData.append("category", "c" + selectedCategory.length + "_" + selectedCategory[selectedCategory.length-1]);
 		myZarItemAddSubmitData.append("title", vItemAddTitle);
@@ -214,13 +216,12 @@ function myzar_item_add_submit(){
 			}
 			else {
 				$(".myzar_content_add_item").hide();
-				sessionStorage.removeItem("selectedCategoryHier");
-				
-				var eventInfo = new CustomEvent("timerDone");
-				window.addEventListener('timerDone', function(){
+				var eventOk = new CustomEvent("itemAddDone");
+				window.addEventListener("itemAddDone", function(){
 					location.reload();
 				});
-				information("success", "fa-solid fa-file-pen", "Зар амжилттай <b>нэмэгдэж</b>, шалгагдаж байна.", 6, eventInfo);
+//				information("success", "fa-solid fa-file-pen", "Зар амжилттай <b>нэмэгдэж</b>, шалгагдаж байна.", 6, eventInfo);
+				confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Зар амжилттай <b>нэмэгдэж</b>, шалгагдаж байна.", eventOk);
 			}
 		};
 		reqMyZarItemAdd.onerror = function(){

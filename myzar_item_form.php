@@ -46,7 +46,7 @@ label.required::after {
 			<tr>
 				<td></td>
 				<td style="color: #9F9F9F; font: normal 14px Arial">
-					<div id="myzar_item_title_error" style="display: none; color: #FF4649">Хоосон байж болохгүй!</div>
+					<div id="myzar_item_title_error" style="display: none; color: #FF4649">Хоосон байж болохгүй эсвэл тоо байж болохгүй!</div>
 					Ижил зар оруулахыг хориглоно. Гарчигт хэрэглэхийг хориглосон үгсийг ашиглахгүй байна уу. Жишээ нь: хямдралтай, яаралтай, түрээслүүлнэ, хямдхан, гэх мэт.
 				</td>
 			</tr>
@@ -194,7 +194,7 @@ label.required::after {
 			<tr>
 				<td></td>
 				<td style="color: #9F9F9F; font: normal 14px Arial">
-					<div id="myzar_item_name_error" style="display: none; color: #FF4649">Хоосон байж болохгүй!</div>
+					<div id="myzar_item_name_error" style="display: none; color: #FF4649">Хоосон байж болохгүй эсвэл тоо байж болохгүй!</div>
 					Нэр хэсэгт хориглох зүйлс!: ганцхан үсэг, дан тоо, тэмдэгт, мөн худалдагч, админ, нэр, зарын эзэн, хэрэглэгч, user, apple, samsung, iphone, galaxy, lexus, toyota, г. м. үгсийг оруулхыг хориглоно.
 				</td>
 			</tr>
@@ -238,7 +238,7 @@ label.required::after {
 		<div id="myzar_item_button" onClick="myzar_item_add_submit()" class="button_yellow" style="margin-bottom: 10px; margin-top: 10px; height: 30px; font: bold 16px Arial">
 			<div style="margin-left: 5px; width: 100px; margin: 0 auto; text-transform: uppercase">Зар нэмэх</div>
 		</div>
-		<p style="margin-left: 5px; font: normal 14px Arial; color: #9F9F9F">Техникийн тусламжийг <b><?php echo $phone_service; ?></b> дугаарт холбогдож лавлана уу.<br/>"ЗАР НЭМЭХ" товчлуурыг дарснаар та Unetei.mn сайтын үйлчилгээний нөхцөл болон Монгол улсын холбогдох хууль тогтоомжийг хүлээн зөвшөөрч буй болно. Зар нэмэх Сайтын дүрэм, зар нийтлэх журам болон нууцлалын бодлого.</p>
+		<p style="margin-left: 5px; font: normal 14px Arial; color: #9F9F9F">Техникийн тусламжийг <b><?php echo $phone_service; ?></b> дугаарт холбогдож лавлана уу.<br/>Товчлуурыг дарснаар та <?php echo $domain; ?> сайтын үйлчилгээний нөхцөл болон Монгол улсын холбогдох хууль тогтоомжийг хүлээн зөвшөөрч буй болно. Зар нэмэх Сайтын дүрэм, зар нийтлэх журам болон нууцлалын бодлого.</p>
 	</div>
 	<hr/>
 </div>

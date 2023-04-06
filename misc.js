@@ -48,3 +48,30 @@ function information(type, icon, message, timer, event){
 		if(event != null) window.dispatchEvent(event);
 	}
 }
+
+function confirmation_yesno(message, eventyes, eventno){
+	$(".confirmation.yesno").show();
+	$(".confirmation.yesno .popup .message").html(message);
+	if(eventyes != null){
+		if(eventyes != null) window.dispatchEvent(eventyes);
+	}
+	if(eventno != null){
+		if(eventno != null) window.dispatchEvent(eventno);
+	}
+}
+
+function confirmation_ok(message, event){
+	window.scrollTo(0, 0);
+	$("body").css("overflow-y", "hidden");
+//	$("html, body").animate({ scrollTop: 0 }, "fast");
+	$(".confirmation.ok").show();
+	$(".confirmation.ok .popup .message").html(message);
+	$(".confirmation.ok .popup .action .button_yellow").click(function(){
+		if(event != null) {
+			window.dispatchEvent(event);
+		}
+		else {
+			$(".confirmation.ok").hide();
+		}
+	});
+}

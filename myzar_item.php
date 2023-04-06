@@ -10,6 +10,10 @@
 	float: left;
 	width: 100%;
 }
+
+.myzar_content_list_item {
+	margin-bottom: 60px;
+}
 	
 .myzar_content_list_item .myzar_content_list_item_top {
 	padding: 4px;
@@ -57,7 +61,10 @@ $(document).ready(function(){
 		$(".myzar_tab_list_item_" + urlMyzarItemListState + " div").css('color', '#ffffff');
 	}
 	else {
-		myzar_list_item_tab("all");
+//		myzar_list_item_tab("all");
+		$(".myzar_tab_list_item_all img").attr("src", "myzar_tab_list_item_all_white.png");
+		$(".myzar_tab_list_item_all i").css('color', '#ffffff');
+		$(".myzar_tab_list_item_all div").css('color', '#ffffff');
 	}
 });
 	
@@ -71,6 +78,8 @@ function myzar_list_item_tab(state){
 }
 	
 function myzar_category_selected_item_edit(id){
+	window.scrollTo(0, 0);
+	
 	var myZarItemListReqData = new FormData();
 	myZarItemListReqData.append("id", id);
 
@@ -138,14 +147,16 @@ function myzar_item_edit_submit(id){
 	var vItemEditEmail = $("#myzar_item_email").val();
 	var vItemEditPhone = $("#myzar_item_phone").val();
 	
-	if(vItemEditTitle === "") $("#myzar_item_title_error").show();
+	const pattern = /^[а-яА-Яa-zA-ZөӨүҮ\s]+$/i;
+	
+	if(vItemEditTitle === "" || !pattern.test(vItemEditTitle)) $("#myzar_item_title_error").show();
 	if(vItemEditQuality == null) $("#myzar_item_quality_error").show();
 	if(vItemEditPrice === "") $("#myzar_item_price_error").show();
 	if(vItemEditDescription === "") $("#myzar_item_description_error").show();
 	if(vItemEditCity == null) $("#myzar_item_city_error").show();
-	if(vItemEditName === "") $("#myzar_item_name_error").show();
+	if(vItemEditName === "" || !pattern.test(vItemEditName)) $("#myzar_item_name_error").show();
 
-	if(vItemEditTitle !== "" && vItemEditQuality != null && vItemEditPrice !== "" && vItemEditDescription !== "" && vItemEditCity != null && vItemEditName !== ""){
+	if((vItemEditTitle !== "" && pattern.test(vItemEditTitle)) && vItemEditQuality != null && vItemEditPrice !== "" && vItemEditDescription !== "" && vItemEditCity != null && (vItemEditName !== "" && pattern.test(vItemEditName))){
 		var myZarItemEditSubmitData = new FormData();
 		myZarItemEditSubmitData.append("itemID", id);
 		myZarItemEditSubmitData.append("category", "c" + selectedCategory.length + "_" + selectedCategory[selectedCategory.length-1]);
@@ -169,13 +180,13 @@ function myzar_item_edit_submit(id){
 			}
 			else {
 				$(".myzar_content_add_item").hide();
-				sessionStorage.removeItem("selectedCategoryHier");
 				
-				var eventInfo = new CustomEvent("timerDone");
-				window.addEventListener('timerDone', function(){
+				var eventEditDone = new CustomEvent("itemEditDone");
+				window.addEventListener("itemEditDone", function(){
 					location.reload();
 				});
-				information("success", "fa-solid fa-file-pen", "Зар амжилттай <b>засагдаж</b>, шалгагдаж байна.", 6, eventInfo);
+				
+				confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Зар амжилттай <b>засагдаж</b>, шалгагдаж байна.", eventEditDone);
 			}
 		};
 		reqMyZarItemEdit.onerror = function(){
@@ -260,6 +271,7 @@ mysqli_free_result($resultFetchListItemsStateCountInActive);
 <div class="myzar_content_list_items">
 	<?php
 	$queryFetchListItems = "SELECT *, (SELECT COUNT(*) FROM images WHERE item=item.id) AS count_images, (SELECT image FROM images WHERE item=item.id LIMIT 1) AS image FROM item WHERE userID=".$_COOKIE["userID"];
+	
 	if((isset($_GET["myzar"]) && $_GET["myzar"] == "item") && (isset($_GET["state"]) && $_GET["state"] == "active")){
 		$queryFetchListItems .= " AND isactive=4";
 	}
@@ -275,6 +287,8 @@ mysqli_free_result($resultFetchListItemsStateCountInActive);
 	else if((isset($_GET["myzar"]) && $_GET["myzar"] == "item") && (isset($_GET["state"]) && $_GET["state"] == "inactive")){
 		$queryFetchListItems .= " AND isactive=0";
 	}
+	
+	$queryFetchListItems .= " ORDER BY datetime DESC";
 	
 	$resultFetchListItems = $conn->query($queryFetchListItems);
 	while($rowFetchListItems = mysqli_fetch_array($resultFetchListItems)){
@@ -328,9 +342,11 @@ mysqli_free_result($resultFetchListItemsStateCountInActive);
 			<div class="myzar_content_list_item_detail" style="margin-left: 10px"></div>
 		</table>
 		<div class="myzar_content_list_item_bottom">
+<!--
 			<div class="button_yellow" style="float: left; font-size: 14px; margin: 5px">
 				<div style="margin-left: 5px">Онцгой зар болгох</div>
 			</div>
+-->
 			<div class="button_yellow" style="float: left; background: #a0cf0a; font-size: 14px; margin: 5px">
 				<div style="margin-left: 5px; color: white">Шинэчлэх</div>
 			</div>
