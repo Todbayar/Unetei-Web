@@ -1,3 +1,4 @@
+<?php include "info.php"; ?>
 <!doctype html>
 <html>
 	<head>

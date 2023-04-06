@@ -1,5 +1,3 @@
-<?php include "info.php"; ?>
-
 <style>
 /* For Mobile */
 @media screen and (max-width: 540px) {

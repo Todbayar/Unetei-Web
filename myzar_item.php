@@ -26,6 +26,20 @@
 	min-width: 136px;
 	min-height: 104px;
 }
+	
+.myzar_content_list_item .myzar_content_list_item_top video {
+	background: #dddddd; 
+	border-radius: 5px;
+	min-width: 136px;
+	min-height: 104px;
+}
+	
+.myzar_content_list_item .myzar_content_list_item_top iframe {
+	background: #dddddd; 
+	border-radius: 5px;
+	min-width: 136px;
+	min-height: 104px;
+}	
 
 .myzar_content_list_item .myzar_content_list_item_bottom {
 	float:left;
@@ -39,12 +53,28 @@
 		width: 136px;
 		height: 104px;
 	}
+	.myzar_content_list_item .myzar_content_list_item_top video {
+		width: 136px;
+		height: 104px;
+	}
+	.myzar_content_list_item .myzar_content_list_item_top iframe {
+		width: 136px;
+		height: 104px;
+	}
 }
 
 /* For Tablets and Desktop */
 /*@media screen and (min-width: 540px) and (max-width: 780px) {*/
 @media screen and (min-width: 540px) {
 	.myzar_content_list_item .myzar_content_list_item_top img {
+		width: 170px;
+		height: 130px;
+	}
+	.myzar_content_list_item .myzar_content_list_item_top video {
+		width: 170px;
+		height: 130px;
+	}
+	.myzar_content_list_item .myzar_content_list_item_top iframe {
 		width: 170px;
 		height: 130px;
 	}
@@ -196,6 +226,49 @@ function myzar_item_edit_submit(id){
 		reqMyZarItemEdit.send(myZarItemEditSubmitData);
 	}
 }
+	
+function myzar_category_selected_item_archive(id){
+	const reqMyZarItemListData = new XMLHttpRequest();
+	reqMyZarItemListData.onload = function() {
+		if(this.responseText == "OK"){
+			var eventArchive = new CustomEvent("itemActionArchive");
+			window.addEventListener("itemActionArchive", function(){
+				location.reload();
+			});
+			confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Зар <b>архивлагдлаа</b>.", eventArchive);
+		}
+		else {
+			alert("Зарыг архивлахад алдаа гарлаа!");
+		}
+	};
+	reqMyZarItemListData.onerror = function() {
+		console.log("<error>:" + reqMyZarItemListData.status);
+	};
+	reqMyZarItemListData.open("GET", "mysql_myzar_item_archive_process.php?id="+id, true);
+	reqMyZarItemListData.send();
+}
+	
+function myzar_category_selected_item_inactive(id){
+	const reqMyZarItemListData = new XMLHttpRequest();
+	reqMyZarItemListData.onload = function() {
+		console.log(this.responseText);
+		if(this.responseText == "OK"){
+			var eventInActive = new CustomEvent("itemActionInActive");
+			window.addEventListener("itemActionInActive", function(){
+				location.reload();
+			});
+			confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Зар <b>идэвхгүй</b> болж 7 хоногийн дараа устхыг анхаарна уу.", eventInActive);
+		}
+		else {
+			alert("Зарыг архивлахад алдаа гарлаа!");
+		}
+	};
+	reqMyZarItemListData.onerror = function() {
+		console.log("<error>:" + reqMyZarItemListData.status);
+	};
+	reqMyZarItemListData.open("GET", "mysql_myzar_item_inactive_process.php?id="+id, true);
+	reqMyZarItemListData.send();
+}
 </script>
 
 <?php
@@ -298,12 +371,37 @@ mysqli_free_result($resultFetchListItemsStateCountInActive);
 	<div class="myzar_content_list_item">
 		<table class="myzar_content_list_item_top" style="display: flex">
 			<tr>
+				<?php
+				if($rowFetchListItems["image"] != "" || $rowFetchListItems["youtube"] != "" || $rowFetchListItems["video"]) {
+				?>
 				<td valign="top" rowspan="2">
-					<div class="myzar_item_list_image">						
-						<img src="user_files/<?php echo $rowFetchListItems["image"]; ?>" />
-						<i style="position: absolute; left: 12px; color: white; opacity: 0.73; font-size: 13px"><i class="fa-solid fa-camera"></i> <?php echo $rowFetchListItems["count_images"]; ?></i>
+					<div class="myzar_item_list_image">
+						<?php
+						if($rowFetchListItems["image"] != ""){
+						?>
+							<img src="user_files/<?php echo $rowFetchListItems["image"]; ?>" />
+							<i style="position: absolute; left: 12px; color: white; opacity: 0.73; font-size: 13px"><i class="fa-solid fa-camera"></i> <?php echo $rowFetchListItems["count_images"]; ?></i>
+						<?php
+						}
+						else if($rowFetchListItems["video"] != ""){
+							$vVideoType = substr($rowFetchListItems["video"], strrpos($rowFetchListItems["video"], ".")+1);
+							if($vVideoType == "mp4") $vVideoType = "video/mp4";
+							else if($vVideoType == "mov") $vVideoType = "video/quicktime";
+							?>
+							<video controls="controls" preload="metadata" style="border-radius: 5px"><source src="<?php echo $path."/".$rowFetchListItems["video"]; ?>#t=0.5" type="<?php echo $vVideoType; ?>"></video>
+							<?php
+						}
+						else if($rowFetchListItems["youtube"] != ""){
+							?>
+							<iframe src="<?php echo $rowFetchListItems["youtube"]; ?>"></iframe>
+							<?php
+						}
+						?>
 					</div>
 				</td>
+				<?php
+				}
+				?>
 				<td valign="top" style="padding-left: 5px">
 					<div class="myzar_content_list_item_title" style="font: bold 16px Arial"><?php echo $rowFetchListItems["title"]." (".number_format($rowFetchListItems["price"])." ₮)"; ?></div>
 					<div class="myzar_content_list_item_expire" style="font: normal 14px Arial; color: #6ab001">Дуусах огноо: <?php echo $expire_datetime; ?>. Шинэчлэхэд <?php echo $days_remain; ?> өдөр дутуу.</div>
@@ -353,12 +451,22 @@ mysqli_free_result($resultFetchListItemsStateCountInActive);
 			<div onClick="myzar_category_selected_item_edit(<?php echo $rowFetchListItems["id"]; ?>)" class="button_yellow" style="float: left; background: transparent; font-size: 14px; margin: 5px">
 				<div style="margin-left: 5px; color: #0086bf">Зараа засах</div>
 			</div>
-			<div class="button_yellow" style="float: left; background: transparent; font-size: 14px; margin: 5px">
-				<div style="margin-left: 5px; color: #0086bf">Архивлах</div>
-			</div>
-			<div class="button_yellow" style="float: left; background: transparent; font-size: 14px; margin: 5px">
-				<div style="margin-left: 5px; color: #0086bf">Устгах</div>
-			</div>
+			<?php
+			if(isset($_GET["state"]) && $_GET["state"] != "archive"){
+			?>
+				<div onClick="myzar_category_selected_item_archive(<?php echo $rowFetchListItems["id"]; ?>)" class="button_yellow" style="float: left; background: transparent; font-size: 14px; margin: 5px">
+					<div style="margin-left: 5px; color: #0086bf">Архивлах</div>
+				</div>
+			<?php
+			}
+			else if(isset($_GET["state"]) && $_GET["state"] != "inactive"){
+			?>
+				<div onClick="myzar_category_selected_item_inactive(<?php echo $rowFetchListItems["id"]; ?>)" class="button_yellow" style="float: left; background: transparent; font-size: 14px; margin: 5px">
+					<div style="margin-left: 5px; color: #0086bf">Устгах</div>
+				</div>
+			<?php
+			}
+			?>
 		</div>
 	</div>
 	<?php
