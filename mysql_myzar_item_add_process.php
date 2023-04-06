@@ -16,9 +16,6 @@ $name = $_REQUEST["name"];
 $email = (isset($_REQUEST["email"]) && filter_var($_REQUEST["email"], FILTER_VALIDATE_EMAIL)) ? $_REQUEST["email"] : "";
 $phone = (isset($_REQUEST["phone"])) ? $_REQUEST["phone"] : "";
 
-//$queryUpdateUser = "UPDATE user SET name='".$name."', email='".$email."', city='".$city."' WHERE id=".$userID;
-//$conn->query($queryUpdateUser);
-
 $queryDuplication = "SELECT * FROM item WHERE title='".$title."' AND userID=".$userID." AND category='".$category."'";
 $resultDuplication = $conn->query($queryDuplication);
 $isDuplication = mysqli_num_rows($resultDuplication);
@@ -26,7 +23,7 @@ if($isDuplication == 0){
 	if($_COOKIE["role"] == 0){
 		$phone = $_COOKIE["phone"];
 	}
-	$queryItem = "INSERT INTO item (title, quality, address, price, youtube, video, description, city, name, phone, email, userID, category, item_viewer, phone_viewer, datetime, expire_days, isactive) VALUES ('".$title."', ".$quality.", '".$address."', ".$price.", '".$youtube."', '".$video."', '".$description."', '".$city."', '".$name."', '".$phone."', '".$email."', ".$userID.", '".$category."', 0, 0, '".date("Y-m-d h:i:s")."', 7, 1)";
+	$queryItem = "INSERT INTO item (title, quality, address, price, youtube, video, description, city, name, phone, email, userID, category, item_viewer, phone_viewer, datetime, expire_days, isactive) VALUES ('".$title."', ".$quality.", '".$address."', ".$price.", '".$youtube."', '".$video."', '".$description."', '".$city."', '".$name."', '".$phone."', '".$email."', ".$userID.", '".$category."', 0, 0, '".date("Y-m-d h:i:s")."', 14, 1)";
 	$resultItem = $conn->query($queryItem);
 	if($resultItem){
 		$itemID = mysqli_insert_id($conn);
