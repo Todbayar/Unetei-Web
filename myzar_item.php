@@ -164,67 +164,29 @@ function myzar_category_selected_item_edit(id){
 }
 	
 function myzar_item_edit_submit(id){
-	var vItemEditTitle = $("#myzar_item_title").val();
-	var vItemEditQuality = $("#myzar_item_quality").val();
-	var vItemEditAddress = $("#myzar_item_address").val();
-	var vItemEditPrice = $("#myzar_item_price").val();
-	var vItemEditImages = JSON.stringify(selectedImagesNames);
-	var vItemEditYoutube = $("#myzar_item_youtube").val();
-	var vItemEditVideo = selectedVideoName;
-	var vItemEditDescription = $("#myzar_item_description").val();
-	var vItemEditCity = $("#myzar_item_city").val();
-	var vItemEditName = $("#myzar_item_name").val();
-	var vItemEditEmail = $("#myzar_item_email").val();
-	var vItemEditPhone = $("#myzar_item_phone").val();
-	
-	const pattern = /^[а-яА-Яa-zA-ZөӨүҮ\s]+$/i;
-	
-	if(vItemEditTitle === "" || !pattern.test(vItemEditTitle)) $("#myzar_item_title_error").show();
-	if(vItemEditQuality == null) $("#myzar_item_quality_error").show();
-	if(vItemEditPrice === "") $("#myzar_item_price_error").show();
-	if(vItemEditDescription === "") $("#myzar_item_description_error").show();
-	if(vItemEditCity == null) $("#myzar_item_city_error").show();
-	if(vItemEditName === "" || !pattern.test(vItemEditName)) $("#myzar_item_name_error").show();
+	const reqMyZarItemEdit = new XMLHttpRequest();
+	reqMyZarItemEdit.onload = function() {
+		if(this.responseText == "Fail"){
+			alert("Зарыг нэмэх боломжгүй байна!");
+		}
+		else {
+			$(".myzar_content_add_item").hide();
 
-	if((vItemEditTitle !== "" && pattern.test(vItemEditTitle)) && vItemEditQuality != null && vItemEditPrice !== "" && vItemEditDescription !== "" && vItemEditCity != null && (vItemEditName !== "" && pattern.test(vItemEditName))){
-		var myZarItemEditSubmitData = new FormData();
-		myZarItemEditSubmitData.append("itemID", id);
-		myZarItemEditSubmitData.append("category", "c" + selectedCategory.length + "_" + selectedCategory[selectedCategory.length-1]);
-		myZarItemEditSubmitData.append("title", vItemEditTitle);
-		myZarItemEditSubmitData.append("quality", vItemEditQuality);
-		myZarItemEditSubmitData.append("address", vItemEditAddress);
-		myZarItemEditSubmitData.append("price", vItemEditPrice);
-		myZarItemEditSubmitData.append("images", vItemEditImages);
-		myZarItemEditSubmitData.append("youtube", vItemEditYoutube);
-		myZarItemEditSubmitData.append("video", vItemEditVideo);
-		myZarItemEditSubmitData.append("description", vItemEditDescription);
-		myZarItemEditSubmitData.append("city", vItemEditCity);
-		myZarItemEditSubmitData.append("name", vItemEditName);
-		myZarItemEditSubmitData.append("email", vItemEditEmail);
-		myZarItemEditSubmitData.append("phone", "+976"+vItemEditPhone);
-		
-		const reqMyZarItemEdit = new XMLHttpRequest();
-		reqMyZarItemEdit.onload = function() {
-			if(this.responseText == "Fail"){
-				alert("Зарыг нэмэх боломжгүй байна!");
-			}
-			else {
-				$(".myzar_content_add_item").hide();
-				
-				var eventEditDone = new CustomEvent("itemEditDone");
-				window.addEventListener("itemEditDone", function(){
-					location.reload();
-				});
-				
-				confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Зар амжилттай <b>засагдаж</b>, шалгагдаж байна.", eventEditDone);
-			}
-		};
-		reqMyZarItemEdit.onerror = function(){
-			console.log("<error>:" + reqMyZarItemEdit.status);
-		};
-		reqMyZarItemEdit.open("POST", "mysql_myzar_item_edit_process.php", true);
-		reqMyZarItemEdit.send(myZarItemEditSubmitData);
-	}
+			var eventEditDone = new CustomEvent("itemEditDone");
+			window.addEventListener("itemEditDone", function(){
+				location.reload();
+			});
+
+			confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Зар амжилттай <b>засагдаж</b>, шалгагдаж байна.", eventEditDone);
+		}
+	};
+	reqMyZarItemEdit.onerror = function(){
+		console.log("<error>:" + reqMyZarItemEdit.status);
+	};
+	reqMyZarItemEdit.open("POST", "mysql_myzar_item_edit_process.php", true);
+	
+	var myZarItemEditSubmitData = getItemDataForm(id);
+	if(myZarItemEditSubmitData !== "") reqMyZarItemEdit.send(myZarItemEditSubmitData);
 }
 	
 function myzar_category_selected_item_archive(id){
@@ -393,7 +355,7 @@ mysqli_free_result($resultFetchListItemsStateCountInActive);
 						}
 						else if($rowFetchListItems["youtube"] != ""){
 							?>
-							<iframe src="<?php echo $rowFetchListItems["youtube"]; ?>"></iframe>
+							<iframe src="<?php echo $rowFetchListItems["youtube"]; ?>" allowfullscreen></iframe>
 							<?php
 						}
 						?>

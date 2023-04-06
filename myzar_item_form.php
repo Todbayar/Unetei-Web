@@ -111,7 +111,9 @@ label.required::after {
 			</tr>
 			<tr>
 				<td></td>
-				<td style="color: #9F9F9F; font: normal 14px Arial"></td>
+				<td style="color: #9F9F9F; font: normal 14px Arial">
+					<div id="myzar_item_youtube_error" style="display: none; color: #FF4649">youtube хаяг (url) буруу байна!</div>
+				</td>
 			</tr>
 		</table>
 		<div style="margin-left: 10px; display: flex">
@@ -207,6 +209,7 @@ label.required::after {
 			<tr>
 				<td></td>
 				<td style="color: #9F9F9F; font: normal 14px Arial">
+					<div id="myzar_item_email_error" style="display: none; color: #FF4649">Таны оруулсан имейл буруу байна!</div>
 					Таны зарын тухай ирсэн мессэжний тухай мэдэгдэл очих болно.
 				</td>
 			</tr>

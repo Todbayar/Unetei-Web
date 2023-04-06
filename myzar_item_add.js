@@ -165,69 +165,32 @@ function myzar_item_video_remove(){
 }
 
 function myzar_item_add_submit(){
-	var vItemAddTitle = $("#myzar_item_title").val();
-	var vItemAddQuality = $("#myzar_item_quality").val();
-	var vItemAddAddress = $("#myzar_item_address").val();
-	var vItemAddPrice = $("#myzar_item_price").val();
-	var vItemAddImages = JSON.stringify(selectedImagesNames);
-	var vItemAddYoutube = $("#myzar_item_youtube").val();
-	var vItemAddVideo = selectedVideoName;
-	var vItemAddDescription = $("#myzar_item_description").val();
-	var vItemAddCity = $("#myzar_item_city").val();
-	var vItemAddName = $("#myzar_item_name").val();
-	var vItemAddEmail = $("#myzar_item_email").val();
-	var vItemAddPhone = $("#myzar_item_phone").val();
-	
-	const pattern = /^[а-яА-Яa-zA-ZөӨүҮ\s]+$/i;
-	
-	if(vItemAddTitle === "" || !pattern.test(vItemAddTitle)) $("#myzar_item_title_error").show();
-	if(vItemAddQuality == null) $("#myzar_item_quality_error").show();
-	if(vItemAddPrice === "") $("#myzar_item_price_error").show();
-	if(vItemAddDescription === "") $("#myzar_item_description_error").show();
-	if(vItemAddCity == null) $("#myzar_item_city_error").show();
-	if(vItemAddName === "" || !pattern.test(vItemAddName)) $("#myzar_item_name_error").show();
-
-	if((vItemAddTitle !== "" && pattern.test(vItemAddTitle)) && vItemAddQuality != null && vItemAddPrice !== "" && vItemAddDescription !== "" && vItemAddCity != null && (vItemAddName !== "" && pattern.test(vItemAddName))){
-		var myZarItemAddSubmitData = new FormData();
-		myZarItemAddSubmitData.append("category", "c" + selectedCategory.length + "_" + selectedCategory[selectedCategory.length-1]);
-		myZarItemAddSubmitData.append("title", vItemAddTitle);
-		myZarItemAddSubmitData.append("quality", vItemAddQuality);
-		myZarItemAddSubmitData.append("address", vItemAddAddress);
-		myZarItemAddSubmitData.append("price", vItemAddPrice);
-		myZarItemAddSubmitData.append("images", vItemAddImages);
-		myZarItemAddSubmitData.append("youtube", vItemAddYoutube);
-		myZarItemAddSubmitData.append("video", vItemAddVideo);
-		myZarItemAddSubmitData.append("description", vItemAddDescription);
-		myZarItemAddSubmitData.append("city", vItemAddCity);
-		myZarItemAddSubmitData.append("name", vItemAddName);
-		myZarItemAddSubmitData.append("email", vItemAddEmail);
-		myZarItemAddSubmitData.append("phone", "+976"+vItemAddPhone);
-		
-		const reqMyZarItemAdd = new XMLHttpRequest();
-		reqMyZarItemAdd.onload = function() {
-			if(this.responseText == "Fail 60"){
-				alert("Уг гарчиг бүхий зар таны зарын жагсаалтанд байна!");
-			}
-			else if(this.responseText == "Fail 56"){
-				alert("Зарыг нэмэх боломжгүй байна!");
-			}
-			else if(this.responseText == "Fail 48"){
-				alert("Зарын зургийг оруулах боломжгүй байна!");
-			}
-			else {
-				$(".myzar_content_add_item").hide();
-				var eventOk = new CustomEvent("itemAddDone");
-				window.addEventListener("itemAddDone", function(){
-					location.reload();
-				});
+	const reqMyZarItemAdd = new XMLHttpRequest();
+	reqMyZarItemAdd.onload = function() {
+		if(this.responseText == "Fail 60"){
+			alert("Уг гарчиг бүхий зар таны зарын жагсаалтанд байна!");
+		}
+		else if(this.responseText == "Fail 56"){
+			alert("Зарыг нэмэх боломжгүй байна!");
+		}
+		else if(this.responseText == "Fail 48"){
+			alert("Зарын зургийг оруулах боломжгүй байна!");
+		}
+		else {
+			$(".myzar_content_add_item").hide();
+			var eventOk = new CustomEvent("itemAddDone");
+			window.addEventListener("itemAddDone", function(){
+				location.reload();
+			});
 //				information("success", "fa-solid fa-file-pen", "Зар амжилттай <b>нэмэгдэж</b>, шалгагдаж байна.", 6, eventInfo);
-				confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Зар амжилттай <b>нэмэгдэж</b>, шалгагдаж байна.", eventOk);
-			}
-		};
-		reqMyZarItemAdd.onerror = function(){
-			console.log("<error>:" + reqMyZarItemAdd.status);
-		};
-		reqMyZarItemAdd.open("POST", "mysql_myzar_item_add_process.php", true);
-		reqMyZarItemAdd.send(myZarItemAddSubmitData);
-	}
+			confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Зар амжилттай <b>нэмэгдэж</b>, шалгагдаж байна.", eventOk);
+		}
+	};
+	reqMyZarItemAdd.onerror = function(){
+		console.log("<error>:" + reqMyZarItemAdd.status);
+	};
+	reqMyZarItemAdd.open("POST", "mysql_myzar_item_add_process.php", true);
+	
+	var myZarItemAddSubmitData = getItemDataForm();
+	if(myZarItemAddSubmitData !== "") reqMyZarItemAdd.send(myZarItemAddSubmitData);
 }
