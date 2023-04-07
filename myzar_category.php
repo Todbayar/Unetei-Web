@@ -74,13 +74,15 @@ include "mysql_config.php";
 		$("#myzar_category_enter_title").val("");
 		$("#myzar_category_enter_words_input").val("");
 		document.getElementById("myzar_category_enter_submit").disabled = true;
+		$("#myzar_category_enter_words").empty();
+		$("#myzar_category_enter_word_error").text("");
 		fetchWordsFromCategories();
 	}
 	
 	function myzar_category_enter_words(event) {
 		if (event.keyCode == 13) {
 			var categoryWord = $("#myzar_category_enter_words_input").val().trim();
-			if(isWordExist(categoryWord)){
+			if(!isWordExist(categoryWord)){
 				$("#myzar_category_enter_words").append("<div class=\"selected\" style=\"float:left; background: #a0cf0a; padding-left: 5px; padding-right: 5px; padding-top: 3px; padding-bottom: 3px; border-radius: 10px; align-items: center; display:flex; font-size: 14px; margin:5px\"><div class=\"text\">"+categoryWord+"</div><i class=\"fa-solid fa-xmark\" onClick=\"javascript:this.parentNode.remove()\" style=\"color: #617e06; margin-left: 5px; cursor: pointer\"></i></div>");
 				$("#myzar_category_enter_words_input").val("");
 			}
@@ -121,8 +123,11 @@ include "mysql_config.php";
 				$("#myzar_category_enter_title").val("");
 				$("#myzar_category_enter_words").empty();
 				$("#myzar_category_enter_words_input").val("");
+				$("#myzar_category_enter_word_error").text("");
 				document.getElementById("myzar_category_enter_icon_image").src = "image-solid.svg";
 				myzar_category_add_button_update();
+				$(".popup.myzar_category_enter").hide();
+				confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Ангилал амжилттай <b>нэмэгдэж</b>, шалгагдаж байна.", eventOk);
 			}
 			else {
 				$("#myzar_category_enter_error").text(this.responseText);
@@ -146,6 +151,7 @@ include "mysql_config.php";
 	function isWordExist(word){
 		var vExist = false;
 		$("#myzar_category_enter_words .selected").children(".text").filter(function(){
+			console.log("<isWordExist>:" + $(this).text()+", "+word);
 			if($(this).text().includes(word)){
 			   vExist = true;
 			}
@@ -161,7 +167,9 @@ include "mysql_config.php";
 		reqMyZarCategoryWordData.onload = function() {
 			const vWords = JSON.parse(this.responseText);
 			vWords.forEach(function(word){
-				$("#myzar_category_enter_words").append("<div class=\"selected\" style=\"float:left; background: #a0cf0a; padding-left: 5px; padding-right: 5px; padding-top: 3px; padding-bottom: 3px; border-radius: 10px; align-items: center; display:flex; font-size: 14px; margin:5px\"><div class=\"text\">"+word+"</div><i class=\"fa-solid fa-xmark\" onClick=\"javascript:this.parentNode.remove()\" style=\"color: #617e06; margin-left: 5px; cursor: pointer\"></i></div>");
+				if(word !== ""){
+					$("#myzar_category_enter_words").append("<div class=\"selected\" style=\"float:left; background: #a0cf0a; padding-left: 5px; padding-right: 5px; padding-top: 3px; padding-bottom: 3px; border-radius: 10px; align-items: center; display:flex; font-size: 14px; margin:5px\"><div class=\"text\">"+word+"</div><i class=\"fa-solid fa-xmark\" onClick=\"javascript:this.parentNode.remove()\" style=\"color: #617e06; margin-left: 5px; cursor: pointer\"></i></div>");
+				}
 			});
 		};
 		reqMyZarCategoryWordData.onerror = function(){
