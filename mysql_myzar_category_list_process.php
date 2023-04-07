@@ -15,7 +15,9 @@ if(isset($_REQUEST["tableID"]) && isset($_REQUEST["parentID"])){
 	else {
 		$query = "SELECT *, (SELECT COUNT(*) FROM category".($tableID+1)." WHERE parent=category".$tableID.".id) AS count_category_children, (SELECT COUNT(*) FROM item WHERE category=CONCAT('c".$tableID."_', category".$tableID.".id)) AS count_item_children FROM category".$tableID." WHERE parent=".$parentID;
 	}
-
+	
+	$query .= " ORDER BY FIELD(userID, ".$_COOKIE["userID"].") DESC";
+	
 	$arr_list = array();
 	$result = $conn->query($query);
 
