@@ -50,8 +50,8 @@ function information(type, icon, message, timer, event){
 }
 
 function confirmation_yesno(message, eventyes, eventno){
-	$(".confirmation.yesno").show();
-	$(".confirmation.yesno .popup .message").html(message);
+	$(".popup.yesno").show();
+	$(".popup.yesno .container .message").html(message);
 	if(eventyes != null){
 		if(eventyes != null) window.dispatchEvent(eventyes);
 	}
@@ -64,9 +64,9 @@ function confirmation_ok(message, event){
 	window.scrollTo(0, 0);
 	$("body").css("overflow-y", "hidden");
 //	$("html, body").animate({ scrollTop: 0 }, "fast");
-	$(".confirmation.ok").show();
-	$(".confirmation.ok .popup .message").html(message);
-	$(".confirmation.ok .popup .action .button_yellow").click(function(){
+	$(".popup.ok").show();
+	$(".popup.ok .container .message").html(message);
+	$(".popup.ok .container .action .button_yellow").click(function(){
 		if(event != null) {
 			window.dispatchEvent(event);
 		}
@@ -145,5 +145,22 @@ function getItemDataForm(id = null){
 	}
 	else {
 		return "";
+	}
+}
+
+function myzar_category_enter_words(event) {
+	if (event.keyCode == 13) {
+		var categoryWord = $(".popup.myzar_category .container #word").val();
+		$(".popup.myzar_category .container .words").append("<div class=\"selected\" style=\"float:left; background: #a0cf0a; padding-left: 5px; padding-right: 5px; padding-top: 3px; padding-bottom: 3px; border-radius: 10px; align-items: center; display:flex; font-size: 14px; margin:5px\"><div class=\"text\">"+categoryWord+"</div><i class=\"fa-solid fa-xmark\" onClick=\"javascript:this.parentNode.remove()\" style=\"color: #617e06; margin-left: 5px; cursor: pointer\"></i></div>");
+		$(".popup.myzar_category .container #word").val("");
+	}
+	else {
+		const pattern = /^[а-яА-Яa-zA-ZөӨүҮ\s]+$/i;
+		if(pattern.test(String.fromCharCode(event.keyCode))){
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 }

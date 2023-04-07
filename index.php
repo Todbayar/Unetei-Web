@@ -26,16 +26,6 @@
 				font-family: "Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, "sans-serif";
 /*				overflow-y: hidden;*/
 			}
-			.confirmation {
-				position: absolute;
-				width: 100%;
-				height: 100%;
-/*				background-color: black;*/
-/*				opacity: 0.73;*/
-				top: 0;
-				left: 0;
-				background: url(background.png) repeat;
-			}
 		</style>
 		
 	</head>
@@ -98,8 +88,8 @@
 			</div>
 		</div>
 		<!--here comes footer-->
-		<div class="confirmation yesno" style="display: none">
-			<div class="popup">
+		<div class="popup yesno" style="display: none">
+			<div class="container">
 				<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('confirmation yesno')[0].style.display='none'; javascript:document.body.style.overflowY='auto'"></i>
 				<div class="header">Мэдэгдэл</div>
 				<div class="message"></div>
@@ -109,14 +99,35 @@
 				</div>
 			</div>
 		</div>
-		<div class="confirmation ok" style="display: none">
-			<div class="popup">
+		
+		<div class="popup ok" style="display: none">
+			<div class="container">
 				<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('confirmation ok')[0].style.display='none'; javascript:document.body.style.overflowY='auto'"></i>
 				<div class="header">Мэдэгдэл</div>
 				<div class="message"></div>
 				<div class="action">
 					<button id="ok" class="button_yellow"><i class="fa-solid fa-check"></i>За</button>
 				</div>
+			</div>
+		</div>
+		
+		<div class="popup myzar_category" style="display: none">
+			<div class="container" style="width: 320px">
+				<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('popup myzar_category')[0].style.display='none'; javascript:document.body.style.overflowY='auto'"></i>
+				<div class="header">Ангилал нэмэх</div>
+				<div style="display: flex; align-items: center; margin-left: 10px; height: 50px">
+					<img id="icon" src="image-solid.svg" width="32" height="32" onClick="myzar_category_add_icon_button()" />
+					<input type="file" name="myzar_category_add_icon" id="myzar_category_add_icon" required="true" accept="image/png, .svg" style="display: none" />
+					<input id="title" type="text" maxlength="128" placeholder="Гарчиг" style="margin-left: 10px; margin-right: 10px; width: 95%; height: 20px; padding: 5px; font: normal 14px Arial; border-radius:10px" />
+				</div>
+				<div class="msg title"></div>
+				<div class="error title"></div>
+				<div class="words" style="margin-left: 5px; margin-right: 5px"></div>
+				<input id="word" type="text" maxlength="128" placeholder="Үгнүүд" style="margin-top:5px; margin-left: 10px; margin-right: 10px; width: 90%; height: 20px; padding: 5px; font: normal 14px Arial; border-radius:10px" onkeypress="return myzar_category_enter_words(event)" />
+				<div style="margin-top:5px; margin-left: 10px; margin-right: 10px; font-size: 14px">
+					<i class="fa-solid fa-circle-info" style="color: #FFA718; margin-right: 5px"></i>Ангилалтай холбоотой үгсийг бичнэ үү. Жишээ нь: Шал, тагт, граж
+				</div>
+				<button id="myzar_category_add_submit" onClick="myzar_category_add_submit_button()" disabled class="button_yellow" style="margin-top: 10px; margin-left: auto; margin-right: auto">Илгээх</button>
 			</div>
 		</div>
 	</body>
