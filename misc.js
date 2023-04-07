@@ -71,7 +71,7 @@ function confirmation_ok(message, event){
 			window.dispatchEvent(event);
 		}
 		else {
-			$(".confirmation.ok").hide();
+			$(".popup.ok").hide();
 		}
 	});
 }

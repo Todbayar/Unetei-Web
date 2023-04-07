@@ -4,7 +4,7 @@ include "mysql_config.php";
 if(isset($_REQUEST["tableID"]) && isset($_REQUEST["title"]) && isset($_FILES["iconfile"]) && isset($_REQUEST["parentID"])){
 	InsertCategoryEntry($_REQUEST["tableID"], $_COOKIE["userID"], $_REQUEST["title"], $_FILES["iconfile"], $_REQUEST["parentID"], $_REQUEST["words"]);
 }
-if(isset($_REQUEST["tableID"]) && isset($_REQUEST["title"]) && !isset($_FILES["iconfile"]) && isset($_REQUEST["parentID"])){
+else if(isset($_REQUEST["tableID"]) && isset($_REQUEST["title"]) && !isset($_FILES["iconfile"]) && isset($_REQUEST["parentID"])){
 	InsertCategoryEntry($_REQUEST["tableID"], $_COOKIE["userID"], $_REQUEST["title"], null, $_REQUEST["parentID"], $_REQUEST["words"]);
 }
 else {
