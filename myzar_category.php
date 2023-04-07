@@ -7,28 +7,38 @@ include "mysql_config.php";
 	
 	var categoryTableID, categoryParentID, categoryTitle, selectedCategories;
 	
-	$(document).ready(function(){
-//		$("#myzar_category_add_popup").draggable();
-		
-		$("#myzar_category_add_icon").change(function(){
-			const vIconType = $("#myzar_category_add_icon")[0].files[0].type;
-			const vIconName = $("#myzar_category_add_icon")[0].files[0].name;
+	$(document).ready(function(){		
+		$("#myzar_category_enter_icon_file").change(function(){
+			const vIconType = $(this)[0].files[0].type;
+			const vIconName = $(this)[0].files[0].name;
 			if(vIconType == "image/svg+xml" || vIconType == "image/png"){
-				$("#myzar_category_add_msg").text("Файл:" + vIconName);
-				document.getElementById("myzar_category_add_icon_image").src = URL.createObjectURL($("#myzar_category_add_icon")[0].files[0]);
-				isMyZarCategoryAddIconValid = true;
+				var reader = new FileReader();
+				reader.onload = function (e) {
+					$("#myzar_category_enter_icon_image").attr("src", e.target.result);
+					$("#myzar_category_enter_msg").text("Файл:" + vIconName);
+					$("#myzar_category_enter_error").text("");
+//					document.getElementById("myzar_category_enter_icon_image").src = URL.createObjectURL($("#myzar_category_enter_icon_file")[0].files[0]);
+					isMyZarCategoryAddIconValid = true;
+				}
+				reader.onerror = function(){
+					$("#myzar_category_enter_error").text("Файлын төрөл буруу байна!");
+					document.getElementById("myzar_category_enter_icon_image").src = "image-solid.svg";
+					isMyZarCategoryAddIconValid = false;	
+				}
+				reader.readAsDataURL($(this)[0].files[0]);
 			}
 			else {
-				$("#myzar_category_add_icon").val(null);
-				$("#myzar_category_add_msg").text('');
-				document.getElementById("myzar_category_add_icon_image").src = "image-solid.svg";
+				$("#myzar_category_enter_icon_file").val(null);
+				$("#myzar_category_enter_msg").text("");
+				$("#myzar_category_enter_error").text("Файлын төрөл буруу байна!");
+				document.getElementById("myzar_category_enter_icon_image").src = "image-solid.svg";
 				isMyZarCategoryAddIconValid = false;
 			}
 			myzar_category_add_button_update();
 		});
 		
-		$("#myzar_category_add_icon_title").on('input',function(e){
-			var tmpMyZarCategoryAddTitle = $("#myzar_category_add_icon_title").val().trim();
+		$("#myzar_category_enter_title").on('input',function(e){
+			var tmpMyZarCategoryAddTitle = $("#myzar_category_enter_title").val().trim();
 			if(tmpMyZarCategoryAddTitle.length > 0){
 				if(tmpMyZarCategoryAddTitle != null){
 					isMyZarCategoryAddTitleValid = true;
@@ -50,55 +60,88 @@ include "mysql_config.php";
 	});
 	
 	function myzar_category_add_button_update(){
-//		document.getElementById('myzar_category_add_submit').disabled = !isMyZarCategoryAddIconValid || !isMyZarCategoryAddTitleValid;
-		document.getElementById('myzar_category_add_submit').disabled = !isMyZarCategoryAddTitleValid;
-		if($("#myzar_category_add_icon_title").val().trim().length == 0){
-		   document.getElementById('myzar_category_add_submit').disabled = true;
+		document.getElementById("myzar_category_enter_submit").disabled = !isMyZarCategoryAddTitleValid;
+		if($("#myzar_category_enter_title").val().trim().length == 0){
+		   document.getElementById("myzar_category_enter_submit").disabled = true;
 		}
 	}
 	
 	function myzar_category_add_show(){
-		$(".popup.myzar_category").show();
-		$(".popup.myzar_category .container .msg").text("");
-		$(".popup.myzar_category .container .error").text("");
+		$(".popup.myzar_category_enter").show();
+		$("#myzar_category_enter_msg").text("");
+		$("#myzar_category_enter_error").text("");
+		$("#myzar_category_enter_icon_file").val(null);
+		$("#myzar_category_enter_title").val("");
+		$("#myzar_category_enter_words").empty();
+		$("#myzar_category_enter_words_input").val("");
+		document.getElementById("myzar_category_enter_submit").disabled = true;
 	}
 	
-	function myzar_category_add_icon_button(){
-		$("#myzar_category_add_icon").trigger("click");
+	function myzar_category_enter_words(event) {
+		if (event.keyCode == 13) {
+			var categoryWord = $("#myzar_category_enter_words_input").val().trim();
+			$("#myzar_category_enter_words").append("<div class=\"selected\" style=\"float:left; background: #a0cf0a; padding-left: 5px; padding-right: 5px; padding-top: 3px; padding-bottom: 3px; border-radius: 10px; align-items: center; display:flex; font-size: 14px; margin:5px\"><div class=\"text\">"+categoryWord+"</div><i class=\"fa-solid fa-xmark\" onClick=\"javascript:this.parentNode.remove()\" style=\"color: #617e06; margin-left: 5px; cursor: pointer\"></i></div>");
+			$("#myzar_category_enter_words_input").val("");
+		}
+		else {
+			const pattern = /^[а-яА-Яa-zA-ZөӨүҮ\s]+$/i;
+			if(pattern.test(String.fromCharCode(event.keyCode))){
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
 	}
 	
-	function myzar_category_selected_add_item(){
-		sessionStorage.setItem("selectedCategoryHier", JSON.stringify(selectedCategories));
-		myzar_tab("item");
+	function myzar_category_enter_icon_button(){
+		$("#myzar_category_enter_icon_file").trigger("click");
 	}
 	
-	function myzar_category_add_submit_button(){
-		var myZarCategoryAddSubmitData = new FormData();
-		myZarCategoryAddSubmitData.append("tableID", categoryTableID);
-		myZarCategoryAddSubmitData.append("title", $("#myzar_category_add_icon_title").val().trim());
-		myZarCategoryAddSubmitData.append("iconfile", $("#myzar_category_add_icon")[0].files[0]);
-		myZarCategoryAddSubmitData.append("parentID", categoryParentID);
+	function myzar_category_enter_submit(id = null){
+		var myZarCategoryEnterSubmitData = new FormData();
+		myZarCategoryEnterSubmitData.append("tableID", categoryTableID);
+		myZarCategoryEnterSubmitData.append("title", $("#myzar_category_enter_title").val().trim());
+		myZarCategoryEnterSubmitData.append("iconfile", $("#myzar_category_enter_icon_file")[0].files[0]);
+		myZarCategoryEnterSubmitData.append("parentID", categoryParentID);
+		myZarCategoryEnterSubmitData.append("words", getWordsFromCategory());
 		
 		const reqMyZarCategoryAddSubmit = new XMLHttpRequest();
 		reqMyZarCategoryAddSubmit.onload = function() {
 			if(this.responseText.includes("OK")){
 				myzar_category_fetch_list(categoryTableID, categoryParentID, categoryTitle, true);
-				$("#myzar_category_add_msg").text("Ангилал амжилттай нэмэгдлээ");
-				$("#myzar_category_add_error").text("");
-				$("#myzar_category_add_icon_title").val("");
-				$("#myzar_category_add_icon").val(null);
-				document.getElementById("myzar_category_add_icon_image").src = "image-solid.svg";
+				$("#myzar_category_enter_msg").text("Ангилал амжилттай нэмэгдлээ");
+				$("#myzar_category_enter_error").text("");
+				$("#myzar_category_enter_icon_file").val(null);
+				$("#myzar_category_enter_title").val("");
+				$("#myzar_category_enter_words").empty();
+				$("#myzar_category_enter_words_input").val("");
+				document.getElementById("myzar_category_enter_icon_image").src = "image-solid.svg";
 				myzar_category_add_button_update();
 			}
 			else {
-				$("#myzar_category_add_error").text(this.responseText);
+				$("#myzar_category_enter_error").text(this.responseText);
 			}
 		};
 		reqMyZarCategoryAddSubmit.onerror = function(){
-			$("#myzar_category_add_error").text(reqMyZarCategoryAddSubmit.status);
+			$("#myzar_category_enter_error").text(reqMyZarCategoryAddSubmit.status);
 		};
 		reqMyZarCategoryAddSubmit.open("POST", "mysql_myzar_category_add_process.php", true);
-		reqMyZarCategoryAddSubmit.send(myZarCategoryAddSubmitData);
+		reqMyZarCategoryAddSubmit.send(myZarCategoryEnterSubmitData);
+	}
+	
+	function getWordsFromCategory(){
+		var vWords = "";
+		$("#myzar_category_enter_words .selected").children(".text").filter(function(){
+			vWords += $(this).text()+",";
+		});
+		return vWords.substring(0, vWords.lastIndexOf(','));
+	}
+	
+	//select categories
+	function myzar_category_selected_add_item(){
+		sessionStorage.setItem("selectedCategoryHier", JSON.stringify(selectedCategories));
+		myzar_tab("item");
 	}
 	
 	function myzar_category_remove(tableID, rowID){
@@ -193,10 +236,10 @@ include "mysql_config.php";
 							else {
 								if(objMyZarCategoryList[i].icon != null){
 									//Don't forget to count its item adv because of preventing to be deleted
-									$("#myzar_content_category_list").append("<div class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: #ddf0ff; height:18px\"><div onClick=\"myzar_category_fetch_list("+(tableID+1)+", "+objMyZarCategoryList[i].id+", '"+objMyZarCategoryList[i].title+"', '"+objMyZarCategoryList[i].icon+"', false, false)\" style=\"display:flex\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"32px\" height=\"32px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div></div><i onClick=\"myzar_category_remove("+tableID+","+objMyZarCategoryList[i].id+")\" class=\"fa-solid fa-circle-minus\" style=\"color:#FF4649; margin-left: 10px; font-size: 20px\"></i></div>");
+									$("#myzar_content_category_list").append("<div class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: #ddf0ff; height:18px\"><div onClick=\"myzar_category_fetch_list("+(tableID+1)+", "+objMyZarCategoryList[i].id+", '"+objMyZarCategoryList[i].title+"', '"+objMyZarCategoryList[i].icon+"', false, false)\" style=\"display:flex; align-items: center\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"32px\" height=\"32px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div></div><i onClick=\"myzar_category_remove("+tableID+","+objMyZarCategoryList[i].id+")\" class=\"fa-solid fa-circle-minus\" style=\"color:#FF4649; margin-left: 10px; font-size: 20px\"></i></div>");
 								}
 								else {
-									$("#myzar_content_category_list").append("<div class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: #ddf0ff; height:18px\"><div onClick=\"myzar_category_fetch_list("+(tableID+1)+", "+objMyZarCategoryList[i].id+", '"+objMyZarCategoryList[i].title+"', '', false, false)\" style=\"display:flex\"><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div></div><i onClick=\"myzar_category_remove("+tableID+","+objMyZarCategoryList[i].id+")\" class=\"fa-solid fa-circle-minus\" style=\"color:#FF4649; margin-left: 10px; font-size: 20px\"></i></div>");
+									$("#myzar_content_category_list").append("<div class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: #ddf0ff; height:18px\"><div onClick=\"myzar_category_fetch_list("+(tableID+1)+", "+objMyZarCategoryList[i].id+", '"+objMyZarCategoryList[i].title+"', '', false, false)\" style=\"display:flex; align-items: center\"><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div></div><i onClick=\"myzar_category_remove("+tableID+","+objMyZarCategoryList[i].id+")\" class=\"fa-solid fa-circle-minus\" style=\"color:#FF4649; margin-left: 10px; font-size: 20px\"></i></div>");
 								}
 							}
 						}				
@@ -231,13 +274,13 @@ include "mysql_config.php";
 </script>
 
 <div class="myzar_content_category">
-	<div id="information" style="margin-top: 10px; margin-left: 10px; display: flex; font-size: 16px; align-content: center"><div class="removable">Мэдээлэл</div><i class="fa-solid fa-circle-info" style="color: #FFA718; margin-left: 5px"></i><div style="margin-left: 5px">:</div><i class="fa-solid fa-circle-plus" style="margin-left: 5px; color: #878787"></i><div style="color: #878787; margin-left: 5px">Ангиллаа сонгож "<b>нэмэх</b>" тэмдэг дээр даран зараа оруулна уу.</div></div>
+	<div id="information" style="margin-top: 10px; margin-left: 10px; display: flex; font-size: 16px; align-content: center"><div class="removable">Мэдээлэл</div><i class="fa-solid fa-circle-info" style="color: #FFA718; margin-left: 5px"></i><div style="margin-left: 5px">:</div><i class="fa-solid fa-circle-plus" style="margin-left: 5px; color: #878787"></i><div style="color: #878787; margin-left: 5px">Ангиллаа сонгож "<b>зар нэмэх</b>" тэмдэг дээр даран зараа оруулна уу.</div></div>
 	<div class="myzar_category_container_selected" style="float: left; padding-top: 10px; width: 100%;"></div>
 	<hr/>
 	<div>
-		<div id="myzar_category_add_button" onClick="myzar_category_add_show()" class="button_yellow" style="margin-left:10px; margin-bottom: 10px; width: 70px; float: left; height: 18px">
+		<div id="myzar_category_add_button" onClick="myzar_category_add_show()" class="button_yellow" style="margin-left:10px; margin-bottom: 10px; width: 75px; float: left; height: 18px">
 			<i class="fa-solid fa-plus"></i>
-			<div style="margin-left: 5px">Нэмэх</div>
+			<div style="margin-left: 5px">Ангилал нэмэх</div>
 		</div>
 		<div id="myzar_content_category_list"></div>
 	</div>	

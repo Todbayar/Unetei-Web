@@ -147,20 +147,3 @@ function getItemDataForm(id = null){
 		return "";
 	}
 }
-
-function myzar_category_enter_words(event) {
-	if (event.keyCode == 13) {
-		var categoryWord = $(".popup.myzar_category .container #word").val();
-		$(".popup.myzar_category .container .words").append("<div class=\"selected\" style=\"float:left; background: #a0cf0a; padding-left: 5px; padding-right: 5px; padding-top: 3px; padding-bottom: 3px; border-radius: 10px; align-items: center; display:flex; font-size: 14px; margin:5px\"><div class=\"text\">"+categoryWord+"</div><i class=\"fa-solid fa-xmark\" onClick=\"javascript:this.parentNode.remove()\" style=\"color: #617e06; margin-left: 5px; cursor: pointer\"></i></div>");
-		$(".popup.myzar_category .container #word").val("");
-	}
-	else {
-		const pattern = /^[а-яА-Яa-zA-ZөӨүҮ\s]+$/i;
-		if(pattern.test(String.fromCharCode(event.keyCode))){
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-}

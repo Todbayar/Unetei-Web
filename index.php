@@ -111,23 +111,23 @@
 			</div>
 		</div>
 		
-		<div class="popup myzar_category" style="display: none">
+		<div class="popup myzar_category_enter" style="display: none">
 			<div class="container" style="width: 320px">
-				<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('popup myzar_category')[0].style.display='none'; javascript:document.body.style.overflowY='auto'"></i>
+				<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('popup myzar_category_enter')[0].style.display='none'; javascript:document.body.style.overflowY='auto'"></i>
 				<div class="header">Ангилал нэмэх</div>
 				<div style="display: flex; align-items: center; margin-left: 10px; height: 50px">
-					<img id="icon" src="image-solid.svg" width="32" height="32" onClick="myzar_category_add_icon_button()" />
-					<input type="file" name="myzar_category_add_icon" id="myzar_category_add_icon" required="true" accept="image/png, .svg" style="display: none" />
-					<input id="title" type="text" maxlength="128" placeholder="Гарчиг" style="margin-left: 10px; margin-right: 10px; width: 95%; height: 20px; padding: 5px; font: normal 14px Arial; border-radius:10px" />
+					<img id="myzar_category_enter_icon_image" class="icon_button" src="image-solid.svg" width="32" height="32" onClick="myzar_category_enter_icon_button()" style="cursor: pointer" />
+					<input id="myzar_category_enter_icon_file" class="icon_file" type="file" required="true" accept="image/png, .svg" style="display: none" />
+					<input id="myzar_category_enter_title" type="text" maxlength="128" placeholder="Гарчиг" style="margin-left: 10px; margin-right: 10px; width: 95%; height: 20px; padding: 5px; font: normal 14px Arial; border-radius:10px" />
 				</div>
-				<div class="msg title"></div>
-				<div class="error title"></div>
-				<div class="words" style="margin-left: 5px; margin-right: 5px"></div>
-				<input id="word" type="text" maxlength="128" placeholder="Үгнүүд" style="margin-top:5px; margin-left: 10px; margin-right: 10px; width: 90%; height: 20px; padding: 5px; font: normal 14px Arial; border-radius:10px" onkeypress="return myzar_category_enter_words(event)" />
+				<div id="myzar_category_enter_msg" class="msg"></div>
+				<div id="myzar_category_enter_error" class="error"></div>
+				<div id="myzar_category_enter_words" style="margin-left: 5px; margin-right: 5px"></div>
+				<input id="myzar_category_enter_words_input" class="words" type="text" maxlength="128" placeholder="Үгнүүд (заавал биш)" style="margin-top:5px; margin-left: 10px; margin-right: 10px; width: 90%; height: 20px; padding: 5px; font: normal 14px Arial; border-radius:10px" onkeypress="return myzar_category_enter_words(event)" />
 				<div style="margin-top:5px; margin-left: 10px; margin-right: 10px; font-size: 14px">
-					<i class="fa-solid fa-circle-info" style="color: #FFA718; margin-right: 5px"></i>Ангилалтай холбоотой үгсийг бичнэ үү. Жишээ нь: Шал, тагт, граж
+					<i class="fa-solid fa-circle-info" style="color: #FFA718; margin-right: 5px"></i>Ангилалтай холбоотой үгсийг бичнэ үү. Жишээ нь: Шал, тагт, граж, г.м...
 				</div>
-				<button id="myzar_category_add_submit" onClick="myzar_category_add_submit_button()" disabled class="button_yellow" style="margin-top: 10px; margin-left: auto; margin-right: auto">Илгээх</button>
+				<button id="myzar_category_enter_submit" onClick="myzar_category_enter_submit()" disabled class="button_yellow" style="margin-top: 10px; margin-left: auto; margin-right: auto">Илгээх</button>
 			</div>
 		</div>
 	</body>
