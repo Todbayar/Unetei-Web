@@ -72,16 +72,21 @@ include "mysql_config.php";
 		$("#myzar_category_enter_error").text("");
 		$("#myzar_category_enter_icon_file").val(null);
 		$("#myzar_category_enter_title").val("");
-		$("#myzar_category_enter_words").empty();
 		$("#myzar_category_enter_words_input").val("");
 		document.getElementById("myzar_category_enter_submit").disabled = true;
+		fetchWordsFromCategories();
 	}
 	
 	function myzar_category_enter_words(event) {
 		if (event.keyCode == 13) {
 			var categoryWord = $("#myzar_category_enter_words_input").val().trim();
-			$("#myzar_category_enter_words").append("<div class=\"selected\" style=\"float:left; background: #a0cf0a; padding-left: 5px; padding-right: 5px; padding-top: 3px; padding-bottom: 3px; border-radius: 10px; align-items: center; display:flex; font-size: 14px; margin:5px\"><div class=\"text\">"+categoryWord+"</div><i class=\"fa-solid fa-xmark\" onClick=\"javascript:this.parentNode.remove()\" style=\"color: #617e06; margin-left: 5px; cursor: pointer\"></i></div>");
-			$("#myzar_category_enter_words_input").val("");
+			if(isWordExist(categoryWord)){
+				$("#myzar_category_enter_words").append("<div class=\"selected\" style=\"float:left; background: #a0cf0a; padding-left: 5px; padding-right: 5px; padding-top: 3px; padding-bottom: 3px; border-radius: 10px; align-items: center; display:flex; font-size: 14px; margin:5px\"><div class=\"text\">"+categoryWord+"</div><i class=\"fa-solid fa-xmark\" onClick=\"javascript:this.parentNode.remove()\" style=\"color: #617e06; margin-left: 5px; cursor: pointer\"></i></div>");
+				$("#myzar_category_enter_words_input").val("");
+			}
+			else {
+				$("#myzar_category_enter_word_error").text("Таны оруулсан үг дээрх жагсаалтанд байна! өөр үг оруулна уу.");
+			}
 		}
 		else {
 			const pattern = /^[а-яА-Яa-zA-ZөӨүҮ\s]+$/i;
@@ -136,6 +141,34 @@ include "mysql_config.php";
 			vWords += $(this).text()+",";
 		});
 		return vWords.substring(0, vWords.lastIndexOf(','));
+	}
+	
+	function isWordExist(word){
+		var vExist = false;
+		$("#myzar_category_enter_words .selected").children(".text").filter(function(){
+			if($(this).text().includes(word)){
+			   vExist = true;
+			}
+		});
+		return vExist;
+	}
+	
+	function fetchWordsFromCategories(){
+		var myZarCategoryListData = new FormData();
+		myZarCategoryListData.append("categories", JSON.stringify(selectedCategories));
+		
+		const reqMyZarCategoryWordData = new XMLHttpRequest();
+		reqMyZarCategoryWordData.onload = function() {
+			const vWords = JSON.parse(this.responseText);
+			vWords.forEach(function(word){
+				$("#myzar_category_enter_words").append("<div class=\"selected\" style=\"float:left; background: #a0cf0a; padding-left: 5px; padding-right: 5px; padding-top: 3px; padding-bottom: 3px; border-radius: 10px; align-items: center; display:flex; font-size: 14px; margin:5px\"><div class=\"text\">"+word+"</div><i class=\"fa-solid fa-xmark\" onClick=\"javascript:this.parentNode.remove()\" style=\"color: #617e06; margin-left: 5px; cursor: pointer\"></i></div>");
+			});
+		};
+		reqMyZarCategoryWordData.onerror = function(){
+			console.log("<error>:" + reqMyZarCategoryWordData.status);
+		};
+		reqMyZarCategoryWordData.open("POST", "mysql_myzar_category_words_process.php", true);
+		reqMyZarCategoryWordData.send(myZarCategoryListData);
 	}
 	
 	//select categories

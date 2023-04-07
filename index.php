@@ -125,6 +125,7 @@
 				<div id="myzar_category_enter_words" style="margin-left: 5px; margin-right: 5px"></div>
 				<input id="myzar_category_enter_words_input" class="words" type="text" maxlength="128" placeholder="Үгнүүд (заавал биш)" style="margin-top:5px; margin-left: 10px; margin-right: 10px; width: 90%; height: 20px; padding: 5px; font: normal 14px Arial; border-radius:10px" onkeypress="return myzar_category_enter_words(event)" />
 				<div style="margin-top:5px; margin-left: 10px; margin-right: 10px; font-size: 14px">
+					<div id="myzar_category_enter_word_error" class="error"></div>
 					<i class="fa-solid fa-circle-info" style="color: #FFA718; margin-right: 5px"></i>Ангилалтай холбоотой үгсийг бичнэ үү. Жишээ нь: Шал, тагт, граж, г.м...
 				</div>
 				<button id="myzar_category_enter_submit" onClick="myzar_category_enter_submit()" disabled class="button_yellow" style="margin-top: 10px; margin-left: auto; margin-right: auto">Илгээх</button>
