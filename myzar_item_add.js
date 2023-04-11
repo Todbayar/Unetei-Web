@@ -187,13 +187,13 @@ function myzar_item_add_submit(){
 	const reqMyZarItemAdd = new XMLHttpRequest();
 	reqMyZarItemAdd.onload = function() {
 		console.log("<myzar_item_add_submit>:" + this.responseText);
-		if(this.responseText == "Fail 60"){
+		if(this.responseText == "Fail 58"){
 			alert("Уг гарчиг бүхий зар таны зарын жагсаалтанд байна!");
 		}
-		else if(this.responseText == "Fail 56"){
+		else if(this.responseText == "Fail 54"){
 			alert("Зарыг нэмэх боломжгүй байна!");
 		}
-		else if(this.responseText == "Fail 48"){
+		else if(this.responseText == "Fail 46"){
 			alert("Зарын зургийг оруулах боломжгүй байна!");
 		}
 		else {

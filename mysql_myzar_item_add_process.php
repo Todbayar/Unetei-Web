@@ -3,15 +3,15 @@ include "mysql_config.php";
 
 $userID = $_COOKIE["userID"];
 $category = $_REQUEST["category"];
-$title = $_REQUEST["title"];
+$title = htmlspecialchars(addslashes($_REQUEST["title"]));
 $quality = $_REQUEST["quality"];
-$address = $_REQUEST["address"];
+$address = htmlspecialchars(addslashes($_REQUEST["address"]));
 $price = $_REQUEST["price"];
 $images = (isset($_REQUEST["images"]) && $_REQUEST["images"] != "[]") ? json_decode($_REQUEST["images"]) : null;
 $youtube = $_REQUEST["youtube"];
 $video = (isset($_REQUEST["video"]) && $_REQUEST["video"] !== "" && $_REQUEST["video"] !== "undefined") ? $_REQUEST["video"] : "";
-$extras = $_REQUEST["extras"];
-$description = $_REQUEST["description"];
+$extras = htmlspecialchars(addslashes($_REQUEST["extras"]));
+$description = htmlspecialchars(addslashes($_REQUEST["description"]));
 $city = $_REQUEST["city"];
 $name = $_REQUEST["name"];
 $email = (isset($_REQUEST["email"]) && filter_var($_REQUEST["email"], FILTER_VALIDATE_EMAIL)) ? $_REQUEST["email"] : "";
@@ -24,7 +24,7 @@ if($isDuplication == 0){
 	if($_COOKIE["role"] == 0){
 		$phone = $_COOKIE["phone"];
 	}
-	echo $queryItem = "INSERT INTO item (title, quality, address, price, youtube, video, extras, description, city, name, phone, email, userID, category, item_viewer, phone_viewer, datetime, expire_days, isactive) VALUES ('".$title."', ".$quality.", '".$address."', ".$price.", '".$youtube."', '".$video."', '".$extras."', '".addslashes(htmlspecialchars($description))."', '".$city."', '".$name."', '".$phone."', '".$email."', ".$userID.", '".$category."', 0, 0, '".date("Y-m-d h:i:s")."', 14, 1)";
+	$queryItem = "INSERT INTO item (title, quality, address, price, youtube, video, extras, description, city, name, phone, email, userID, category, item_viewer, phone_viewer, datetime, expire_days, isactive) VALUES ('".$title."', ".$quality.", '".$address."', ".$price.", '".$youtube."', '".$video."', '".$extras."', '".$description."', '".$city."', '".$name."', '".$phone."', '".$email."', ".$userID.", '".$category."', 0, 0, '".date("Y-m-d h:i:s")."', 14, 1)";
 	$resultItem = $conn->query($queryItem);
 	if($resultItem){
 		$itemID = mysqli_insert_id($conn);
@@ -43,7 +43,7 @@ if($isDuplication == 0){
 				echo $itemID;
 			}
 			else {
-				echo "Fail 48";
+				echo "Fail 46";
 			}
 		}
 		else {
@@ -51,11 +51,11 @@ if($isDuplication == 0){
 		}
 	}
 	else {
-		echo "Fail 56";
+		echo "Fail 54";
 	}
 }
 else {
-	echo "Fail 60";
+	echo "Fail 58";
 }
 
 mysqli_close($conn);
