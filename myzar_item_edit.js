@@ -33,13 +33,20 @@ function myzar_category_selected_item_edit(id){
 	reqMyZarItemListData.onload = function() {
 		const resultItemData = JSON.parse(this.responseText);
 		myzar_item_categories(resultItemData.categories);
-		$("#myzar_item_id").val(resultItemData.id)
+		console.log("<myzar_category_selected_item_edit>:" + resultItemData.description);
+//		const resultExtras = JSON.parse(resultItemData.description);
+		
+//		for(const [key, value] of Object.entries(resultExtras)){
+//			console.log(key + ", " + value);
+//		}
+		
+		$("#myzar_item_id").val(resultItemData.id);
 		$("#myzar_item_title").val(resultItemData.title);
 		$("#myzar_item_quality").val(resultItemData.quality);
 		$("#myzar_item_address").val(resultItemData.address);
 		$("#myzar_item_price").val(parseFloat(resultItemData.price));
 		$("#myzar_item_youtube").val(resultItemData.youtube);
-		$("#myzar_item_description").val(resultItemData.description);
+//		$("#myzar_item_description").val(resultExtras.description);
 		$("#myzar_item_city").val(resultItemData.city);
 		$("#myzar_item_name").val(resultItemData.name);
 		$("#myzar_item_email").val(resultItemData.email);

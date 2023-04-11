@@ -23,7 +23,7 @@ if($isDuplication == 0){
 	if($_COOKIE["role"] == 0){
 		$phone = $_COOKIE["phone"];
 	}
-	$queryItem = "INSERT INTO item (title, quality, address, price, youtube, video, description, city, name, phone, email, userID, category, item_viewer, phone_viewer, datetime, expire_days, isactive) VALUES ('".$title."', ".$quality.", '".$address."', ".$price.", '".$youtube."', '".$video."', '".$description."', '".$city."', '".$name."', '".$phone."', '".$email."', ".$userID.", '".$category."', 0, 0, '".date("Y-m-d h:i:s")."', 14, 1)";
+	echo $queryItem = "INSERT INTO item (title, quality, address, price, youtube, video, description, city, name, phone, email, userID, category, item_viewer, phone_viewer, datetime, expire_days, isactive) VALUES ('".$title."', ".$quality.", '".$address."', ".$price.", '".$youtube."', '".$video."', '".$description."', '".$city."', '".$name."', '".$phone."', '".$email."', ".$userID.", '".$category."', 0, 0, '".date("Y-m-d h:i:s")."', 14, 1)";
 	$resultItem = $conn->query($queryItem);
 	if($resultItem){
 		$itemID = mysqli_insert_id($conn);

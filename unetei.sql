@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Apr 07, 2023 at 02:06 PM
+-- Generation Time: Apr 11, 2023 at 05:49 AM
 -- Server version: 5.7.40
 -- PHP Version: 8.0.26
 
@@ -34,11 +34,11 @@ CREATE TABLE IF NOT EXISTS `category1` (
   `title` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
   `words` text COLLATE utf8_unicode_ci NOT NULL,
   `icon` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `status` int(1) NOT NULL DEFAULT '0',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0-public,1-private',
   `category_viewer` int(10) NOT NULL DEFAULT '0',
   `active` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0-review, 1-dismiss, 2-active',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `category1`
@@ -66,11 +66,11 @@ CREATE TABLE IF NOT EXISTS `category2` (
   `words` text COLLATE utf8_unicode_ci NOT NULL,
   `icon` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `parent` int(10) NOT NULL,
-  `status` int(1) NOT NULL DEFAULT '0',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0-public,1-private',
   `category_viewer` int(10) NOT NULL DEFAULT '0',
   `active` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0-review, 1-dismiss, 2-active',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `category2`
@@ -97,11 +97,11 @@ CREATE TABLE IF NOT EXISTS `category3` (
   `words` text COLLATE utf8_unicode_ci NOT NULL,
   `icon` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `parent` int(10) NOT NULL,
-  `status` int(1) NOT NULL DEFAULT '0',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0-public,1-private',
   `category_viewer` int(10) NOT NULL DEFAULT '0',
   `active` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0-review, 1-dismiss, 2-active',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `category3`
@@ -112,7 +112,8 @@ INSERT INTO `category3` (`id`, `userID`, `title`, `words`, `icon`, `parent`, `st
 (4, 1, 'АОС, хаус, зуслан зарна', '', NULL, 2, 0, 0, 0),
 (5, 1, 'Mercedes-Benz', '', NULL, 3, 0, 0, 0),
 (6, 1, 'Toyota', '', NULL, 3, 0, 0, 0),
-(8, 1, 'Гадуур хувцас', 'Размер', NULL, 4, 0, 0, 0);
+(8, 1, 'Гадуур хувцас', 'Размер', NULL, 4, 0, 0, 0),
+(9, 1, 'Nissan', 'Мотор багтаамж,Хурдны хайрцаг,Хүрд,Төрөл,Өнгө,Үйлдвэрлэсэн он,Орж ирсэн он,Хөдөлгүүр,Дотор өнгө,Лизинг,Хаяг байршил,Хөтлөгч,Явсан,Нөхцөл,Хаалга', NULL, 3, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -128,11 +129,11 @@ CREATE TABLE IF NOT EXISTS `category4` (
   `words` text COLLATE utf8_unicode_ci NOT NULL,
   `icon` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `parent` int(10) NOT NULL,
-  `status` int(1) NOT NULL DEFAULT '0',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0-public,1-private',
   `category_viewer` int(10) NOT NULL DEFAULT '0',
   `active` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0-review, 1-dismiss, 2-active',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `category4`
@@ -140,7 +141,9 @@ CREATE TABLE IF NOT EXISTS `category4` (
 
 INSERT INTO `category4` (`id`, `userID`, `title`, `words`, `icon`, `parent`, `status`, `category_viewer`, `active`) VALUES
 (1, 1, 'S-Class', '', NULL, 5, 0, 0, 0),
-(2, 2, 'Prius 30', 'Мотор багтаамж,Хурдны хайрцаг,Хүрд,Төрөл,Өнгө,Үйлдвэрлэсэн он,Орж ирсэн он,Хөдөлгүүр,Дотор өнгө,Лизинг,Хаяг байршил,Хөтлөгч,Явсан,Нөхцөл,Хаалга', NULL, 6, 0, 0, 0);
+(2, 2, 'Prius 30', 'Мотор багтаамж,Хурдны хайрцаг,Хүрд,Төрөл,Өнгө,Үйлдвэрлэсэн он,Орж ирсэн он,Хөдөлгүүр,Дотор өнгө,Лизинг,Хаяг байршил,Хөтлөгч,Явсан,Нөхцөл,Хаалга', NULL, 6, 0, 0, 0),
+(3, 1, 'test', '', NULL, 3, 0, 0, 0),
+(4, 1, 'X-Trail', 'Мотор багтаамж,Хурдны хайрцаг,Хүрд,Төрөл,Өнгө,Үйлдвэрлэсэн он,Орж ирсэн он,Хөдөлгүүр,Дотор өнгө,Лизинг,Хөтлөгч,Явсан,Нөхцөл,Хаалга', NULL, 9, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -156,7 +159,7 @@ CREATE TABLE IF NOT EXISTS `images` (
   `image` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   UNIQUE KEY `id` (`id`),
   UNIQUE KEY `image` (`image`)
-) ENGINE=MyISAM AUTO_INCREMENT=34 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=42 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `images`
@@ -182,7 +185,12 @@ INSERT INTO `images` (`id`, `userID`, `item`, `image`) VALUES
 (28, 2, 10, '20230406124141_20230404_095431.jpg'),
 (31, 1, 12, '20230406084345_25.jpg'),
 (32, 1, 13, '20230406085853_27.jpg'),
-(33, 1, 13, '20230406085853_28.jpg');
+(33, 1, 13, '20230406085853_28.jpg'),
+(39, 1, 20, '20230411013603_0f1955188b307a6ee14e8c5227a240cb.jpg'),
+(37, 1, 16, '20230411123832_15.jpg'),
+(38, 1, 16, '20230411123832_16.jpg'),
+(40, 1, 20, '20230411013603_29477ecd52ceebb842e99a41d3692ee2.jpg'),
+(41, 1, 20, '20230411013603_948303f4bd4656cfcdda628491c95dae.jpg');
 
 -- --------------------------------------------------------
 
@@ -199,7 +207,7 @@ CREATE TABLE IF NOT EXISTS `item` (
   `price` decimal(22,2) UNSIGNED NOT NULL,
   `youtube` varchar(2048) COLLATE utf8_unicode_ci NOT NULL,
   `video` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
-  `description` text COLLATE utf8_unicode_ci NOT NULL,
+  `description` text CHARACTER SET utf8mb4 NOT NULL,
   `city` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   `name` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
   `phone` varchar(12) COLLATE utf8_unicode_ci NOT NULL,
@@ -212,7 +220,7 @@ CREATE TABLE IF NOT EXISTS `item` (
   `expire_days` int(10) NOT NULL,
   `isactive` tinyint(4) NOT NULL COMMENT '0-inactive, 1-review, 2-archive, 3-dismiss, 4-active',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `item`
@@ -230,7 +238,14 @@ INSERT INTO `item` (`id`, `title`, `quality`, `address`, `price`, `youtube`, `vi
 (11, 'олрйы д дйы', 0, '', '54.00', 'https://www.youtube.com/embed/yJLZvQqcpME', '', 'https://www.youtube.com/embed/yJLZvQqcpME', 'Улаанбаатар', 'asd ok asd as лорйыбд үө үү', '+97699213557', 'asd@gmail.com', 1, 'c3_4', 0, 0, '2023-04-06 08:33:31', 7, 1),
 (12, 'Mercedes-Benz S-Class, 2016/2023', 1, '', '185000000.00', '', '', 'S500 Mongold 2023.03.07orj irsen S bh buh yum bgaa goyo ter gee zarna. Uniin dungiin tald mashin <b>oroltsuulna</b>', 'Улаанбаатар', 'Era', '+97691112725', '', 1, 'c4_1', 0, 0, '2023-04-06 08:46:42', 7, 1),
 (13, 'Toyota Tacoma, 2017/2019', 1, '', '110000000.00', '', '', 'Зэвгүй. Бага гүйлттэй\r\nМотор багтаамж: 3.5 л\r\nХурдны хайрцаг: Автомат\r\nХүрд: Зөв\r\nТөрөл: Жийп\r\nӨнгө: Улаан\r\nҮйлдвэрлэсэн он: 2017\r\nОрж ирсэн он: 2019\r\nХөдөлгүүр: Бензин', 'Улаанбаатар', 'радиатор ланд ххк', '+97699119133', '', 1, 'c3_6', 0, 0, '2023-04-06 08:58:55', 7, 0),
-(14, 'asd', 0, '', '54.00', '', '', 'asd', 'Улаанбаатар', 'asd', '+97699213557', '', 1, 'c1_5', 0, 0, '2023-04-07 09:18:16', 14, 1);
+(14, 'asd', 0, '', '54.00', '', '', 'asd', 'Улаанбаатар', 'asd', '+97699213557', '', 1, 'c1_5', 0, 0, '2023-04-07 09:18:16', 14, 1),
+(15, 'asd', 0, '', '54.00', '', '', 'asd', 'Дархан-Уул', 'asd', '+97699213557', '', 1, 'c4_4', 0, 0, '2023-04-11 11:36:26', 14, 1),
+(16, 'Nissan X-Trail, 2004/2014', 1, ' Улаанбаатар Нисэхийн спорт орны хажууд', '12000000.00', '', '', '[{\"Мотор багтаамж\":\"2.0 л\"},{\"Хурдны хайрцаг\":\" Автомат\"},{\"Хүрд\":\" Буруу\"},{\"Төрөл\":\"Жийп\"},{\"Өнгө\":\"Хар\"},{\"Үйлдвэрлэсэн он\":\"2004\"},{\"Орж ирсэн он\":\"2014\"},{\"Хөдөлгүүр\":\"Бензин\"},{\"Дотор өнгө\":\"Саарал\"},{\"Лизинг\":\"Лизинггүй\"},{\"Хөтлөгч\":\"Бүх дугуй 4WD\"},{\"Явсан\":\"189000 км.\"},{\"Нөхцөл\":\"Дугаар авсан\"},{\"Хаалга\":\"4\"},{\"description\":\"Хийх юм байхгүй сайхан тэрэг байна. Хөдөө гадаа унаад явхад бэлэн.\n\n-Урд хоер суудал хална.-\n\n-Ухарахад толь бууна\n\n-Агаар цэвэршүүлэгчтэй-\n\n-Залгаж салгах мосттой-\n\n-Мотор хроп 3-н хэлхээ маш сайн\n\n-Бинзен зарцуулалт бага\n\nАвсан хүн алзахгүй сайхан тэрэг байна. Приус 20 оролцуулж зөрүүг тохирж болно.\"}]', 'Улаанбаатар', 'Орших Сервис Төгс цэвэрлэнэ', '+97688109095', '', 1, 'c4_4', 0, 0, '2023-04-11 12:40:13', 14, 1),
+(17, 'Nissan X-Trail, 2011/2021', 1, 'Сансар', '25000000.00', '', '', '', 'Улаанбаатар', 'zizi', '+97699213557', '', 1, 'c4_4', 0, 0, '2023-04-11 01:19:26', 14, 1),
+(18, 'Nissan X-Trail, 2011/2021', 1, 'Сансар', '25000000.00', '', '', '', 'Улаанбаатар', 'zizi', '+97699213557', '', 1, 'c4_4', 0, 0, '2023-04-11 01:19:26', 14, 1),
+(19, 'Nissan X-Trail, 2011/2022', 1, 'Сансар', '25000000.00', '', '', '[{\"Мотор багтаамж\":\"2.0 л\"},{\"Хурдны хайрцаг\":\" Автомат\"},{\"Хүрд\":\" Буруу\"},{\"Төрөл\":\"Жийп\"},{\"Өнгө\":\"Хар\"},{\"Үйлдвэрлэсэн он\":\"2004\"},{\"Орж ирсэн он\":\"2014\"},{\"Хөдөлгүүр\":\"Бензин\"},{\"Дотор өнгө\":\"Саарал\"},{\"Лизинг\":\"Лизинггүй\"},{\"Хөтлөгч\":\"Бүх дугуй 4WD\"},{\"Явсан\":\"189000 км.\"},{\"Нөхцөл\":\"Дугаар авсан\"},{\"Хаалга\":\"4\"},{\"description\":\"Nissan Xtrail T31 зарна 2500cc мотортой Салгаж, залгадаг мосттой 4x4 Бүх суудал хална Ухрах kамертай Ачаатай Автомат Савхин суудалтай Хийх зүйлгүй Туулах чадвар өндөртэй\"}]', 'Улаанбаатар', 'zizi', '+97699213557', '', 1, 'c4_4', 0, 0, '2023-04-11 01:29:41', 14, 1),
+(20, 'Nissan X-Trail, 2012/2021', 1, 'Сансар', '25000000.00', '', '', '[{&quot;Мотор багтаамж&quot;:&quot;2.0 л&quot;},{&quot;Хурдны хайрцаг&quot;:&quot; Автомат&quot;},{&quot;Хүрд&quot;:&quot; Буруу&quot;},{&quot;Төрөл&quot;:&quot;Жийп&quot;},{&quot;Өнгө&quot;:&quot;Хар&quot;},{&quot;Үйлдвэрлэсэн он&quot;:&quot;2004&quot;},{&quot;Орж ирсэн он&quot;:&quot;2014&quot;},{&quot;Хөдөлгүүр&quot;:&quot;Бензин&quot;},{&quot;Дотор өнгө&quot;:&quot;Саарал&quot;},{&quot;Лизинг&quot;:&quot;Лизинггүй&quot;},{&quot;Хөтлөгч&quot;:&quot;Бүх дугуй 4WD&quot;},{&quot;Явсан&quot;:&quot;189000 км.&quot;},{&quot;Нөхцөл&quot;:&quot;Дугаар авсан&quot;},{&quot;Хаалга&quot;:&quot;4&quot;},{&quot;description&quot;:&quot;Nissan Xtrail T31 зарна\\n\\n2500cc мотортой\\n\\nСалгаж, залгадаг мосттой 4x4\\n\\nБүх суудал хална\\n\\nУхрах kамертай\\n\\nАчаатай\\n\\nАвтомат\\n\\nСавхин суудалтай\\n\\nХийх зүйлгүй\\n\\nТуулах чадвар өндөртэй&quot;}]', 'Улаанбаатар', 'zizi', '+97680196888', '', 1, 'c4_4', 0, 0, '2023-04-11 01:37:00', 14, 1),
+(21, 'Nissan X-Trail, 2010/2021', 1, '', '24999999.00', '', '', '[{&quot;Мотор багтаамж&quot;:&quot;&quot;},{&quot;Хурдны хайрцаг&quot;:&quot;&quot;},{&quot;Хүрд&quot;:&quot;&quot;},{&quot;Төрөл&quot;:&quot;&quot;},{&quot;Өнгө&quot;:&quot;&quot;},{&quot;Үйлдвэрлэсэн он&quot;:&quot;&quot;},{&quot;Орж ирсэн он&quot;:&quot;&quot;},{&quot;Хөдөлгүүр&quot;:&quot;&quot;},{&quot;Дотор өнгө&quot;:&quot;&quot;},{&quot;Лизинг&quot;:&quot;&quot;},{&quot;Хөтлөгч&quot;:&quot;&quot;},{&quot;Явсан&quot;:&quot;&quot;},{&quot;Нөхцөл&quot;:&quot;&quot;},{&quot;Хаалга&quot;:&quot;&quot;},{&quot;description&quot;:&quot;Nissan Xtrail T31 зарна\\n\\n🔴2500cc мотортой\\n\\n🔴Салгаж, залгадаг мосттой 4x4\\n\\n🔴Бүх суудал хална\\n\\n🔴Ухрах kамертай\\n\\n🔴Ачаатай\\n\\n🔴Автомат\\n\\n🔴Савхин суудалтай\\n\\n🔴Хийх зүйлгүй\\n\\n🔴Туулах чадвар өндөртэй&quot;}]', 'Улаанбаатар', 'zizi', '+97699213557', '', 1, 'c4_4', 0, 0, '2023-04-11 01:42:17', 14, 1);
 
 -- --------------------------------------------------------
 

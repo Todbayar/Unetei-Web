@@ -186,6 +186,7 @@ function myzar_item_video_remove(){
 function myzar_item_add_submit(){
 	const reqMyZarItemAdd = new XMLHttpRequest();
 	reqMyZarItemAdd.onload = function() {
+		console.log("<myzar_item_add_submit>:" + this.responseText);
 		if(this.responseText == "Fail 60"){
 			alert("Уг гарчиг бүхий зар таны зарын жагсаалтанд байна!");
 		}
