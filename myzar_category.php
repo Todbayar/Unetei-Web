@@ -174,16 +174,28 @@ function isWordExist(word){
 
 function fetchWordsFromCategories(){
 	var myZarCategoryListData = new FormData();
-	myZarCategoryListData.append("categories", JSON.stringify(selectedCategories));
+	var wordsSelectedCategories = JSON.stringify(selectedCategories);
+	myZarCategoryListData.append("categories", wordsSelectedCategories);
 
 	const reqMyZarCategoryWordData = new XMLHttpRequest();
 	reqMyZarCategoryWordData.onload = function() {
-		const vWords = JSON.parse(this.responseText);
-		vWords.forEach(function(word){
-			if(word !== ""){
-				$("#myzar_category_enter_words").append("<div class=\"selected\" style=\"float:left; background: #a0cf0a; padding-left: 5px; padding-right: 5px; padding-top: 3px; padding-bottom: 3px; border-radius: 10px; align-items: center; display:flex; font-size: 14px; margin:5px\"><div class=\"text\">"+word+"</div><i class=\"fa-solid fa-xmark\" onClick=\"javascript:this.parentNode.remove()\" style=\"color: #617e06; margin-left: 5px; cursor: pointer\"></i></div>");
+		if(this.responseText != ""){
+			const vWords = JSON.parse(this.responseText);
+			try {
+				vWords.forEach(function(word){
+					if(word !== ""){
+						$("#myzar_category_enter_words").append("<div class=\"selected\" style=\"float:left; background: #a0cf0a; padding-left: 5px; padding-right: 5px; padding-top: 3px; padding-bottom: 3px; border-radius: 10px; align-items: center; display:flex; font-size: 14px; margin:5px\"><div class=\"text\">"+word+"</div><i class=\"fa-solid fa-xmark\" onClick=\"javascript:this.parentNode.remove()\" style=\"color: #617e06; margin-left: 5px; cursor: pointer\"></i></div>");
+					}
+				});
 			}
-		});
+			catch(err){
+				for(const [key, value] of Object.entries(vWords)){
+					if(value !== ""){
+						$("#myzar_category_enter_words").append("<div class=\"selected\" style=\"float:left; background: #a0cf0a; padding-left: 5px; padding-right: 5px; padding-top: 3px; padding-bottom: 3px; border-radius: 10px; align-items: center; display:flex; font-size: 14px; margin:5px\"><div class=\"text\">"+value+"</div><i class=\"fa-solid fa-xmark\" onClick=\"javascript:this.parentNode.remove()\" style=\"color: #617e06; margin-left: 5px; cursor: pointer\"></i></div>");
+					}
+				}
+			}
+		}
 	};
 	reqMyZarCategoryWordData.onerror = function(){
 		console.log("<error>:" + reqMyZarCategoryWordData.status);

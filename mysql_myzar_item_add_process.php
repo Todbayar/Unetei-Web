@@ -10,6 +10,7 @@ $price = $_REQUEST["price"];
 $images = (isset($_REQUEST["images"]) && $_REQUEST["images"] != "[]") ? json_decode($_REQUEST["images"]) : null;
 $youtube = $_REQUEST["youtube"];
 $video = (isset($_REQUEST["video"]) && $_REQUEST["video"] !== "" && $_REQUEST["video"] !== "undefined") ? $_REQUEST["video"] : "";
+$extras = $_REQUEST["extras"];
 $description = $_REQUEST["description"];
 $city = $_REQUEST["city"];
 $name = $_REQUEST["name"];
@@ -23,7 +24,7 @@ if($isDuplication == 0){
 	if($_COOKIE["role"] == 0){
 		$phone = $_COOKIE["phone"];
 	}
-	echo $queryItem = "INSERT INTO item (title, quality, address, price, youtube, video, description, city, name, phone, email, userID, category, item_viewer, phone_viewer, datetime, expire_days, isactive) VALUES ('".$title."', ".$quality.", '".$address."', ".$price.", '".$youtube."', '".$video."', '".$description."', '".$city."', '".$name."', '".$phone."', '".$email."', ".$userID.", '".$category."', 0, 0, '".date("Y-m-d h:i:s")."', 14, 1)";
+	echo $queryItem = "INSERT INTO item (title, quality, address, price, youtube, video, extras, description, city, name, phone, email, userID, category, item_viewer, phone_viewer, datetime, expire_days, isactive) VALUES ('".$title."', ".$quality.", '".$address."', ".$price.", '".$youtube."', '".$video."', '".$extras."', '".addslashes(htmlspecialchars($description))."', '".$city."', '".$name."', '".$phone."', '".$email."', ".$userID.", '".$category."', 0, 0, '".date("Y-m-d h:i:s")."', 14, 1)";
 	$resultItem = $conn->query($queryItem);
 	if($resultItem){
 		$itemID = mysqli_insert_id($conn);

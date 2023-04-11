@@ -123,10 +123,6 @@ function getItemDataForm(id = null){
 	if(vItemYoutube !== "" && !patternYoutube.test(vItemYoutube)) $("#myzar_item_youtube_error").show();
 	
 	if(vItemTitle !== "" && vItemQuality != null && vItemPrice !== "" && vItemDescription !== "" && vItemCity != null && (vItemName !== "" && patternOnlyText.test(vItemName)) && (vItemEmail === "" || patternEmail.test(vItemEmail)) && (vItemYoutube === "" || patternYoutube.test(vItemYoutube))){
-		
-		var vDescription = getItemExtrasForm();
-		vDescription[vDescription.length] = {"description":vItemDescription};
-		
 		var itemSubmitData = new FormData();
 		itemSubmitData.append("category", "c" + selectedCategory.length + "_" + selectedCategory[selectedCategory.length-1]);
 		itemSubmitData.append("title", vItemTitle);
@@ -136,7 +132,8 @@ function getItemDataForm(id = null){
 		itemSubmitData.append("images", vItemImages);
 		itemSubmitData.append("youtube", youtubeUrlEmbed(vItemYoutube));
 		itemSubmitData.append("video", vItemVideo);
-		itemSubmitData.append("description", JSON.stringify(vDescription));
+		itemSubmitData.append("extras", JSON.stringify(getItemExtrasForm()));
+		itemSubmitData.append("description", vItemDescription);
 		itemSubmitData.append("city", vItemCity);
 		itemSubmitData.append("name", vItemName);
 		itemSubmitData.append("email", vItemEmail);

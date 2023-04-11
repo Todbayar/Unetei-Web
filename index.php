@@ -90,7 +90,7 @@
 		<!--here comes footer-->
 		<div class="popup yesno" style="display: none">
 			<div class="container">
-				<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('confirmation yesno')[0].style.display='none'; javascript:document.body.style.overflowY='auto'"></i>
+				<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('popup yesno')[0].style.display='none'; javascript:document.body.style.overflowY='auto'"></i>
 				<div class="header">Мэдэгдэл</div>
 				<div class="message"></div>
 				<div class="action">
@@ -102,7 +102,7 @@
 		
 		<div class="popup ok" style="display: none">
 			<div class="container">
-				<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('confirmation ok')[0].style.display='none'; javascript:document.body.style.overflowY='auto'"></i>
+				<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('popup ok')[0].style.display='none'; javascript:document.body.style.overflowY='auto'"></i>
 				<div class="header">Мэдэгдэл</div>
 				<div class="message"></div>
 				<div class="action">
