@@ -1,6 +1,5 @@
 <script src="myzar_item_add.js"></script>
 <script src="myzar_item_edit.js"></script>
-<script src="misc.js"></script>
 
 <?php include "myzar_item_form.php"; ?>
 

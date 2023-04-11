@@ -126,6 +126,7 @@ label.required::after {
 				</div>
 			</div>
 		</div>
+		<div id="myzar_item_extras"></div>
 		<table width="100%">
 			<tr>
 				<td width="115px" valign="top"><label class="required">Тайлбар:</label></td>

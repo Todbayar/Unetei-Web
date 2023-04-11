@@ -40,7 +40,26 @@ function myzar_item_categories(hierCategories){
 		}
 	}
 	$(".myzar_content_add_item").show();
-//		sessionStorage.removeItem("selectedCategoryHier");
+
+	const reqMyZarItemExtrasSubmit = new XMLHttpRequest();
+	reqMyZarItemExtrasSubmit.onload = function() {
+		if(this.responseText != ""){
+			const vExtras = JSON.parse(this.responseText);
+			var extraID = 1;
+			vExtras.forEach(function(vExtra){
+				$("#myzar_item_extras").append("<table width=\"100%\"><tr><td width=\"115px\">"+vExtra+"</td><td><input name=\""+vExtra+"\" id=\"myzar_item_extra"+extraID+"\" type=\"text\" maxlength=\"200\" style=\"width: 95%; height: 25px; padding: 5px; font: normal 16px Arial\"></td></tr></table>");
+				extraID++;
+			});
+		}
+	};
+
+	reqMyZarItemExtrasSubmit.onerror = function(){
+		console.log("<myzar_item_video_browse>:" + reqMyZarItemExtrasSubmit.status + ", " + reqMyZarItemExtrasSubmit.statusText);
+	};
+	
+	const lastCategory = "c"+selectedCategoryHier.length+"_"+selectedCategoryHier[selectedCategoryHier.length-1].id;
+	reqMyZarItemExtrasSubmit.open("GET", "mysql_myzar_item_extras_process.php?category="+lastCategory, true);
+	reqMyZarItemExtrasSubmit.send();
 }
 
 function myzar_item_images_browse(){

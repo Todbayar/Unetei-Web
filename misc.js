@@ -124,6 +124,9 @@ function getItemDataForm(id = null){
 	
 	if(vItemTitle !== "" && vItemQuality != null && vItemPrice !== "" && vItemDescription !== "" && vItemCity != null && (vItemName !== "" && patternOnlyText.test(vItemName)) && (vItemEmail === "" || patternEmail.test(vItemEmail)) && (vItemYoutube === "" || patternYoutube.test(vItemYoutube))){
 		
+		var vDescription = getItemExtrasForm();
+		vDescription[vDescription.length] = {"description":vItemDescription};
+		
 		var itemSubmitData = new FormData();
 		itemSubmitData.append("category", "c" + selectedCategory.length + "_" + selectedCategory[selectedCategory.length-1]);
 		itemSubmitData.append("title", vItemTitle);
@@ -133,7 +136,7 @@ function getItemDataForm(id = null){
 		itemSubmitData.append("images", vItemImages);
 		itemSubmitData.append("youtube", youtubeUrlEmbed(vItemYoutube));
 		itemSubmitData.append("video", vItemVideo);
-		itemSubmitData.append("description", vItemDescription);
+		itemSubmitData.append("description", JSON.stringify(vDescription));
 		itemSubmitData.append("city", vItemCity);
 		itemSubmitData.append("name", vItemName);
 		itemSubmitData.append("email", vItemEmail);
@@ -146,4 +149,18 @@ function getItemDataForm(id = null){
 	else {
 		return "";
 	}
+}
+
+function getItemExtrasForm(){
+	var tableID = 1;
+	var inputArray = [];
+	$("#myzar_item_extras table").each(function(){
+		const vKey = $("#myzar_item_extra"+tableID).attr("name");
+		const vValue = $("#myzar_item_extra"+tableID).val();
+		const vObj = {};
+		vObj[vKey] = vValue;
+		inputArray[tableID-1] = vObj;
+		tableID++;
+	});
+	return inputArray;
 }
