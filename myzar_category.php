@@ -173,10 +173,6 @@ function isWordExist(word){
 }
 
 function fetchWordsFromCategories(){
-	var myZarCategoryListData = new FormData();
-	var wordsSelectedCategories = JSON.stringify(selectedCategories);
-	myZarCategoryListData.append("categories", wordsSelectedCategories);
-
 	const reqMyZarCategoryWordData = new XMLHttpRequest();
 	reqMyZarCategoryWordData.onload = function() {
 		if(this.responseText != ""){
@@ -200,8 +196,9 @@ function fetchWordsFromCategories(){
 	reqMyZarCategoryWordData.onerror = function(){
 		console.log("<error>:" + reqMyZarCategoryWordData.status);
 	};
-	reqMyZarCategoryWordData.open("POST", "mysql_myzar_category_words_process.php", true);
-	reqMyZarCategoryWordData.send(myZarCategoryListData);
+	
+	reqMyZarCategoryWordData.open("POST", "mysql_myzar_category_words_process.php?id="+selectedCategories[0].id, true);
+	reqMyZarCategoryWordData.send();
 }
 
 //select categories
