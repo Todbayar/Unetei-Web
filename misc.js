@@ -161,3 +161,25 @@ function getItemExtrasForm(){
 	});
 	return inputArray;
 }
+
+function getItemExtraDataList(key, category, elID){
+	const reqMyZarItemExtraDataListSubmit = new XMLHttpRequest();
+	reqMyZarItemExtraDataListSubmit.onload = function() {
+		if(this.responseText != ""){
+			const vDataList = JSON.parse(this.responseText);
+			var vDataListEl = "<datalist id=\""+key+"\">";
+			for(var i=0; i<vDataList.length; i++){
+				vDataListEl += "<option>"+vDataList[i]+"</option>";
+			}
+			vDataListEl += "</datalist>";
+			$("#myzar_item_extras table:eq('"+elID+"') tr td:nth-child(2)").append(vDataListEl);
+		}
+	};
+
+	reqMyZarItemExtraDataListSubmit.onerror = function(){
+		console.log("<getItemExtraDataList>:" + reqMyZarItemExtraDataListSubmit.status + ", " + reqMyZarItemExtraDataListSubmit.statusText);
+	};
+
+	reqMyZarItemExtraDataListSubmit.open("GET", "mysql_myzar_item_extra_datalist_process.php?key="+key+"&category="+category, true);
+	reqMyZarItemExtraDataListSubmit.send();
+}

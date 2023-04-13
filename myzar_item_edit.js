@@ -23,19 +23,6 @@ function myzar_list_item_tab(state){
 	}
 }
 
-function myzar_list_item_extras(words){
-	if(words != "" && words != undefined){
-		const extras = JSON.parse(words);
-		for(var i=0; i<extras.length; i++){
-			for(const [key, value] of Object.entries(extras[i])){
-				console.log(key + ", " + value);
-				
-				$("#myzar_item_extras input").val(value);
-			}
-		}
-	}
-}
-
 function myzar_category_selected_item_edit(id){
 	window.scrollTo(0, 0);
 	
@@ -46,8 +33,7 @@ function myzar_category_selected_item_edit(id){
 	reqMyZarItemListData.onload = function() {
 		const resultItemData = JSON.parse(this.responseText);
 		$("#myzar_item_extras").empty();
-		myzar_item_categories(resultItemData.categories);
-		myzar_list_item_extras(resultItemData.extras);
+		myzar_item_categories(resultItemData.categories, resultItemData.extras);
 		
 		$("#myzar_item_id").val(resultItemData.id);
 		$("#myzar_item_title").val(resultItemData.title);
