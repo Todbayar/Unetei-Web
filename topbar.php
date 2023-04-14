@@ -1,3 +1,14 @@
+<style>
+.notification_number {
+	position: absolute; 
+	top:6px; right:14.3%; 
+	font-size: 10px; 
+	background: red; 
+	color: white; 
+	padding: 3px; 
+	border-radius: 5px;
+}
+</style>
 <img src="icon.png" width="50" height="50" />
 <div class="title">Unetei</div>
 <div class="control">
@@ -16,9 +27,20 @@
 			</div>
 		</div>
 	</div>
-	<i class="fa-regular fa-star" style="font-size: 24px; color: #FFFFFF; font: normal; margin-left: 10px"></i>
-	<i class="fa-regular fa-comments" style="font-size: 24px; color: #FFFFFF; font: normal; margin-left: 10px"></i>
-	<div class="button_yellow" style="margin-left: 10px">
+	<i class="fa-regular fa-star" style="font-size: 24px; color: #FFFFFF; font: normal; margin-left: 10px; cursor: pointer"></i>
+	<?php 
+	if(!isset($_GET["page"]) || $_GET["page"] != "chat"){
+	?>
+	<i class="fa-regular fa-comments" style="font-size: 24px; color: #FFFFFF; font: normal; margin-left: 10px; cursor: pointer" onClick="javascript:location.href='?page=chat'"><p class="notification_number">10</p></i>
+	<?php
+	}
+	else {
+	?>
+	<i class="fa-solid fa-comments" style="font-size: 24px; color: #FFFFFF; font: normal; margin-left: 10px; cursor: pointer" onClick="javascript:location.href='?page=chat'"><p class="notification_number">1</p></i>
+	<?php
+	}
+	?>
+	<div class="button_yellow" style="margin-left: 10px" onClick="javascript:location.href='?page=myzar&myzar=category'">
 		<i class="fa-solid fa-plus"></i>
 		<div class="removable" style="margin-left: 5px">Зар нэмэх</div>
 	</div>

@@ -79,6 +79,9 @@
 					case "myzar":
 						include "myzar.php";
 						break;
+					case "chat":
+						include "chat.php";
+						break;
 				}
 			}
 			else {

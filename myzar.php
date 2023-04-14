@@ -12,13 +12,11 @@ $(document).ready(function(){
 });
 
 function myzar_tab(name){
-	if(!location.href.includes(name)){
-		if(location.href.includes("&myzar=")){
-		   location.href = location.href.substring(0, location.href.lastIndexOf("&myzar=")) + "&myzar=" + name;
-		}
-		else {
-			location.href += "&myzar=" + name;
-		}
+	if(location.href.includes("&myzar=")){
+	   location.href = location.href.substring(0, location.href.lastIndexOf("&myzar=")) + "&myzar=" + name;
+	}
+	else {
+		location.href += "&myzar=" + name;
 	}
 }
 </script>
