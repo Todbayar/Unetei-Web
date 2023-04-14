@@ -210,207 +210,142 @@
 		</div>
 	</div>
 	<div class="right">
-		<div class="message">
-			<img src="user.png">
-			<div class="container">
-				<div class="text">Сайн байна уу?
+		<div class="top">
+			<div class="message">
+				<img src="user.png">
+				<div class="container">
+					<div class="text">Сайн байна уу?
 
-Манай сайтын нэрийг барин залилан хийх оролдлогууд гарсан байна.
+	Манай сайтын нэрийг барин залилан хийх оролдлогууд гарсан байна.
 
-Бид одоогоор хүргэлт хийдэггүй бөгөөд хэрэглэгч хоорондын худалдан авалт хийх үед оролцдоггүй болно.
+	Бид одоогоор хүргэлт хийдэггүй бөгөөд хэрэглэгч хоорондын худалдан авалт хийх үед оролцдоггүй болно.
 
-Тиймээс та мэдэхгүй хүнд болон мэдэхгүй сайт дээрээ банкны картын дугаараа өгөхгүй байна уу.
+	Тиймээс та мэдэхгүй хүнд болон мэдэхгүй сайт дээрээ банкны картын дугаараа өгөхгүй байна уу.
 
-Хүндэтгэсэн,
-Unegui.mn хамт олон</div>
-				<div class="datetime">2023.4.14 1:14</div>
+	Хүндэтгэсэн,
+	Unegui.mn хамт олон</div>
+					<div class="datetime">2023.4.14 1:14</div>
+				</div>
+			</div>
+			<div class="message me">
+				<div class="container">
+					<div class="text">Todbayar</div>
+					<div class="datetime">2023.4.14 1:14</div>
+				</div>
+				<img src="user.png">
+			</div>
+			<div class="message">
+				<img src="user.png">
+				<div class="container">
+					<div class="text">Сайн байна уу?
+
+	Манай сайтын нэрийг</div>
+					<div class="datetime">2023.4.14 1:14</div>
+				</div>
+			</div>
+			<div class="message me">
+				<div class="container">
+					<div class="text">Сайн байна уу?
+
+	Манай сайтын нэрийг барин залилан хийх оролдлогууд гарсан байна.
+
+	Бид одоогоор хүргэлт хийдэггүй бөгөөд хэрэглэгч хоорондын худалдан авалт хийх үед оролцдоггүй болно.</div>
+					<div class="datetime">2023.4.14 1:14</div>
+				</div>
+				<img src="user.png">
+			</div>
+			<div class="message">
+				<img src="user.png">
+				<div class="container">
+					<div class="text">Сайн байна уу?
+
+	Манай сайтын нэрийг барин залилан хийх оролдлогууд гарсан байна.
+
+	Бид одоогоор хүргэлт хийдэггүй бөгөөд хэрэглэгч хоорондын худалдан авалт хийх үед оролцдоггүй болно.
+
+	Тиймээс та мэдэхгүй хүнд болон мэдэхгүй сайт дээрээ банкны картын дугаараа өгөхгүй байна уу.
+
+	Хүндэтгэсэн,
+	Unegui.mn хамт олон</div>
+					<div class="datetime">2023.4.14 1:14</div>
+				</div>
+			</div>
+			<div class="message me">
+				<div class="container">
+					<div class="text">Todbayar</div>
+					<div class="datetime">2023.4.14 1:14</div>
+				</div>
+				<img src="user.png">
+			</div>
+			<div class="message">
+				<img src="user.png">
+				<div class="container">
+					<div class="text">Сайн байна уу?
+
+	Манай сайтын нэрийг</div>
+					<div class="datetime">2023.4.14 1:14</div>
+				</div>
+			</div>
+			<div class="message me">
+				<div class="container">
+					<div class="text">Сайн байна уу?
+
+	Манай сайтын нэрийг барин залилан хийх оролдлогууд гарсан байна.
+
+	Бид одоогоор хүргэлт хийдэггүй бөгөөд хэрэглэгч хоорондын худалдан авалт хийх үед оролцдоггүй болно.</div>
+					<div class="datetime">2023.4.14 1:14</div>
+				</div>
+				<img src="user.png">
+			</div>
+			<div class="message">
+				<img src="user.png">
+				<div class="container">
+					<div class="text">Сайн байна уу?
+
+	Манай сайтын нэрийг барин залилан хийх оролдлогууд гарсан байна.
+
+	Бид одоогоор хүргэлт хийдэггүй бөгөөд хэрэглэгч хоорондын худалдан авалт хийх үед оролцдоггүй болно.
+
+	Тиймээс та мэдэхгүй хүнд болон мэдэхгүй сайт дээрээ банкны картын дугаараа өгөхгүй байна уу.
+
+	Хүндэтгэсэн,
+	Unegui.mn хамт олон</div>
+					<div class="datetime">2023.4.14 1:14</div>
+				</div>
+			</div>
+			<div class="message me">
+				<div class="container">
+					<div class="text">Todbayar</div>
+					<div class="datetime">2023.4.14 1:14</div>
+				</div>
+				<img src="user.png">
+			</div>
+			<div class="message">
+				<img src="user.png">
+				<div class="container">
+					<div class="text">Сайн байна уу?
+
+	Манай сайтын нэрийг</div>
+					<div class="datetime">2023.4.14 1:14</div>
+				</div>
+			</div>
+			<div class="message me">
+				<div class="container">
+					<div class="text">Сайн байна уу?
+
+	Манай сайтын нэрийг барин залилан хийх оролдлогууд гарсан байна.
+
+	Бид одоогоор хүргэлт хийдэггүй бөгөөд хэрэглэгч хоорондын худалдан авалт хийх үед оролцдоггүй болно.</div>
+					<div class="datetime">2023.4.14 1:14</div>
+				</div>
+				<img src="user.png">
 			</div>
 		</div>
-		<div class="message me">
-			<div class="container">
-				<div class="text">Сайн байна уу?
-
-Манай сайтын нэрийг барин залилан хийх оролдлогууд гарсан байна.
-
-Бид одоогоор хүргэлт хийдэггүй бөгөөд хэрэглэгч хоорондын худалдан авалт хийх үед оролцдоггүй болно.
-
-Тиймээс та мэдэхгүй хүнд болон мэдэхгүй сайт дээрээ банкны картын дугаараа өгөхгүй байна уу.
-
-Хүндэтгэсэн,
-Unegui.mn хамт олон</div>
-				<div class="datetime">2023.4.14 1:14</div>
+		<div class="bottom">
+			<input type="text" placeholder="Энд бичнэ үү" />
+			<div class="button_yellow" style="float: right; height: 16px">
+				<i class="fa-solid fa-paper-plane"></i>
 			</div>
-			<img src="user.png">
-		</div>
-		<div class="message">
-			<img src="user.png">
-			<div class="container">
-				<div class="text">Todbayar</div>
-				<div class="datetime">2023.4.14 1:14</div>
-			</div>
-		</div>
-		<div class="message me">
-			<div class="container">
-				<div class="text">Сайн байна уу?
-
-Манай сайтын нэрийг барин залилан хийх оролдлогууд гарсан байна.
-
-Бид одоогоор хүргэлт хийдэггүй бөгөөд хэрэглэгч хоорондын худалдан авалт хийх үед оролцдоггүй болно.
-
-Тиймээс та мэдэхгүй хүнд болон мэдэхгүй сайт дээрээ банкны картын дугаараа өгөхгүй байна уу.
-
-Хүндэтгэсэн,
-Unegui.mn хамт олон</div>
-				<div class="datetime">2023.4.14 1:14</div>
-			</div>
-			<img src="user.png">
-		</div>
-		<div class="message">
-			<img src="user.png">
-			<div class="container">
-				<div class="text">Todbayar</div>
-				<div class="datetime">2023.4.14 1:14</div>
-			</div>
-		</div>
-		<div class="message me">
-			<div class="container">
-				<div class="text">Сайн байна уу?
-
-Манай сайтын нэрийг барин залилан хийх оролдлогууд гарсан байна.
-
-Бид одоогоор хүргэлт хийдэггүй бөгөөд хэрэглэгч хоорондын худалдан авалт хийх үед оролцдоггүй болно.
-
-Тиймээс та мэдэхгүй хүнд болон мэдэхгүй сайт дээрээ банкны картын дугаараа өгөхгүй байна уу.
-
-Хүндэтгэсэн,
-Unegui.mn хамт олон</div>
-				<div class="datetime">2023.4.14 1:14</div>
-			</div>
-			<img src="user.png">
-		</div>
-		<div class="message">
-			<img src="user.png">
-			<div class="container">
-				<div class="text">Todbayar</div>
-				<div class="datetime">2023.4.14 1:14</div>
-			</div>
-		</div>
-		<div class="message me">
-			<div class="container">
-				<div class="text">Сайн байна уу?
-
-Манай сайтын нэрийг барин залилан хийх оролдлогууд гарсан байна.
-
-Бид одоогоор хүргэлт хийдэггүй бөгөөд хэрэглэгч хоорондын худалдан авалт хийх үед оролцдоггүй болно.
-
-Тиймээс та мэдэхгүй хүнд болон мэдэхгүй сайт дээрээ банкны картын дугаараа өгөхгүй байна уу.
-
-Хүндэтгэсэн,
-Unegui.mn хамт олон</div>
-				<div class="datetime">2023.4.14 1:14</div>
-			</div>
-			<img src="user.png">
-		</div>
-		<div class="message">
-			<img src="user.png">
-			<div class="container">
-				<div class="text">Сайн байна уу?
-
-Манай сайтын нэрийг барин залилан хийх оролдлогууд гарсан байна.
-
-Бид одоогоор хүргэлт хийдэггүй бөгөөд хэрэглэгч хоорондын худалдан авалт хийх үед оролцдоггүй болно.
-
-Тиймээс та мэдэхгүй хүнд болон мэдэхгүй сайт дээрээ банкны картын дугаараа өгөхгүй байна уу.
-
-Хүндэтгэсэн,
-Unegui.mn хамт олон</div>
-				<div class="datetime">2023.4.14 1:14</div>
-			</div>
-		</div>
-		<div class="message me">
-			<div class="container">
-				<div class="text">Сайн байна уу?
-
-Манай сайтын нэрийг барин залилан хийх оролдлогууд гарсан байна.
-
-Бид одоогоор хүргэлт хийдэггүй бөгөөд хэрэглэгч хоорондын худалдан авалт хийх үед оролцдоггүй болно.
-
-Тиймээс та мэдэхгүй хүнд болон мэдэхгүй сайт дээрээ банкны картын дугаараа өгөхгүй байна уу.
-
-Хүндэтгэсэн,
-Unegui.mn хамт олон</div>
-				<div class="datetime">2023.4.14 1:14</div>
-			</div>
-			<img src="user.png">
-		</div>
-		<div class="message">
-			<img src="user.png">
-			<div class="container">
-				<div class="text">Todbayar</div>
-				<div class="datetime">2023.4.14 1:14</div>
-			</div>
-		</div>
-		<div class="message me">
-			<div class="container">
-				<div class="text">Сайн байна уу?
-
-Манай сайтын нэрийг барин залилан хийх оролдлогууд гарсан байна.
-
-Бид одоогоор хүргэлт хийдэггүй бөгөөд хэрэглэгч хоорондын худалдан авалт хийх үед оролцдоггүй болно.
-
-Тиймээс та мэдэхгүй хүнд болон мэдэхгүй сайт дээрээ банкны картын дугаараа өгөхгүй байна уу.
-
-Хүндэтгэсэн,
-Unegui.mn хамт олон</div>
-				<div class="datetime">2023.4.14 1:14</div>
-			</div>
-			<img src="user.png">
-		</div>
-		<div class="message">
-			<img src="user.png">
-			<div class="container">
-				<div class="text">Todbayar</div>
-				<div class="datetime">2023.4.14 1:14</div>
-			</div>
-		</div>
-		<div class="message me">
-			<div class="container">
-				<div class="text">Сайн байна уу?
-
-Манай сайтын нэрийг барин залилан хийх оролдлогууд гарсан байна.
-
-Бид одоогоор хүргэлт хийдэггүй бөгөөд хэрэглэгч хоорондын худалдан авалт хийх үед оролцдоггүй болно.
-
-Тиймээс та мэдэхгүй хүнд болон мэдэхгүй сайт дээрээ банкны картын дугаараа өгөхгүй байна уу.
-
-Хүндэтгэсэн,
-Unegui.mn хамт олон</div>
-				<div class="datetime">2023.4.14 1:14</div>
-			</div>
-			<img src="user.png">
-		</div>
-		<div class="message">
-			<img src="user.png">
-			<div class="container">
-				<div class="text">Todbayar</div>
-				<div class="datetime">2023.4.14 1:14</div>
-			</div>
-		</div>
-		<div class="message me">
-			<div class="container">
-				<div class="text">Сайн байна уу?
-
-Манай сайтын нэрийг барин залилан хийх оролдлогууд гарсан байна.
-
-Бид одоогоор хүргэлт хийдэггүй бөгөөд хэрэглэгч хоорондын худалдан авалт хийх үед оролцдоггүй болно.
-
-Тиймээс та мэдэхгүй хүнд болон мэдэхгүй сайт дээрээ банкны картын дугаараа өгөхгүй байна уу.
-
-Хүндэтгэсэн,
-Unegui.mn хамт олон</div>
-				<div class="datetime">2023.4.14 1:14</div>
-			</div>
-			<img src="user.png">
 		</div>
 	</div>
 </div>
