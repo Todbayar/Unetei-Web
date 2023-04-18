@@ -1,6 +1,7 @@
 <?php
 include "mysql_config.php";
 include "info.php";
+include "chat_process";
 
 $userID = $_COOKIE["userID"];
 $itemID = $_REQUEST["itemID"];
@@ -39,6 +40,7 @@ if($conn->query($queryUpdateItem)){
 			}
 		}
 		if($countImageEditDone == 0){
+			chat_send($userID, 0, 2, $itemID);
 			echo "OK";
 		}
 		else {
@@ -46,6 +48,7 @@ if($conn->query($queryUpdateItem)){
 		}
 	}
 	else {
+		chat_send($userID, 0, 2, $itemID);
 		echo "OK";
 	}
 }

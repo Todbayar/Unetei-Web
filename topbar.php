@@ -9,8 +9,10 @@
 	border-radius: 5px;
 }
 </style>
-<img src="icon.png" width="50" height="50" />
-<div class="title">Unetei</div>
+<div onClick="javascript:location.href='./'" style="display: flex; align-items: center; cursor: pointer">
+	<img src="icon.png" width="50" height="50" />
+	<div class="title">Unetei</div>
+</div>
 <div class="control">
 	<div class="myzar">
 		<div style="display: flex; align-items: center; height: 70px">

@@ -1,5 +1,6 @@
 <?php
 include "mysql_config.php";
+include "chat_process";
 
 $userID = $_COOKIE["userID"];
 $category = $_REQUEST["category"];
@@ -40,6 +41,7 @@ if($isDuplication == 0){
 				}
 			}
 			if($isImagesInsert){
+				chat_send($userID, 0, 2, $itemID);
 				echo $itemID;
 			}
 			else {

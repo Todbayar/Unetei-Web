@@ -6,6 +6,25 @@ $(document).ready(function(){
 		}
 	});
 });
+	
+function chat_send(toID){
+	var chatSubmitData = new FormData();
+	chatSubmitData.append("fromID", <?php echo $_COOKIE["userID"]; ?>);
+	chatSubmitData.append("toID", toID);
+	chatSubmitData.append("type", 0);
+	chatSubmitData.append("message", $("#chatMessage").val());
+
+	const reqChatSubmit = new XMLHttpRequest();
+	reqChatSubmit.onload = function() {
+		console.log("<chat_send>:" + this.responseText);
+	};
+	reqChatSubmit.onerror = function(){
+		console.log("<chat_send>:" + reqChatSubmit.status);
+	};
+
+	reqChatSubmit.open("POST", "chat_process.php", true);
+	reqChatSubmit.send(chatSubmitData);
+}
 </script>
 
 <div class="chat">
@@ -352,8 +371,8 @@ $(document).ready(function(){
 			</div>
 		</div>
 		<div class="bottom">
-			<input type="text" placeholder="Энд бичнэ үү" />
-			<div class="button_yellow" style="float: right; height: 16px">
+			<input id="chatMessage" type="text" placeholder="Энд бичнэ үү" />
+			<div onClick="chat_send(0)" class="button_yellow" style="float: right; height: 16px">
 				<i class="fa-solid fa-paper-plane"></i>
 			</div>
 		</div>

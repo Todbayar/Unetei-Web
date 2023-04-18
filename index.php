@@ -3,7 +3,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>Unetei</title>
+		<title><?php echo $title; ?></title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		
 		<script src="https://www.gstatic.com/firebasejs/9.12.1/firebase-app-compat.js"></script>
@@ -17,7 +17,9 @@
 		<link rel="stylesheet" href="topbar.css">
 		<link rel="stylesheet" href="buttons.css">
 		<link rel="stylesheet" href="dropdowns.css">
-
+		
+		<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+		
 		<style>
 			body {
 				border: 0;
