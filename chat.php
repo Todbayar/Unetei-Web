@@ -1,9 +1,19 @@
+<script>
+$(document).ready(function(){
+	Notification.requestPermission().then((permission) => {
+		if (permission === 'granted') {
+		  console.log('Notification permission granted.');
+		}
+	});
+});
+</script>
+
 <div class="chat">
 	<div class="left">
 		<div class="user">
 			<div class="container">
 				<div class="box">
-					<div>
+					<div class="profile">
 						<img src="user.png">
 					</div>
 					<div>
