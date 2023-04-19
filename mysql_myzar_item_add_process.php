@@ -1,7 +1,7 @@
 <?php
 include "mysql_config.php";
 include "mysql_misc.php";
-include "chat_process";
+include "chat_process.php";
 
 $userID = $_COOKIE["userID"];
 $category = $_REQUEST["category"];
@@ -44,7 +44,7 @@ if($isDuplication == 0){
 			}
 			if($isImagesInsert){
 				chat_send($userID, 0, 2, $itemID);
-				update_profile($name, $email, $userID);
+				update_profile($name, $email, $city, $userID);
 				echo $itemID;
 			}
 			else {

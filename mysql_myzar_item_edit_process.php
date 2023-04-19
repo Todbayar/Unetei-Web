@@ -2,7 +2,7 @@
 include "mysql_config.php";
 include "mysql_misc.php";
 include "info.php";
-include "chat_process";
+include "chat_process.php";
 
 $userID = $_COOKIE["userID"];
 $itemID = $_REQUEST["itemID"];
@@ -42,7 +42,7 @@ if($conn->query($queryUpdateItem)){
 		}
 		if($countImageEditDone == 0){
 			chat_send($userID, 0, 2, $itemID);
-			update_profile($name, $email, $userID);
+			update_profile($name, $email, $city, $userID);
 			echo "OK";
 		}
 		else {
@@ -51,7 +51,7 @@ if($conn->query($queryUpdateItem)){
 	}
 	else {
 		chat_send($userID, 0, 2, $itemID);
-		update_profile($name, $email, $userID);
+		update_profile($name, $email, $city, $userID);
 		echo "OK";
 	}
 }

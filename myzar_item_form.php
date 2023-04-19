@@ -1,3 +1,6 @@
+<?php
+include "mysql_config.php";
+?>
 <style>
 /* For Mobile */
 @media screen and (max-width: 540px) {
@@ -27,6 +30,12 @@ label.required::after {
 	font-family: 'RobotoRegular'
 }
 </style>
+
+<script>
+function selectCity(city){
+	$("#myzar_item_city").val(city);
+}
+</script>
 
 <div id="information" style="display: none; margin: 10px auto; font-size: 16px; align-content: center; width: 100%"><div class="removable">Мэдээлэл</div><i id="type" class="fa-solid fa-circle-info" style="margin-left: 5px"></i><div style="margin-left: 5px">:</div><i id="icon" class="fa-solid fa-circle-plus" style="margin-left: 5px; color: #878787; display: none"></i><div id="message" style="color: #878787; margin-left: 5px"></div><div id="timer" style="color: #878787; margin-left: 5px"></div></div>
 
@@ -149,6 +158,11 @@ label.required::after {
 				<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&v=weekly" defer></script>
 			</div>
 		</div>
+		<?php
+		$queryFetchProfile = "SELECT * FROM user WHERE id=".$_COOKIE["userID"];
+		$resultFetchProfile = $conn->query($queryFetchProfile);
+		$rowFetchProfile = mysqli_fetch_array($resultFetchProfile);
+		?>
 		<table width="100%">
 			<tr>
 				<td width="115px"><label class="required">Байрлал:</label></td>
@@ -178,6 +192,13 @@ label.required::after {
 						<option value="Хөвсгөл">Хөвсгөл</option>
 						<option value="Хэнтий">Хэнтий</option>
 					</select>
+					<?php
+					if($rowFetchProfile["city"] != ""){
+					?>
+					<script>selectCity('<?php echo $rowFetchProfile["city"]; ?>')</script>
+					<?php
+					}
+					?>
 				</td>
 			</tr>
 			<tr>
@@ -189,7 +210,7 @@ label.required::after {
 			<tr>
 				<td width="115px"><label class="required">Нэр:</label></td>
 				<td>
-					<input id="myzar_item_name" type="text" maxlength="128" style="width: 85%; height: 25px; padding: 5px; font: normal 16px Arial">
+					<input id="myzar_item_name" type="text" maxlength="128" value="<?php if($rowFetchProfile["name"]!="") echo $rowFetchProfile["name"]; ?>" style="width: 85%; height: 25px; padding: 5px; font: normal 16px Arial">
 				</td>
 			</tr>
 			<tr>
@@ -204,7 +225,7 @@ label.required::after {
 			<tr>
 				<td width="115px">Имейл хаяг:</td>
 				<td>
-					<input id="myzar_item_email" type="email" maxlength="128" style="width: 85%; height: 25px; padding: 5px; font: normal 16px Arial">
+					<input id="myzar_item_email" type="email" maxlength="128" value="<?php if($rowFetchProfile["email"]!="") echo $rowFetchProfile["email"]; ?>" style="width: 85%; height: 25px; padding: 5px; font: normal 16px Arial">
 				</td>
 			</tr>
 			<tr>

@@ -199,7 +199,6 @@ function myzar_item_video_remove(){
 function myzar_item_add_submit(){
 	const reqMyZarItemAdd = new XMLHttpRequest();
 	reqMyZarItemAdd.onload = function() {
-		console.log("<myzar_item_add_submit>:" + this.responseText);
 		if(this.responseText == "Fail 58"){
 			alert("Уг гарчиг бүхий зар таны зарын жагсаалтанд байна!");
 		}
@@ -215,7 +214,7 @@ function myzar_item_add_submit(){
 			window.addEventListener("itemAddDone", function(){
 				location.reload();
 			});
-//				information("success", "fa-solid fa-file-pen", "Зар амжилттай <b>нэмэгдэж</b>, шалгагдаж байна.", 6, eventInfo);
+//			information("success", "fa-solid fa-file-pen", "Зар амжилттай <b>нэмэгдэж</b>, шалгагдаж байна.", 6, eventInfo);
 			confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Зар амжилттай <b>нэмэгдэж</b>, шалгагдаж байна.", eventOk);
 		}
 	};
