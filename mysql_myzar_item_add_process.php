@@ -1,5 +1,6 @@
 <?php
 include "mysql_config.php";
+include "mysql_misc.php";
 include "chat_process";
 
 $userID = $_COOKIE["userID"];
@@ -25,6 +26,7 @@ if($isDuplication == 0){
 	if($_COOKIE["role"] == 0){
 		$phone = $_COOKIE["phone"];
 	}
+	
 	$queryItem = "INSERT INTO item (title, quality, address, price, youtube, video, extras, description, city, name, phone, email, userID, category, item_viewer, phone_viewer, datetime, expire_days, isactive) VALUES ('".$title."', ".$quality.", '".$address."', ".$price.", '".$youtube."', '".$video."', '".$extras."', '".$description."', '".$city."', '".$name."', '".$phone."', '".$email."', ".$userID.", '".$category."', 0, 0, '".date("Y-m-d h:i:s")."', 14, 1)";
 	$resultItem = $conn->query($queryItem);
 	if($resultItem){
@@ -42,6 +44,7 @@ if($isDuplication == 0){
 			}
 			if($isImagesInsert){
 				chat_send($userID, 0, 2, $itemID);
+				update_profile($name, $email, $userID);
 				echo $itemID;
 			}
 			else {
