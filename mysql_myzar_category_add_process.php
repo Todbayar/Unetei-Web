@@ -1,6 +1,6 @@
 <?php
 include "mysql_config.php";
-include "chat_process";
+include "chat_process.php";
 
 if(isset($_REQUEST["tableID"]) && isset($_REQUEST["title"]) && isset($_FILES["iconfile"]) && isset($_REQUEST["parentID"])){
 	InsertCategoryEntry($_REQUEST["tableID"], $_COOKIE["userID"], $_REQUEST["title"], $_FILES["iconfile"], $_REQUEST["parentID"], $_REQUEST["words"]);
@@ -41,7 +41,7 @@ function InsertCategoryEntry($pTableID, $pUID , $pTitle, $pFile, $pParentID, $pW
 				}
 
 				if($resultInsert){
-					chat_send($pUID, 0, 1, mysqli_insert_id($conn));
+					chat_send($pUID, 0, 1, "c".$pTableID."_".mysqli_insert_id($conn));
 					echo "OK";
 				}
 				else {
