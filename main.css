@@ -229,6 +229,14 @@
 	margin-top: 3px;
 }
 
+.chat .right .top .message .container .action {
+	margin-top: 5px;
+}
+
+.chat .right .top .message.me .container .action {
+	margin-top: 23px;
+}
+
 .chat .right .bottom {
 	
 	padding: 5px;

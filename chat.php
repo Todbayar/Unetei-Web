@@ -36,7 +36,20 @@ function chat_select(groupID){
 
 	const reqChatFetchSubmit = new XMLHttpRequest();
 	reqChatFetchSubmit.onload = function() {
-		console.log("<chat_select>:" + this.responseText);
+		if(this.responseText != ""){
+			const responseChatFetch = JSON.parse(this.responseText);
+			responseChatFetch.forEach(function(chatRow){
+				if(parseInt(chatRow.type) == 1){
+					chat_list_category(chatRow.sender, chatRow.body, chatRow.datetime);
+				}
+				else if(parseInt(chatRow.type) == 2){
+					chat_list_item(chatRow.sender, chatRow.body, chatRow.datetime);
+				}
+				else {
+					chat_list_message(chatRow.sender, chatRow.body, chatRow.datetime);
+				}
+			});
+		}
 	};
 	reqChatFetchSubmit.onerror = function(){
 		console.log("<chat_select>:" + reqChatFetchSubmit.status);
@@ -44,6 +57,40 @@ function chat_select(groupID){
 
 	reqChatFetchSubmit.open("GET", "chat_fetch.php?id="+groupID, true);
 	reqChatFetchSubmit.send();
+}
+	
+function chat_list_category(sender, body, datetime){
+	if(sender.id == <?php echo $_COOKIE["userID"]; ?>){
+		$(".chat .right .top").append("<div class=\"message me\"><div class=\"container\"><div class=\"text\">"+body.title+"</div><div class=\"datetime\">"+datetime+"</div></div><img src=\"<?php echo $path; ?>/"+sender.image+"\"></div>");
+	}
+	else {
+		$(".chat .right .top").append("<div class=\"message\"><img src=\"<?php echo $path; ?>/"+sender.image+"\"><div class=\"container\"><div class=\"text\">"+body.title+"</div><div class=\"datetime\">"+datetime+"</div></div></div>");
+	}
+}
+	
+function chat_list_item(sender, body, datetime){
+	if(sender.id == <?php echo $_COOKIE["userID"]; ?>){
+		$(".chat .right .top").append("<div class=\"message me\"><div class=\"container\"><div class=\"text\">"+body.title+"</div><div class=\"datetime\">"+datetime+"</div></div><img src=\"<?php echo $path; ?>/"+sender.image+"\"></div>");
+	}
+	else {
+		$(".chat .right .top").append("<div class=\"message\"><img src=\"<?php echo $path; ?>/"+sender.image+"\"><div class=\"container\"><div class=\"text\">"+body.title+"</div><div class=\"datetime\">"+datetime+"</div></div></div>");
+	}
+}
+
+function chat_list_message(sender, body, datetime){
+	if(sender.id == <?php echo $_COOKIE["userID"]; ?>){
+		$(".chat .right .top").append("<div class=\"message me\"><div class=\"container\"><div class=\"text\">"+body+"</div><div class=\"datetime\">"+datetime+"</div></div><img src=\"<?php echo $path; ?>/"+sender.image+"\"></div>");
+	}
+	else {
+		$(".chat .right .top").append("<div class=\"message\"><img src=\"<?php echo $path; ?>/"+sender.image+"\"><div class=\"container\"><div class=\"text\">"+body+"</div><div class=\"datetime\">"+datetime+"</div></div></div>");
+	}
+}
+
+function chat_action(action, type, id){
+	//action 0=accept, 1=dismiss
+	//type 0=category, 1=item
+	//id rowid
+	
 }
 </script>
 
@@ -117,118 +164,28 @@ function chat_select(groupID){
 	Хүндэтгэсэн,
 	Unegui.mn хамт олон</div>
 					<div class="datetime">2023.4.14 1:14</div>
+					<div class="action">
+						<div class="button_yellow" style="float: left" onClick="chat_action(0, 1, 1)">
+							<i class="fa-solid fa-check"></i>
+						</div>
+						<div class="button_yellow" style="float: left; margin-left: 5px" onClick="chat_action(0, 2, 1)">
+							<i class="fa-solid fa-arrow-rotate-left"></i>
+						</div>
+					</div>
 				</div>
 			</div>
 			<div class="message me">
 				<div class="container">
 					<div class="text">Todbayar</div>
 					<div class="datetime">2023.4.14 1:14</div>
-				</div>
-				<img src="user.png">
-			</div>
-			<div class="message">
-				<img src="user.png">
-				<div class="container">
-					<div class="text">Сайн байна уу?
-
-	Манай сайтын нэрийг</div>
-					<div class="datetime">2023.4.14 1:14</div>
-				</div>
-			</div>
-			<div class="message me">
-				<div class="container">
-					<div class="text">Сайн байна уу?
-
-	Манай сайтын нэрийг барин залилан хийх оролдлогууд гарсан байна.
-
-	Бид одоогоор хүргэлт хийдэггүй бөгөөд хэрэглэгч хоорондын худалдан авалт хийх үед оролцдоггүй болно.</div>
-					<div class="datetime">2023.4.14 1:14</div>
-				</div>
-				<img src="user.png">
-			</div>
-			<div class="message">
-				<img src="user.png">
-				<div class="container">
-					<div class="text">Сайн байна уу?
-
-	Манай сайтын нэрийг барин залилан хийх оролдлогууд гарсан байна.
-
-	Бид одоогоор хүргэлт хийдэггүй бөгөөд хэрэглэгч хоорондын худалдан авалт хийх үед оролцдоггүй болно.
-
-	Тиймээс та мэдэхгүй хүнд болон мэдэхгүй сайт дээрээ банкны картын дугаараа өгөхгүй байна уу.
-
-	Хүндэтгэсэн,
-	Unegui.mn хамт олон</div>
-					<div class="datetime">2023.4.14 1:14</div>
-				</div>
-			</div>
-			<div class="message me">
-				<div class="container">
-					<div class="text">Todbayar</div>
-					<div class="datetime">2023.4.14 1:14</div>
-				</div>
-				<img src="user.png">
-			</div>
-			<div class="message">
-				<img src="user.png">
-				<div class="container">
-					<div class="text">Сайн байна уу?
-
-	Манай сайтын нэрийг</div>
-					<div class="datetime">2023.4.14 1:14</div>
-				</div>
-			</div>
-			<div class="message me">
-				<div class="container">
-					<div class="text">Сайн байна уу?
-
-	Манай сайтын нэрийг барин залилан хийх оролдлогууд гарсан байна.
-
-	Бид одоогоор хүргэлт хийдэггүй бөгөөд хэрэглэгч хоорондын худалдан авалт хийх үед оролцдоггүй болно.</div>
-					<div class="datetime">2023.4.14 1:14</div>
-				</div>
-				<img src="user.png">
-			</div>
-			<div class="message">
-				<img src="user.png">
-				<div class="container">
-					<div class="text">Сайн байна уу?
-
-	Манай сайтын нэрийг барин залилан хийх оролдлогууд гарсан байна.
-
-	Бид одоогоор хүргэлт хийдэггүй бөгөөд хэрэглэгч хоорондын худалдан авалт хийх үед оролцдоггүй болно.
-
-	Тиймээс та мэдэхгүй хүнд болон мэдэхгүй сайт дээрээ банкны картын дугаараа өгөхгүй байна уу.
-
-	Хүндэтгэсэн,
-	Unegui.mn хамт олон</div>
-					<div class="datetime">2023.4.14 1:14</div>
-				</div>
-			</div>
-			<div class="message me">
-				<div class="container">
-					<div class="text">Todbayar</div>
-					<div class="datetime">2023.4.14 1:14</div>
-				</div>
-				<img src="user.png">
-			</div>
-			<div class="message">
-				<img src="user.png">
-				<div class="container">
-					<div class="text">Сайн байна уу?
-
-	Манай сайтын нэрийг</div>
-					<div class="datetime">2023.4.14 1:14</div>
-				</div>
-			</div>
-			<div class="message me">
-				<div class="container">
-					<div class="text">Сайн байна уу?
-
-	Манай сайтын нэрийг барин залилан хийх оролдлогууд гарсан байна.
-
-	Бид одоогоор хүргэлт хийдэггүй бөгөөд хэрэглэгч хоорондын худалдан авалт хийх үед оролцдоггүй болно.</div>
-					<div class="datetime">2023.4.14 1:14</div>
+					<div class="action">
+						<div class="button_yellow" style="float: left">
+							<i class="fa-solid fa-check"></i>
+						</div>
+						<div class="button_yellow" style="float: left; margin-left: 5px">
+							<i class="fa-solid fa-arrow-rotate-left"></i>
+						</div>
+					</div>
 				</div>
 				<img src="user.png">
 			</div>

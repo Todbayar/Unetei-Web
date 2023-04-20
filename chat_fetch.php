@@ -9,10 +9,14 @@ if(isset($_GET["id"])){
 		$message = new stdClass();
 		$message->type = $row["type"];
 		$message->datetime = $row["datetime"];
+		
 		$sender = new stdClass();
+		$sender->id = $row["fromID"];
 		$sender->name = $row["sender_name"];
 		$sender->image = $row["sender_image"];
+		
 		$message->sender = $sender;
+		
 		if($row["type"] == 0){
 			$message->body = $row["message"];
 		}
@@ -35,7 +39,9 @@ function fetchItem($id){
 	$body = new stdClass();
 	$body->id = $row["id"];
 	$body->title = $row["title"];
+	$body->isActive = $row["isactive"];
 	$body->category = harvestCategory($row["category"]);
+	return $body;
 }
 
 function fetchCategory($id){
@@ -48,11 +54,12 @@ function fetchCategory($id){
 	$body = new stdClass();
 	$body->id = $row["id"];
 	$body->title = $row["title"];
+	$body->isActive = $row["active"];
 	$body->category = harvestCategory($id);
+	return $body;
 }
 
 function harvestCategory($categoryID){
-	echo "<harvestCategory>:".$categoryID." ";
 	global $conn;
 	$arrCategories = array();
 	$category = explode("_", $categoryID);
@@ -72,6 +79,6 @@ function harvestCategory($categoryID){
 
 		$arrCategories[] = $rowCategory["title"];
 	}
-	return $arrCategories;
+	return array_reverse($arrCategories);
 }
 ?>
