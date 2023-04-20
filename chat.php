@@ -49,6 +49,7 @@ function chat_select(groupID){
 					chat_list_message(chatRow.sender, chatRow.body, chatRow.datetime);
 				}
 			});
+			$("div.message:last-child").css("margin-bottom","35px");
 		}
 	};
 	reqChatFetchSubmit.onerror = function(){
@@ -61,19 +62,39 @@ function chat_select(groupID){
 	
 function chat_list_category(sender, body, datetime){
 	if(sender.id == <?php echo $_COOKIE["userID"]; ?>){
-		$(".chat .right .top").append("<div class=\"message me\"><div class=\"container\"><div class=\"text\">"+body.title+"</div><div class=\"datetime\">"+datetime+"</div></div><img src=\"<?php echo $path; ?>/"+sender.image+"\"></div>");
+		var htmlCategory = "<div class=\"message me\"><div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-sitemap\"></i><br/>"+body.title;
+	   	htmlCategory += chat_list_category_show(body.category, body.title);
+		htmlCategory += "</div><div class=\"datetime\">"+datetime+"</div>";
+		htmlCategory += chat_list_category_action_show(body.isActive, body.id, true);
+		htmlCategory += "</div><img src=\"<?php echo $path; ?>/"+sender.image+"\"></div>";
+		$(".chat .right .top").append(htmlCategory);
 	}
 	else {
-		$(".chat .right .top").append("<div class=\"message\"><img src=\"<?php echo $path; ?>/"+sender.image+"\"><div class=\"container\"><div class=\"text\">"+body.title+"</div><div class=\"datetime\">"+datetime+"</div></div></div>");
+		var htmlCategory = "<div class=\"message\"><img src=\"<?php echo $path; ?>/"+sender.image+"\"><div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-sitemap\"></i><br/>"+body.title;
+		htmlCategory += chat_list_category_show(body.category, body.title);
+		htmlCategory += "</div><div class=\"datetime\">"+datetime+"</div>";
+		htmlCategory += chat_list_category_action_show(body.isActive, body.id);
+		htmlCategory += "</div></div>";
+		$(".chat .right .top").append(htmlCategory);
 	}
 }
-	
+
 function chat_list_item(sender, body, datetime){
 	if(sender.id == <?php echo $_COOKIE["userID"]; ?>){
-		$(".chat .right .top").append("<div class=\"message me\"><div class=\"container\"><div class=\"text\">"+body.title+"</div><div class=\"datetime\">"+datetime+"</div></div><img src=\"<?php echo $path; ?>/"+sender.image+"\"></div>");
+	   	var htmlItem = "<div class=\"message me\"><div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-cart-shopping\"></i><br/>"+body.title;
+	   	htmlItem += chat_list_category_show(body.category, "");
+		htmlItem += "</div><div class=\"datetime\">"+datetime+"</div>";
+		htmlItem += chat_list_item_action_show(body.isActive, body.id, true);
+		htmlItem += "</div><img src=\"<?php echo $path; ?>/"+sender.image+"\"></div>";
+		$(".chat .right .top").append(htmlItem);
 	}
 	else {
-		$(".chat .right .top").append("<div class=\"message\"><img src=\"<?php echo $path; ?>/"+sender.image+"\"><div class=\"container\"><div class=\"text\">"+body.title+"</div><div class=\"datetime\">"+datetime+"</div></div></div>");
+		var htmlItem = "<div class=\"message\"><img src=\"<?php echo $path; ?>/"+sender.image+"\"><div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-cart-shopping\"></i><br/>"+body.title;
+		htmlItem += chat_list_category_show(body.category, "");
+		htmlItem += "</div><div class=\"datetime\">"+datetime+"</div>";
+		htmlItem += chat_list_item_action_show(body.isActive, body.id);
+		htmlItem += "</div></div>";
+		$(".chat .right .top").append(htmlItem);
 	}
 }
 
@@ -86,11 +107,52 @@ function chat_list_message(sender, body, datetime){
 	}
 }
 
+function chat_list_category_show(categories, title){
+	var vCategory = "<div style=\"font-size:14px; color:gray; margin-top:5px\">";
+	for(let i=0; i<categories.length; i++){
+		if(i+1<categories.length){
+			vCategory += categories[i]+"<i class=\"fas fa-angle-right\" style=\"font-size:10px; margin-left:5px; margin-right:5px\"></i>";   
+		}
+		else {
+			if(categories[i] != title) vCategory += categories[i];
+		}
+	}
+	return "<br/>"+vCategory+"</div>";
+}
+
+function chat_list_category_action_show(isactive, id, isMe = false){
+	if(isactive == 0){
+		if(!isMe){
+	   		return "<div class=\"action\"><div onClick=\"chat_action(0,0,"+id+")\" class=\"button_yellow\" style=\"float: left\"><i class=\"fa-solid fa-check\"></i></div><div onClick=\"chat_action(1,0,"+id+")\" class=\"button_yellow\" style=\"float: left; margin-left: 5px\"><i class=\"fa-solid fa-arrow-rotate-left\"></i></div></div>";
+		}
+		else {
+			return "<div class=\"action\" style=\"display:flex; justify-content: flex-end\"><div onClick=\"chat_action(0,0,"+id+")\" class=\"button_yellow\" style=\"float: left\"><i class=\"fa-solid fa-check\"></i></div><div onClick=\"chat_action(1,0,"+id+")\" class=\"button_yellow\" style=\"float: left; margin-left: 5px\"><i class=\"fa-solid fa-arrow-rotate-left\"></i></div></div>";
+		}
+	}
+	else {
+		return "";
+	}
+}
+	
+function chat_list_item_action_show(isactive, id, isMe = false){
+	if(isactive == 1){
+		if(!isMe){
+			return "<div class=\"action\"><div onClick=\"chat_action(0,1,"+id+")\" class=\"button_yellow\" style=\"float: left\"><i class=\"fa-solid fa-check\"></i></div><div onClick=\"chat_action(1,1,"+id+")\" class=\"button_yellow\" style=\"float: left; margin-left: 5px\"><i class=\"fa-solid fa-arrow-rotate-left\"></i></div></div>";   
+	   	}
+		else {
+			return "<div class=\"action\" style=\"display:flex; justify-content: flex-end\"><div onClick=\"chat_action(0,1,"+id+")\" class=\"button_yellow\" style=\"float: left\"><i class=\"fa-solid fa-check\"></i></div><div onClick=\"chat_action(1,1,"+id+")\" class=\"button_yellow\" style=\"float: left; margin-left: 5px\"><i class=\"fa-solid fa-arrow-rotate-left\"></i></div></div>";   
+		}
+	}
+	else {
+		return "";
+	}
+}
+	
 function chat_action(action, type, id){
 	//action 0=accept, 1=dismiss
 	//type 0=category, 1=item
 	//id rowid
-	
+	console.log(action + ", " + type + ", " + id);
 }
 </script>
 
@@ -150,10 +212,11 @@ function chat_action(action, type, id){
 	</div>
 	<div class="right">
 		<div class="top">
+<!--
 			<div class="message">
 				<img src="user.png">
 				<div class="container">
-					<div class="text">Сайн байна уу?
+					<div class="text"><i class="fa-solid fa-sitemap"></i><br/>Сайн байна уу?
 
 	Манай сайтын нэрийг барин залилан хийх оролдлогууд гарсан байна.
 
@@ -176,7 +239,7 @@ function chat_action(action, type, id){
 			</div>
 			<div class="message me">
 				<div class="container">
-					<div class="text">Todbayar</div>
+					<div class="text"><i class="fa-solid fa-cart-shopping"></i><br/>Todbayar</div>
 					<div class="datetime">2023.4.14 1:14</div>
 					<div class="action">
 						<div class="button_yellow" style="float: left">
@@ -189,6 +252,7 @@ function chat_action(action, type, id){
 				</div>
 				<img src="user.png">
 			</div>
+-->
 		</div>
 		<div class="bottom">
 			<input id="chatMessage" type="text" placeholder="Энд бичнэ үү" />
