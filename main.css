@@ -197,6 +197,7 @@
 
 .chat .right .top .message.me .container .text {
 	background: #fff4d0;
+	position:relative;
 }
 
 .chat .right .top .message.me .container .datetime {
@@ -221,6 +222,7 @@
 	border-radius: 10px;
 	font: normal 14px Arial;
 	padding: 10px;
+	position:relative;
 }
 
 .chat .right .top .message .container .datetime {

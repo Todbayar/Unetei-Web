@@ -37,6 +37,7 @@ function chat_select(groupID){
 	const reqChatFetchSubmit = new XMLHttpRequest();
 	reqChatFetchSubmit.onload = function() {
 		if(this.responseText != ""){
+			$(".chat .right .top").empty();
 			const responseChatFetch = JSON.parse(this.responseText);
 			responseChatFetch.forEach(function(chatRow){
 				if(parseInt(chatRow.type) == 1){
@@ -55,25 +56,27 @@ function chat_select(groupID){
 	reqChatFetchSubmit.onerror = function(){
 		console.log("<chat_select>:" + reqChatFetchSubmit.status);
 	};
-
+	console.log(groupID);
 	reqChatFetchSubmit.open("GET", "chat_fetch.php?id="+groupID, true);
 	reqChatFetchSubmit.send();
 }
 	
 function chat_list_category(sender, body, datetime){
 	if(sender.id == <?php echo $_COOKIE["userID"]; ?>){
-		var htmlCategory = "<div class=\"message me\"><div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-sitemap\"></i><br/>"+body.title;
+		var htmlCategory = "<div class=\"message me\"><div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-sitemap\" style=\"position:absolute; top:-12px; left:0; padding:5px; border-radius:10px; background: #fff4d0; color:#a6945a\"></i>"+body.title;
 	   	htmlCategory += chat_list_category_show(body.category, body.title);
+		htmlCategory += chat_list_category_words_show(body.words);
 		htmlCategory += "</div><div class=\"datetime\">"+datetime+"</div>";
-		htmlCategory += chat_list_category_action_show(body.isActive, body.id, true);
-		htmlCategory += "</div><img src=\"<?php echo $path; ?>/"+sender.image+"\"></div>";
+		htmlCategory += chat_list_category_action_show(body.isActive, body.category.length+"_"+body.id, true);
+		htmlCategory += "</div>"+chat_profile_image_show(sender.image)+"</div>";
 		$(".chat .right .top").append(htmlCategory);
 	}
 	else {
-		var htmlCategory = "<div class=\"message\"><img src=\"<?php echo $path; ?>/"+sender.image+"\"><div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-sitemap\"></i><br/>"+body.title;
+		var htmlCategory = "<div class=\"message\">"+chat_profile_image_show(sender.image)+"<div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-sitemap\" style=\"position:absolute; top:-12px; right:0; padding:5px; border-radius:10px; background: #e7e7e7; color:#878787\"></i>"+body.title;
 		htmlCategory += chat_list_category_show(body.category, body.title);
+		htmlCategory += chat_list_category_words_show(body.words);
 		htmlCategory += "</div><div class=\"datetime\">"+datetime+"</div>";
-		htmlCategory += chat_list_category_action_show(body.isActive, body.id);
+		htmlCategory += chat_list_category_action_show(body.isActive, body.category.length+"_"+body.id);
 		htmlCategory += "</div></div>";
 		$(".chat .right .top").append(htmlCategory);
 	}
@@ -81,15 +84,15 @@ function chat_list_category(sender, body, datetime){
 
 function chat_list_item(sender, body, datetime){
 	if(sender.id == <?php echo $_COOKIE["userID"]; ?>){
-	   	var htmlItem = "<div class=\"message me\"><div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-cart-shopping\"></i><br/>"+body.title;
+	   	var htmlItem = "<div class=\"message me\"><div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-cart-shopping\" style=\"position:absolute; top:-12px; left:0; padding:5px; border-radius:10px; background: #fff4d0; color:#a6945a\"></i>"+body.title;
 	   	htmlItem += chat_list_category_show(body.category, "");
 		htmlItem += "</div><div class=\"datetime\">"+datetime+"</div>";
 		htmlItem += chat_list_item_action_show(body.isActive, body.id, true);
-		htmlItem += "</div><img src=\"<?php echo $path; ?>/"+sender.image+"\"></div>";
+		htmlItem += "</div>"+chat_profile_image_show(sender.image)+"</div>";
 		$(".chat .right .top").append(htmlItem);
 	}
 	else {
-		var htmlItem = "<div class=\"message\"><img src=\"<?php echo $path; ?>/"+sender.image+"\"><div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-cart-shopping\"></i><br/>"+body.title;
+		var htmlItem = "<div class=\"message\">"+chat_profile_image_show(sender.image)+"<div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-cart-shopping\" style=\"position:absolute; top:-12px; right:0; padding:5px; border-radius:10px; background: #e7e7e7; color:#878787\"></i>"+body.title;
 		htmlItem += chat_list_category_show(body.category, "");
 		htmlItem += "</div><div class=\"datetime\">"+datetime+"</div>";
 		htmlItem += chat_list_item_action_show(body.isActive, body.id);
@@ -108,10 +111,10 @@ function chat_list_message(sender, body, datetime){
 }
 
 function chat_list_category_show(categories, title){
-	var vCategory = "<div style=\"font-size:14px; color:gray; margin-top:5px\">";
+	var vCategory = "<div style=\"font-size:12px; color:gray; margin-top:5px\">";
 	for(let i=0; i<categories.length; i++){
 		if(i+1<categories.length){
-			vCategory += categories[i]+"<i class=\"fas fa-angle-right\" style=\"font-size:10px; margin-left:5px; margin-right:5px\"></i>";   
+			vCategory += categories[i]+"<i class=\"fas fa-angle-right\" style=\"font-size:10px; margin-left:2px; margin-right:2px\"></i>";   
 		}
 		else {
 			if(categories[i] != title) vCategory += categories[i];
@@ -119,14 +122,18 @@ function chat_list_category_show(categories, title){
 	}
 	return "<br/>"+vCategory+"</div>";
 }
+	
+function chat_list_category_words_show(words){
+	return "<div style=\"font-size:12px; color:gray; margin-top:5px\">"+words+"</div>";
+}
 
 function chat_list_category_action_show(isactive, id, isMe = false){
 	if(isactive == 0){
 		if(!isMe){
-	   		return "<div class=\"action\"><div onClick=\"chat_action(0,0,"+id+")\" class=\"button_yellow\" style=\"float: left\"><i class=\"fa-solid fa-check\"></i></div><div onClick=\"chat_action(1,0,"+id+")\" class=\"button_yellow\" style=\"float: left; margin-left: 5px\"><i class=\"fa-solid fa-arrow-rotate-left\"></i></div></div>";
+	   		return "<div class=\"action\"><div onClick=\"chat_action(0,0,'"+id+"')\" class=\"button_yellow\" style=\"float: left\"><i class=\"fa-solid fa-check\"></i></div><div onClick=\"chat_action(1,0,'"+id+"')\" class=\"button_yellow\" style=\"float: left; margin-left: 5px\"><i class=\"fa-solid fa-arrow-rotate-left\"></i></div></div>";
 		}
 		else {
-			return "<div class=\"action\" style=\"display:flex; justify-content: flex-end\"><div onClick=\"chat_action(0,0,"+id+")\" class=\"button_yellow\" style=\"float: left\"><i class=\"fa-solid fa-check\"></i></div><div onClick=\"chat_action(1,0,"+id+")\" class=\"button_yellow\" style=\"float: left; margin-left: 5px\"><i class=\"fa-solid fa-arrow-rotate-left\"></i></div></div>";
+			return "<div class=\"action\" style=\"display:flex; justify-content: flex-end\"><div onClick=\"chat_action(0,0,'"+id+"')\" class=\"button_yellow\" style=\"float: left\"><i class=\"fa-solid fa-check\"></i></div><div onClick=\"chat_action(1,0,'"+id+"')\" class=\"button_yellow\" style=\"float: left; margin-left: 5px\"><i class=\"fa-solid fa-arrow-rotate-left\"></i></div></div>";
 		}
 	}
 	else {
@@ -140,27 +147,67 @@ function chat_list_item_action_show(isactive, id, isMe = false){
 			return "<div class=\"action\"><div onClick=\"chat_action(0,1,"+id+")\" class=\"button_yellow\" style=\"float: left\"><i class=\"fa-solid fa-check\"></i></div><div onClick=\"chat_action(1,1,"+id+")\" class=\"button_yellow\" style=\"float: left; margin-left: 5px\"><i class=\"fa-solid fa-arrow-rotate-left\"></i></div></div>";   
 	   	}
 		else {
-			return "<div class=\"action\" style=\"display:flex; justify-content: flex-end\"><div onClick=\"chat_action(0,1,"+id+")\" class=\"button_yellow\" style=\"float: left\"><i class=\"fa-solid fa-check\"></i></div><div onClick=\"chat_action(1,1,"+id+")\" class=\"button_yellow\" style=\"float: left; margin-left: 5px\"><i class=\"fa-solid fa-arrow-rotate-left\"></i></div></div>";   
+			return "<div class=\"action\" style=\"display:flex; justify-content: flex-end\"><div onClick=\"chat_action(0,1,"+id+")\" class=\"button_yellow\" style=\"float: left\"><i class=\"fa-solid fa-check\"></i></div><div onClick=\"chat_action(1,1,"+id+")\" class=\"button_yellow\" style=\"float: left; margin-left: 5px\"><i class=\"fa-solid fa-arrow-rotate-left\"></i></div></div>";
 		}
 	}
 	else {
 		return "";
 	}
 }
-	
+
+function chat_profile_image_show(image){
+	if(image != ""){
+		return "<img src=\"<?php echo $path; ?>/"+image+"\">";
+	}
+	else {
+		return "<img src=\"user.png\">";
+	}
+}
+
 function chat_action(action, type, id){
 	//action 0=accept, 1=dismiss
 	//type 0=category, 1=item
 	//id rowid
 	console.log(action + ", " + type + ", " + id);
+	
+	var chatActionSubmitData = new FormData();
+	chatActionSubmitData.append("action", action);
+	chatActionSubmitData.append("type", type);
+	chatActionSubmitData.append("id", id);
+
+	const reqChatActionSubmit = new XMLHttpRequest();
+	reqChatActionSubmit.onload = function() {
+		console.log("<chat_send>:" + this.responseText);
+	};
+	reqChatActionSubmit.onerror = function(){
+		console.log("<chat_send>:" + reqChatActionSubmit.status);
+	};
+
+	reqChatActionSubmit.open("POST", "chat_action.php", true);
+	reqChatActionSubmit.send(chatActionSubmitData);
 }
 </script>
 
 <div class="chat">
 	<div class="left">
+		<div id="chatSelect0" class="user" onClick="chat_select(0)">
+			<div class="container">
+				<div class="box">
+					<div class="profile">
+						<img src="user.png">
+					</div>
+					<div>
+						<div class="name"><?php echo $title; ?></div>
+						<div class="role">Сүпер админ</div>
+					</div>
+				</div>
+			</div>
+		</div>
 		<?php
 		$queryFetchSender = "SELECT *, (SELECT name FROM user WHERE id=chat.fromID) AS name, (SELECT image FROM user WHERE id=chat.fromID) AS image, (SELECT role FROM user WHERE id=chat.fromID) AS role FROM chat WHERE toID=".$_COOKIE["userID"];
-		if($_COOKIE["role"]>0) $queryFetchSender .= " OR toID=0";
+//		if($_COOKIE["role"]>0){
+//			$queryFetchSender .= " OR toID=0";
+//		}
 		$queryFetchSender .= " GROUP BY toID ORDER BY datetime DESC";
 		$resultFetchSender = $conn->query($queryFetchSender);
 		while($rowFetchSender = mysqli_fetch_array($resultFetchSender)){
@@ -211,49 +258,7 @@ function chat_action(action, type, id){
 		?>
 	</div>
 	<div class="right">
-		<div class="top">
-<!--
-			<div class="message">
-				<img src="user.png">
-				<div class="container">
-					<div class="text"><i class="fa-solid fa-sitemap"></i><br/>Сайн байна уу?
-
-	Манай сайтын нэрийг барин залилан хийх оролдлогууд гарсан байна.
-
-	Бид одоогоор хүргэлт хийдэггүй бөгөөд хэрэглэгч хоорондын худалдан авалт хийх үед оролцдоггүй болно.
-
-	Тиймээс та мэдэхгүй хүнд болон мэдэхгүй сайт дээрээ банкны картын дугаараа өгөхгүй байна уу.
-
-	Хүндэтгэсэн,
-	Unegui.mn хамт олон</div>
-					<div class="datetime">2023.4.14 1:14</div>
-					<div class="action">
-						<div class="button_yellow" style="float: left" onClick="chat_action(0, 1, 1)">
-							<i class="fa-solid fa-check"></i>
-						</div>
-						<div class="button_yellow" style="float: left; margin-left: 5px" onClick="chat_action(0, 2, 1)">
-							<i class="fa-solid fa-arrow-rotate-left"></i>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="message me">
-				<div class="container">
-					<div class="text"><i class="fa-solid fa-cart-shopping"></i><br/>Todbayar</div>
-					<div class="datetime">2023.4.14 1:14</div>
-					<div class="action">
-						<div class="button_yellow" style="float: left">
-							<i class="fa-solid fa-check"></i>
-						</div>
-						<div class="button_yellow" style="float: left; margin-left: 5px">
-							<i class="fa-solid fa-arrow-rotate-left"></i>
-						</div>
-					</div>
-				</div>
-				<img src="user.png">
-			</div>
--->
-		</div>
+		<div class="top"></div>
 		<div class="bottom">
 			<input id="chatMessage" type="text" placeholder="Энд бичнэ үү" />
 			<div onClick="chat_send(0)" class="button_yellow" style="float: right; height: 16px">

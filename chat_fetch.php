@@ -55,6 +55,7 @@ function fetchCategory($id){
 	$body->id = $row["id"];
 	$body->title = $row["title"];
 	$body->isActive = $row["active"];
+	$body->words = $row["words"];
 	$body->category = harvestCategory($id);
 	return $body;
 }
