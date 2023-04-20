@@ -31,18 +31,14 @@ include "info.php";
 .profile .container .divcontainer {
 	margin-top: 10px;
 	font: normal 18px Arial;
-	display: flex;
-	align-content: center;
-	align-items: center;
-	justify-content: center;
 }
 	
 .profile .container .divcontainer input {
-	width: 60%;
+	width: 100%;
 	height: 25px;
 	border-radius: 10px;
-	margin-left: 10px;
 	font: normal 16px Arial;
+	margin-top: 5px;
 }
 </style>
 
@@ -57,6 +53,7 @@ $(document).ready(function(){
 				$("#image").attr("src", e.target.result);
 			}
 			reader.onerror = function(){
+				$("#image").attr("src", "user.png");
 				console.log("<image_file>:error");
 			}
 			reader.readAsDataURL($(this)[0].files[0]);
@@ -76,23 +73,36 @@ function profile_image_button(){
 }
 	
 function submitProfile(){
-	var profileSubmitData = new FormData();
-	profileSubmitData.append("userID", <?php echo $_COOKIE["userID"]; ?>);
-	profileSubmitData.append("image", $("#image_file")[0].files[0]);
-	profileSubmitData.append("name", $("#name").val().trim());
-	profileSubmitData.append("email", $("#email").val().trim());
-	profileSubmitData.append("city", $("#city").val());
+	const patternOnlyText = /^[а-яА-Яa-zA-ZөӨүҮ\s]+$/i;
+	const patternEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i;
 	
-	const reqProfileSubmit = new XMLHttpRequest();
-	reqProfileSubmit.onload = function() {
-		console.log("<submitProfile>:" + this.responseText);
-	};
-	reqProfileSubmit.onerror = function(){
-		console.log("<submitProfile_error>:" + reqProfileSubmit.status);
-	};
+	var vName = $("#name").val().trim();
+	var vEmail = $("#email").val().trim();
+	
+	if(vName != "" && !patternOnlyText.test(vName)) $("#name_error").show(); else $("#name_error").hide();
+	if(vEmail != "" && !patternEmail.test(vEmail)) $("#email_error").show(); else $("#email_error").hide();
+	
+	if((vName != "" && patternOnlyText.test(vName)) && (vEmail != "" && patternEmail.test(vEmail))){
+		var profileSubmitData = new FormData();
+		profileSubmitData.append("userID", <?php echo $_COOKIE["userID"]; ?>);
+		profileSubmitData.append("image", $("#image_file")[0].files[0]);
+		profileSubmitData.append("name", vName);
+		profileSubmitData.append("email", vEmail);
+		profileSubmitData.append("city", $("#city").val());
 
-	reqProfileSubmit.open("POST", "mysql_profile_update.php", true);
-	reqProfileSubmit.send(profileSubmitData);
+		const reqProfileSubmit = new XMLHttpRequest();
+		reqProfileSubmit.onload = function() {
+			if(this.responseText == "OK"){
+				confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Амжилттай хадгалагдлаа.", null);	
+			}
+		};
+		reqProfileSubmit.onerror = function(){
+			console.log("<submitProfile_error>:" + reqProfileSubmit.status);
+		};
+
+		reqProfileSubmit.open("POST", "mysql_profile_update.php", true);
+		reqProfileSubmit.send(profileSubmitData);
+    }
 }
 </script>
 
@@ -120,15 +130,19 @@ $row = mysqli_fetch_array($result);
 		</div>
 		<div class="divcontainer">
 			<div>Нэр:</div>
-			<input id="name" class="name" maxlength="128" value="<?php echo $row["name"]; ?>">
+			<div>
+				<input id="name" class="name" type="text" maxlength="128" value="<?php echo $row["name"]; ?>">
+				<div id="name_error" style="color: red; margin-top: 5px; font-size: 14px; display: none">Тоо эсвэл тусгай тэмдэгт оруулж болохгүй!</div>
+			</div>
 		</div>
 		<div class="divcontainer">
 			<div>Имейл:</div>
-			<input id="email" class="email" maxlength="128" value="<?php echo $row["email"]; ?>">
+			<input id="email" class="email" type="email" maxlength="128" value="<?php echo $row["email"]; ?>">
+			<div id="email_error" style="color: red; margin-top: 5px; font-size: 14px; display: none">Имейл буруу байна!</div>
 		</div>
 		<div class="divcontainer">
 			<div>Байршил:</div>
-			<select id="city" style="width: 200px; height: 35px; font: normal 16px Arial; margin-left: 10px; border-radius: 10px">
+			<select id="city" style="width: 200px; height: 35px; font: normal 16px Arial; border-radius: 10px; margin-top: 5px">
 				<option value="" disabled selected>Сонгох</option>
 				<option value="Улаанбаатар">Улаанбаатар</option>
 				<option value="Архангай">Архангай</option>
