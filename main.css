@@ -118,6 +118,7 @@
 	cursor: pointer;
 	padding-bottom: 5px;
 	padding-top: 5px;
+	background-color: transparent;
 }
 
 .chat .left .user:hover {
@@ -125,6 +126,10 @@
 }
 
 .chat .left .user:active {
+	background-color: #d7edf7;
+}
+
+.chat .left .user:focus {
 	background-color: #d7edf7;
 }
 
