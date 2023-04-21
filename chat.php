@@ -27,6 +27,7 @@ function chat_send(toID){
 	
 	const reqChatSubmit = new XMLHttpRequest();
 	reqChatSubmit.onload = function() {
+		console.log("<chat_send>:" + reqChatSubmit.responseText);
 		$("#chatMessage").val("");
 		chat_select(toID);
 	};
@@ -111,10 +112,10 @@ function chat_list_item(sender, body, datetime){
 	if(sender.id == <?php echo $_COOKIE["userID"]; ?>){
 	   	var htmlItem = "<div class=\"message me\"><div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-cart-shopping\" style=\"position:absolute; top:0; left:-15px; padding:5px; border-radius:10px; background: #fff4d0; color:#878787\"></i>";
 	   	if(body.isActive == 3){
-			htmlCategory += "<i class=\"fa-solid fa-arrow-rotate-left\" style=\"position:absolute; top:20px; left:-15px; padding:5px; border-radius:10px; background: #fff4d0; color:#878787\"></i>";
+			htmlItem += "<i class=\"fa-solid fa-arrow-rotate-left\" style=\"position:absolute; top:20px; left:-15px; padding:5px; border-radius:10px; background: #fff4d0; color:#878787\"></i>";
 		}
 		else if(body.isActive == 4){
-			htmlCategory += "<i class=\"fa-solid fa-check\" style=\"position:absolute; top:20px; left:-15px; padding:5px; border-radius:10px; background: #fff4d0; color:#878787\"></i>";
+			htmlItem += "<i class=\"fa-solid fa-check\" style=\"position:absolute; top:20px; left:-15px; padding:5px; border-radius:10px; background: #fff4d0; color:#878787\"></i>";
 		}
 	   	htmlItem += body.title;
 	   	htmlItem += chat_list_category_show(body.category, "");
@@ -126,10 +127,10 @@ function chat_list_item(sender, body, datetime){
 	else {
 		var htmlItem = "<div class=\"message\">"+chat_profile_image_show(sender.image)+"<div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-cart-shopping\" style=\"position:absolute; top:0; right:15px; padding:5px; border-radius:10px; background: #e7e7e7; color:#878787\"></i>";
 		if(body.isActive == 3){
-			htmlCategory += "<i class=\"fa-solid fa-arrow-rotate-left\" style=\"position:absolute; top:20px; right:-15px; padding:5px; border-radius:10px; background: #e7e7e7; color:#878787\"></i>";
+			htmlItem += "<i class=\"fa-solid fa-arrow-rotate-left\" style=\"position:absolute; top:20px; right:-15px; padding:5px; border-radius:10px; background: #e7e7e7; color:#878787\"></i>";
 		}
 		else if(body.isActive == 4){
-			htmlCategory += "<i class=\"fa-solid fa-check\" style=\"position:absolute; top:20px; right:-15px; padding:5px; border-radius:10px; background: #e7e7e7; color:#878787\"></i>";
+			htmlItem += "<i class=\"fa-solid fa-check\" style=\"position:absolute; top:20px; right:-15px; padding:5px; border-radius:10px; background: #e7e7e7; color:#878787\"></i>";
 		}
 		htmlItem += body.title;
 		htmlItem += chat_list_category_show(body.category, "");

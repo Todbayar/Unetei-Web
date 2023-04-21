@@ -18,6 +18,7 @@ if(isset($_GET["id"])){
 		$message->sender = $sender;
 		
 		if($row["type"] == 0){
+//			$message->body = stripslashes(htmlspecialchars_decode($row["message"]));
 			$message->body = $row["message"];
 		}
 		else if($row["type"] == 1){

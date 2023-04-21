@@ -10,18 +10,29 @@ require "./include/PHPMailer/src/PHPMailer.php";
 require "./include/PHPMailer/src/SMTP.php";
 
 if(isset($_REQUEST["fromID"]) && isset($_REQUEST["toID"]) && isset($_REQUEST["type"]) && isset($_REQUEST["message"])){
-	chat_send($_REQUEST["fromID"], $_REQUEST["toID"], $_REQUEST["type"], $_REQUEST["message"]);
+	chat_send($_REQUEST["fromID"], $_REQUEST["toID"], $_REQUEST["type"], htmlspecialchars(addslashes($_REQUEST["message"])));
 }
 
 function chat_send($from, $to, $type, $message){
 	global $conn, $smtp_host, $smtp_port, $smtp_username, $smtp_password;
 	if($message != ""){
-		$query = "INSERT INTO chat (fromID, toID, type, message, isRead, datetime) VALUES (".$from.", ".$to.", ".$type.", '".$message."', 0, '".date("Y-m-d H:i:s")."')";
-		if($conn->query($query)){
-			echo "OK";
+		if(!isChatExist($from, $to, $type, $message)){
+			$query = "INSERT INTO chat (fromID, toID, type, message, isRead, datetime) VALUES (".$from.", ".$to.", ".$type.", '".$message."', 0, '".date("Y-m-d H:i:s")."')";
+			if($conn->query($query)){
+				echo "OK";
+			}
+			else {
+				echo "Fail";
+			}
 		}
 		else {
-			echo "Fail";
+			$query = "UPDATE chat SET isRead=0, datetime='".date("Y-m-d H:i:s")."' WHERE fromID=".$from." AND toID=".$to." AND type=".$type." AND message='".$message."'";
+			if($conn->query($query)){
+				echo "OK";
+			}
+			else {
+				echo "Fail";
+			}
 		}
 	}
 	
@@ -61,5 +72,17 @@ function chat_send($from, $to, $type, $message){
 //	} catch (Exception $e) {
 //		echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
 //	}
+}
+
+function isChatExist($from, $to, $type, $message){
+	global $conn;
+	echo $query = "SELECT * FROM chat WHERE fromID=".$from." AND toID=".$to." AND type=".$type." AND message='".$message."'";
+	$result = $conn->query($query);
+	if(mysqli_num_rows($result) > 0){
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 ?>
