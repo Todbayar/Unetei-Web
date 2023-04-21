@@ -9,6 +9,13 @@ $(document).ready(function(){
 		  console.log('Notification permission granted.');
 		}
 	});
+	
+	$(".chat .right .bottom #chatMessage").keydown( function( event ) {
+		if(event.which === 13){
+			event.preventDefault();
+			$(".chat .right .bottom .button_yellow").trigger("click");
+		}
+	});
 });
 	
 function chat_send(toID){
@@ -17,10 +24,11 @@ function chat_send(toID){
 	chatSubmitData.append("toID", toID);
 	chatSubmitData.append("type", 0);
 	chatSubmitData.append("message", $("#chatMessage").val());
-
+	
 	const reqChatSubmit = new XMLHttpRequest();
 	reqChatSubmit.onload = function() {
-		console.log("<chat_send>:" + this.responseText);
+		$("#chatMessage").val("");
+		chat_select(toID);
 	};
 	reqChatSubmit.onerror = function(){
 		console.log("<chat_send>:" + reqChatSubmit.status);
@@ -30,10 +38,13 @@ function chat_send(toID){
 	reqChatSubmit.send(chatSubmitData);
 }
 	
-function chat_select(groupID){
+function chat_select(toID){
 	$(".left .user").css("background-color", "transparent");
-	$(".left #chatSelect"+groupID).css("background-color", "#d7edf7");
-
+	$(".left #chatSelect"+toID).css("background-color", "#d7edf7");
+	
+	$(".chat .right .bottom").show();
+	$(".chat .right .bottom .button_yellow").attr("onclick", "chat_send("+toID+")");
+	
 	const reqChatFetchSubmit = new XMLHttpRequest();
 	reqChatFetchSubmit.onload = function() {
 		if(this.responseText != ""){
@@ -56,14 +67,21 @@ function chat_select(groupID){
 	reqChatFetchSubmit.onerror = function(){
 		console.log("<chat_select>:" + reqChatFetchSubmit.status);
 	};
-	console.log(groupID);
-	reqChatFetchSubmit.open("GET", "chat_fetch.php?id="+groupID, true);
+	
+	reqChatFetchSubmit.open("GET", "chat_fetch.php?id="+toID, true);
 	reqChatFetchSubmit.send();
 }
 	
 function chat_list_category(sender, body, datetime){
 	if(sender.id == <?php echo $_COOKIE["userID"]; ?>){
-		var htmlCategory = "<div class=\"message me\"><div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-sitemap\" style=\"position:absolute; top:-12px; left:0; padding:5px; border-radius:10px; background: #fff4d0; color:#a6945a\"></i>"+body.title;
+		var htmlCategory = "<div class=\"message me\"><div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-sitemap\" style=\"position:absolute; top:0; left:-15px; padding:5px; border-radius:10px; background: #fff4d0; color:#878787\"></i>";
+	   	if(body.isActive == 1){
+			htmlCategory += "<i class=\"fa-solid fa-arrow-rotate-left\" style=\"position:absolute; top:20px; left:-15px; padding:5px; border-radius:10px; background: #fff4d0; color:#878787\"></i>";
+		}
+		else if(body.isActive == 2){
+			htmlCategory += "<i class=\"fa-solid fa-check\" style=\"position:absolute; top:20px; left:-15px; padding:5px; border-radius:10px; background: #fff4d0; color:#878787\"></i>";
+		}
+	   	htmlCategory += body.title;
 	   	htmlCategory += chat_list_category_show(body.category, body.title);
 		htmlCategory += chat_list_category_words_show(body.words);
 		htmlCategory += "</div><div class=\"datetime\">"+datetime+"</div>";
@@ -72,7 +90,14 @@ function chat_list_category(sender, body, datetime){
 		$(".chat .right .top").append(htmlCategory);
 	}
 	else {
-		var htmlCategory = "<div class=\"message\">"+chat_profile_image_show(sender.image)+"<div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-sitemap\" style=\"position:absolute; top:-12px; right:0; padding:5px; border-radius:10px; background: #e7e7e7; color:#878787\"></i>"+body.title;
+		var htmlCategory = "<div class=\"message\">"+chat_profile_image_show(sender.image)+"<div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-sitemap\" style=\"position:absolute; top:0; right:-15px; padding:5px; border-radius:10px; background: #e7e7e7; color:#878787\"></i>";
+		if(body.isActive == 1){
+			htmlCategory += "<i class=\"fa-solid fa-arrow-rotate-left\" style=\"position:absolute; top:20px; right:-15px; padding:5px; border-radius:10px; background: #e7e7e7; color:#878787\"></i>";
+		}
+		else if(body.isActive == 2){
+			htmlCategory += "<i class=\"fa-solid fa-check\" style=\"position:absolute; top:20px; right:-15px; padding:5px; border-radius:10px; background: #e7e7e7; color:#878787\"></i>";
+		}
+		htmlCategory += body.title;
 		htmlCategory += chat_list_category_show(body.category, body.title);
 		htmlCategory += chat_list_category_words_show(body.words);
 		htmlCategory += "</div><div class=\"datetime\">"+datetime+"</div>";
@@ -84,7 +109,14 @@ function chat_list_category(sender, body, datetime){
 
 function chat_list_item(sender, body, datetime){
 	if(sender.id == <?php echo $_COOKIE["userID"]; ?>){
-	   	var htmlItem = "<div class=\"message me\"><div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-cart-shopping\" style=\"position:absolute; top:-12px; left:0; padding:5px; border-radius:10px; background: #fff4d0; color:#a6945a\"></i>"+body.title;
+	   	var htmlItem = "<div class=\"message me\"><div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-cart-shopping\" style=\"position:absolute; top:0; left:-15px; padding:5px; border-radius:10px; background: #fff4d0; color:#878787\"></i>";
+	   	if(body.isActive == 3){
+			htmlCategory += "<i class=\"fa-solid fa-arrow-rotate-left\" style=\"position:absolute; top:20px; left:-15px; padding:5px; border-radius:10px; background: #fff4d0; color:#878787\"></i>";
+		}
+		else if(body.isActive == 4){
+			htmlCategory += "<i class=\"fa-solid fa-check\" style=\"position:absolute; top:20px; left:-15px; padding:5px; border-radius:10px; background: #fff4d0; color:#878787\"></i>";
+		}
+	   	htmlItem += body.title;
 	   	htmlItem += chat_list_category_show(body.category, "");
 		htmlItem += "</div><div class=\"datetime\">"+datetime+"</div>";
 		htmlItem += chat_list_item_action_show(body.isActive, body.id, true);
@@ -92,7 +124,14 @@ function chat_list_item(sender, body, datetime){
 		$(".chat .right .top").append(htmlItem);
 	}
 	else {
-		var htmlItem = "<div class=\"message\">"+chat_profile_image_show(sender.image)+"<div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-cart-shopping\" style=\"position:absolute; top:-12px; right:0; padding:5px; border-radius:10px; background: #e7e7e7; color:#878787\"></i>"+body.title;
+		var htmlItem = "<div class=\"message\">"+chat_profile_image_show(sender.image)+"<div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-cart-shopping\" style=\"position:absolute; top:0; right:15px; padding:5px; border-radius:10px; background: #e7e7e7; color:#878787\"></i>";
+		if(body.isActive == 3){
+			htmlCategory += "<i class=\"fa-solid fa-arrow-rotate-left\" style=\"position:absolute; top:20px; right:-15px; padding:5px; border-radius:10px; background: #e7e7e7; color:#878787\"></i>";
+		}
+		else if(body.isActive == 4){
+			htmlCategory += "<i class=\"fa-solid fa-check\" style=\"position:absolute; top:20px; right:-15px; padding:5px; border-radius:10px; background: #e7e7e7; color:#878787\"></i>";
+		}
+		htmlItem += body.title;
 		htmlItem += chat_list_category_show(body.category, "");
 		htmlItem += "</div><div class=\"datetime\">"+datetime+"</div>";
 		htmlItem += chat_list_item_action_show(body.isActive, body.id);
@@ -128,12 +167,12 @@ function chat_list_category_words_show(words){
 }
 
 function chat_list_category_action_show(isactive, id, isMe = false){
-	if(isactive == 0){
+	if(isactive == 0){	//review
 		if(!isMe){
-	   		return "<div class=\"action\"><div onClick=\"chat_action(0,0,'"+id+"')\" class=\"button_yellow\" style=\"float: left\"><i class=\"fa-solid fa-check\"></i></div><div onClick=\"chat_action(1,0,'"+id+"')\" class=\"button_yellow\" style=\"float: left; margin-left: 5px\"><i class=\"fa-solid fa-arrow-rotate-left\"></i></div></div>";
+	   		return "<div id=\"0"+id+"\" class=\"action\"><div onClick=\"chat_action(0,0,'"+id+"')\" class=\"button_yellow\" style=\"float: left\"><i class=\"fa-solid fa-check\"></i></div><div onClick=\"chat_action(1,0,'"+id+"')\" class=\"button_yellow\" style=\"float: left; margin-left: 5px\"><i class=\"fa-solid fa-arrow-rotate-left\"></i></div></div>";
 		}
 		else {
-			return "<div class=\"action\" style=\"display:flex; justify-content: flex-end\"><div onClick=\"chat_action(0,0,'"+id+"')\" class=\"button_yellow\" style=\"float: left\"><i class=\"fa-solid fa-check\"></i></div><div onClick=\"chat_action(1,0,'"+id+"')\" class=\"button_yellow\" style=\"float: left; margin-left: 5px\"><i class=\"fa-solid fa-arrow-rotate-left\"></i></div></div>";
+			return "<div id=\"0"+id+"\" class=\"action\" style=\"display:flex; justify-content: flex-end\"><div onClick=\"chat_action(0,0,'"+id+"')\" class=\"button_yellow\" style=\"float: left\"><i class=\"fa-solid fa-check\"></i></div><div onClick=\"chat_action(1,0,'"+id+"')\" class=\"button_yellow\" style=\"float: left; margin-left: 5px\"><i class=\"fa-solid fa-arrow-rotate-left\"></i></div></div>";
 		}
 	}
 	else {
@@ -142,12 +181,12 @@ function chat_list_category_action_show(isactive, id, isMe = false){
 }
 	
 function chat_list_item_action_show(isactive, id, isMe = false){
-	if(isactive == 1){
+	if(isactive == 1){	//review
 		if(!isMe){
-			return "<div class=\"action\"><div onClick=\"chat_action(0,1,"+id+")\" class=\"button_yellow\" style=\"float: left\"><i class=\"fa-solid fa-check\"></i></div><div onClick=\"chat_action(1,1,"+id+")\" class=\"button_yellow\" style=\"float: left; margin-left: 5px\"><i class=\"fa-solid fa-arrow-rotate-left\"></i></div></div>";   
+			return "<div id=\"1"+id+"\" class=\"action\"><div onClick=\"chat_action(0,1,"+id+")\" class=\"button_yellow\" style=\"float: left\"><i class=\"fa-solid fa-check\"></i></div><div onClick=\"chat_action(1,1,"+id+")\" class=\"button_yellow\" style=\"float: left; margin-left: 5px\"><i class=\"fa-solid fa-arrow-rotate-left\"></i></div></div>";   
 	   	}
 		else {
-			return "<div class=\"action\" style=\"display:flex; justify-content: flex-end\"><div onClick=\"chat_action(0,1,"+id+")\" class=\"button_yellow\" style=\"float: left\"><i class=\"fa-solid fa-check\"></i></div><div onClick=\"chat_action(1,1,"+id+")\" class=\"button_yellow\" style=\"float: left; margin-left: 5px\"><i class=\"fa-solid fa-arrow-rotate-left\"></i></div></div>";
+			return "<div id=\"1"+id+"\" class=\"action\" style=\"display:flex; justify-content: flex-end\"><div onClick=\"chat_action(0,1,"+id+")\" class=\"button_yellow\" style=\"float: left\"><i class=\"fa-solid fa-check\"></i></div><div onClick=\"chat_action(1,1,"+id+")\" class=\"button_yellow\" style=\"float: left; margin-left: 5px\"><i class=\"fa-solid fa-arrow-rotate-left\"></i></div></div>";
 		}
 	}
 	else {
@@ -168,7 +207,6 @@ function chat_action(action, type, id){
 	//action 0=accept, 1=dismiss
 	//type 0=category, 1=item
 	//id rowid
-	console.log(action + ", " + type + ", " + id);
 	
 	var chatActionSubmitData = new FormData();
 	chatActionSubmitData.append("action", action);
@@ -177,7 +215,9 @@ function chat_action(action, type, id){
 
 	const reqChatActionSubmit = new XMLHttpRequest();
 	reqChatActionSubmit.onload = function() {
-		console.log("<chat_send>:" + this.responseText);
+		if(this.responseText == "OK"){
+			$("div#"+type+""+id).hide();
+		}
 	};
 	reqChatActionSubmit.onerror = function(){
 		console.log("<chat_send>:" + reqChatActionSubmit.status);
@@ -186,6 +226,12 @@ function chat_action(action, type, id){
 	reqChatActionSubmit.open("POST", "chat_action.php", true);
 	reqChatActionSubmit.send(chatActionSubmitData);
 }
+
+//function chat_input_enter(evt){
+//	if(evt.keyCode == 13){
+//		$(".chat .right .bottom .button_yellow").trigger("click");
+//    }
+//}
 </script>
 
 <div class="chat">
@@ -208,7 +254,7 @@ function chat_action(action, type, id){
 //		if($_COOKIE["role"]>0){
 //			$queryFetchSender .= " OR toID=0";
 //		}
-		$queryFetchSender .= " GROUP BY toID ORDER BY datetime DESC";
+		$queryFetchSender .= " GROUP BY fromID ORDER BY datetime DESC";
 		$resultFetchSender = $conn->query($queryFetchSender);
 		while($rowFetchSender = mysqli_fetch_array($resultFetchSender)){
 		?>
@@ -259,7 +305,7 @@ function chat_action(action, type, id){
 	</div>
 	<div class="right">
 		<div class="top"></div>
-		<div class="bottom">
+		<div class="bottom" style="display: none">
 			<input id="chatMessage" type="text" placeholder="Энд бичнэ үү" />
 			<div onClick="chat_send(0)" class="button_yellow" style="float: right; height: 16px">
 				<i class="fa-solid fa-paper-plane"></i>

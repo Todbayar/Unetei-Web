@@ -29,7 +29,11 @@ if(isset($_REQUEST["tableID"]) && isset($_REQUEST["parentID"])){
 			}
 		}
 	}
-
+	
+	foreach($arr_list as $key => $value){
+		if($key == "title") $arr_list[$key] = stripslashes(htmlspecialchars_decode($value));
+	}
+	
 	echo json_encode($arr_list);
 
 	mysqli_close($conn);	

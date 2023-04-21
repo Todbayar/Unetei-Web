@@ -37,10 +37,15 @@ function fetchItem($id){
 	$result = $conn->query($query);
 	$row = mysqli_fetch_array($result);
 	$body = new stdClass();
-	$body->id = $row["id"];
-	$body->title = $row["title"];
-	$body->isActive = $row["isactive"];
-	$body->category = harvestCategory($row["category"]);
+	if(mysqli_num_rows($result) > 0){
+		$body->id = $row["id"];
+		$body->title = $row["title"];
+		$body->isActive = $row["isactive"];
+		$body->category = harvestCategory($row["category"]);
+	}
+	else {
+		$body = null;
+	}
 	return $body;
 }
 
@@ -52,11 +57,16 @@ function fetchCategory($id){
 	$result = $conn->query($query);
 	$row = mysqli_fetch_array($result);
 	$body = new stdClass();
-	$body->id = $row["id"];
-	$body->title = $row["title"];
-	$body->isActive = $row["active"];
-	$body->words = $row["words"];
-	$body->category = harvestCategory($id);
+	if(mysqli_num_rows($result) > 0){
+		$body->id = $row["id"];
+		$body->title = $row["title"];
+		$body->isActive = $row["active"];
+		$body->words = $row["words"];
+		$body->category = harvestCategory($id);
+	}
+	else {
+		$body = null;
+	}
 	return $body;
 }
 

@@ -17,7 +17,7 @@ $(document).ready(function(){
 				$("#myzar_category_enter_icon_image").attr("src", e.target.result);
 				$("#myzar_category_enter_msg").text("Файл:" + vIconName);
 				$("#myzar_category_enter_error").text("");
-//					document.getElementById("myzar_category_enter_icon_image").src = URL.createObjectURL($("#myzar_category_enter_icon_file")[0].files[0]);
+//				document.getElementById("myzar_category_enter_icon_image").src = URL.createObjectURL($("#myzar_category_enter_icon_file")[0].files[0]);
 				isMyZarCategoryAddIconValid = true;
 			}
 			reader.onerror = function(){
@@ -91,7 +91,7 @@ function myzar_category_enter_words(event) {
 		}
 	}
 	else {
-		const pattern = /^[а-яА-Яa-zA-ZөӨүҮ\s]+$/i;
+		const pattern = /^[а-яА-Яa-zA-ZөӨүҮ0-9\s]+$/i;
 		if(pattern.test(String.fromCharCode(event.keyCode))){
 			return true;
 		}
@@ -106,51 +106,56 @@ function myzar_category_enter_icon_button(){
 }
 
 function myzar_category_enter_submit(tableID = null, id = null){
-	var myZarCategoryEnterSubmitData = new FormData();
-	if(tableID != null && id != null) {
-		console.log(tableID + ", " + id);
-		myZarCategoryEnterSubmitData.append("id", id);
-		categoryTableID = tableID;
-	}
-	myZarCategoryEnterSubmitData.append("tableID", categoryTableID);
-	myZarCategoryEnterSubmitData.append("title", $("#myzar_category_enter_title").val().trim());
-	myZarCategoryEnterSubmitData.append("iconfile", $("#myzar_category_enter_icon_file")[0].files[0]);
-	myZarCategoryEnterSubmitData.append("parentID", categoryParentID);
-	myZarCategoryEnterSubmitData.append("words", getWordsFromCategory());
+	const patternText = /^[а-яА-Яa-zA-ZөӨүҮ0-9\s]+$/i;
+	if(patternText.test($("#myzar_category_enter_title").val().trim())){
+		var myZarCategoryEnterSubmitData = new FormData();
+		if(tableID != null && id != null) {
+			myZarCategoryEnterSubmitData.append("id", id);
+			categoryTableID = tableID;
+		}
+		myZarCategoryEnterSubmitData.append("tableID", categoryTableID);
+		myZarCategoryEnterSubmitData.append("title", $("#myzar_category_enter_title").val().trim());
+		myZarCategoryEnterSubmitData.append("iconfile", $("#myzar_category_enter_icon_file")[0].files[0]);
+		myZarCategoryEnterSubmitData.append("parentID", categoryParentID);
+		myZarCategoryEnterSubmitData.append("words", getWordsFromCategory());
 
-	const reqMyZarCategoryAddSubmit = new XMLHttpRequest();
-	reqMyZarCategoryAddSubmit.onload = function() {
-		if(this.responseText.includes("OK")){
-			myzar_category_fetch_list(categoryTableID, categoryParentID, categoryTitle, true);
-			$("#myzar_category_enter_msg").text("Ангилал амжилттай нэмэгдлээ");
-			$("#myzar_category_enter_error").text("");
-			$("#myzar_category_enter_icon_file").val(null);
-			$("#myzar_category_enter_title").val("");
-			$("#myzar_category_enter_words").empty();
-			$("#myzar_category_enter_words_input").val("");
-			$("#myzar_category_enter_word_error").text("");
-			document.getElementById("myzar_category_enter_icon_image").src = "image-solid.svg";
-			myzar_category_add_button_update();
-			$(".popup.myzar_category_enter").hide();
-			
-			if(tableID == null && id == null){
-				confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Ангилал амжилттай <b>нэмэгдэж</b>, шалгагдаж байна.", null);
+		const reqMyZarCategoryAddSubmit = new XMLHttpRequest();
+		reqMyZarCategoryAddSubmit.onload = function() {
+			if(this.responseText.includes("OK")){
+				myzar_category_fetch_list(categoryTableID, categoryParentID, categoryTitle, true);
+				$("#myzar_category_enter_msg").text("Ангилал амжилттай нэмэгдлээ");
+				$("#myzar_category_enter_error").text("");
+				$("#myzar_category_enter_icon_file").val(null);
+				$("#myzar_category_enter_title").val("");
+				$("#myzar_category_enter_words").empty();
+				$("#myzar_category_enter_words_input").val("");
+				$("#myzar_category_enter_word_error").text("");
+				document.getElementById("myzar_category_enter_icon_image").src = "image-solid.svg";
+				myzar_category_add_button_update();
+				$(".popup.myzar_category_enter").hide();
+
+				if(tableID == null && id == null){
+					confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Ангилал амжилттай <b>нэмэгдэж</b>, шалгагдаж байна.", null);
+				}
+				else {
+					confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Ангилал амжилттай <b>засагдаж</b>, шалгагдаж байна.", null);
+				}
 			}
 			else {
-				confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Ангилал амжилттай <b>засагдаж</b>, шалгагдаж байна.", null);
+				$("#myzar_category_enter_error").text(this.responseText);
 			}
-		}
-		else {
-			$("#myzar_category_enter_error").text(this.responseText);
-		}
-	};
-	reqMyZarCategoryAddSubmit.onerror = function(){
-		$("#myzar_category_enter_error").text(reqMyZarCategoryAddSubmit.status);
-	};
+		};
+		reqMyZarCategoryAddSubmit.onerror = function(){
+			$("#myzar_category_enter_error").text(reqMyZarCategoryAddSubmit.status);
+		};
 
-	reqMyZarCategoryAddSubmit.open("POST", "mysql_myzar_category_add_process.php", true);
-	if(tableID != null && id != null) reqMyZarCategoryAddSubmit.open("POST", "mysql_myzar_category_edit_process.php", true);
-	reqMyZarCategoryAddSubmit.send(myZarCategoryEnterSubmitData);
+		reqMyZarCategoryAddSubmit.open("POST", "mysql_myzar_category_add_process.php", true);
+		if(tableID != null && id != null) reqMyZarCategoryAddSubmit.open("POST", "mysql_myzar_category_edit_process.php", true);
+		reqMyZarCategoryAddSubmit.send(myZarCategoryEnterSubmitData);
+	}
+	else {
+		$("#myzar_category_enter_error").text("Ангиллын гарчиг буруу байна!");
+	}
 }
 
 function getWordsFromCategory(){
@@ -164,7 +169,6 @@ function getWordsFromCategory(){
 function isWordExist(word){
 	var vExist = false;
 	$("#myzar_category_enter_words .selected").children(".text").filter(function(){
-		console.log("<isWordExist>:" + $(this).text()+", "+word);
 		if($(this).text().includes(word)){
 		   vExist = true;
 		}

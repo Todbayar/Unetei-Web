@@ -9,15 +9,21 @@ require "./include/PHPMailer/src/Exception.php";
 require "./include/PHPMailer/src/PHPMailer.php";
 require "./include/PHPMailer/src/SMTP.php";
 
-if(isset($_REQUEST["fromID"]) && isset($_REQUEST["toID"]) && isset($_REQUEST["type"])){
+if(isset($_REQUEST["fromID"]) && isset($_REQUEST["toID"]) && isset($_REQUEST["type"]) && isset($_REQUEST["message"])){
 	chat_send($_REQUEST["fromID"], $_REQUEST["toID"], $_REQUEST["type"], $_REQUEST["message"]);
 }
 
 function chat_send($from, $to, $type, $message){
 	global $conn, $smtp_host, $smtp_port, $smtp_username, $smtp_password;
-	
-	$query = "INSERT INTO chat (fromID, toID, type, message, isRead, datetime) VALUES (".$from.", ".$to.", ".$type.", '".$message."', 0, '".date("Y-m-d H:i:s")."')";
-	$conn->query($query);
+	if($message != ""){
+		$query = "INSERT INTO chat (fromID, toID, type, message, isRead, datetime) VALUES (".$from.", ".$to.", ".$type.", '".$message."', 0, '".date("Y-m-d H:i:s")."')";
+		if($conn->query($query)){
+			echo "OK";
+		}
+		else {
+			echo "Fail";
+		}
+	}
 	
 //	$mail = new PHPMailer(true);
 //	try {
