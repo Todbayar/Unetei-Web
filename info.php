@@ -10,6 +10,9 @@ $domain = "Unetei.mn";
 //files
 $path = "user_files";
 
+//variables
+$days_item_remove = 7;
+
 //email
 $smtp_host = "smtp.gmail.com";
 $smtp_port = 465;

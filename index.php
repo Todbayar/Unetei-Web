@@ -1,4 +1,7 @@
-<?php include "info.php"; ?>
+<?php 
+include "info.php"; 
+include "mysql_myzar_item_remove_process.php";
+?>
 <!doctype html>
 <html>
 	<head>

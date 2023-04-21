@@ -1,5 +1,6 @@
 <?php
 include "mysql_config.php";
+include "chat_remove.php";
 
 if(isset($_REQUEST["tableID"]) && isset($_REQUEST["rowID"])){
 	$queryFetchIcon = "SELECT icon FROM category".$_REQUEST["tableID"]." WHERE id=".$_REQUEST["rowID"];
@@ -9,7 +10,12 @@ if(isset($_REQUEST["tableID"]) && isset($_REQUEST["rowID"])){
 	
 	$queryRemove = "DELETE FROM category".$_REQUEST["tableID"]." WHERE id=".$_REQUEST["rowID"];
 	if($conn->query($queryRemove)){
-		echo "OK";
+		if(chat_remove(1, "c".$_REQUEST["tableID"]."_".$_REQUEST["rowID"])){
+			echo "OK";
+		}
+		else {
+			echo "Ангиллыг устгах явцад алдаа гарлаа!";
+		}
 	}
 	else {
 		echo "Ангиллыг устгах явцад алдаа гарлаа!";
