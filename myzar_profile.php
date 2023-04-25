@@ -62,21 +62,47 @@ $(document).ready(function(){
 			$("#image_file").val(null);
 		}
 	});
+	
+	$("#socialpay_file").change(function(){
+		const vIconType = $(this)[0].files[0].type;
+//		const vIconName = $(this)[0].files[0].name;
+		if(vIconType == "image/svg+xml" || vIconType == "image/png" || vIconType == "image/jpeg"){
+			var reader = new FileReader();
+			reader.onload = function (e) {
+				$("#socialpay").attr("src", e.target.result);
+			}
+			reader.onerror = function(){
+				$("#socialpay").attr("src", "image-solid.svg");
+				console.log("<image_file>:error");
+			}
+			reader.readAsDataURL($(this)[0].files[0]);
+		}
+		else {
+			$("#socialpay_file").val(null);
+		}
+	});
 });
 	
 function selectCity(city){
 	$("#city").val(city);
 }
 
-function selectBank(name){
-	console.log("<selectBank>:" + name);
-	$(".divcontainer.bank_owner").css("display","block");
+function selectBank(name, isNew = false){
+	$(".divcontainer.bank_owner").show();
 	$(".divcontainer.bank_account").show();
 	$("#bank_name").val(name);
+	if(isNew){
+	   	$("#bank_owner").val("");
+		$("#bank_account").val("");
+    }
 }
 
 function profile_image_button(){
 	$("#image_file").trigger("click");
+}
+
+function profile_socialpay_button(){
+	$("#socialpay_file").trigger("click");
 }
 	
 function submitProfile(){
@@ -104,6 +130,7 @@ function submitProfile(){
 		profileSubmitData.append("bank_name", $("#bank_name").val()!=""?$("#bank_name").val():"");
 		profileSubmitData.append("bank_owner", vBankOwner);
 		profileSubmitData.append("bank_account", vBankAccount);
+		profileSubmitData.append("socialpay", $("#socialpay_file")[0].files[0]);
 
 		const reqProfileSubmit = new XMLHttpRequest();
 		reqProfileSubmit.onload = function() {
@@ -215,8 +242,20 @@ $row = mysqli_fetch_array($result);
 		<div class="divcontainer">
 			<div>Таны хэрэглэгчийн эрх мэдэл:
 			<?php 
-			
-			echo $row["role"]; 
+			switch($row["role"]){
+				case 0:
+					echo "Хэрэглэгч";
+					break;
+				case 1:
+					echo "Нийтлэгч";
+					break;
+				case 2:
+					echo "Менежер";
+					break;
+				case 3:
+					echo "Админ";
+					break;
+			}
 			?>
 			</div>
 		</div>
@@ -227,7 +266,7 @@ $row = mysqli_fetch_array($result);
 			<div>Утасны дугаар:</div>
 			<div style="display: flex; align-items: center">
 				<label for="affiliate_number" style="margin-right: 5px">+976</label>
-				<input id="affiliate_number" type="number" maxlength="200" value="<?php echo substr($row["affiliate"],4); ?>"></inpu>
+				<input id="affiliate_number" type="number" maxlength="200" value="<?php echo substr($row["affiliate"],4); ?>" />
 			</div>
 		</div>
 		<div class="divcontainer" style="color: #42c200; font-size: 14px">
@@ -235,7 +274,7 @@ $row = mysqli_fetch_array($result);
 		</div>
 		<div class="divcontainer">
 			<div>Банкны нэр:</div>	
-			<select id="bank_name" style="width: 60%; height: 35px; font: normal 16px Arial; border-radius: 10px; margin-top: 5px" onchange="javascript:selectBank(this.value)">
+			<select id="bank_name" style="width: 60%; height: 35px; font: normal 16px Arial; border-radius: 10px; margin-top: 5px" onchange="javascript:selectBank(this.value, true)">
 				<option value="" disabled selected>Сонгох</option>
 				<option value="Худалдаа хөгжлийн банк">Худалдаа хөгжлийн банк</option>
 				<option value="ХААН банк">ХААН банк</option>
@@ -249,13 +288,6 @@ $row = mysqli_fetch_array($result);
 				<option value="Богд банк">Богд банк</option>
 				<option value="Чингис Хаан банк">Чингис Хаан банк</option>
 			</select>
-			<?php
-			if($row["bank_name"] != ""){
-			?>
-			<script>selectBank("<?php echo $row["bank_name"]; ?>")</script>
-			<?php
-			}
-			?>
 		</div>
 		<div class="divcontainer bank_owner" style="width: 60%; display: none">
 			<div>Данс эзэмшигчийн нэр:</div>
@@ -264,6 +296,32 @@ $row = mysqli_fetch_array($result);
 		<div class="divcontainer bank_account" style="width: 60%; display: none">
 			<div>Дансны дугаар:</div>
 			<input id="bank_account" type="number" maxlength="200" value="<?php echo $row["bank_account"]>0 ? $row["bank_account"] : ""; ?>">
+		</div>
+		<?php
+		if($row["bank_name"] != ""){
+		?>
+		<script>selectBank("<?php echo $row["bank_name"]; ?>")</script>
+		<?php
+		}
+		?>
+		<div class="divcontainer" style="width: 60%">
+			<div>Socialpay QRCode:</div>
+			<div style="color: #42c200; font-size: 14px">Голомт банкны Socialpay аппын хэтэвч хуудасны Socialpay дансны QRCode-ийг скрийншот хийгээд тайрч энэ хэсэгт оруулах.</div>
+			<div style="display: flex; align-items: center">
+				<?php
+				if($row["socialpay"] != ""){
+				?>
+				<img id="socialpay" src="<?php echo $path.DIRECTORY_SEPARATOR.$row["socialpay"]; ?>" onClick="profile_socialpay_button()" style="cursor: pointer" />
+				<?php
+				}
+				else {
+				?>
+				<img id="socialpay" src="image-solid.svg" onClick="profile_socialpay_button()" style="cursor: pointer" />
+				<?php
+				}
+				?>
+				<input type="file" id="socialpay_file" accept="image/png, image/gif, image/jpeg, .svg" style="display: none">
+			</div>
 		</div>
 		<div style="width: 100%; float: left; margin-top: 10px; justify-content: center; display: flex">
 			<div class="button_yellow button" style="float: left" onClick="submitProfile()">
