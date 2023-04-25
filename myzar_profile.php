@@ -255,12 +255,15 @@ $row = mysqli_fetch_array($result);
 				case 3:
 					echo "Админ";
 					break;
+				case 4:
+					echo "Сүпер админ";
+					break;
 			}
 			?>
 			</div>
 		</div>
 		<div class="divcontainer" style="color: #42c200; font-size: 14px">
-			<div>Таньд <?php echo $domain; ?>-ыг санал болгосон хүний утасны дугаар.</div>
+			<div>Таньд <?php echo $domain; ?>-ыг санал болгосон хүний утасны дугаар. Хоосон тохиолдолд сүпер админы дагагч болохыг анхаарна уу.</div>
 		</div>
 		<div class="divcontainer" style="width: 60%">
 			<div>Утасны дугаар:</div>
