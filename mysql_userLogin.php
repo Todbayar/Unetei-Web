@@ -19,15 +19,32 @@ if(isset($uID) && isset($uPhone)){
 		echo $_COOKIE["userID"];
 	}
 	else {
-		$query = "INSERT INTO user (uid, phone, role, status) values ('".$uID."','".$uPhone."', 0, 1)";
+		$query = "SELECT * FROM user WHERE phone=".$uPhone;
 		$result = $conn->query($query);
-		if ($result === TRUE) {
-			$userID = mysqli_insert_id($conn);
-			SaveCookie();
-			echo $_COOKIE["userID"];
+		if ($result->num_rows > 0) {
+			$queryUpdate = "UPDATE user SET uid='".$uID."' WHERE phone=".$uPhone;
+			if($conn->query($queryUpdate)) {
+				$row = mysqli_fetch_array($result);
+				$userID = $row["id"];
+				$uRole = $row["role"];
+				SaveCookie();
+				echo $_COOKIE["userID"];	
+			}
+			else {
+				echo "Fail";
+			}
 		}
 		else {
-			echo "Fail";
+			$query = "INSERT INTO user (uid, phone, role, status) values ('".$uID."','".$uPhone."', 0, 1)";
+			$result = $conn->query($query);
+			if ($result === TRUE) {
+				$userID = mysqli_insert_id($conn);
+				SaveCookie();
+				echo $_COOKIE["userID"];
+			}
+			else {
+				echo "Fail";
+			}
 		}
 	}
 }
