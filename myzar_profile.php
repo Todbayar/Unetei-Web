@@ -110,16 +110,31 @@ function submitProfile(){
 	const patternEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i;
 	const patternOnlyNumbers = /^(0|[1-9][0-9]*)$/i;
 	
+	var isSubmitOK = true;
+	
 	var vName = $("#name").val().trim();
 	var vEmail = $("#email").val().trim();
 	
-	if(vName != "" && !patternOnlyText.test(vName)) $("#name_error").show(); else $("#name_error").hide();
-	if(vEmail != "" && !patternEmail.test(vEmail)) $("#email_error").show(); else $("#email_error").hide();
+	if(vName != "" && !patternOnlyText.test(vName)){
+		$("#name_error").show(); 
+		isSubmitOK = false;
+	}
+	else {
+		$("#name_error").hide();
+	}
+	
+	if(vEmail != "" && !patternEmail.test(vEmail)) {
+		$("#email_error").show(); 
+		isSubmitOK = false;
+	}
+	else {
+		$("#email_error").hide();
+	}
 	
 	var vBankOwner = patternOnlyText.test($("#bank_owner").val()) ? $("#bank_owner").val() : "";
 	var vBankAccount = patternOnlyNumbers.test($("#bank_account").val()) ? $("#bank_account").val() : "";
 	
-	if((vName != "" && patternOnlyText.test(vName)) && (vEmail != "" && patternEmail.test(vEmail))){
+	if(isSubmitOK){
 		var profileSubmitData = new FormData();
 		profileSubmitData.append("userID", <?php echo $_COOKIE["userID"]; ?>);
 		profileSubmitData.append("image", $("#image_file")[0].files[0]);
@@ -134,7 +149,6 @@ function submitProfile(){
 
 		const reqProfileSubmit = new XMLHttpRequest();
 		reqProfileSubmit.onload = function() {
-			console.log("<submitProfile>:" + this.responseText);
 			if(this.responseText == "OK"){
 				confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Амжилттай хадгалагдлаа.", null);	
 			}
@@ -145,7 +159,7 @@ function submitProfile(){
 
 		reqProfileSubmit.open("POST", "mysql_profile_update.php", true);
 		reqProfileSubmit.send(profileSubmitData);
-    }
+	}
 }
 </script>
 

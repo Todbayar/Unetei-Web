@@ -15,7 +15,7 @@
 </div>
 <div class="control">
 	<div class="myzar">
-		<div style="display: flex; align-items: center; height: 70px">
+		<div style="display: flex; align-items: center; height: 70px; cursor: pointer">
 			<i class="fa-regular fa-user" style="font-size: 24px; color: #FFFFFF"></i>
 			<div class="removable" style="color:#FFFFFF; margin-left: 5px">Миний зарууд</div>
 			<div id="myzar_phone" class="removable" style="color: #174400">Нэвтрэх ба бүртгэл</div>
