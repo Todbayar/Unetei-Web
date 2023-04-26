@@ -139,5 +139,86 @@ include "mysql_myzar_item_remove_process.php";
 				<button id="myzar_category_enter_submit" onClick="myzar_category_enter_submit()" disabled class="button_yellow" style="margin-top: 10px; margin-left: auto; margin-right: auto">Илгээх</button>
 			</div>
 		</div>
+		
+		<div class="popup myzar_user_upgrade" style="display: none">
+			<div class="container" style="width: 320px; top: 5vh">
+				<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('popup myzar_user_upgrade')[0].style.display='none'; javascript:document.body.style.overflowY='auto'"></i>
+				<div class="header">Хэрэглэгчийн эрх</div>
+				<div style="display:block; margin:10px">
+					<div style="font-size: 14px; margin-bottom: 5px">Та +97699213557 (Тодбаяр, Сүпер админ)-ын дагагч болох гэж байна.<br/><a style="font-size: 12px; color: red">Өөрчлөхийг хүсвэл уг цонхыг хаагаад Миний зар->Тохиргоо-ны "Дагагч болох"-ын доор утасны дугаарыг нь оруулаад дахин энэ цонхыг нээнэ үү.</a></div>
+					<div style="margin-bottom:10px; padding-bottom:10px; border-bottom:solid 1px #ccc">
+						<div style="font: bold 16px Arial"><input type="radio" name="role" value="4"> Сүпер админ</div>
+						<div style="margin-left: 25px"><?php echo $role_price_superadmin; ?> ₮</div>
+						<ul style="font-size: 14px">
+							<li>Өөрийн дагагчдаас <i>орлого</i> хүлээн авах</li>
+							<li>Хязгааргүй ангилал нэмэх эсвэл брэнд үүсгэх</li>
+							<li>Хязгааргүй зар нэмэх</li>
+							<li>Удирдах <i>бүрэн эрх</i>, хүсэлтүүдийг хянах</li>
+							<li>Бизнесийн хөгжүүлэлтэнд саналаа хэлэх</li>
+						</ul>
+					</div>
+					<div style="margin-bottom:10px; padding-bottom:10px; border-bottom:solid 1px #ccc">
+						<div style="font: bold 16px Arial"><input type="radio" name="role" value="3"> Админ</div>
+						<div style="margin-left: 25px"><?php echo $role_price_admin; ?> ₮</div>
+						<ul style="font-size: 14px">
+							<li>Өөрийн дагагчдаас <i>орлого</i> хүлээн авах</li>
+							<li>Хязгааргүй ангилал нэмэх эсвэл брэнд үүсгэх</li>
+							<li>Хязгааргүй зар нэмэх</li>
+							<li>Удирдах <i>хязгаарлагдмал эрх</i>, хүсэлтүүдийг хянах</li>
+						</ul>
+					</div>
+					<div style="margin-bottom:10px; padding-bottom:10px; border-bottom:solid 1px #ccc">
+						<div style="font: bold 16px Arial"><input type="radio" name="role" value="2"> Менежер</div>
+						<div style="margin-left: 25px"><?php echo $role_price_manager; ?> ₮</div>
+						<ul style="font-size: 14px">
+							<li>Өөрийн дагагчдаас <i>орлого</i> хүлээн авах</li>
+							<li>10 ангилал нэмэх эсвэл брэнд үүсгэх</li>
+							<li>Хязгааргүй зар нэмэх</li>
+						</ul>
+					</div>
+					<div style="padding-bottom:10px">
+						<div style="font: bold 16px Arial"><input type="radio" name="role" value="1"> Нийтлэгч</div>
+						<div style="margin-left: 25px"><?php echo $role_price_publisher; ?> ₮</div>
+						<ul style="font-size: 14px">
+							<li>10 ангилал нэмэх</li>
+							<li>Хязгааргүй зар нэмэх</li>
+						</ul>
+					</div>
+				</div>
+				<button id="myzar_category_enter_submit" onClick="myzar_category_enter_submit()" disabled class="button_yellow" style="margin-top: 10px; margin-left: auto; margin-right: auto">Илгээх</button>
+			</div>
+		</div>
+		
+		<div class="popup billing">
+			<div class="container" style="width: 320px; top: 5vh">
+				<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('popup billing')[0].style.display='none'; javascript:document.body.style.overflowY='auto'"></i>
+				<div class="header">Төлбөр төлөх</div>
+				<div style="display:block; margin:10px; font-size: 14px">
+					<div id="billing_type">Онцгой зард байршуулах</div>
+					<div id="billing_number">#789</div>
+					<div id="billing_title">Dell optiplex 3020 дан процессор</div>
+					<div id="billing_price" style="font: bold 16px Arial; margin-top: 10px">Төлөх дүн: 6,000 ₮</div>
+				</div>
+				<div>
+					<div id="billing_bank" style="font-size: 14px; margin-left: 10px">
+						Дараах данс руу илгээнэ үү.<br/>
+						<a id="name" style="font-size: 16px"><b>ХААН банк</b></a>ны данс: <a id="account" style="font-size: 16px"><b>5447171926</b></a><br/>
+						Хүлээн авагч: <a id="owner" style="font-size: 16px"><b>Үнэгүй Групп ХХК</b></a>
+					</div>
+					<div style="margin-left: 10px; margin-top: 10px">Socialpay-аар төлөх:</div>
+					<div id="billing_socialpay" style="font-size: 14px; margin-left: 10px; margin-top: 10px; text-align: center">
+						<img src="user_files/20230425090025_Socialpay.jpg" style="width: 200px; height: 200px" />
+					</div>
+					<div style="font-size: 14px">
+						<ul>
+							<li>Гүйлгээний утга дээр заавал: УТАСНЫ ДУГААР оруулна уу.</li>
+							<li>Таны захиалсан үйлчилгээ (онцгой зар, зар шинэчлэх, ангилал, хэрэглэгч гэх мэт) мөнгө шилжсэний дараа идэвхжинэ.</li>
+							<li>Хэрвээ та заасан төлбөрөөс илүүг шилжүүлбэл хариулт мөнгө тань таны сайтны дансанд орох болно.</li>
+						</ul>
+					</div>
+				</div>
+				<button id="myzar_category_enter_submit" onClick="myzar_category_enter_submit()" disabled class="button_yellow" style="margin-top: 10px; margin-left: auto; margin-right: auto">За</button>
+			</div>
+		</div>
 	</body>
 </html>

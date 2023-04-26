@@ -40,6 +40,28 @@ include "info.php";
 	font: normal 16px Arial;
 	margin-top: 5px;
 }
+	
+#buttonUpgradeUserRole {
+	animation: pulse 1s infinite;
+	animation-iteration-count: 3;
+}
+	
+@keyframes pulse {
+	0% {
+		transform: scale(0.95);
+		box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7);
+	}
+
+	70% {
+		transform: scale(1);
+		box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+	}
+
+	100% {
+		transform: scale(0.95);
+		box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+	}
+}
 </style>
 
 <script>
@@ -81,6 +103,15 @@ $(document).ready(function(){
 			$("#socialpay_file").val(null);
 		}
 	});
+	
+	<?php
+	if($_COOKIE["role"] <= 1){
+	?>
+	$("#bank_name").attr("disabled", true);
+	$("#socialpay").removeAttr("onclick");
+	<?php
+	}
+	?>
 });
 	
 function selectCity(city){
@@ -251,7 +282,7 @@ $row = mysqli_fetch_array($result);
 		<hr/>
 		<div class="divcontainer" style="width: 100%; display: flex; align-items: center">
 			<div style="margin-right: 5px">Дагагч болох</div>
-			<i class="fa-solid fa-plus" style="float: left; font-size: 14px; background: #FFA718; border-radius: 100%; padding: 5px; cursor: pointer"></i>
+			<i id="buttonUpgradeUserRole" class="fa-solid fa-plus" style="float: left; font-size: 14px; background: #FFA718; border-radius: 100%; padding: 5px; cursor: pointer"></i>
 		</div>
 		<div class="divcontainer">
 			<div>Таны хэрэглэгчийн эрх мэдэл:
@@ -315,7 +346,7 @@ $row = mysqli_fetch_array($result);
 			<input id="bank_account" type="number" maxlength="200" value="<?php echo $row["bank_account"]>0 ? $row["bank_account"] : ""; ?>">
 		</div>
 		<?php
-		if($row["bank_name"] != ""){
+		if($row["bank_name"] != "" && $row["bank_name"] != "null"){
 		?>
 		<script>selectBank("<?php echo $row["bank_name"]; ?>")</script>
 		<?php
