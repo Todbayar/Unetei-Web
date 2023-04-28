@@ -76,7 +76,7 @@ function chat_send($from, $to, $type, $message){
 
 function isChatExist($from, $to, $type, $message){
 	global $conn;
-	echo $query = "SELECT * FROM chat WHERE fromID=".$from." AND toID=".$to." AND type=".$type." AND message='".$message."'";
+	$query = "SELECT * FROM chat WHERE fromID=".$from." AND toID=".$to." AND type=".$type." AND message='".$message."'";
 	$result = $conn->query($query);
 	if(mysqli_num_rows($result) > 0){
 		return true;

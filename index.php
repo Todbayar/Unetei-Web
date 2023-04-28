@@ -144,9 +144,9 @@ include "mysql_myzar_item_remove_process.php";
 			<div class="container" style="width: 320px; top: 5vh">
 				<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('popup myzar_user_upgrade')[0].style.display='none'; javascript:document.body.style.overflowY='auto'"></i>
 				<div class="header">Хэрэглэгчийн эрх</div>
-				<div style="display:block; margin:10px">
-					<div style="font-size: 14px; margin-bottom: 5px"><a id="affiliate"></a><br/><a style="font-size: 12px; color: red">Өөрчлөхийг хүсвэл уг цонхыг хаагаад Миний зар->Тохиргоо-ны "Дагагч болох"-ын доор утасны дугаарыг нь оруулаад дахин энэ цонхыг нээнэ үү.</a></div>
-					<div style="margin-bottom:10px; padding-bottom:10px; border-bottom:solid 1px #ccc">
+				<div style="display:block">
+					<div style="font-size: 14px; margin-bottom: 5px; margin-top: 10px; margin-left: 10px; margin-right: 10px"><a id="affiliate"></a><br/><a style="font-size: 12px; color: red">Өөрчлөхийг хүсвэл уг цонхыг хаагаад Миний зар->Тохиргоо-ны "Дагагч болох"-ын доор утасны дугаарыг нь оруулаад дахин энэ цонхыг нээнэ үү.</a></div>
+					<div class="selection">
 						<div style="font: bold 16px Arial"><input type="radio" id="role" name="role" value="4"> Сүпер админ</div>
 						<div style="margin-left: 25px"><?php echo $role_price_superadmin; ?> ₮</div>
 						<ul style="font-size: 14px">
@@ -157,7 +157,7 @@ include "mysql_myzar_item_remove_process.php";
 							<li>Бизнесийн хөгжүүлэлтэнд саналаа хэлэх</li>
 						</ul>
 					</div>
-					<div style="margin-bottom:10px; padding-bottom:10px; border-bottom:solid 1px #ccc">
+					<div class="selection">
 						<div style="font: bold 16px Arial"><input type="radio" id="role" name="role" value="3"> Админ</div>
 						<div style="margin-left: 25px"><?php echo $role_price_admin; ?> ₮</div>
 						<ul style="font-size: 14px">
@@ -167,7 +167,7 @@ include "mysql_myzar_item_remove_process.php";
 							<li>Удирдах <i>хязгаарлагдмал эрх</i>, хүсэлтүүдийг хянах</li>
 						</ul>
 					</div>
-					<div style="margin-bottom:10px; padding-bottom:10px; border-bottom:solid 1px #ccc">
+					<div class="selection">
 						<div style="font: bold 16px Arial"><input type="radio" id="role" name="role" value="2"> Менежер</div>
 						<div style="margin-left: 25px"><?php echo $role_price_manager; ?> ₮</div>
 						<ul style="font-size: 14px">
@@ -176,7 +176,7 @@ include "mysql_myzar_item_remove_process.php";
 							<li>Хязгааргүй зар нэмэх</li>
 						</ul>
 					</div>
-					<div style="padding-bottom:10px">
+					<div class="selection">
 						<div style="font: bold 16px Arial"><input type="radio" id="role" name="role" value="1"> Нийтлэгч</div>
 						<div style="margin-left: 25px"><?php echo $role_price_publisher; ?> ₮</div>
 						<ul style="font-size: 14px">
@@ -185,7 +185,7 @@ include "mysql_myzar_item_remove_process.php";
 						</ul>
 					</div>
 				</div>
-				<button id="buttonSubmit" class="button_yellow" style="margin-top: 10px; margin-left: auto; margin-right: auto" disabled>Илгээх</button>
+				<button id="buttonSubmit" disabled class="button_yellow" style="margin-top: 10px; margin-left: auto; margin-right: auto">Илгээх</button>
 			</div>
 		</div>
 		

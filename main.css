@@ -272,3 +272,24 @@
 	border-radius: 10px;
 	font-size: 14px;
 }
+
+.popup.myzar_user_upgrade .selection {
+	padding-top:10px; 
+	padding-left:10px; 
+	padding-right:10px; 
+	border-bottom:solid 1px #ccc;
+	cursor: pointer;
+}
+
+.popup.myzar_user_upgrade .selection:last-child {
+	border-bottom: hidden;
+	padding-bottom:5px; 
+}
+
+.popup.myzar_user_upgrade .selection:hover {
+	background: #ddd;
+}
+
+.popup.myzar_user_upgrade .selection #role[disabled] {
+    background-color: blue;
+}

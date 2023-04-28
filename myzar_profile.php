@@ -67,6 +67,8 @@ include "info.php";
 <script src="misc.js"></script>
 
 <script>
+var lastSelectionRoleUpgradeOption;
+	
 $(document).ready(function(){		
 	$("#image_file").change(function(){
 		const vIconType = $(this)[0].files[0].type;
@@ -116,9 +118,8 @@ $(document).ready(function(){
 	?>
 	
 	$("#buttonUpgradeUserRole").click(function(){
-		const affiliate = $("#affiliate_number").val();
 		$(".popup.myzar_user_upgrade").show();
-		$.post("mysql_fetch_profile.php", {affiliate:affiliate}).done(function (response){
+		$.post("mysql_fetch_profile.php", {affiliate:$("#affiliate_number").val()}).done(function (response){
 			const res = JSON.parse(response);
 			$(".popup.myzar_user_upgrade #affiliate").html("Та "+res.phone+" ("+res.name+", "+convertRoleInString(res.role)+")-ын дагагч болох гэж байна.");
 			$(".popup.myzar_user_upgrade #buttonSubmit").attr("onclick", "submitRoleUpgrade('"+res.phone+"')");
@@ -126,13 +127,23 @@ $(document).ready(function(){
 	});
 	
 	$(".popup.myzar_user_upgrade input[name='role']").change(function(){
-		console.log("<asd>");
+		lastSelectionRoleUpgradeOption = $(this);
+	});
+	
+	$(".popup.myzar_user_upgrade .selection").click(function(){
+		if(lastSelectionRoleUpgradeOption != null) lastSelectionRoleUpgradeOption.find("input").prop("checked", false);
+		lastSelectionRoleUpgradeOption = $(this);
+		lastSelectionRoleUpgradeOption.find("input").prop("checked", true);
 		$(".popup.myzar_user_upgrade #buttonSubmit").attr("disabled", false);
 	});
 });
 	
-function submitRoleUpgrade(affiliate){
-	console.log("<submitRoleUpgrade>:" + affiliate + ", " + $("input[name='role']:checked").val());
+function submitRoleUpgrade(affiliatePhone){
+	$(".popup.myzar_user_upgrade").hide();
+	$.post("mysql_billing.php", {type:"role", affiliate:affiliatePhone, role:$("input[name='role']:checked").val()}).done(function (response){
+		$(".popup.billing").show();
+		//set here
+	});
 }
 	
 function selectCity(city){
