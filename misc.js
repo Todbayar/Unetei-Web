@@ -184,3 +184,25 @@ function getItemExtraDataList(key, category, elID){
 	reqMyZarItemExtraDataListSubmit.open("GET", "mysql_myzar_item_extra_datalist_process.php?key="+key+"&category="+category, true);
 	reqMyZarItemExtraDataListSubmit.send();
 }
+
+function convertRoleInString(role){
+	var vRole;
+	switch(parseInt(role)){
+		case 0:
+			vRole = "Хэрэглэгч";
+			break;
+		case 1:
+			vRole = "Нийтлэгч";
+			break;
+		case 2:
+			vRole = "Менежер";
+			break;
+		case 3:
+			vRole = "Админ";
+			break;
+		case 4:
+			vRole = "Сүпер админ";
+			break;
+    }
+	return vRole;
+}
