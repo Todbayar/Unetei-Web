@@ -52,16 +52,16 @@ function chat_select(toID){
 			const responseChatFetch = JSON.parse(this.responseText);
 			responseChatFetch.forEach(function(chatRow){
 				if(parseInt(chatRow.type) == 1){
-					chat_list_category(chatRow.sender, chatRow.body, chatRow.datetime);
+					chat_list_category(chatRow.sender, chatRow.body, chatRow.datetime, chatRow.isEdit);
 				}
 				else if(parseInt(chatRow.type) == 2){
-					chat_list_item(chatRow.sender, chatRow.body, chatRow.datetime);
+					chat_list_item(chatRow.sender, chatRow.body, chatRow.datetime, chatRow.isEdit);
 				}
 				else if(parseInt(chatRow.type) == 3){
-					chat_list_role(chatRow.sender, chatRow.body, chatRow.datetime);
+					chat_list_role(chatRow.sender, chatRow.body, chatRow.datetime, chatRow.isEdit);
 				}
 				else {
-					chat_list_message(chatRow.sender, chatRow.body, chatRow.datetime);
+					chat_list_message(chatRow.sender, chatRow.body, chatRow.datetime, chatRow.isEdit);
 				}
 				$(".chat .right .top").scrollTop($(".chat .right .top").height());
 			});
@@ -76,12 +76,12 @@ function chat_select(toID){
 	reqChatFetchSubmit.send();
 }
 
-function chat_list_role(sender, body, datetime){
+function chat_list_role(sender, body, datetime, isEdit){
 	if(sender.id == <?php echo $_COOKIE["userID"]; ?>){
 	   	var htmlRole = "<div class=\"message me\"><div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-user\" style=\"position:absolute; top:0; left:-15px; padding:5px; border-radius:10px; background: #fff4d0; color:#878787\"></i>";
 	   	htmlRole += body.message;
 		htmlRole += "</div><div class=\"datetime\">"+datetime+"</div>";
-	   	htmlRole += chat_list_role_action_show(body.isActive, body.id, true);
+	    if(isEdit) htmlRole += chat_list_role_action_show(body.isActive, body.id, true);
 		htmlRole += "</div>"+chat_profile_image_show(sender.image)+"</div>";
 		$(".chat .right .top").append(htmlRole);
     }
@@ -89,7 +89,7 @@ function chat_list_role(sender, body, datetime){
 	   	var htmlRole = "<div class=\"message\">"+chat_profile_image_show(sender.image)+"<div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-user\" style=\"position:absolute; top:0; right:-15px; padding:5px; border-radius:10px; background: #e7e7e7; color:#878787\"></i>";
 		htmlRole += body.message;
 		htmlRole += "</div><div class=\"datetime\">"+datetime+"</div>";
-		htmlRole += chat_list_role_action_show(body.isActive, body.id, false);
+		if(isEdit) htmlRole += chat_list_role_action_show(body.isActive, body.id, false);
 		htmlRole += "</div></div>";
 		$(".chat .right .top").append(htmlRole);
     }
@@ -109,7 +109,7 @@ function chat_list_role_action_show(isactive, id, isMe){
 	}
 }
 
-function chat_list_category(sender, body, datetime){
+function chat_list_category(sender, body, datetime, isEdit){
 	if(sender.id == <?php echo $_COOKIE["userID"]; ?>){
 		var htmlCategory = "<div class=\"message me\"><div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-sitemap\" style=\"position:absolute; top:0; left:-15px; padding:5px; border-radius:10px; background: #fff4d0; color:#878787\"></i>";
 	   	if(body.isActive == 1){
@@ -122,7 +122,7 @@ function chat_list_category(sender, body, datetime){
 	   	htmlCategory += chat_list_category_show(body.category, body.title);
 		htmlCategory += chat_list_category_words_show(body.words);
 		htmlCategory += "</div><div class=\"datetime\">"+datetime+"</div>";
-		htmlCategory += chat_list_category_action_show(body.isActive, body.category.length+"_"+body.id, true);
+		if(isEdit) htmlCategory += chat_list_category_action_show(body.isActive, body.category.length+"_"+body.id, true);
 		htmlCategory += "</div>"+chat_profile_image_show(sender.image)+"</div>";
 		$(".chat .right .top").append(htmlCategory);
 	}
@@ -138,13 +138,13 @@ function chat_list_category(sender, body, datetime){
 		htmlCategory += chat_list_category_show(body.category, body.title);
 		htmlCategory += chat_list_category_words_show(body.words);
 		htmlCategory += "</div><div class=\"datetime\">"+datetime+"</div>";
-		htmlCategory += chat_list_category_action_show(body.isActive, body.category.length+"_"+body.id);
+		if(isEdit) htmlCategory += chat_list_category_action_show(body.isActive, body.category.length+"_"+body.id);
 		htmlCategory += "</div></div>";
 		$(".chat .right .top").append(htmlCategory);
 	}
 }
 
-function chat_list_item(sender, body, datetime){
+function chat_list_item(sender, body, datetime, isEdit){
 	if(sender.id == <?php echo $_COOKIE["userID"]; ?>){
 	   	var htmlItem = "<div class=\"message me\"><div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-cart-shopping\" style=\"position:absolute; top:0; left:-15px; padding:5px; border-radius:10px; background: #fff4d0; color:#878787\"></i>";
 	   	if(body.isActive == 3){
@@ -156,7 +156,7 @@ function chat_list_item(sender, body, datetime){
 	   	htmlItem += body.title;
 	   	htmlItem += chat_list_category_show(body.category, "");
 		htmlItem += "</div><div class=\"datetime\">"+datetime+"</div>";
-		htmlItem += chat_list_item_action_show(body.isActive, body.id, true);
+		if(isEdit) htmlItem += chat_list_item_action_show(body.isActive, body.id, true);
 		htmlItem += "</div>"+chat_profile_image_show(sender.image)+"</div>";
 		$(".chat .right .top").append(htmlItem);
 	}
@@ -171,7 +171,7 @@ function chat_list_item(sender, body, datetime){
 		htmlItem += body.title;
 		htmlItem += chat_list_category_show(body.category, "");
 		htmlItem += "</div><div class=\"datetime\">"+datetime+"</div>";
-		htmlItem += chat_list_item_action_show(body.isActive, body.id);
+		if(isEdit) htmlItem += chat_list_item_action_show(body.isActive, body.id);
 		htmlItem += "</div></div>";
 		$(".chat .right .top").append(htmlItem);
 	}

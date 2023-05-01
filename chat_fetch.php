@@ -10,7 +10,8 @@ if(isset($_GET["toID"])){
 		$message = new stdClass();
 		$message->type = $row["type"];
 		$message->datetime = $row["datetime"];
-		
+		$message->isEdit = ($_COOKIE["role"]>=3 && $_COOKIE["userID"]==$row["toID"]) ? true : false;
+
 		$sender = new stdClass();
 		$sender->id = $row["fromID"];
 		$sender->name = $row["sender_name"];
