@@ -16,6 +16,10 @@ $(document).ready(function(){
 			$(".chat .right .bottom .button_yellow").trigger("click");
 		}
 	});
+	
+//	$(".chat .right .top").scroll(function(){
+//		console.log("<scroll>:"+$(".chat .right .top").scrollTop()+", "+$(".chat .right .top").height()+", "+$(".chat .right .top").innerHeight());
+//	});
 });
 	
 function chat_send(toID){
@@ -63,7 +67,7 @@ function chat_select(toID){
 				else {
 					chat_list_message(chatRow.sender, chatRow.body, chatRow.datetime, chatRow.isEdit);
 				}
-				$(".chat .right .top").scrollTop($(".chat .right .top").height());
+				$(".chat .right .top").scrollTop($(".chat .right .top").innerHeight()*2);
 			});
 			$("div.message:last-child").css("margin-bottom","35px");
 		}
