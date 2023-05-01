@@ -57,9 +57,13 @@ function chat_select(toID){
 				else if(parseInt(chatRow.type) == 2){
 					chat_list_item(chatRow.sender, chatRow.body, chatRow.datetime);
 				}
+				else if(parseInt(chatRow.type) == 3){
+					chat_list_role(chatRow.sender, chatRow.body, chatRow.datetime);
+				}
 				else {
 					chat_list_message(chatRow.sender, chatRow.body, chatRow.datetime);
 				}
+				$(".chat .right .top").scrollTop($(".chat .right .top").height());
 			});
 			$("div.message:last-child").css("margin-bottom","35px");
 		}
@@ -71,7 +75,40 @@ function chat_select(toID){
 	reqChatFetchSubmit.open("GET", "chat_fetch.php?toID="+toID, true);
 	reqChatFetchSubmit.send();
 }
-	
+
+function chat_list_role(sender, body, datetime){
+	if(sender.id == <?php echo $_COOKIE["userID"]; ?>){
+	   	var htmlRole = "<div class=\"message me\"><div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-user\" style=\"position:absolute; top:0; left:-15px; padding:5px; border-radius:10px; background: #fff4d0; color:#878787\"></i>";
+	   	htmlRole += body.message;
+		htmlRole += "</div><div class=\"datetime\">"+datetime+"</div>";
+	   	htmlRole += chat_list_role_action_show(body.isActive, body.id, true);
+		htmlRole += "</div>"+chat_profile_image_show(sender.image)+"</div>";
+		$(".chat .right .top").append(htmlRole);
+    }
+	else {
+	   	var htmlRole = "<div class=\"message\">"+chat_profile_image_show(sender.image)+"<div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-user\" style=\"position:absolute; top:0; right:-15px; padding:5px; border-radius:10px; background: #e7e7e7; color:#878787\"></i>";
+		htmlRole += body.message;
+		htmlRole += "</div><div class=\"datetime\">"+datetime+"</div>";
+		htmlRole += chat_list_role_action_show(body.isActive, body.id, false);
+		htmlRole += "</div></div>";
+		$(".chat .right .top").append(htmlRole);
+    }
+}
+
+function chat_list_role_action_show(isactive, id, isMe){
+	if(isactive == 0){	//review
+		if(!isMe){
+			return "<div id=\"2"+id+"\" class=\"action\"><div onClick=\"chat_action(0,2,"+id+")\" class=\"button_yellow\" style=\"float: left\"><i class=\"fa-solid fa-check\"></i></div></div>";
+	   	}
+		else {
+			return "<div id=\"2"+id+"\" class=\"action\" style=\"display:flex; justify-content: flex-end\"><div onClick=\"chat_action(0,2,"+id+")\" class=\"button_yellow\" style=\"float: left\"><i class=\"fa-solid fa-check\"></i></div></div>";
+		}
+	}
+	else {
+		return "";
+	}
+}
+
 function chat_list_category(sender, body, datetime){
 	if(sender.id == <?php echo $_COOKIE["userID"]; ?>){
 		var htmlCategory = "<div class=\"message me\"><div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-sitemap\" style=\"position:absolute; top:0; left:-15px; padding:5px; border-radius:10px; background: #fff4d0; color:#878787\"></i>";
@@ -205,7 +242,7 @@ function chat_profile_image_show(image){
 
 function chat_action(action, type, id){
 	//action 0=accept, 1=dismiss
-	//type 0=category, 1=item
+	//type 0=category, 1=item, 2=role
 	//id rowid
 	
 	var chatActionSubmitData = new FormData();

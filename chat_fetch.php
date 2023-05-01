@@ -27,6 +27,14 @@ if(isset($_GET["toID"])){
 		else if($row["type"] == 2){
 			$message->body = fetchItem($row["message"]);
 		}
+		else if($row["type"] == 3){
+			$body = new stdClass();
+			$body->id = $row["id"];
+			$body->isActive = $row["isRead"];
+			$body->message = $row["message"];
+			$message->body = $body;
+		}
+		
 		$objArr[] = $message;
 	}
 	echo json_encode($objArr);

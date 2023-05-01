@@ -28,6 +28,11 @@ if(isset($_REQUEST["action"]) && isset($_REQUEST["type"]) && isset($_REQUEST["id
 		}
 		$query .= " WHERE id=".$id;
 	}
+	else if($type == 2){
+		if($action == 0){
+			$query = "UPDATE chat SET isRead=1 WHERE id=".$id;
+		}
+	}
 	
 	if($conn->query($query)){
 		echo "OK";

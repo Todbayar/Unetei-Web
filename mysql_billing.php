@@ -35,7 +35,7 @@ if(isset($_POST["type"])){
 				break;
 		}
 		
-		$message = $requester["name"]." (".$requester["id"].", ".$requester["phone"].") хэрэглэгч ".$shortMessage." болох хүсэлт илгээлээ.";
+		$message = $requester["name"]." (#".$requester["id"].", ".$requester["phone"].") хэрэглэгч ".$shortMessage." болох хүсэлт илгээлээ.";
 		chat_send($requester["id"], $affiliate["id"], 3, $message, false);
 		
 		$billing = new stdClass();
