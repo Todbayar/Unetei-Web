@@ -1,8 +1,8 @@
 <?php
 include "mysql_config.php";
 
-if(isset($_GET["id"])){
-	$query = "SELECT *, (SELECT name FROM user WHERE id=fromID) AS sender_name, (SELECT image FROM user WHERE id=fromID) AS sender_image FROM chat WHERE toID=".$_GET["id"]." ORDER BY datetime ASC";
+if(isset($_GET["toID"])){
+	$query = "SELECT *, (SELECT name FROM user WHERE id=fromID) AS sender_name, (SELECT image FROM user WHERE id=fromID) AS sender_image FROM chat WHERE fromID IN (".$_COOKIE["userID"].",".$_GET["toID"].") AND toID IN (".$_COOKIE["userID"].",".$_GET["toID"].") ORDER BY datetime ASC";
 	$result = $conn->query($query);
 	$objArr = array();
 	while($row = mysqli_fetch_array($result)){

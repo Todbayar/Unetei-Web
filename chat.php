@@ -27,7 +27,6 @@ function chat_send(toID){
 	
 	const reqChatSubmit = new XMLHttpRequest();
 	reqChatSubmit.onload = function() {
-		console.log("<chat_send>:" + reqChatSubmit.responseText);
 		$("#chatMessage").val("");
 		chat_select(toID);
 	};
@@ -69,7 +68,7 @@ function chat_select(toID){
 		console.log("<chat_select>:" + reqChatFetchSubmit.status);
 	};
 	
-	reqChatFetchSubmit.open("GET", "chat_fetch.php?id="+toID, true);
+	reqChatFetchSubmit.open("GET", "chat_fetch.php?toID="+toID, true);
 	reqChatFetchSubmit.send();
 }
 	
@@ -259,7 +258,7 @@ function chat_action(action, type, id){
 		$resultFetchSender = $conn->query($queryFetchSender);
 		while($rowFetchSender = mysqli_fetch_array($resultFetchSender)){
 		?>
-		<div id="chatSelect<?php echo $rowFetchSender["toID"]; ?>" class="user" onClick="chat_select(<?php echo $rowFetchSender["toID"]; ?>)">
+		<div id="chatSelect<?php echo $rowFetchSender["fromID"]; ?>" class="user" onClick="chat_select(<?php echo $rowFetchSender["fromID"]; ?>)">
 			<div class="container">
 				<div class="box">
 					<div class="profile">
