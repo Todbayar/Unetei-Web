@@ -36,7 +36,7 @@ if(isset($_POST["type"])){
 		}
 		
 		$message = $requester["name"]." (".$requester["id"].", ".$requester["phone"].") хэрэглэгч ".$shortMessage." болох хүсэлт илгээлээ.";
-		chat_send($requester["id"], $affiliate["id"], 3, $message);
+		chat_send($requester["id"], $affiliate["id"], 3, $message, false);
 		
 		$billing = new stdClass();
 		$billing->type = "Хэрэглэгчийн эрхээ дээшлүүлэх";
@@ -47,7 +47,7 @@ if(isset($_POST["type"])){
 		$billing->bank_owner = $affiliate["bank_owner"];
 		$billing->bank_account = $affiliate["bank_account"];
 		$billing->socialpay = $affiliate["socialpay"];
-		json_encode($billing);
+		echo json_encode($billing);
 	}
 }
 ?>

@@ -13,25 +13,25 @@ if(isset($_REQUEST["fromID"]) && isset($_REQUEST["toID"]) && isset($_REQUEST["ty
 	chat_send($_REQUEST["fromID"], $_REQUEST["toID"], $_REQUEST["type"], htmlspecialchars(addslashes($_REQUEST["message"])));
 }
 
-function chat_send($from, $to, $type, $message){
+function chat_send($from, $to, $type, $message, $isPrint = true){
 	global $conn, $smtp_host, $smtp_port, $smtp_username, $smtp_password;
 	if($message != ""){
 		if(!isChatExist($from, $to, $type, $message)){
 			$query = "INSERT INTO chat (fromID, toID, type, message, isRead, datetime) VALUES (".$from.", ".$to.", ".$type.", '".$message."', 0, '".date("Y-m-d H:i:s")."')";
 			if($conn->query($query)){
-				echo "OK";
+				if($isPrint) echo "OK";
 			}
 			else {
-				echo "Fail";
+				if($isPrint) echo "Fail";
 			}
 		}
 		else {
 			$query = "UPDATE chat SET isRead=0, datetime='".date("Y-m-d H:i:s")."' WHERE fromID=".$from." AND toID=".$to." AND type=".$type." AND message='".$message."'";
 			if($conn->query($query)){
-				echo "OK";
+				if($isPrint) echo "OK";
 			}
 			else {
-				echo "Fail";
+				if($isPrint) echo "Fail";
 			}
 		}
 	}

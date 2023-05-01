@@ -118,6 +118,8 @@ $(document).ready(function(){
 	?>
 	
 	$("#buttonUpgradeUserRole").click(function(){
+		window.scrollTo(0, 0);
+		$("body").css("overflow-y", "hidden");
 		$(".popup.myzar_user_upgrade").show();
 		$.post("mysql_fetch_profile.php", {affiliate:$("#affiliate_number").val()}).done(function (response){
 			const res = JSON.parse(response);
@@ -140,9 +142,18 @@ $(document).ready(function(){
 	
 function submitRoleUpgrade(affiliatePhone){
 	$(".popup.myzar_user_upgrade").hide();
-	$.post("mysql_billing.php", {type:"role", affiliate:affiliatePhone, role:$("input[name='role']:checked").val()}).done(function (response){
+	const selRole = $("input[name='role']:checked").val();
+	$.post("mysql_billing.php", {type:"role", affiliate:affiliatePhone, role:selRole}).done(function (response){
 		$(".popup.billing").show();
-		//set here
+		const res = JSON.parse(response);
+		$(".popup.billing .container #billing_type").html(res.type);
+		$(".popup.billing .container #billing_number").html(convertRoleInString(selRole));
+		$(".popup.billing .container #billing_title").html(res.title);
+		$(".popup.billing .container #billing_price").html(res.price + " ₮");
+		$(".popup.billing .container #billing_bank #name").html("<b>" + res.bank_name + "</b>");
+		$(".popup.billing .container #billing_bank #account").html("<b>" + res.bank_account + "</b>");
+		$(".popup.billing .container #billing_bank #owner").html("<b>" + res.bank_owner + "</b>");
+		$(".popup.billing .container #billing_socialpay img").attr("src", "user_files/"+res.socialpay);
 	});
 }
 	

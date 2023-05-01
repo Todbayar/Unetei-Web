@@ -194,20 +194,20 @@ include "mysql_myzar_item_remove_process.php";
 				<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('popup billing')[0].style.display='none'; javascript:document.body.style.overflowY='auto'"></i>
 				<div class="header">Төлбөр төлөх</div>
 				<div style="display:block; margin:10px; font-size: 14px">
-					<div id="billing_type">Онцгой зард байршуулах</div>
-					<div id="billing_number">#789</div>
-					<div id="billing_title">Dell optiplex 3020 дан процессор</div>
-					<div id="billing_price" style="font: bold 16px Arial; margin-top: 10px">Төлөх дүн: 6,000 ₮</div>
+					<div id="billing_type"></div>
+					<div id="billing_number"></div>
+					<div id="billing_title"></div>
+					<div id="billing_price" style="font: bold 16px Arial; margin-top: 10px"></div>
 				</div>
 				<div>
 					<div id="billing_bank" style="font-size: 14px; margin-left: 10px">
 						Дараах данс руу илгээнэ үү.<br/>
-						<a id="name" style="font-size: 16px"><b>ХААН банк</b></a>ны данс: <a id="account" style="font-size: 16px"><b>5447171926</b></a><br/>
-						Хүлээн авагч: <a id="owner" style="font-size: 16px"><b>Үнэгүй Групп ХХК</b></a>
+						<a id="name" style="font-size: 16px"><b></b></a>ны данс: <a id="account" style="font-size: 16px"><b></b></a><br/>
+						Хүлээн авагч: <a id="owner" style="font-size: 16px"><b></b></a>
 					</div>
 					<div style="margin-left: 10px; margin-top: 10px">Socialpay-аар төлөх:</div>
 					<div id="billing_socialpay" style="font-size: 14px; margin-left: 10px; margin-top: 10px; text-align: center">
-						<img src="user_files/20230425090025_Socialpay.jpg" style="width: 200px; height: 200px" />
+						<img style="width: 200px; height: 200px" />
 					</div>
 					<div style="font-size: 14px">
 						<ul>
@@ -217,7 +217,7 @@ include "mysql_myzar_item_remove_process.php";
 						</ul>
 					</div>
 				</div>
-				<button id="myzar_category_enter_submit" onClick="myzar_category_enter_submit()" disabled class="button_yellow" style="margin-top: 10px; margin-left: auto; margin-right: auto">За</button>
+				<button onClick="javascript:document.getElementsByClassName('popup billing')[0].style.display='none'; javascript:document.body.style.overflowY='auto'" class="button_yellow" style="margin-top: 10px; margin-left: auto; margin-right: auto">За</button>
 			</div>
 		</div>
 	</body>
