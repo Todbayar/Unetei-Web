@@ -6,7 +6,7 @@ if(isset($_GET["toID"])){
 	$result = $conn->query($query);
 	$objArr = array();
 	while($row = mysqli_fetch_array($result)){
-		@$conn->query("UPDATE chat SET isRead=1 WHERE id=".$row["id"]);
+		@$conn->query("UPDATE chat SET isRead=1 WHERE id=".$row["id"]." NOT type=3");
 		
 		$message = new stdClass();
 		$message->type = $row["type"];

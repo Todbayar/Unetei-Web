@@ -1,6 +1,8 @@
 <?php
 include "mysql_config.php";
 include "chat_process.php";
+include "mysql_misc.php";
+include "info.php";
 
 if(isset($_REQUEST["tableID"]) && isset($_REQUEST["title"]) && isset($_FILES["iconfile"]) && isset($_REQUEST["parentID"])){
 	InsertCategoryEntry($_REQUEST["tableID"], $_COOKIE["userID"], htmlspecialchars(addslashes($_REQUEST["title"])), $_FILES["iconfile"], $_REQUEST["parentID"], htmlspecialchars(addslashes($_REQUEST["words"])));
@@ -39,9 +41,11 @@ function InsertCategoryEntry($pTableID, $pUID , $pTitle, $pFile, $pParentID, $pW
 				if ($conn->connect_error) {
 					die("<InsertCategoryEntry>:".$conn->connect_error);
 				}
-
+				
+				$lastInsertID = mysqli_insert_id($conn);
+				
 				if($resultInsert){
-					chat_send($pUID, 0, 1, "c".$pTableID."_".mysqli_insert_id($conn));
+					chat_send($pUID, getAffiliateID($pUID), 1, "c".$pTableID."_".$lastInsertID);
 					echo "OK";
 				}
 				else {
@@ -54,19 +58,21 @@ function InsertCategoryEntry($pTableID, $pUID , $pTitle, $pFile, $pParentID, $pW
 		else {
 			$queryInsert = "";
 			if($pParentID == 0){
-				echo $queryInsert = "INSERT INTO category".$pTableID."(userID, title, words) VALUES('".$pUID."','".$pTitle."','".$pWords."')";
+				$queryInsert = "INSERT INTO category".$pTableID."(userID, title, words) VALUES('".$pUID."','".$pTitle."','".$pWords."')";
 			}
 			else {
-				echo $queryInsert = "INSERT INTO category".$pTableID."(userID, title, words, parent) VALUES('".$pUID."','".$pTitle."','".$pWords."',".$pParentID.")";
+				$queryInsert = "INSERT INTO category".$pTableID."(userID, title, words, parent) VALUES('".$pUID."','".$pTitle."','".$pWords."',".$pParentID.")";
 			}
 			$resultInsert = $conn->query($queryInsert);
 
 			if ($conn->connect_error) {
 				die("<InsertCategoryEntry>:".$conn->connect_error);
 			}
-
+			
+			$lastInsertID = mysqli_insert_id($conn);
+			
 			if($resultInsert){
-				chat_send($pUID, 0, 1, "c".$pTableID."_".mysqli_insert_id($conn));
+				chat_send($pUID, getAffiliateID($pUID), 1, "c".$pTableID."_".$lastInsertID);
 				echo "OK";
 			}
 			else {

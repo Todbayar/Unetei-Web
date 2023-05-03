@@ -43,7 +43,7 @@ if($isDuplication == 0){
 				}
 			}
 			if($isImagesInsert){
-				chat_send($userID, 0, 2, $itemID);
+				chat_send($userID, getAffiliateID($userID), 2, $itemID);
 				update_profile($name, $email, $city, $userID);
 				echo $itemID;
 			}

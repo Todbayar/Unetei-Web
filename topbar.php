@@ -33,20 +33,22 @@ include "mysql_config.php";
 		</div>
 	</div>
 	<i class="fa-regular fa-star" style="font-size: 24px; color: #FFFFFF; font: normal; margin-left: 10px; cursor: pointer"></i>
-	<?php 
-	$query = "SELECT * FROM chat WHERE (toID=".$_COOKIE["userID"]." OR toID=0) AND isRead=0";
-	$result = $conn->query($query);
-	$countChat = mysqli_num_rows($result);
-	
-	if(!isset($_GET["page"]) || $_GET["page"] != "chat"){
-	?>
-	<i class="fa-regular fa-comments" style="font-size: 24px; color: #FFFFFF; font: normal; margin-left: 10px; cursor: pointer" onClick="javascript:location.href='?page=chat'"><p class="notification_number"><?php echo $countChat; ?></p></i>
 	<?php
-	}
-	else {
-	?>
-	<i class="fa-solid fa-comments" style="font-size: 24px; color: #FFFFFF; font: normal; margin-left: 10px; cursor: pointer" onClick="javascript:location.href='?page=chat'"><p class="notification_number"><?php echo $countChat; ?></p></i>
-	<?php
+	if(isset($_COOKIE["userID"])){
+		$query = "SELECT * FROM chat WHERE (toID=".$_COOKIE["userID"]." OR toID=0) AND isRead=0";
+		$result = $conn->query($query);
+		$countChat = mysqli_num_rows($result);
+		
+		if(!isset($_GET["page"]) || $_GET["page"] != "chat"){
+		?>
+		<i class="fa-regular fa-comments" style="font-size: 24px; color: #FFFFFF; font: normal; margin-left: 10px; cursor: pointer" onClick="javascript:location.href='?page=chat'"><p class="notification_number"><?php echo $countChat; ?></p></i>
+		<?php
+		}
+		else {
+		?>
+		<i class="fa-solid fa-comments" style="font-size: 24px; color: #FFFFFF; font: normal; margin-left: 10px; cursor: pointer" onClick="javascript:location.href='?page=chat'"><p class="notification_number"><?php echo $countChat; ?></p></i>
+		<?php
+		}
 	}
 	?>
 	<div class="button_yellow" style="margin-left: 10px" onClick="javascript:location.href='?page=myzar&myzar=category'">

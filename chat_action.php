@@ -1,5 +1,6 @@
 <?php
 include "mysql_config.php";
+include "info.php";
 
 if(isset($_REQUEST["action"]) && isset($_REQUEST["type"]) && isset($_REQUEST["id"])){
 	$type = $_REQUEST["type"];
@@ -30,6 +31,26 @@ if(isset($_REQUEST["action"]) && isset($_REQUEST["type"]) && isset($_REQUEST["id
 	}
 	else if($type == 2){
 		if($action == 0){
+			$queryFetchRole = "SELECT fromID, message FROM chat WHERE id=".$id;
+			$resultFetchRole = $conn->query($queryFetchRole);
+			$rowFetchRole = mysqli_fetch_array($resultFetchRole);
+			$priceFetchRole = explode(' ',$rowFetchRole["message"])[5];
+			$queryUpdateRole = "UPDATE user SET";
+			if($priceFetchRole === $role_price_superadmin){
+				$queryUpdateRole .= " role=4";
+			}
+			else if($priceFetchRole === $role_price_admin){
+				$queryUpdateRole .= " role=3";
+			}
+			else if($priceFetchRole === $role_price_manager){
+				$queryUpdateRole .= " role=2";
+			}
+			else if($priceFetchRole === $role_price_publisher){
+				$queryUpdateRole .= " role=1";
+			}
+			$queryUpdateRole .= " WHERE id=".$rowFetchRole["fromID"];
+			@$conn->query($queryUpdateRole);
+			
 			$query = "UPDATE chat SET isRead=1 WHERE id=".$id;
 		}
 	}
