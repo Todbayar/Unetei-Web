@@ -24,18 +24,16 @@ include "mysql_myzar_item_remove_process.php";
 		<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
 		
 		<style>
-			body {
-				border: 0;
-				padding: 0;
-				margin: 0;
-				font-family: "Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, "sans-serif";
+		body {
+			border: 0;
+			padding: 0;
+			margin: 0;
+			font-family: "Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, "sans-serif";
 /*				overflow-y: hidden;*/
-			}
+		}
 		</style>
 		
-	</head>
-
-	<script>
+		<script>
 		const firebaseConfig = {
 			apiKey: "AIzaSyAJxCfAZKgG4vy_nd6UVX3UKhZAF0iyKl4",
 			authDomain: "unetei-bc717.firebaseapp.com",
@@ -46,7 +44,7 @@ include "mysql_myzar_item_remove_process.php";
 			measurementId: "G-Q1YLJDB3KC"
 		};
 		firebase.initializeApp(firebaseConfig);
-		
+
 		$(document).ready(function(){
 			<?php
 			if(isset($_COOKIE["uid"]) && isset($_COOKIE["phone"])){
@@ -65,7 +63,8 @@ include "mysql_myzar_item_remove_process.php";
 				$(".dropdown").hide();
 			});
 		});
-	</script>
+		</script>
+	</head>
 	
 	<body>
 		<div class="topbar">

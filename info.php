@@ -12,6 +12,7 @@ $path = "user_files";
 
 //variables
 $days_item_remove = 7;
+$category_count_limit_publisher_manager = 10;
 
 //email
 $smtp_host = "smtp.gmail.com";

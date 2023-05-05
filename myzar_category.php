@@ -1,5 +1,6 @@
 <?php
 include "mysql_config.php";
+include "info.php";
 ?>
 <script>
 var isMyZarCategoryAddIconValid = false;
@@ -76,7 +77,7 @@ function myzar_category_add_show(){
 	document.getElementById("myzar_category_enter_submit").disabled = true;
 	$("#myzar_category_enter_words").empty();
 	$("#myzar_category_enter_word_error").text("");
-	fetchWordsFromCategories();
+	if(selectedCategories.length > 0) fetchWordsFromCategories();
 }
 
 function myzar_category_enter_words(event) {
@@ -386,10 +387,54 @@ function myzar_category_fetch_list(tableID, parentID, title, icon, hasChildren, 
 		<div style="color: #c33473"><i class="fa-solid fa-circle-info" style="padding-right: 5px; color: #e77aaa"></i> Таны нэмсэн ангилал <b>буцаагдсан</b>.</div>
 	</div>
 	<div>
+		<?php
+		if($_COOKIE["role"]==0){
+			?>
+			<div id="myzar_category_add_button" onClick="javascript:confirmation_ok('Та хэрэглэгчийн эрхээ дээшлүүлнэ үү. <b>Тохиргоо</b> хэсэгт хэрэглэгчийн эрхээ дээшлүүлэх тохиргоо байгаа.')" class="button_yellow" style="background-color: #ccc; margin-left:10px; margin-bottom: 10px; width: 75px; float: left; height: 18px">
+				<i class="fa-solid fa-plus"></i>
+				<div style="margin-left: 5px">Ангилал нэмэх</div>
+			</div>
+			<?php
+		}
+		else if($_COOKIE["role"]==1 || $_COOKIE["role"]==2){
+			$countLimitCategory = getCountListCategory();
+			if($countLimitCategory<$category_count_limit_publisher_manager){
+				?>
+				<div id="myzar_category_add_button" onClick="myzar_category_add_show()" class="button_yellow" style="margin-left:10px; margin-bottom: 10px; width: 75px; float: left; height: 18px">
+					<i class="fa-solid fa-plus"></i>
+					<div style="margin-left: 5px">Ангилал нэмэх</div>
+				</div>
+				<?php
+			}
+			else {
+				?>
+				<div id="myzar_category_add_button" onClick="javascript:confirmation_ok('Та хэрэглэгчийн эрхийнхээ хүрээнд <?php echo $countLimitCategory; ?> ангилал нэмжээ, эсвэл та хэрэглэгчийн эрхээ дээшлүүлнэ үү.')" class="button_yellow" style="background-color: #ccc; margin-left:10px; margin-bottom: 10px; width: 75px; float: left; height: 18px">
+					<i class="fa-solid fa-plus"></i>
+					<div style="margin-left: 5px">Ангилал нэмэх</div>
+				</div>
+				<?php
+			}
+		}
+		else if($_COOKIE["role"]>2){
+		?>
 		<div id="myzar_category_add_button" onClick="myzar_category_add_show()" class="button_yellow" style="margin-left:10px; margin-bottom: 10px; width: 75px; float: left; height: 18px">
 			<i class="fa-solid fa-plus"></i>
 			<div style="margin-left: 5px">Ангилал нэмэх</div>
 		</div>
+		<?php
+		}
+	   	?>
+		<!--Category added list-->
 		<div id="myzar_content_category_list"></div>
 	</div>	
 </div>
+
+<?php
+function getCountListCategory(){
+	global $conn;
+	$count = 0;
+	for($i=1; $i<=4; $i++){
+		$count += mysqli_num_rows($conn->query("SELECT * FROM category".$i." WHERE userID=".$_COOKIE["userID"]));
+	}
+}
+?>
