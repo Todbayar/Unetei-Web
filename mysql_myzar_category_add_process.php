@@ -5,17 +5,28 @@ include "mysql_misc.php";
 include "info.php";
 
 if(isset($_REQUEST["tableID"]) && isset($_REQUEST["title"]) && isset($_FILES["iconfile"]) && isset($_REQUEST["parentID"])){
-	InsertCategoryEntry($_REQUEST["tableID"], $_COOKIE["userID"], htmlspecialchars(addslashes($_REQUEST["title"])), $_FILES["iconfile"], $_REQUEST["parentID"], htmlspecialchars(addslashes($_REQUEST["words"])));
+	if(isset($_REQUEST["type"])){
+		InsertCategoryEntry($_REQUEST["tableID"], $_COOKIE["userID"], htmlspecialchars(addslashes($_REQUEST["title"])), $_FILES["iconfile"], $_REQUEST["parentID"], htmlspecialchars(addslashes($_REQUEST["words"])), $_REQUEST["type"]);
+	}
+	else {
+		InsertCategoryEntry($_REQUEST["tableID"], $_COOKIE["userID"], htmlspecialchars(addslashes($_REQUEST["title"])), $_FILES["iconfile"], $_REQUEST["parentID"], htmlspecialchars(addslashes($_REQUEST["words"])), 0);
+	}
 }
 else if(isset($_REQUEST["tableID"]) && isset($_REQUEST["title"]) && !isset($_FILES["iconfile"]) && isset($_REQUEST["parentID"])){
-	InsertCategoryEntry($_REQUEST["tableID"], $_COOKIE["userID"], htmlspecialchars(addslashes($_REQUEST["title"])), null, $_REQUEST["parentID"], htmlspecialchars(addslashes($_REQUEST["words"])));
+	if(isset($_REQUEST["type"])){
+		InsertCategoryEntry($_REQUEST["tableID"], $_COOKIE["userID"], htmlspecialchars(addslashes($_REQUEST["title"])), null, $_REQUEST["parentID"], htmlspecialchars(addslashes($_REQUEST["words"])), $_REQUEST["type"]);
+	}
+	else {
+		InsertCategoryEntry($_REQUEST["tableID"], $_COOKIE["userID"], htmlspecialchars(addslashes($_REQUEST["title"])), null, $_REQUEST["parentID"], htmlspecialchars(addslashes($_REQUEST["words"])), 0);
+	}
 }
 else {
 	echo "Ангиллыг нэмхэд алдаа гарлаа!";
 }
 
-function InsertCategoryEntry($pTableID, $pUID , $pTitle, $pFile, $pParentID, $pWords){
+function InsertCategoryEntry($pTableID, $pUID , $pTitle, $pFile, $pParentID, $pWords, $type){
 	global $conn, $category_count_limit_publisher_manager;
+	$vType = $type != "undefined" ? $type : 0;
 	
 	$IsInsertCategoryOK = true;
 	if($pParentID == 0){
@@ -40,10 +51,10 @@ function InsertCategoryEntry($pTableID, $pUID , $pTitle, $pFile, $pParentID, $pW
 				if (move_uploaded_file($pFile["tmp_name"], "user_files/".$vNewFile)) {
 					$queryInsert = "";
 					if($pParentID == 0){
-						$queryInsert = "INSERT INTO category".$pTableID."(userID, title, words, icon) VALUES('".$pUID."','".$pTitle."','".$pWords."','".$vNewFile."')";
+						$queryInsert = "INSERT INTO category".$pTableID."(userID, title, words, icon, status) VALUES('".$pUID."','".$pTitle."','".$pWords."','".$vNewFile."',".$vType.")";
 					}
 					else {
-						$queryInsert = "INSERT INTO category".$pTableID."(userID, title, words, icon, parent) VALUES('".$pUID."','".$pTitle."','".$pWords."', '".$vNewFile."',".$pParentID.")";
+						$queryInsert = "INSERT INTO category".$pTableID."(userID, title, words, icon, parent, status) VALUES('".$pUID."','".$pTitle."','".$pWords."', '".$vNewFile."',".$pParentID.",".$vType.")";
 					}
 					$resultInsert = $conn->query($queryInsert);
 
@@ -67,11 +78,12 @@ function InsertCategoryEntry($pTableID, $pUID , $pTitle, $pFile, $pParentID, $pW
 			else {
 				$queryInsert = "";
 				if($pParentID == 0){
-					$queryInsert = "INSERT INTO category".$pTableID."(userID, title, words) VALUES('".$pUID."','".$pTitle."','".$pWords."')";
+					$queryInsert = "INSERT INTO category".$pTableID."(userID, title, words, status) VALUES('".$pUID."','".$pTitle."','".$pWords."',".$vType.")";
 				}
 				else {
-					$queryInsert = "INSERT INTO category".$pTableID."(userID, title, words, parent) VALUES('".$pUID."','".$pTitle."','".$pWords."',".$pParentID.")";
+					$queryInsert = "INSERT INTO category".$pTableID."(userID, title, words, parent, status) VALUES('".$pUID."','".$pTitle."','".$pWords."',".$pParentID.",".$vType.")";
 				}
+				echo $queryInsert;
 				$resultInsert = $conn->query($queryInsert);
 
 				if ($conn->connect_error) {

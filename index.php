@@ -129,6 +129,23 @@ include "mysql_myzar_item_remove_process.php";
 				</div>
 				<div id="myzar_category_enter_msg" class="msg"></div>
 				<div id="myzar_category_enter_error" class="error"></div>
+				<?php
+				if($_COOKIE["role"]>=2){
+				?>
+				<div style="margin-left: 10px">
+					<div>Ангиллын төрөл</div>
+					<div>
+						<div>
+							<input type="radio" id="myzar_category_enter_type" name="myzar_category_enter_type" value="0" checked="checked"><label for="myzar_category_enter_type">Энгийн</label>
+						</div>
+						<div>
+							<input type="radio" id="myzar_category_enter_type" name="myzar_category_enter_type" value="1"><label for="myzar_category_enter_type">Брэнд</label>
+						</div>
+					</div>
+				</div>
+				<?php
+				}
+				?>
 				<div id="myzar_category_enter_words" style="margin-left: 5px; margin-right: 5px"></div>
 				<input id="myzar_category_enter_words_input" class="words" type="text" maxlength="128" placeholder="Үгнүүд (заавал биш)" style="margin-top:5px; margin-left: 10px; margin-right: 10px; width: 90%; height: 20px; padding: 5px; font: normal 14px Arial; border-radius:10px" onkeypress="return myzar_category_enter_words(event)" />
 				<div style="margin-top:5px; margin-left: 10px; margin-right: 10px; font-size: 14px">

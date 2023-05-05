@@ -115,10 +115,12 @@ function myzar_category_enter_submit(tableID = null, id = null){
 			myZarCategoryEnterSubmitData.append("id", id);
 			categoryTableID = tableID;
 		}
+		
 		myZarCategoryEnterSubmitData.append("tableID", categoryTableID);
 		myZarCategoryEnterSubmitData.append("title", $("#myzar_category_enter_title").val().trim());
 		myZarCategoryEnterSubmitData.append("iconfile", $("#myzar_category_enter_icon_file")[0].files[0]);
 		myZarCategoryEnterSubmitData.append("parentID", categoryParentID);
+		myZarCategoryEnterSubmitData.append("type", $("#myzar_category_enter_type:checked").val());
 		myZarCategoryEnterSubmitData.append("words", getWordsFromCategory());
 
 		const reqMyZarCategoryAddSubmit = new XMLHttpRequest();
