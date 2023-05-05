@@ -52,6 +52,8 @@ if($isDuplication == 0){
 			}
 		}
 		else {
+			chat_send($userID, getAffiliateID($userID), 2, $itemID);
+			update_profile($name, $email, $city, $userID);
 			echo $itemID;
 		}
 	}
