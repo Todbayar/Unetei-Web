@@ -17,4 +17,13 @@ function getAffiliateID($id){
 	$rowSuperDuper = mysqli_fetch_array($resultSuperDuper);
 	return ($rowAffiliate["affiliate_id"] != null && $rowAffiliate["affiliate_id"] != "") ? $rowAffiliate["affiliate_id"] : $rowSuperDuper["id"];
 }
+
+function getCountListCategory(){
+	global $conn;
+	$count = 0;
+	for($i=1; $i<=4; $i++){
+		$count += mysqli_num_rows($conn->query("SELECT * FROM category".$i." WHERE userID=".$_COOKIE["userID"]));
+	}
+	return $count;
+}
 ?>

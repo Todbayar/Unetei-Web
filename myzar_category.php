@@ -1,5 +1,6 @@
 <?php
 include "mysql_config.php";
+include "mysql_misc.php";
 include "info.php";
 ?>
 <script>
@@ -428,13 +429,3 @@ function myzar_category_fetch_list(tableID, parentID, title, icon, hasChildren, 
 		<div id="myzar_content_category_list"></div>
 	</div>	
 </div>
-
-<?php
-function getCountListCategory(){
-	global $conn;
-	$count = 0;
-	for($i=1; $i<=4; $i++){
-		$count += mysqli_num_rows($conn->query("SELECT * FROM category".$i." WHERE userID=".$_COOKIE["userID"]));
-	}
-}
-?>

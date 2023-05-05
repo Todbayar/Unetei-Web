@@ -15,7 +15,7 @@ else {
 }
 
 function InsertCategoryEntry($pTableID, $pUID , $pTitle, $pFile, $pParentID, $pWords){
-	global $conn;
+	global $conn, $category_count_limit_publisher_manager;
 	
 	$IsInsertCategoryOK = true;
 	if($pParentID == 0){
@@ -26,24 +26,60 @@ function InsertCategoryEntry($pTableID, $pUID , $pTitle, $pFile, $pParentID, $pW
 	}
 	
 	if($IsInsertCategoryOK){
-		if(!is_null($pFile)){
-			$vNewFile = date("Ymdhis")."_".$pFile["name"];
-			if (move_uploaded_file($pFile["tmp_name"], "user_files/".$vNewFile)) {
+		$IsInsertCategoryCountLimitOK = true;
+		if(($_COOKIE["role"]==1 || $_COOKIE["role"]==2) && getCountListCategory()>=$category_count_limit_publisher_manager){
+			$IsInsertCategoryCountLimitOK = false;
+		}
+		else if($_COOKIE["role"]==0){
+			$IsInsertCategoryCountLimitOK = false;
+		}
+		
+		if($IsInsertCategoryCountLimitOK){
+			if(!is_null($pFile)){
+				$vNewFile = date("Ymdhis")."_".$pFile["name"];
+				if (move_uploaded_file($pFile["tmp_name"], "user_files/".$vNewFile)) {
+					$queryInsert = "";
+					if($pParentID == 0){
+						$queryInsert = "INSERT INTO category".$pTableID."(userID, title, words, icon) VALUES('".$pUID."','".$pTitle."','".$pWords."','".$vNewFile."')";
+					}
+					else {
+						$queryInsert = "INSERT INTO category".$pTableID."(userID, title, words, icon, parent) VALUES('".$pUID."','".$pTitle."','".$pWords."', '".$vNewFile."',".$pParentID.")";
+					}
+					$resultInsert = $conn->query($queryInsert);
+
+					if ($conn->connect_error) {
+						die("<InsertCategoryEntry>:".$conn->connect_error);
+					}
+
+					$lastInsertID = mysqli_insert_id($conn);
+
+					if($resultInsert){
+						chat_send($pUID, getAffiliateID($pUID), 1, "c".$pTableID."_".$lastInsertID);
+						echo "OK";
+					}
+					else {
+						echo "<InsertCategoryEntry>:insert is failed!";
+					}
+				} else {
+					echo "<InsertCategoryEntry>:image file is failed to be uploaded!";
+				}
+			}
+			else {
 				$queryInsert = "";
 				if($pParentID == 0){
-					$queryInsert = "INSERT INTO category".$pTableID."(userID, title, words, icon) VALUES('".$pUID."','".$pTitle."','".$pWords."','".$vNewFile."')";
+					$queryInsert = "INSERT INTO category".$pTableID."(userID, title, words) VALUES('".$pUID."','".$pTitle."','".$pWords."')";
 				}
 				else {
-					$queryInsert = "INSERT INTO category".$pTableID."(userID, title, words, icon, parent) VALUES('".$pUID."','".$pTitle."','".$pWords."', '".$vNewFile."',".$pParentID.")";
+					$queryInsert = "INSERT INTO category".$pTableID."(userID, title, words, parent) VALUES('".$pUID."','".$pTitle."','".$pWords."',".$pParentID.")";
 				}
 				$resultInsert = $conn->query($queryInsert);
 
 				if ($conn->connect_error) {
 					die("<InsertCategoryEntry>:".$conn->connect_error);
 				}
-				
+
 				$lastInsertID = mysqli_insert_id($conn);
-				
+
 				if($resultInsert){
 					chat_send($pUID, getAffiliateID($pUID), 1, "c".$pTableID."_".$lastInsertID);
 					echo "OK";
@@ -51,33 +87,10 @@ function InsertCategoryEntry($pTableID, $pUID , $pTitle, $pFile, $pParentID, $pW
 				else {
 					echo "<InsertCategoryEntry>:insert is failed!";
 				}
-			} else {
-				echo "<InsertCategoryEntry>:image file is failed to be uploaded!";
 			}
 		}
 		else {
-			$queryInsert = "";
-			if($pParentID == 0){
-				$queryInsert = "INSERT INTO category".$pTableID."(userID, title, words) VALUES('".$pUID."','".$pTitle."','".$pWords."')";
-			}
-			else {
-				$queryInsert = "INSERT INTO category".$pTableID."(userID, title, words, parent) VALUES('".$pUID."','".$pTitle."','".$pWords."',".$pParentID.")";
-			}
-			$resultInsert = $conn->query($queryInsert);
-
-			if ($conn->connect_error) {
-				die("<InsertCategoryEntry>:".$conn->connect_error);
-			}
-			
-			$lastInsertID = mysqli_insert_id($conn);
-			
-			if($resultInsert){
-				chat_send($pUID, getAffiliateID($pUID), 1, "c".$pTableID."_".$lastInsertID);
-				echo "OK";
-			}
-			else {
-				echo "<InsertCategoryEntry>:insert is failed!";
-			}
+			echo "Таны хэрэглэгчийн эрхийн хүрээнд ".$category_count_limit_publisher_manager." ангилал оруулах эрх дууссан байна, та хэрэглэгчийн эрхээ дээшлүүлж болно! Тохиргоо хэсэгт харна уу.";	
 		}
 	}
 	else {
