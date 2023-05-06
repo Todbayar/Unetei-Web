@@ -1,4 +1,7 @@
-<?php include "mysql_config.php"; ?>
+<?php 
+include "mysql_config.php"; 
+include "info.php";
+?>
 
 <meta charset="utf-8">
 
@@ -208,6 +211,50 @@
 }
 </style>
 
+<script>
+$(document).ready(function() {
+	recursiveFetchCategory(1, 0);
+	fetchItems();
+});
+				
+function fetchItems(){
+	$.post("mysql_item_list_process.php", function(data){
+//		console.log("<fetchItems>:" + data);
+	});
+}
+
+var categoryTableID, categoryParentID;
+	
+function recursiveFetchCategory(tableID, parentID){
+	
+	categoryTableID = tableID;
+	categoryParentID = parentID;
+	var myZarCategoryListData = new FormData();
+	myZarCategoryListData.append("tableID", tableID);
+	myZarCategoryListData.append("parentID", parentID);
+	const reqMyZarCategoryListData = new XMLHttpRequest();
+	reqMyZarCategoryListData.onload = function() {
+		console.log("<recursiveFetchCategory>:" + this.responseText);
+		const objCategoryList = JSON.parse(this.responseText);
+		if(objCategoryList.length > 0){
+			$(".searchCategoryListAvailable").empty();
+		   	for(let i=0; i<objCategoryList.length; i++){
+			   	if(parseInt(objCategoryList[i].active) == 2){
+				   	var html = "<div";
+				   	if(objCategoryList[i].count_category_children > 0) html += " onClick=\"recursiveFetchCategory("+(tableID+1)+","+objCategoryList[i].id+")\"";
+				   	html += " class=\"button_yellow\" style=\"float:left; margin:5px; height:18px; background: #f3f3f3\">";
+				   	if(objCategoryList[i].icon != null) html += "<img src=\"./<?php echo $path; ?>/"+objCategoryList[i].icon+"\" width=\"32px\" height=\"32px\">";
+				   	html += "<div style=\"margin-left: 5px\">"+objCategoryList[i].title+"</div></div>";
+				   	$(".searchCategoryListAvailable").append(html);
+			   	}
+		   	}
+	   	}
+	}
+	reqMyZarCategoryListData.open("POST", "mysql_myzar_category_list_process.php", true);
+	reqMyZarCategoryListData.send(myZarCategoryListData);
+}
+</script>
+
 <div class="mid" style="margin-top: 10px; margin-left: 5px;	margin-right: 5px; float: left; width: 100%">
 	<div style="display: flex">
 		<?php
@@ -230,16 +277,7 @@
 				<div style="margin-left: 5px">Компьютер сэлбэг хэрэгсэл</div>
 			</div>
 		</div>
-		<div id="searchCategoryListAvailable" class="searchCategoryListAvailable">
-			<div class="button_yellow" style="float:left; margin:5px; height:18px; background: transparent">
-				<img src="./user_files/20230404012333_Media-Design-Hydropro-V2-My-Computer.512.png" width="32px" height="32px">
-				<div style="margin-left: 5px">Компьютер сэлбэг хэрэгсэл</div>
-			</div>
-			<div class="button_yellow" style="float:left; margin:5px; height:18px; background: transparent">
-				<img src="./user_files/20230406120300_realestate.png" width="32px" height="32px">
-				<div style="margin-left: 5px">Үл хөдлөх</div>
-			</div>
-		</div>
+		<div id="searchCategoryListAvailable" class="searchCategoryListAvailable"></div>
 	</div>
 	<div class="searchResult">
 		<div class="type">Vip зар</div>
