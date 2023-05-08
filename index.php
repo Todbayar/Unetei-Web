@@ -266,7 +266,7 @@ include "mysql_myzar_item_remove_process.php";	//for auto removal of expired ite
 					$rowPriceRange = mysqli_fetch_array($conn->query("SELECT MAX(price) AS max, MIN(price) as min, (MAX(price)-MIN(price))/10 AS step FROM item"));
 					?>
 					<select id="searchPriceLimitLowest" style="width: 120px; height: 30px; font: normal 15px Arial; border-radius: 10px">
-						<option value="0" selected>Доод</option>
+						<option value="0" disabled selected>Доод</option>
 						<?php
 						for($price=$rowPriceRange["max"]; $price>=0; $price -= $rowPriceRange["step"]){
 							?>
@@ -276,7 +276,7 @@ include "mysql_myzar_item_remove_process.php";	//for auto removal of expired ite
 						?>
 					</select>
 					<select id="searchPriceLimitHighest" style="width: 120px; height: 30px; font: normal 15px Arial; border-radius: 10px">
-						<option value="0" selected>Дээд</option>
+						<option value="0" disabled selected>Дээд</option>
 						<?php
 						for($price=$rowPriceRange["max"]; $price>=0; $price -= $rowPriceRange["step"]){
 							?>
