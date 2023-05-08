@@ -212,9 +212,12 @@ include "info.php";
 </style>
 
 <script>
+var categoryTableID, categoryParentID, selectedCategories;
+	
 $(document).ready(function() {
 	recursiveFetchCategory(1, 0);
 	fetchItems();
+	selectedCategories = [];
 });
 				
 function fetchItems(){
@@ -222,11 +225,31 @@ function fetchItems(){
 //		console.log("<fetchItems>:" + data);
 	});
 }
-
-var categoryTableID, categoryParentID;
 	
-function recursiveFetchCategory(tableID, parentID){
+function recursiveFetchCategory(tableID, parentID, title, icon){
+	//removes hierarchical depth after current selected category
+	if(tableID < categoryTableID){
+		for(let i=tableID; i<=4; i++){
+			selectedCategories.splice(tableID-1, 1);
+			if($("#selectedCategory" + i).length) $("#selectedCategory" + i).remove();
+		}
+	}
 	
+	//showing selected categories
+	if(tableID > 1 && tableID > categoryTableID){
+		const selectedCategory = {tableID:categoryTableID, id:parentID, title:title, icon:icon};
+		selectedCategories[tableID-2] = selectedCategory;
+		console.log("<recursiveFetchCategory>:"+JSON.stringify(selectedCategories)+", " + icon);
+		var html = "<div id=\"selectedCategory"+categoryTableID+"\"";
+		html += " onClick=\"recursiveFetchCategory("+categoryTableID+","+categoryParentID+")\"";
+		html += " class=\"button_yellow\" style=\"float:left; margin:5px; height:18px; background: #ddf0ff\">";
+		if(icon != "null") html += "<img src=\"./<?php echo $path; ?>/"+icon+"\" width=\"32px\" height=\"32px\">";
+		html += "<div style=\"margin-left: 5px\">"+title+"</div><i class=\"fa-solid fa-xmark\" style=\"margin-left: 5px; color:#adcfea\"></i></div>";
+		$(".searchCategoryListSelected").append(html);
+	}
+	
+	//showing all categories recursively
+	$(".searchCategoryListAvailable").empty();
 	categoryTableID = tableID;
 	categoryParentID = parentID;
 	var myZarCategoryListData = new FormData();
@@ -234,14 +257,12 @@ function recursiveFetchCategory(tableID, parentID){
 	myZarCategoryListData.append("parentID", parentID);
 	const reqMyZarCategoryListData = new XMLHttpRequest();
 	reqMyZarCategoryListData.onload = function() {
-		console.log("<recursiveFetchCategory>:" + this.responseText);
 		const objCategoryList = JSON.parse(this.responseText);
 		if(objCategoryList.length > 0){
-			$(".searchCategoryListAvailable").empty();
 		   	for(let i=0; i<objCategoryList.length; i++){
-			   	if(parseInt(objCategoryList[i].active) == 2){
+			   	if(parseInt(objCategoryList[i].active) == 2 && (objCategoryList[i].count_category_children > 0 || objCategoryList[i].count_item_children > 0)){
 				   	var html = "<div";
-				   	if(objCategoryList[i].count_category_children > 0) html += " onClick=\"recursiveFetchCategory("+(tableID+1)+","+objCategoryList[i].id+")\"";
+				   	html += " onClick=\"recursiveFetchCategory("+(tableID+1)+","+objCategoryList[i].id+",'"+objCategoryList[i].title+"','"+objCategoryList[i].icon+"')\"";
 				   	html += " class=\"button_yellow\" style=\"float:left; margin:5px; height:18px; background: #f3f3f3\">";
 				   	if(objCategoryList[i].icon != null) html += "<img src=\"./<?php echo $path; ?>/"+objCategoryList[i].icon+"\" width=\"32px\" height=\"32px\">";
 				   	html += "<div style=\"margin-left: 5px\">"+objCategoryList[i].title+"</div></div>";
@@ -271,12 +292,7 @@ function recursiveFetchCategory(tableID, parentID){
 		</div>
 	</div>
 	<div class="searchCategoryList">
-		<div id="searchCategoryListSelected" class="searchCategoryListSelected">
-			<div class="button_yellow" style="float:left; margin:5px; height:18px; background: transparent">
-				<img src="./user_files/20230404012333_Media-Design-Hydropro-V2-My-Computer.512.png" width="32px" height="32px">
-				<div style="margin-left: 5px">Компьютер сэлбэг хэрэгсэл</div>
-			</div>
-		</div>
+		<div id="searchCategoryListSelected" class="searchCategoryListSelected"></div>
 		<div id="searchCategoryListAvailable" class="searchCategoryListAvailable"></div>
 	</div>
 	<div class="searchResult">
