@@ -1,6 +1,7 @@
 <?php 
 include "mysql_config.php";
-include "info.php"; 
+include "mysql_misc.php";
+include "info.php";
 include "mysql_myzar_item_remove_process.php";	//for auto removal of expired item
 ?>
 <!doctype html>
@@ -267,9 +268,9 @@ include "mysql_myzar_item_remove_process.php";	//for auto removal of expired ite
 					<select id="searchPriceLimitLowest" style="width: 120px; height: 30px; font: normal 15px Arial; border-radius: 10px">
 						<option value="0" selected>Доод</option>
 						<?php
-						for($price=$rowPriceRange["max"]; $price>=$rowPriceRange["min"]; $price=$price/$rowPriceRange["step"]){
+						for($price=$rowPriceRange["max"]; $price>=0; $price -= $rowPriceRange["step"]){
 							?>
-							<option value="<?php echo $price; ?>"><?php echo number_format($price); ?></option>
+							<option value="<?php echo convertPriceToNumber($price); ?>"><?php echo convertPriceToText($price); ?></option>
 							<?php
 						}
 						?>
@@ -277,9 +278,9 @@ include "mysql_myzar_item_remove_process.php";	//for auto removal of expired ite
 					<select id="searchPriceLimitHighest" style="width: 120px; height: 30px; font: normal 15px Arial; border-radius: 10px">
 						<option value="0" selected>Дээд</option>
 						<?php
-						for($price=$rowPriceRange["max"]; $price>=$rowPriceRange["min"]; $price -= $rowPriceRange["step"]){
+						for($price=$rowPriceRange["max"]; $price>=0; $price -= $rowPriceRange["step"]){
 							?>
-							<option value="<?php echo $price; ?>"><?php echo number_format($price); ?></option>
+							<option value="<?php echo convertPriceToNumber($price); ?>"><?php echo convertPriceToText($price); ?></option>
 							<?php
 						}
 						?>

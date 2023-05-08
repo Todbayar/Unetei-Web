@@ -26,4 +26,36 @@ function getCountListCategory(){
 	}
 	return $count;
 }
+
+function convertPriceToText($price){
+	$digits = explode(',', number_format($price));
+	switch(count($digits)-1){
+		case 4:
+			return $digits[0]." ихнаяд";
+		case 3:
+			return $digits[0]." тэрбум";
+		case 2:
+			return $digits[0]." сая";
+		case 1:
+			return $digits[0].",000";
+		case 0:
+			return number_format($price);
+	}
+}
+
+function convertPriceToNumber($price){
+	$digits = explode(',', number_format($price));
+	switch(count($digits)-1){
+		case 4:
+			return intval($digits[0]."000000000000");
+		case 3:
+			return intval($digits[0]."000000000");
+		case 2:
+			return intval($digits[0]."000000");
+		case 1:
+			return intval($digits[0]."000");
+		case 0:
+			return intval($price);
+	}
+}
 ?>
