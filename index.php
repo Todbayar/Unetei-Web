@@ -1,6 +1,7 @@
 <?php 
+include "mysql_config.php";
 include "info.php"; 
-include "mysql_myzar_item_remove_process.php";
+include "mysql_myzar_item_remove_process.php";	//for auto removal of expired item
 ?>
 <!doctype html>
 <html>
@@ -234,6 +235,88 @@ include "mysql_myzar_item_remove_process.php";
 					</div>
 				</div>
 				<button onClick="javascript:document.getElementsByClassName('popup billing')[0].style.display='none'; javascript:document.body.style.overflowY='auto'" class="button_yellow" style="margin-top: 10px; margin-left: auto; margin-right: auto">За</button>
+			</div>
+		</div>
+		
+		<div class="popup search">
+			<div class="container" style="width: 320px; top: 5vh">
+				<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('popup search')[0].style.display='none'; javascript:document.body.style.overflowY='auto'"></i>
+				<div class="header">Нарийвчлан хайх</div>
+				<div style="margin: 10px">
+					<label for="searchQuality">Шинэ/хуучин:</label>
+					<select id="searchQuality" style="width: 120px; height: 30px; font: normal 15px Arial; border-radius: 10px">
+						<option value="" selected>Бүгд</option>
+						<option value="0">Шинэ</option>
+						<option value="1">Хуучин</option>
+					</select>
+				</div>
+				<div style="margin: 10px">
+					<label for="searchOrder">Эрэбмэ:</label>
+					<select id="searchOrder" style="width: 180px; height: 30px; font: normal 15px Arial; border-radius: 10px">
+						<option value="0" selected>Огноогоор шинэ</option>
+						<option value="1">Огноогоор хуучин</option>
+						<option value="2">Хямд нь эхэндээ</option>
+						<option value="3">Үнэтэй нь эхэндээ</option>
+					</select>
+				</div>
+				<div style="margin: 10px">
+					<label for="searchPriceLimit">Үнэ:</label>
+					<?php
+					$rowPriceRange = mysqli_fetch_array($conn->query("SELECT MAX(price) AS max, MIN(price) as min, (MAX(price)-MIN(price))/10 AS step FROM item"));
+					?>
+					<select id="searchPriceLimitLowest" style="width: 120px; height: 30px; font: normal 15px Arial; border-radius: 10px">
+						<option value="0" selected>Доод</option>
+						<?php
+						for($price=$rowPriceRange["max"]; $price>=$rowPriceRange["min"]; $price=$price/$rowPriceRange["step"]){
+							?>
+							<option value="<?php echo $price; ?>"><?php echo number_format($price); ?></option>
+							<?php
+						}
+						?>
+					</select>
+					<select id="searchPriceLimitHighest" style="width: 120px; height: 30px; font: normal 15px Arial; border-radius: 10px">
+						<option value="0" selected>Дээд</option>
+						<?php
+						for($price=$rowPriceRange["max"]; $price>=$rowPriceRange["min"]; $price -= $rowPriceRange["step"]){
+							?>
+							<option value="<?php echo $price; ?>"><?php echo number_format($price); ?></option>
+							<?php
+						}
+						?>
+					</select>
+				</div>
+				<div style="margin: 10px">
+					<label for="searchCity">Байршил:</label>
+					<select id="searchCity" style="width: 203px; height: 30px; font: normal 15px Arial; border-radius: 10px">
+						<option value="" disabled selected>Сонгох</option>
+						<option value="Улаанбаатар">Улаанбаатар</option>
+						<option value="Архангай">Архангай</option>
+						<option value="Баян-Өлгий">Баян-Өлгий</option>
+						<option value="Баянхонгор">Баянхонгор</option>
+						<option value="Булган">Булган</option>
+						<option value="Говь-Алтай">Говь-Алтай</option>
+						<option value="Говьсүмбэр">Говьсүмбэр</option>
+						<option value="Дархан-Уул">Дархан-Уул</option>
+						<option value="Дорноговь">Дорноговь</option>
+						<option value="Дорнод">Дорнод</option>
+						<option value="Дундговь">Дундговь</option>
+						<option value="Завхан">Завхан</option>
+						<option value="Орхон">Орхон</option>
+						<option value="Өвөрхангай">Өвөрхангай</option>
+						<option value="Өмнөговь">Өмнөговь</option>
+						<option value="Сүхбаатар">Сүхбаатар</option>
+						<option value="Сэлэнгэ">Сэлэнгэ</option>
+						<option value="Төв">Төв</option>
+						<option value="Увс">Увс</option>
+						<option value="Ховд">Ховд</option>
+						<option value="Хөвсгөл">Хөвсгөл</option>
+						<option value="Хэнтий">Хэнтий</option>
+					</select>
+				</div>
+				<div style="display: flex; margin-top: 10px; justify-content: center">
+					<button onClick="" class="button_yellow">За</button>
+					<button onClick="" class="button_yellow" style="margin-left: 10px; background:rgb(240,85,87)">Арилгах</button>
+				</div>
 			</div>
 		</div>
 	</body>

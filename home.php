@@ -257,6 +257,7 @@ function recursiveFetchCategory(tableID, parentID, title, icon){
 	myZarCategoryListData.append("parentID", parentID);
 	const reqMyZarCategoryListData = new XMLHttpRequest();
 	reqMyZarCategoryListData.onload = function() {
+		console.log("<recursiveFetchCategory>:"+this.responseText);
 		const objCategoryList = JSON.parse(this.responseText);
 		if(objCategoryList.length > 0){
 		   	for(let i=0; i<objCategoryList.length; i++){
