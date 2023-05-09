@@ -1,6 +1,6 @@
 <?php
 include "mysql_config.php";
-include "mysql_misc.php";
+include_once "mysql_misc.php";
 include "info.php";
 ?>
 <script>

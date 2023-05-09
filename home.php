@@ -256,8 +256,7 @@ function recursiveFetchCategory(tableID, parentID, title, icon){
 	myZarCategoryListData.append("tableID", tableID);
 	myZarCategoryListData.append("parentID", parentID);
 	const reqMyZarCategoryListData = new XMLHttpRequest();
-	reqMyZarCategoryListData.onload = function() {
-		console.log("<recursiveFetchCategory>:"+this.responseText);
+	reqMyZarCategoryListData.onload = function(){
 		const objCategoryList = JSON.parse(this.responseText);
 		if(objCategoryList.length > 0){
 		   	for(let i=0; i<objCategoryList.length; i++){
@@ -275,6 +274,12 @@ function recursiveFetchCategory(tableID, parentID, title, icon){
 	reqMyZarCategoryListData.open("POST", "mysql_myzar_category_list_process.php", true);
 	reqMyZarCategoryListData.send(myZarCategoryListData);
 }
+
+function showSearch(){
+	window.scrollTo(0, 0);
+	$("body").css("overflow-y", "hidden");
+	$(".popup.search").show();
+}
 </script>
 
 <div class="mid" style="margin-top: 10px; margin-left: 5px;	margin-right: 5px; float: left; width: 100%">
@@ -284,7 +289,7 @@ function recursiveFetchCategory(tableID, parentID, title, icon){
 		$resultCountItems = $conn->query($queryCountItems);
 		?>
 		<input id="searchInput" class="searchInput" type="text" placeholder="<?php echo mysqli_num_rows($resultCountItems); ?> зар байна" />
-		<div class="button_yellow" style="margin-left: 10px; background: #42c200">
+		<div onClick="showSearch()" class="button_yellow" style="margin-left: 10px; background: #42c200">
 			<i class="fa-solid fa-circle-chevron-down" style="color: white"></i>
 		</div>
 		<div class="button_yellow" style="margin-left: 10px; background: #42c200">

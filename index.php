@@ -1,6 +1,6 @@
 <?php 
 include "mysql_config.php";
-include "mysql_misc.php";
+include_once "mysql_misc.php";
 include "info.php";
 include "mysql_myzar_item_remove_process.php";	//for auto removal of expired item
 ?>
@@ -65,6 +65,15 @@ include "mysql_myzar_item_remove_process.php";	//for auto removal of expired ite
 				$(".dropdown").hide();
 			});
 		});
+			
+		function clearSearch(){
+			$("#searchQuality option").eq(0).prop("selected", true);
+			$("#searchOrder option").eq(0).prop("selected", true);
+			$("#searchPriceLimitLowest option").eq(0).prop("selected", true);
+			$("#searchPriceLimitHighest option").eq(0).prop("selected", true);
+			$("#searchCity option").eq(0).prop("selected", true);
+			$("#searchRate option").eq(0).prop("selected", true);
+		}
 		</script>
 	</head>
 	
@@ -239,7 +248,7 @@ include "mysql_myzar_item_remove_process.php";	//for auto removal of expired ite
 			</div>
 		</div>
 		
-		<div class="popup search">
+		<div class="popup search" style="display: none">
 			<div class="container" style="width: 320px; top: 5vh">
 				<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('popup search')[0].style.display='none'; javascript:document.body.style.overflowY='auto'"></i>
 				<div class="header">Нарийвчлан хайх</div>
@@ -314,9 +323,17 @@ include "mysql_myzar_item_remove_process.php";	//for auto removal of expired ite
 						<option value="Хэнтий">Хэнтий</option>
 					</select>
 				</div>
+				<div style="margin: 10px">
+					<label for="searchRate">Эрэлт:</label>
+					<select id="searchRate" style="width: 120px; height: 30px; font: normal 15px Arial; border-radius: 10px">
+						<option value="" disabled selected>Сонгох</option>
+						<option value="0">Их</option>
+						<option value="1">Бага</option>
+					</select>
+				</div>
 				<div style="display: flex; margin-top: 10px; justify-content: center">
-					<button onClick="" class="button_yellow">За</button>
-					<button onClick="" class="button_yellow" style="margin-left: 10px; background:rgb(240,85,87)">Арилгах</button>
+					<button onClick="javascript:document.getElementsByClassName('popup search')[0].style.display='none'; javascript:document.body.style.overflowY='auto'" class="button_yellow">За</button>
+					<button onClick="clearSearch()" class="button_yellow" style="margin-left: 10px; background:rgb(240,85,87)">Арилгах</button>
 				</div>
 			</div>
 		</div>
