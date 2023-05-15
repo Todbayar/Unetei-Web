@@ -213,18 +213,14 @@ include "info.php";
 
 <script>
 var categoryTableID, categoryParentID, selectedCategories;
-	
+var searchType = -1;
+
 $(document).ready(function() {
 	recursiveFetchCategory(1, 0);
 	fetchItems();
 	selectedCategories = [];
+	$("#searchSubmit").click(fetchItems);
 });
-				
-function fetchItems(){
-	$.post("mysql_item_list_process.php", function(data){
-//		console.log("<fetchItems>:" + data);
-	});
-}
 	
 function recursiveFetchCategory(tableID, parentID, title, icon){
 	//removes hierarchical depth after current selected category
@@ -280,6 +276,20 @@ function showSearch(){
 	$("body").css("overflow-y", "hidden");
 	$(".popup.search").show();
 }
+
+function fetchItems(){
+//	console.log("<fetchItems>:"+);
+	$.post("mysql_item_list_process.php", {type:searchType,
+										   quality:$("#searchQuality option:selected").val(), 
+										   order:$("#searchOrder option:selected").val(),
+										   priceLowest:$("#searchPriceLimitLowest option:selected").val(),
+										   priceHighest:$("#searchPriceLimitHighest option:selected").val(),
+										   city:$("#searchCity option:selected").val(),
+										   rate:$("#searchRate option:selected").val(),
+										  }).done(function(data){
+		console.log("<fetchItems>:" + data);
+	});
+}
 </script>
 
 <div class="mid" style="margin-top: 10px; margin-left: 5px;	margin-right: 5px; float: left; width: 100%">
@@ -292,7 +302,7 @@ function showSearch(){
 		<div onClick="showSearch()" class="button_yellow" style="margin-left: 10px; background: #42c200">
 			<i class="fa-solid fa-circle-chevron-down" style="color: white"></i>
 		</div>
-		<div class="button_yellow" style="margin-left: 10px; background: #42c200">
+		<div id="searchSubmit" class="button_yellow" style="margin-left: 10px; background: #42c200">
 			<i class="fa-solid fa-magnifying-glass" style="color: white"></i>
 			<div class="removable" style="margin-left: 5px; color: white">Хайх</div>
 		</div>
