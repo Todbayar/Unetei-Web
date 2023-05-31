@@ -30,3 +30,8 @@
 		display:none;
 	}
 }
+
+.bottom {
+	height: 70px;
+	background: #42c200;
+}

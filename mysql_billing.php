@@ -6,11 +6,11 @@ include "info.php";
 if(isset($_POST["type"])){
 	if($_POST["type"] == "role"){
 		$phone = ($_POST["affiliate"] != "" && $_POST["affiliate"] != $_COOKIE["phone"]) ? $_POST["affiliate"] : $superduperadmin;
-		$query = "SELECT * FROM user WHERE phone=".$phone;
+		$query = "SELECT * FROM user WHERE phone='".$phone."'";
 		$result = $conn->query($query);
 		$affiliate = mysqli_fetch_array($result);
 		
-		$query = "SELECT * FROM user WHERE phone=".$_COOKIE["phone"];
+		$query = "SELECT * FROM user WHERE phone='".$_COOKIE["phone"]."'";
 		$result = $conn->query($query);
 		$requester = mysqli_fetch_array($result);
 		
@@ -43,6 +43,27 @@ if(isset($_POST["type"])){
 		$billing->number = $requester["phone"];
 		$billing->title = $requester["name"];
 		$billing->price = $price;
+		$billing->bank_name = $affiliate["bank_name"];
+		$billing->bank_owner = $affiliate["bank_owner"];
+		$billing->bank_account = $affiliate["bank_account"];
+		$billing->socialpay = $affiliate["socialpay"];
+		echo json_encode($billing);
+	}
+	else if($_POST["type"] == "item"){
+		$query = "SELECT * FROM user WHERE phone=".$_COOKIE["phone"];
+		$result = $conn->query($query);
+		$requester = mysqli_fetch_array($result);
+		$phone = $requester["affiliate"]!="" ? $requester["affiliate"] : $superduperadmin;
+		
+		$queryAffiliate = "SELECT * FROM user WHERE phone='".$phone."'";
+		$resultAffiliate = $conn->query($queryAffiliate);
+		$affiliate = mysqli_fetch_array($resultAffiliate);
+		
+		$billing = new stdClass();
+		$billing->type = "Зар нэмэх";
+		$billing->number = $_COOKIE["phone"];
+		$billing->title = $requester["name"];
+		$billing->price = 0;
 		$billing->bank_name = $affiliate["bank_name"];
 		$billing->bank_owner = $affiliate["bank_owner"];
 		$billing->bank_account = $affiliate["bank_account"];

@@ -26,5 +26,9 @@ $role_price_admin = number_format("300000");
 $role_price_manager = number_format("100000");
 $role_price_publisher = number_format("50000");
 
+//item publish option prices
+$item_publish_price_vip = number_format("20000");
+$item_publish_price_special = number_format("10000");
+
 $superduperadmin = "+97699213557";
 ?>

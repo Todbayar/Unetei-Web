@@ -18,6 +18,18 @@ if(isset($_POST["priceHighest"]) && $_POST["priceHighest"]>0){
 	$priceHighest = $_POST["priceHighest"];
 }
 
+if(isset($_POST["city"]) && $_POST["city"] != ""){
+	$search .= " city='".$_POST["city"]."' AND";
+}
+
+if(isset($_POST["search"]) && $_POST["search"] != ""){
+	$search .= " title LIKE '%".$_POST["search"]."%' AND";
+}
+
+if(isset($_POST["category"]) && $_POST["category"] != ""){
+	$search .= " category IN (".fetchRecursiveCategories($_POST["category"], false).") AND";
+}
+
 if(isset($_POST["order"]) && $_POST["order"] != ""){
 	switch($_POST["order"]){
 		case 0:
@@ -32,6 +44,15 @@ if(isset($_POST["order"]) && $_POST["order"] != ""){
 		case 3:
 			$order .= " ORDER BY price DESC";
 			break;
+	}
+}
+
+if(isset($_POST["rate"]) && $_POST["rate"] != ""){
+	if($_POST["rate"] == 0){
+		$order .= ",((item_viewer+phone_viewer)/2) DESC";
+	}
+	else if($_POST["rate"] == 1){
+		$order .= ",((item_viewer+phone_viewer)/2) ASC";
 	}
 }
 
@@ -68,35 +89,114 @@ if(isset($_POST["type"])){
 	
 	if($_POST["type"] == -1){
 		$arr = array();
-		$limit = " LIMIT 10";
+		$pageCount = 1;
+		$pageOffset = $_POST["page"]*$pageCount;
+		$limit = " LIMIT ".$pageOffset.",".$pageCount;
+		
 		//fetch first vip
-		echo $queryVip = "SELECT * FROM item WHERE status=2 AND".substr($search, 0, strrpos($search, "AND")).$order.$limit;
+		$queryCountItems = "SELECT * FROM item WHERE status=2 AND".substr($search, 0, strrpos($search, "AND"));
+		$rowCountItems = mysqli_num_rows($conn->query($queryCountItems));
+		$totalCountItems = $rowCountItems;
+		
+		$queryVip = "SELECT *, (SELECT COUNT(*) FROM images WHERE item=item.id) AS count_images, (SELECT image FROM images WHERE item=item.id LIMIT 1) AS image FROM item WHERE status=2 AND".substr($search, 0, strrpos($search, "AND")).$order.$limit;
 		$resultVip = $conn->query($queryVip);
 		while($rowVip = mysqli_fetch_object($resultVip)){
-			$arr[] = $rowVip;
+			$arr["data"][] = $rowVip;
 		}
+		
 		//fetch first special
-		$querySpecial = "SELECT * FROM item WHERE status=1 AND".substr($search, 0, strrpos($search, "AND")).$order.$limit;
+		$queryCountItems = "SELECT * FROM item WHERE status=1 AND".substr($search, 0, strrpos($search, "AND"));
+		$rowCountItemsSpecial = mysqli_num_rows($conn->query($queryCountItems));
+		$totalCountItems += $rowCountItemsSpecial;
+		if($rowCountItems<$rowCountItemsSpecial) $rowCountItems=$rowCountItemsSpecial;
+		
+		$querySpecial = "SELECT *, (SELECT COUNT(*) FROM images WHERE item=item.id) AS count_images, (SELECT image FROM images WHERE item=item.id LIMIT 1) AS image FROM item WHERE status=1 AND".substr($search, 0, strrpos($search, "AND")).$order.$limit;
 		$resultSpecial = $conn->query($querySpecial);
 		while($rowSpecial = mysqli_fetch_object($resultSpecial)){
-			$arr[] = $rowSpecial;
+			$arr["data"][] = $rowSpecial;
 		}
+		
 		//fetch first regular
-		$queryRegular = "SELECT * FROM item WHERE status=0 AND".substr($search, 0, strrpos($search, "AND")).$order.$limit;
+		$queryCountItems = "SELECT * FROM item WHERE status=1 AND".substr($search, 0, strrpos($search, "AND"));
+		$rowCountItemsRegular = mysqli_num_rows($conn->query($queryCountItems));
+		$totalCountItems += $rowCountItemsRegular;
+		if($rowCountItems<$rowCountItemsRegular) $rowCountItems=$rowCountItemsRegular;
+		
+		$queryRegular = "SELECT *, (SELECT COUNT(*) FROM images WHERE item=item.id) AS count_images, (SELECT image FROM images WHERE item=item.id LIMIT 1) AS image FROM item WHERE status=0 AND".substr($search, 0, strrpos($search, "AND")).$order.$limit;
 		$resultRegular = $conn->query($queryRegular);
 		while($rowRegular = mysqli_fetch_object($resultRegular)){
-			$arr[] = $rowRegular;
+			$arr["data"][] = $rowRegular;
 		}
+		
+		$arr["page"]["offset"] = $_POST["page"];	//index
+		$arr["page"]["perpage"] = $pageCount;
+		$arr["page"]["countItems"] = $totalCountItems;
+		$arr["page"]["countPages"] = ceil($rowCountItems/$pageCount);
+		$arr["queryPage"] = $queryCountItems;
+		
 		echo json_encode($arr);
 	}
 	else {
-		$limit = " LIMIT 60";
-		echo $query = "SELECT * FROM item WHERE status=".$_POST["type"]." AND ".substr($search, 0, strrpos($search, "AND")).$order.$limit;
-		$result = $conn->query($query);
-		while($rowRegular = mysqli_fetch_object($result)){
-			$arr[] = $row;
+		$arr = array();
+		$pageCount = 2;
+		$pageOffset = $_POST["page"]*$pageCount;
+		$limit = " LIMIT ".$pageOffset.",".$pageCount;
+		
+		$query = "SELECT *, (SELECT COUNT(*) FROM images WHERE item=item.id) AS count_images, (SELECT image FROM images WHERE item=item.id LIMIT 1) AS image FROM item WHERE ".substr($search, 0, strrpos($search, "AND"));
+		
+		$queryCountItems = "SELECT * FROM item WHERE ".substr($search, 0, strrpos($search, "AND"));
+		$rowCountItems = mysqli_num_rows($conn->query($queryCountItems));
+		
+		$arr["page"]["offset"] = $_POST["page"];	//index
+		$arr["page"]["perpage"] = $pageCount;
+		$arr["page"]["countItems"] = $rowCountItems;
+		$arr["page"]["countPages"] = ceil($rowCountItems/$pageCount);
+		$arr["query"] = $query;
+		$arr["queryPage"] = $queryCountItems;
+		
+		$result = $conn->query($query.$order.$limit);
+		while($row = mysqli_fetch_object($result)){
+			$arr["data"][] = $row;
 		}
 		echo json_encode($arr);
+	}
+}
+
+function fetchRecursiveCategories($categories, $isDone){
+	global $conn;
+	if($categories != "" && $isDone === false){
+		$tableID = 0;
+		$id = 0;
+		if(strpos($categories,",")!==false){
+			$split = explode(",", $categories);
+			$splita = explode("_", trim($split[count($split)-1],"'"));
+			$tableID = intval(substr($splita[0], 1));
+			$id = intval($splita[1]);
+		}
+		else {
+			$splita = explode("_", trim($categories,"'"));
+			$tableID = intval(substr($splita[0], 1));
+			$id = intval($splita[1]);
+		}
+		
+		if($tableID == 4){
+			return $categories;
+		}
+		else {
+			$query = "SELECT id FROM category".($tableID+1)." WHERE parent=".$id." AND active=2";
+			$result = $conn->query($query);
+			if(mysqli_num_rows($result) > 0){
+				while($row = mysqli_fetch_array($result)){
+					return fetchRecursiveCategories($categories.",'c".($tableID+1)."_".$row["id"]."'", false);
+				}
+			}
+			else {
+				return fetchRecursiveCategories($categories, true);
+			}
+		}
+	}
+	else {
+		return $categories;
 	}
 }
 ?>

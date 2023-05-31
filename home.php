@@ -1,4 +1,4 @@
-<?php 
+<?php
 include "mysql_config.php"; 
 include "info.php";
 ?>
@@ -42,6 +42,15 @@ include "info.php";
 	font: bold 20px Arial;
 	padding-left: 5px;
 	margin-bottom: 5px;
+	display: flex;
+}
+	
+.searchResult .type .button_yellow {
+	font: normal 12px Arial;
+	width: 45px;
+	height: 18px;
+	padding: 2px;
+	text-align: center;
 }
 
 .searchResult .list {
@@ -133,16 +142,26 @@ include "info.php";
 .searchResult .list .item .image img {
 	width: 100%;
 	height: 100%;
-	object-fit: contain;
+	object-fit: cover;
+	border-radius: 10px;
+}
+
+.searchResult .list .item .image iframe {
+	width: 100%;
+	height: 100%;
+	border-radius: 10px;
+}
+	
+.searchResult .list .item .image video {
+	width: 100%;
+	height: 152px;
+	border-radius: 10px;
 }
 
 /* For Mobile */
 @media screen and (max-width: 540px) {
 	.searchResult .list .item {
 		width: 165px;
-	}
-	.searchResult .list .item .image img {
-		border-radius: 10px;
 	}
 }
 
@@ -170,12 +189,13 @@ include "info.php";
 	right: 5px;
 	bottom: 5px;
 	font-size: 22px;
-	opacity: 0.73;
+	opacity: 0.9;
 	color: gray;
+	z-index: 1;
 }
 
 .searchResult .list .item .image .fa-star:hover {
-	opacity: 0.73;
+	opacity: 0.9;
 	color: #FFA718;
 }
 
@@ -198,6 +218,7 @@ include "info.php";
 	float: left;
 	width: 100%;
 	display: flex;
+	margin-top: 20px;
 	margin-bottom: 20px;
 	font: bold 18px Arial;
 	cursor: pointer;
@@ -206,22 +227,99 @@ include "info.php";
 }
 
 .searchPage .page {
-	margin-left: 10px;
-	margin-right: 10px;
+	margin-left: 3px;
+	margin-right: 3px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 8px;
+	padding-right: 8px;
+}
+	
+.searchPage .page:not(.nohover):hover {
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 8px;
+	padding-right: 8px;
+	background: #ddf0ff;
+	border-radius: 100%;
+	text-decoration: underline;
+	text-decoration-thickness: 3px;
 }
 </style>
+
+<script src="misc.js"></script>
 
 <script>
 var categoryTableID, categoryParentID, selectedCategories;
 var searchType = -1;
+var searchPage = 0;
+var searchPageRangeCount = 2;
+var searchPageLast = 0;
 
 $(document).ready(function() {
 	recursiveFetchCategory(1, 0);
 	fetchItems();
 	selectedCategories = [];
 	$("#searchSubmit").click(fetchItems);
-});
 	
+	$("#moreVip").click(function(){
+		searchType = 2;
+		searchPage = 0;
+		fetchItems();
+	});
+	
+	$("#moreSpecial").click(function(){
+		searchType = 1;
+		searchPage = 0;
+		fetchItems();
+	});
+	
+	$("#moreRegular").click(function(){
+		searchType = 0;
+		searchPage = 0;
+		fetchItems();
+	});
+	
+	$("#searchInput").keyup(function(){
+		searchPage = 0;
+		fetchItems();
+	});
+	
+	$("#searchQuality").change(function(){
+		searchPage = 0;
+		console.log("<searchQuality>:"+searchPage);
+	});
+	
+	$("#searchPriceLimitLowest").change(function(){
+		searchPage = 0;
+		console.log("<searchPriceLimitLowest>:"+searchPage);
+	});
+	
+	$("#searchPriceLimitHighest").change(function(){
+		searchPage = 0;
+		console.log("<searchPriceLimitHighest>:"+searchPage);
+	});
+	
+	$("#searchCity").change(function(){
+		searchPage = 0;
+		console.log("<searchCity>:"+searchPage);
+	});
+	
+	$("#pagePrev").click(function(){
+		if(searchPage>0){
+			searchPage--;
+			fetchItems();
+		}
+	});
+	
+	$("#pageNext").click(function(){
+		if(searchPage<searchPageLast){
+			searchPage++;
+			fetchItems();
+		}
+	});
+});
+
 function recursiveFetchCategory(tableID, parentID, title, icon){
 	//removes hierarchical depth after current selected category
 	if(tableID < categoryTableID){
@@ -229,19 +327,22 @@ function recursiveFetchCategory(tableID, parentID, title, icon){
 			selectedCategories.splice(tableID-1, 1);
 			if($("#selectedCategory" + i).length) $("#selectedCategory" + i).remove();
 		}
+		searchPage = 0;
+		fetchItems();
 	}
 	
 	//showing selected categories
 	if(tableID > 1 && tableID > categoryTableID){
 		const selectedCategory = {tableID:categoryTableID, id:parentID, title:title, icon:icon};
 		selectedCategories[tableID-2] = selectedCategory;
-		console.log("<recursiveFetchCategory>:"+JSON.stringify(selectedCategories)+", " + icon);
 		var html = "<div id=\"selectedCategory"+categoryTableID+"\"";
 		html += " onClick=\"recursiveFetchCategory("+categoryTableID+","+categoryParentID+")\"";
 		html += " class=\"button_yellow\" style=\"float:left; margin:5px; height:18px; background: #ddf0ff\">";
 		if(icon != "null") html += "<img src=\"./<?php echo $path; ?>/"+icon+"\" width=\"32px\" height=\"32px\">";
 		html += "<div style=\"margin-left: 5px\">"+title+"</div><i class=\"fa-solid fa-xmark\" style=\"margin-left: 5px; color:#adcfea\"></i></div>";
 		$(".searchCategoryListSelected").append(html);
+		searchPage = 0;
+		fetchItems();
 	}
 	
 	//showing all categories recursively
@@ -277,17 +378,139 @@ function showSearch(){
 	$(".popup.search").show();
 }
 
+function pageAt(offset){
+	searchPage = offset;
+	fetchItems();
+}
+	
 function fetchItems(){
-//	console.log("<fetchItems>:"+);
-	$.post("mysql_item_list_process.php", {type:searchType,
-										   quality:$("#searchQuality option:selected").val(), 
-										   order:$("#searchOrder option:selected").val(),
-										   priceLowest:$("#searchPriceLimitLowest option:selected").val(),
-										   priceHighest:$("#searchPriceLimitHighest option:selected").val(),
-										   city:$("#searchCity option:selected").val(),
-										   rate:$("#searchRate option:selected").val(),
-										  }).done(function(data){
-		console.log("<fetchItems>:" + data);
+	$("#listVip").empty();
+	$("#listSpecial").empty();
+	$("#listRegular").empty();
+	
+	$("#typeVip").hide();
+	$("#typeSpecial").hide();
+	$("#typeRegular").hide();
+	
+	const vCategory = typeof selectedCategories !== "undefined" && selectedCategories.length > 0 ? "'c"+selectedCategories[selectedCategories.length-1].tableID+"_"+selectedCategories[selectedCategories.length-1].id+"'" : "";	
+	
+	$.post("mysql_item_list_process.php", {type:searchType, page:searchPage, category:vCategory, search:$("#searchInput").val(), quality:$("#searchQuality option:selected").val(), order:$("#searchOrder option:selected").val(), priceLowest:$("#searchPriceLimitLowest option:selected").val(), priceHighest:$("#searchPriceLimitHighest option:selected").val(), city:$("#searchCity option:selected").val(), rate:$("#searchRate option:selected").val()}).done(function(responseText){
+		const vObj = JSON.parse(responseText);
+		$("#searchInput").prop("placeholder",vObj.page.countItems+" зар байна");
+		searchPageLast = vObj.page.countPages-1;
+		
+		if(searchPage==0){
+			$("#pagePrev").hide();
+		}
+		else {
+			$("#pagePrev").show();
+		}
+		
+		if(searchPage==searchPageLast){
+			$("#pageNext").hide();
+		}
+		else {
+			$("#pageNext").show();
+		}
+		
+		if(vObj.page.countPages>1){
+			$(".searchPage").show();
+			$(".searchPage #pageNumbers").empty();
+			for(var offset=0; offset<vObj.page.countPages; offset++){
+				const beforeRange = Math.sign(searchPage-searchPageRangeCount)>-1?searchPage-searchPageRangeCount:0;
+				const afterRange = (searchPage+searchPageRangeCount)<vObj.page.countPages?searchPage+searchPageRangeCount:vObj.page.countPages;
+				if(offset>=beforeRange && offset<=afterRange){
+					if(offset==searchPage){
+						$(".searchPage #pageNumbers").append("<div onClick=\"pageAt("+offset+")\" class=\"page\" style=\"text-decoration: underline; text-decoration-thickness:3px\">"+(offset+1)+"</div>");
+					}
+					else {
+						$(".searchPage #pageNumbers").append("<div onClick=\"pageAt("+offset+")\" class=\"page\">"+(offset+1)+"</div>");
+					}
+				}
+				else {
+					if($(".searchPage #pageNumbers .page.nohover.before").length==0 && offset>=beforeRange){
+						$(".searchPage #pageNumbers").append("<div class=\"page nohover before\">&hellip;</div>");
+					}
+					if($(".searchPage #pageNumbers .page.nohover.after").length==0 && offset<=afterRange){
+						$(".searchPage #pageNumbers").append("<div class=\"page nohover after\">&hellip;</div>");
+					}
+				}
+			}
+	   	}
+		else {
+			$(".searchPage").hide();
+		}
+		
+		if(vObj.data != null){
+			for(var i=0; i<vObj.data.length; i++){
+				var media = "";
+				if(vObj.data[i].image != null){
+					if(vObj.data[i].status == 2){
+						media = "<div class=\"image\"><div class=\"badge_vip\" data-top=\"VIP\"></div><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i><i class=\"fa-solid fa-star\"></i><img src=\"<?php echo $path."/"; ?>"+vObj.data[i].image+"\" onerror=\"this.onerror=null; this.src='image-solid.svg'\" /></div>";
+					}
+					else if(vObj.data[i].status == 1){
+						media = "<div class=\"image\"><div class=\"badge_special\" data-top=\"Онцгой\"></div><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i><i class=\"fa-solid fa-star\"></i><img src=\"<?php echo $path."/"; ?>"+vObj.data[i].image+"\" onerror=\"this.onerror=null; this.src='image-solid.svg'\" /></div>";
+					}
+					else if(vObj.data[i].status == 0){
+						media = "<div class=\"image\"><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i><i class=\"fa-solid fa-star\"></i><img src=\""+vObj.data[i].image+"\" onerror=\"this.onerror=null; this.src='image-solid.svg'\" /></div>";
+					}
+				}
+				else if(vObj.data[i].youtube != ""){
+					if(vObj.data[i].status == 2){
+						media = "<div class=\"image\"><div class=\"badge_vip\" data-top=\"VIP\"></div><i class=\"fa-solid fa-star\"></i><iframe src=\""+vObj.data[i].youtube+"\" allowfullscreen></iframe></div>";
+					}
+					else if(vObj.data[i].status == 1){
+						media = "<div class=\"image\"><div class=\"badge_special\" data-top=\"Онцгой\"></div><i class=\"fa-solid fa-star\"></i><iframe src=\""+vObj.data[i].youtube+"\" allowfullscreen></iframe></div>";
+					}
+					else if(vObj.data[i].status == 0){
+						media = "<div class=\"image\"><i class=\"fa-solid fa-star\"></i><iframe src=\""+vObj.data[i].youtube+"\" allowfullscreen></iframe></div>";
+					}
+				}
+				else if(vObj.data[i].video != ""){
+					if(vObj.data[i].status == 2){
+						media = "<div class=\"image\"><div class=\"badge_vip\" data-top=\"VIP\"></div><i class=\"fa-solid fa-star\"></i><video controls=\"controls\" preload=\"metadata\" style=\"border-radius: 5px\"><source src=\"<?php echo $path."/"; ?>"+vObj.data[i].video+"#t=0.5\" type=\""+findTypeOfVideo(vObj.data[i].video)+"\"></video></div>";
+					}
+					else if(vObj.data[i].status == 1){
+						media = "<div class=\"image\"><div class=\"badge_special\" data-top=\"Онцгой\"></div><i class=\"fa-solid fa-star\"></i><video controls=\"controls\" preload=\"metadata\" style=\"border-radius: 5px\"><source src=\"<?php echo $path."/"; ?>"+vObj.data[i].video+"#t=0.5\" type=\""+findTypeOfVideo(vObj.data[i].video)+"\"></video></div>";
+					}
+					else if(vObj.data[i].status == 0){
+						media = "<div class=\"image\"><i class=\"fa-solid fa-star\"></i><video controls=\"controls\" preload=\"metadata\" style=\"border-radius: 5px\"><source src=\"<?php echo $path."/"; ?>"+vObj.data[i].video+"#t=0.5\" type=\""+findTypeOfVideo(vObj.data[i].video)+"\"></video></div>";
+					}
+				}
+
+				var html = "<div class=\"item\">"+media+"<div class=\"price\">"+convertPriceToTextJS(vObj.data[i].price)+" ₮</div><div class=\"title\">"+vObj.data[i].title+"</div></div>";
+
+				if(searchType == -1){
+					if(vObj.data[i].status==2){
+						$("#typeVip").show();
+						$("#listVip").append(html);
+					}
+					else if(vObj.data[i].status==1){
+						$("#typeSpecial").show();
+						$("#listSpecial").append(html);
+					}
+					else if(vObj.data[i].status==0){
+						$("#typeRegular").show();
+						$("#listRegular").append(html);
+					}
+				}
+				else if(searchType == 2){
+					$("#typeVip").show();
+					$("#moreVip").hide();
+					$("#listVip").append(html);
+				}
+				else if(searchType == 1){
+					$("#typeSpecial").show();
+					$("#moreSpecial").hide();
+					$("#listSpecial").append(html);
+				}
+				else if(searchType == 0){
+					$("#typeRegular").show();
+					$("#moreRegular").hide();
+					$("#listRegular").append(html);
+				}
+			}
+		}
 	});
 }
 </script>
@@ -312,64 +535,17 @@ function fetchItems(){
 		<div id="searchCategoryListAvailable" class="searchCategoryListAvailable"></div>
 	</div>
 	<div class="searchResult">
-		<div class="type">Vip зар</div>
-		<div class="list">
-			<div class="item">
-				<div class="image">
-					<div class="badge_vip" data-top="VIP"></div>
-					<i class="count"><i class="fa-solid fa-camera"></i> 3</i>
-					<i class="fa-solid fa-star"></i>
-					<img src="https://cdn1.unegui.mn/media/cache2/f0/7a/f07a79ef67097299821b90f8d17e82f1.jpg" />
-				</div>
-				<div class="price">180,000 ₮</div>
-				<div class="title">Uniqlo брэндийн үслэг цамц</div>
-			</div>
-			<div class="item">
-				<div class="image">
-					<div class="badge_vip" data-top="VIP"></div>
-					<i class="count"><i class="fa-solid fa-camera"></i> 3</i>
-					<i class="fa-solid fa-star"></i>
-					<img src="https://cdn1.unegui.mn/media/cache2/f0/7a/f07a79ef67097299821b90f8d17e82f1.jpg" />
-				</div>
-				<div class="price">180,000 ₮</div>
-				<div class="title">Uniqlo брэндийн үслэг цамц</div>
-			</div>
-			<div class="item">
-				<div class="image">
-					<div class="badge_vip" data-top="VIP"></div>
-					<i class="count"><i class="fa-solid fa-camera"></i> 3</i>
-					<i class="fa-solid fa-star"></i>
-					<img src="https://cdn1.unegui.mn/media/cache2/f0/7a/f07a79ef67097299821b90f8d17e82f1.jpg" />
-				</div>
-				<div class="price">180,000 ₮</div>
-				<div class="title">Uniqlo брэндийн үслэг цамц</div>
-			</div>
-			<div class="item">
-				<div class="image">
-					<div class="badge_vip" data-top="VIP"></div>
-					<i class="count"><i class="fa-solid fa-camera"></i> 3</i>
-					<i class="fa-solid fa-star"></i>
-					<img src="https://cdn1.unegui.mn/media/cache2/f0/7a/f07a79ef67097299821b90f8d17e82f1.jpg" />
-				</div>
-				<div class="price">180,000 ₮</div>
-				<div class="title">Uniqlo брэндийн үслэг цамц</div>
-			</div>
-			<div class="item">
-				<div class="image">
-					<div class="badge_vip" data-top="VIP"></div>
-					<i class="count"><i class="fa-solid fa-camera"></i> 3</i>
-					<i class="fa-solid fa-star"></i>
-					<img src="https://cdn1.unegui.mn/media/cache2/f0/7a/f07a79ef67097299821b90f8d17e82f1.jpg" />
-				</div>
-				<div class="price">180,000 ₮</div>
-				<div class="title">Uniqlo брэндийн үслэг цамц</div>
+		<div id="typeVip" class="type" style="display: none">Vip зар 
+			<div id="moreVip" class="button_yellow" style="margin-left: 10px; background: #42c200">
+				<i class="fa-solid fa-eye" style="color: white"></i>
+				<div style="margin-left: 5px; color: white">Бүгд</div>
 			</div>
 		</div>
-		<div class="type">Онцгой зар</div>
-		<div class="list">
+		<div id="listVip" class="list">
+<!--
 			<div class="item">
 				<div class="image">
-					<div class="badge_special" data-top="Онцгой"></div>
+					<div class="badge_vip" data-top="VIP"></div>
 					<i class="count"><i class="fa-solid fa-camera"></i> 3</i>
 					<i class="fa-solid fa-star"></i>
 					<img src="https://cdn1.unegui.mn/media/cache2/f0/7a/f07a79ef67097299821b90f8d17e82f1.jpg" />
@@ -379,7 +555,7 @@ function fetchItems(){
 			</div>
 			<div class="item">
 				<div class="image">
-					<div class="badge_special" data-top="Онцгой"></div>
+					<div class="badge_vip" data-top="VIP"></div>
 					<i class="count"><i class="fa-solid fa-camera"></i> 3</i>
 					<i class="fa-solid fa-star"></i>
 					<img src="https://cdn1.unegui.mn/media/cache2/f0/7a/f07a79ef67097299821b90f8d17e82f1.jpg" />
@@ -389,7 +565,7 @@ function fetchItems(){
 			</div>
 			<div class="item">
 				<div class="image">
-					<div class="badge_special" data-top="Онцгой"></div>
+					<div class="badge_vip" data-top="VIP"></div>
 					<i class="count"><i class="fa-solid fa-camera"></i> 3</i>
 					<i class="fa-solid fa-star"></i>
 					<img src="https://cdn1.unegui.mn/media/cache2/f0/7a/f07a79ef67097299821b90f8d17e82f1.jpg" />
@@ -399,7 +575,7 @@ function fetchItems(){
 			</div>
 			<div class="item">
 				<div class="image">
-					<div class="badge_special" data-top="Онцгой"></div>
+					<div class="badge_vip" data-top="VIP"></div>
 					<i class="count"><i class="fa-solid fa-camera"></i> 3</i>
 					<i class="fa-solid fa-star"></i>
 					<img src="https://cdn1.unegui.mn/media/cache2/f0/7a/f07a79ef67097299821b90f8d17e82f1.jpg" />
@@ -409,17 +585,84 @@ function fetchItems(){
 			</div>
 			<div class="item">
 				<div class="image">
-					<div class="badge_special" data-top="Онцгой"></div>
+					<div class="badge_vip" data-top="VIP"></div>
 					<i class="count"><i class="fa-solid fa-camera"></i> 3</i>
 					<i class="fa-solid fa-star"></i>
 					<img src="https://cdn1.unegui.mn/media/cache2/f0/7a/f07a79ef67097299821b90f8d17e82f1.jpg" />
 				</div>
 				<div class="price">180,000 ₮</div>
 				<div class="title">Uniqlo брэндийн үслэг цамц</div>
+			</div>
+-->
+		</div>
+		<div id="typeSpecial" class="type" style="display: none">Онцгой зар
+			<div id="moreSpecial" class="button_yellow" style="margin-left: 10px; background: #42c200">
+				<i class="fa-solid fa-eye" style="color: white"></i>
+				<div style="margin-left: 5px; color: white">Бүгд</div>
 			</div>
 		</div>
-		<div class="type">Энгийн зар</div>
-		<div class="list">
+		<div id="listSpecial" class="list">
+<!--
+			<div class="item">
+				<div class="image">
+					<div class="badge_special" data-top="Онцгой"></div>
+					<i class="count"><i class="fa-solid fa-camera"></i> 3</i>
+					<i class="fa-solid fa-star"></i>
+					<img src="https://cdn1.unegui.mn/media/cache2/f0/7a/f07a79ef67097299821b90f8d17e82f1.jpg" />
+				</div>
+				<div class="price">180,000 ₮</div>
+				<div class="title">Uniqlo брэндийн үслэг цамц</div>
+			</div>
+			<div class="item">
+				<div class="image">
+					<div class="badge_special" data-top="Онцгой"></div>
+					<i class="count"><i class="fa-solid fa-camera"></i> 3</i>
+					<i class="fa-solid fa-star"></i>
+					<img src="https://cdn1.unegui.mn/media/cache2/f0/7a/f07a79ef67097299821b90f8d17e82f1.jpg" />
+				</div>
+				<div class="price">180,000 ₮</div>
+				<div class="title">Uniqlo брэндийн үслэг цамц</div>
+			</div>
+			<div class="item">
+				<div class="image">
+					<div class="badge_special" data-top="Онцгой"></div>
+					<i class="count"><i class="fa-solid fa-camera"></i> 3</i>
+					<i class="fa-solid fa-star"></i>
+					<img src="https://cdn1.unegui.mn/media/cache2/f0/7a/f07a79ef67097299821b90f8d17e82f1.jpg" />
+				</div>
+				<div class="price">180,000 ₮</div>
+				<div class="title">Uniqlo брэндийн үслэг цамц</div>
+			</div>
+			<div class="item">
+				<div class="image">
+					<div class="badge_special" data-top="Онцгой"></div>
+					<i class="count"><i class="fa-solid fa-camera"></i> 3</i>
+					<i class="fa-solid fa-star"></i>
+					<img src="https://cdn1.unegui.mn/media/cache2/f0/7a/f07a79ef67097299821b90f8d17e82f1.jpg" />
+				</div>
+				<div class="price">180,000 ₮</div>
+				<div class="title">Uniqlo брэндийн үслэг цамц</div>
+			</div>
+			<div class="item">
+				<div class="image">
+					<div class="badge_special" data-top="Онцгой"></div>
+					<i class="count"><i class="fa-solid fa-camera"></i> 3</i>
+					<i class="fa-solid fa-star"></i>
+					<img src="https://cdn1.unegui.mn/media/cache2/f0/7a/f07a79ef67097299821b90f8d17e82f1.jpg" />
+				</div>
+				<div class="price">180,000 ₮</div>
+				<div class="title">Uniqlo брэндийн үслэг цамц</div>
+			</div>
+-->
+		</div>
+		<div id="typeRegular" class="type" style="display: none">Энгийн зар
+			<div id="moreRegular" class="button_yellow" style="margin-left: 10px; background: #42c200">
+				<i class="fa-solid fa-eye" style="color: white"></i>
+				<div style="margin-left: 5px; color: white">Бүгд</div>
+			</div>
+		</div>
+		<div id="listRegular" class="list">
+<!--
 			<div class="item">
 				<div class="image">
 					<i class="count"><i class="fa-solid fa-camera"></i> 3</i>
@@ -429,14 +672,17 @@ function fetchItems(){
 				<div class="price">180,000 ₮</div>
 				<div class="title">Uniqlo брэндийн үслэг цамц</div>
 			</div>
+-->
 		</div>
 	</div>
-	<div class="searchPage">
-		<div class="page">Өмнөх</div>
-		<div class="page">1</div>
-		<div class="page">2</div>
-		<div class="page">...</div>
-		<div class="page">15</div>
-		<div class="page">Дараах</div>
+	<div class="searchPage" style="display: none">
+		<div id="pagePrev" class="page">Өмнөх</div>
+		<div id="pageNumbers" style="display: flex">
+			<div class="page">1</div>
+			<div class="page">2</div>
+	<!--	<div id="page" class="page">...</div>-->
+			<div class="page">15</div>
+		</div>
+		<div id="pageNext" class="page">Дараах</div>
 	</div>
 </div>

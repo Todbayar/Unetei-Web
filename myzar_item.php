@@ -1,9 +1,11 @@
 <script src="myzar_item_add.js"></script>
 <script src="myzar_item_edit.js"></script>
 
-<?php include "myzar_item_form.php"; ?>
-
-<?php include "mysql_config.php"; ?>
+<?php 
+include "mysql_config.php";
+include "myzar_item_form.php"; 
+include_once "mysql_misc.php";
+?>
 
 <style>
 .myzar_content_list_items {
@@ -213,7 +215,7 @@ mysqli_free_result($resultFetchListItemsStateCountInActive);
 				}
 				?>
 				<td valign="top" style="padding-left: 5px">
-					<div class="myzar_content_list_item_title" style="font: bold 16px Arial"><?php echo $rowFetchListItems["title"]." (".number_format($rowFetchListItems["price"])." ₮)"; ?></div>
+					<div class="myzar_content_list_item_title" style="font: bold 16px Arial"><?php echo $rowFetchListItems["title"]." (".convertPriceToText($rowFetchListItems["price"])." ₮)"; ?></div>
 					<div class="myzar_content_list_item_expire" style="font: normal 14px Arial; color: #6ab001">Дуусах огноо: <?php echo $expire_datetime; ?>. Шинэчлэхэд <?php echo $days_remain; ?> өдөр дутуу.</div>
 					<div class="myzar_content_list_item_category" style="font: normal 14px Arial; color: #999999">
 						<?php

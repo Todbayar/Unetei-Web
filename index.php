@@ -8,8 +8,10 @@ include "mysql_myzar_item_remove_process.php";	//for auto removal of expired ite
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title><?php echo $title; ?></title>
+		<meta http-equiv="Permissions-Policy" content="interest-cohort=()">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+		<title><?php echo $title; ?></title>
 		
 		<script src="https://www.gstatic.com/firebasejs/9.12.1/firebase-app-compat.js"></script>
 		<script src="https://www.gstatic.com/firebasejs/9.12.1/firebase-auth-compat.js"></script>
@@ -105,6 +107,9 @@ include "mysql_myzar_item_remove_process.php";	//for auto removal of expired ite
 			?>
 			</div>
 		</div>
+		<div class="bottom">
+		</div>
+		
 		<!--here comes footer-->
 		<div class="popup yesno" style="display: none">
 			<div class="container">
@@ -179,7 +184,7 @@ include "mysql_myzar_item_remove_process.php";	//for auto removal of expired ite
 						<ul style="font-size: 14px">
 							<li>Өөрийн дагагчдаас <i>орлого</i> хүлээн авах</li>
 							<li>Хязгааргүй ангилал нэмэх эсвэл брэнд үүсгэх</li>
-							<li>Хязгааргүй зар нэмэх</li>
+							<li>Хязгааргүй VIP, Онцгой, Энгийн зар нэмэх</li>
 							<li>Удирдах <i>бүрэн эрх</i>, хүсэлтүүдийг хянах</li>
 							<li>Бизнесийн хөгжүүлэлтэнд саналаа хэлэх</li>
 						</ul>
@@ -190,7 +195,7 @@ include "mysql_myzar_item_remove_process.php";	//for auto removal of expired ite
 						<ul style="font-size: 14px">
 							<li>Өөрийн дагагчдаас <i>орлого</i> хүлээн авах</li>
 							<li>Хязгааргүй ангилал нэмэх эсвэл брэнд үүсгэх</li>
-							<li>Хязгааргүй зар нэмэх</li>
+							<li>Хязгааргүй VIP, Онцгой, Энгийн зар нэмэх</li>
 							<li>Удирдах <i>хязгаарлагдмал эрх</i>, хүсэлтүүдийг хянах</li>
 						</ul>
 					</div>
@@ -200,7 +205,7 @@ include "mysql_myzar_item_remove_process.php";	//for auto removal of expired ite
 						<ul style="font-size: 14px">
 							<li>Өөрийн дагагчдаас <i>орлого</i> хүлээн авах</li>
 							<li>10 ангилал нэмэх эсвэл брэнд үүсгэх</li>
-							<li>Хязгааргүй зар нэмэх</li>
+							<li>Хязгааргүй Энгийн зар нэмэх</li>
 						</ul>
 					</div>
 					<div class="selection">
@@ -208,7 +213,7 @@ include "mysql_myzar_item_remove_process.php";	//for auto removal of expired ite
 						<div style="margin-left: 25px"><?php echo $role_price_publisher; ?> ₮</div>
 						<ul style="font-size: 14px">
 							<li>10 ангилал нэмэх</li>
-							<li>Хязгааргүй зар нэмэх</li>
+							<li>Хязгааргүй Энгийн зар нэмэх</li>
 						</ul>
 					</div>
 				</div>
@@ -335,6 +340,45 @@ include "mysql_myzar_item_remove_process.php";	//for auto removal of expired ite
 					<button onClick="javascript:document.getElementsByClassName('popup search')[0].style.display='none'; javascript:document.body.style.overflowY='auto'" class="button_yellow">За</button>
 					<button onClick="clearSearch()" class="button_yellow" style="margin-left: 10px; background:rgb(240,85,87)">Арилгах</button>
 				</div>
+			</div>
+		</div>
+		
+		<div class="popup item_publish_option" style="display: none">
+			<div class="container" style="width: 320px; top: 5vh">
+				<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('popup item_publish_option')[0].style.display='none'; javascript:document.body.style.overflowY='auto'"></i>
+				<div class="header">Нийтлэх нөхцөл</div>
+				<div id="category" class="category"><i class="fas fa-angle-right"></i></div>
+				<div id="title" class="title"></div>
+				
+				<div class="options">
+					<div class="selection">
+						<div style="font: bold 16px Arial"><input type="radio" id="publish_option" name="publish_option" value="2"> VIP</div>						
+						<div style="margin-left: 25px"><?php echo $_COOKIE["role"]>=3 ? "Үнэгүй" : $item_publish_price_vip; ?> ₮</div>
+						<ul style="font-size: 14px">
+							<li>Facebook ads хийх хүсэлт</li>
+							<li>Онцгой заруудын дээр</li>
+							<li>10 хоног нийтлэгдэнэ</li>
+						</ul>
+					</div>
+					<div class="selection">
+						<div style="font: bold 16px Arial"><input type="radio" id="publish_option" name="publish_option" value="1"> Онцгой</div>
+						<div style="margin-left: 25px"><?php echo $_COOKIE["role"]>=3 ? "Үнэгүй" : $item_publish_price_special; ?> ₮</div>
+						<ul style="font-size: 14px">
+							<li>Энгийн заруудын дээр</li>
+							<li>20 хоног нийтлэгдэнэ</li>
+						</ul>
+					</div>
+					<div class="selection">
+						<div style="font: bold 16px Arial"><input type="radio" id="publish_option" name="publish_option" value="0"> Энгийн</div>
+						<div style="margin-left: 25px">Үнэгүй</div>
+						<ul style="font-size: 14px">
+							<li>30 хоног нийтлэгдэнэ</li>
+							<li>Онцгой заруудын доор байрлана</li>
+							<li>Бусад зараас тодорч харагдахгүй</li>
+						</ul>
+					</div>
+				</div>
+				<button onClick="publishItemSubmit(<?php echo $_COOKIE["role"]; ?>)" id="buttonPublish" class="button_yellow" style="margin-top: 10px; margin-left: auto; margin-right: auto" disabled>Нийтлэх</button>
 			</div>
 		</div>
 	</body>

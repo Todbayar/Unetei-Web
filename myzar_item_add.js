@@ -1,7 +1,10 @@
 var selectedCategory = [];
+var selectedCategoryTitles = [];
 var selectedImagesIndex = 0;
 var selectedImagesNames = [];
 var selectedVideoName = "";
+var selectedPublishOption;
+var itemData;
 
 function initMap() {
   const myLatLng = { lat: 47.919126, lng: 106.917510 };
@@ -25,6 +28,21 @@ $(document).ready(function(){
 		myzar_item_categories(JSON.parse(sessionStorage.getItem("selectedCategoryHier")), null);
 		sessionStorage.removeItem("selectedCategoryHier");
 	}
+	
+	$(".popup.item_publish_option input[name='publish_option']").change(function(){
+		selectedPublishOption = $(this);
+		itemData.set("status", selectedPublishOption.val());
+		$(".popup.item_publish_option #buttonPublish").attr("disabled", false);
+	});
+	
+	$(".popup.item_publish_option .selection").click(function(){
+		if(selectedPublishOption != null) selectedPublishOption.find("input").prop("checked", false);
+		selectedPublishOption = $(this);
+		const findSelPubOpt = selectedPublishOption.find("input");
+		findSelPubOpt.prop("checked", true);
+		itemData.set("status", findSelPubOpt.val());
+		$(".popup.item_publish_option #buttonPublish").attr("disabled", false);
+	});
 });
 
 function myzar_item_categories(hierCategories, words){
@@ -32,6 +50,7 @@ function myzar_item_categories(hierCategories, words){
 	const selectedCategoryHier = hierCategories;
 	for(let i=0; i<selectedCategoryHier.length; i++){
 		selectedCategory[i] = selectedCategoryHier[i].id;
+		selectedCategoryTitles[i] = selectedCategoryHier[i].title;
 		if(selectedCategoryHier[i].icon != ""){
 			$(".myzar_content_add_item_selected_categories").append("<div class=\"button_yellow\" style=\"margin-left:10px; margin-bottom: 10px; float: left; background: #e1e5e8; height:18px\"><div style=\"display:flex; align-items: center\"><img src=\"./user_files/"+selectedCategoryHier[i].icon+"\" width=\"32px\" height=\"32px\" style=\"margin-left: 5px\" /><div style=\"margin-left: 5px\">"+selectedCategoryHier[i].title+"</div></div></div>");
 		}
@@ -197,6 +216,25 @@ function myzar_item_video_remove(){
 }
 
 function myzar_item_add_submit(){
+	itemData = getItemDataForm();
+	if(itemData != ""){
+		window.scrollTo(0, 0);
+		$("body").css("overflow-y", "hidden");
+		$(".popup.item_publish_option").show();
+		$(".popup.item_publish_option .title").html(itemData.get("title"));
+		$(".popup.item_publish_option .category").empty();
+		selectedCategoryTitles.forEach(function(title, index, arr){
+			if(selectedCategoryTitles.length-1>index){
+		   		$(".popup.item_publish_option .category").append(title+"<i class=\"fas fa-angle-right\" style=\"font-size:12px; margin-left:2px; margin-right:2px\"></i>");
+			}
+			else {
+				$(".popup.item_publish_option .category").append(title);
+			}
+		});
+	}
+}
+
+function publishItemSubmit(role){
 	const reqMyZarItemAdd = new XMLHttpRequest();
 	reqMyZarItemAdd.onload = function() {
 		if(this.responseText == "Fail 58"){
@@ -210,19 +248,43 @@ function myzar_item_add_submit(){
 		}
 		else {
 			$(".myzar_content_add_item").hide();
-			var eventOk = new CustomEvent("itemAddDone");
-			window.addEventListener("itemAddDone", function(){
-				location.reload();
-			});
-//			information("success", "fa-solid fa-file-pen", "Зар амжилттай <b>нэмэгдэж</b>, шалгагдаж байна.", 6, eventInfo);
-			confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Зар амжилттай <b>нэмэгдэж</b>, шалгагдаж байна.", eventOk);
+			
+			const itemAddedID = this.responseText;
+			const selPriceOpt = $(".popup.item_publish_option input[name='publish_option']:checked").val();
+			const itemPrice = selPriceOpt==1?convertPriceToTextJS(10000.00):selPriceOpt==2?convertPriceToTextJS(20000.00):0;
+			$(".popup.item_publish_option").hide();
+			
+			if(role>=3 || selPriceOpt==0){
+				var eventOk = new CustomEvent("itemAddDone");
+				window.addEventListener("itemAddDone", function(){
+					location.reload();
+				});
+	//			information("success", "fa-solid fa-file-pen", "Зар амжилттай <b>нэмэгдэж</b>, шалгагдаж байна.", 6, eventInfo);
+				confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Зар амжилттай <b>нэмэгдэж</b>, шалгагдаж байна.", eventOk);
+			}
+			else {
+				$.post("mysql_billing.php", {type:"item"}).done(function (response){
+					$(".popup.billing").show();
+					const res = JSON.parse(response);
+					$(".popup.billing .container #billing_type").html("Зар нэмэх");
+					$(".popup.billing .container #billing_number").html("#" + itemAddedID);
+					$(".popup.billing .container #billing_title").html(itemData.get("title"));
+					$(".popup.billing .container #billing_price").html(itemPrice + " ₮");
+					$(".popup.billing .container #billing_bank #name").html("<b>" + res.bank_name + "</b>");
+					$(".popup.billing .container #billing_bank #account").html("<b>" + res.bank_account + "</b>");
+					$(".popup.billing .container #billing_bank #owner").html("<b>" + res.bank_owner + "</b>");
+					$(".popup.billing .container #billing_socialpay img").attr("src", "user_files/"+res.socialpay);
+					
+					$(".popup.billing .container .button_yellow").click(function(){
+						location.reload();
+					});
+				});
+			}
 		}
 	};
 	reqMyZarItemAdd.onerror = function(){
 		console.log("<error>:" + reqMyZarItemAdd.status);
 	};
 	reqMyZarItemAdd.open("POST", "mysql_myzar_item_add_process.php", true);
-	
-	var myZarItemAddSubmitData = getItemDataForm();
-	if(myZarItemAddSubmitData !== "") reqMyZarItemAdd.send(myZarItemAddSubmitData);
+	if(itemData !== "") reqMyZarItemAdd.send(itemData);	
 }

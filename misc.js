@@ -206,3 +206,29 @@ function convertRoleInString(role){
     }
 	return vRole;
 }
+
+function findTypeOfVideo(name){
+	const type = name.substr(name.lastIndexOf(".")+1);
+	if(type == "mp4"){
+		return "video/mp4";
+   	}
+	else if(type == "mov"){
+		return "video/quicktime";
+	}
+}
+
+function convertPriceToTextJS(number){
+	var vNumber = parseFloat(number).toLocaleString("en-US").toString().split(",");
+	switch(vNumber.length-1){
+		case 4:
+			return vNumber[0]+" ихнаяд";
+		case 3:
+			return vNumber[0]+" тэрбум";
+		case 2:
+			return vNumber[0]+" сая";
+		case 1:
+			return vNumber[0]+",000";
+		case 0:
+			return parseFloat(number).toLocaleString("en-US");
+	}
+}

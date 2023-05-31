@@ -18,6 +18,7 @@ $city = $_REQUEST["city"];
 $name = $_REQUEST["name"];
 $email = (isset($_REQUEST["email"]) && filter_var($_REQUEST["email"], FILTER_VALIDATE_EMAIL)) ? $_REQUEST["email"] : "";
 $phone = (isset($_REQUEST["phone"])) ? $_REQUEST["phone"] : "";
+$status = $_REQUEST["status"];
 
 $queryDuplication = "SELECT * FROM item WHERE title='".$title."' AND userID=".$userID." AND category='".$category."'";
 $resultDuplication = $conn->query($queryDuplication);
@@ -27,7 +28,16 @@ if($isDuplication == 0){
 		$phone = $_COOKIE["phone"];
 	}
 	
-	$queryItem = "INSERT INTO item (title, quality, address, price, youtube, video, extras, description, city, name, phone, email, userID, category, item_viewer, phone_viewer, datetime, expire_days, isactive) VALUES ('".$title."', ".$quality.", '".$address."', ".$price.", '".$youtube."', '".$video."', '".$extras."', '".$description."', '".$city."', '".$name."', '".$phone."', '".$email."', ".$userID.", '".$category."', 0, 0, '".date("Y-m-d h:i:s")."', 14, 1)";
+	$days = 30;
+	if($status == 2){
+		$days = 10;
+	}
+	else {
+		$days = 20;
+	}
+	
+	$queryItem = "INSERT INTO item (title, quality, address, price, youtube, video, extras, description, city, name, phone, email, userID, category, item_viewer, phone_viewer, datetime, expire_days, status, isactive) VALUES ('".$title."', ".$quality.", '".$address."', ".$price.", '".$youtube."', '".$video."', '".$extras."', '".$description."', '".$city."', '".$name."', '".$phone."', '".$email."', ".$userID.", '".$category."', 0, 0, '".date("Y-m-d h:i:s")."', ".$days.", ".$status.", 1)";
+	
 	$resultItem = $conn->query($queryItem);
 	if($resultItem){
 		$itemID = mysqli_insert_id($conn);
@@ -43,7 +53,7 @@ if($isDuplication == 0){
 				}
 			}
 			if($isImagesInsert){
-				chat_send($userID, getAffiliateID($userID), 2, $itemID);
+				chat_send($userID, getAffiliateID($userID), 2, $itemID, false);
 				update_profile($name, $email, $city, $userID);
 				echo $itemID;
 			}
@@ -52,7 +62,7 @@ if($isDuplication == 0){
 			}
 		}
 		else {
-			chat_send($userID, getAffiliateID($userID), 2, $itemID);
+			chat_send($userID, getAffiliateID($userID), 2, $itemID, false);
 			update_profile($name, $email, $city, $userID);
 			echo $itemID;
 		}

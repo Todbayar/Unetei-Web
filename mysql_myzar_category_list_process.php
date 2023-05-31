@@ -6,7 +6,7 @@ if(isset($_REQUEST["tableID"]) && isset($_REQUEST["parentID"])){
 	$parentID = $_REQUEST["parentID"];
 	$query = "";
 
-	if($tableID == 1){ 
+	if($tableID == 1){
 		$query = "SELECT *, (SELECT COUNT(*) FROM category2 WHERE parent=category1.id) AS count_category_children, (SELECT COUNT(*) FROM item WHERE category=CONCAT('c1_', category1.id)) AS count_item_children FROM category1";
 	}
 	else if($tableID == 4){
