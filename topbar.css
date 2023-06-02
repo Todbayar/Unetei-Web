@@ -1,5 +1,5 @@
 @charset "utf-8";
-/* CSS Document */
+
 .topbar {
 	height: 70px;
 	background: #42c200;
@@ -29,9 +29,4 @@
 	.removable {
 		display:none;
 	}
-}
-
-.bottom {
-	height: 70px;
-	background: #42c200;
 }

@@ -31,4 +31,8 @@ $item_publish_price_vip = number_format("20000");
 $item_publish_price_special = number_format("10000");
 
 $superduperadmin = "+97699213557";
+
+//pages
+$pageCountHome = 10;
+$pageCountList = 60;
 ?>

@@ -382,7 +382,7 @@ function pageAt(offset){
 	searchPage = offset;
 	fetchItems();
 }
-	
+
 function fetchItems(){
 	$("#listVip").empty();
 	$("#listSpecial").empty();
@@ -478,7 +478,7 @@ function fetchItems(){
 					}
 				}
 
-				var html = "<div class=\"item\">"+media+"<div class=\"price\">"+convertPriceToTextJS(vObj.data[i].price)+" ₮</div><div class=\"title\">"+vObj.data[i].title+"</div></div>";
+				var html = "<div class=\"item\" onClick=\"pagenavigation('detail&id="+vObj.data[i].id+"')\">"+media+"<div class=\"price\">"+convertPriceToTextJS(vObj.data[i].price)+" ₮</div><div class=\"title\">"+vObj.data[i].title+"</div></div>";
 
 				if(searchType == -1){
 					if(vObj.data[i].status==2){

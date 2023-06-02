@@ -28,12 +28,31 @@ include "mysql_myzar_item_remove_process.php";	//for auto removal of expired ite
 		<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
 		
 		<style>
-		body {
+		@font-face {
+			font-family: "RobotoRegular";
+			src: url("include/Fonts/Roboto/Roboto-Regular.ttf");
+			src: url("include/Fonts/Roboto/roboto-regular-webfont.woff") format("woff"),
+			/*
+			url("CustomFont.otf") format("opentype"),
+			url("CustomFont.svg#filename") format("svg");
+			*/
+		}
+		@font-face {
+			font-family: "RobotoBold";
+			src: url("include/Fonts/Roboto/Roboto-Bold.ttf");
+		}
+			
+		body.main {
+/*			background: #ccc;*/
 			border: 0;
 			padding: 0;
 			margin: 0;
 			font-family: "Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, "sans-serif";
-/*				overflow-y: hidden;*/
+			/*overflow-y: hidden;*/
+			position: relative;
+			width: 100%;
+    		max-width: 100%;
+			height: 100%;
 		}
 		</style>
 		
@@ -79,7 +98,7 @@ include "mysql_myzar_item_remove_process.php";	//for auto removal of expired ite
 		</script>
 	</head>
 	
-	<body>
+	<body class="main">
 		<div class="topbar">
 			<div class="wrap">
 			<?php include "topbar.php"; ?>
@@ -99,6 +118,9 @@ include "mysql_myzar_item_remove_process.php";	//for auto removal of expired ite
 					case "chat":
 						include "chat.php";
 						break;
+					case "detail":
+						include "detail.php";
+						break;
 				}
 			}
 			else {
@@ -107,7 +129,7 @@ include "mysql_myzar_item_remove_process.php";	//for auto removal of expired ite
 			?>
 			</div>
 		</div>
-		<div class="bottom">
+		<div class="bottom" style="display: none">
 		</div>
 		
 		<!--here comes footer-->
