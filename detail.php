@@ -131,11 +131,196 @@ include_once "info.php";
 	border-radius: 5px;
 	cursor: pointer;
 }
+
+.detailMain .left .words {
+	margin-top: 10px;
+	display: inline-block;
+/*	justify-content: space-around;*/
+	font-size: 16px;
+	font-family: RobotoRegular;
+	column-count: 2;
+	width: 100%;
+}
+
+.detailMain .left .words div {
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-top: -1px;
+	padding: 10px 0;
+	border-top: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+	break-inside: avoid;
+	width: 100%;
+}
+	
+.detailMain .left .description {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	font-size: 16px;
+    line-height: 21px;
+}
 	
 .detailMain .right {
 	margin-left: 10px;
 	margin-right: 5px;
 }
+	
+.detailMain .left .list .item {
+/*	max-height: 230px;*/
+	float: left;
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-top: 5px;
+	margin-bottom: 10px;
+	cursor: pointer;
+	position: relative;
+}
+	
+.detailMain .left .list .item .badge_vip {
+	position: absolute;
+	top: 0px;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	pointer-events: none;
+	overflow: hidden;
+}
+	
+.detailMain .left .list .item .badge_vip::after {
+	position: absolute;
+    background-color: #f00;
+    content: attr(data-top);
+    left: -33px;
+	top: 13px;
+    height: 25px;
+    width: 115px;
+    -ms-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    font-size: 14px;
+    color: #fff;
+    font-family: 'Arial';
+    line-height: 26px;
+    text-align: center;
+	box-shadow: 2px 2px 5px #888888;
+}
+	
+.detailMain .left .list .item .badge_special {
+	position: absolute;
+	top: 0px;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	pointer-events: none;
+	overflow: hidden;
+}
+	
+.detailMain .left .list .item .badge_special::after {
+	position: absolute;
+    background-color: #00d300;
+    content: attr(data-top);
+    left: -33px;
+	top: 13px;
+    height: 25px;
+    width: 115px;
+    -ms-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    font-size: 14px;
+    color: #fff;
+    font-family: 'Arial';
+    line-height: 26px;
+    text-align: center;
+	box-shadow: 2px 2px 5px #888888;
+}
+
+.detailMain .left .list .item:hover {
+	background: #f3f3f3;
+	border-radius: 10px;
+	box-shadow: 2px 2px 10px #888888;
+}
+
+.detailMain .left .list .item .image {
+	width: 100%;
+	height: 152px;
+	background: #f3f3f3;
+	border-radius: 10px;
+	position: relative;
+}
+	
+.detailMain .left .list .item .image img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	border-radius: 10px;
+}
+
+.detailMain .left .list .item .image iframe {
+	width: 100%;
+	height: 100%;
+	border-radius: 10px;
+}
+	
+.detailMain .left .list .item .image video {
+	width: 100%;
+	height: 152px;
+	border-radius: 10px;
+}
+
+/* For Mobile */
+@media screen and (max-width: 540px) {
+	.detailMain .left .list .item {
+		width: 165px;
+	}
+}
+
+/* For Tablets and Desktop */
+@media screen and (min-width: 540px) {
+	.detailMain .left .list .item {
+		width: 190px;	
+	}
+}
+	
+.detailMain .left .list .item .image .count {
+	color: white; 
+	background: gray;
+	opacity: 0.73; 
+	font-size: 13px;
+	padding: 5px;
+	position: absolute;
+	right: 0;
+	border-bottom-left-radius: 5px;
+	border-top-right-radius: 10px;
+}
+
+.detailMain .left .list .item .image .fa-star {
+	position: absolute;
+	right: 5px;
+	bottom: 5px;
+	font-size: 22px;
+	opacity: 0.9;
+	color: gray;
+	z-index: 1;
+}
+
+.detailMain .left .list .item .image .fa-star:hover {
+	opacity: 0.9;
+	color: #FFA718;
+}
+
+.detailMain .left .list .item .price {
+	font: bold 18px Arial;
+	margin-top: 5px;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+	
+.detailMain .left .list .item .title {
+	font: normal 18px Arial;
+	margin-top: 5px;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+}
+
 </style>
 
 <script>
@@ -170,7 +355,7 @@ if(isset($_GET["id"])){
 	
 	//rate calculate
 	$joinedCategories = implode(",",$arrCategories["id"]);
-	echo $queryRateList = "SELECT *, (SELECT COUNT(*) FROM item WHERE category IN (".$joinedCategories.")) AS count_category, (SELECT COUNT(*) FROM item) AS count_global, ((item_viewer+phone_viewer)/2) AS average, (((item_viewer+phone_viewer)/2)/(SELECT COUNT(*) FROM item WHERE category IN (".$joinedCategories."))) AS rate_category, (((item_viewer+phone_viewer)/2)/(SELECT COUNT(*) FROM item)) AS rate_global FROM item WHERE category IN (".$joinedCategories.") AND id=".$_GET["id"]." ORDER BY rate_category DESC, rate_global DESC";
+	$queryRateList = "SELECT *, (SELECT COUNT(*) FROM item WHERE category IN (".$joinedCategories.")) AS count_category, (SELECT COUNT(*) FROM item) AS count_global, ((item_viewer+phone_viewer)/2) AS average, (((item_viewer+phone_viewer)/2)/(SELECT COUNT(*) FROM item WHERE category IN (".$joinedCategories."))) AS rate_category, (((item_viewer+phone_viewer)/2)/(SELECT COUNT(*) FROM item)) AS rate_global FROM item WHERE category IN (".$joinedCategories.") AND id=".$_GET["id"]." ORDER BY rate_category DESC, rate_global DESC";
 	$resultRateList = $conn->query($queryRateList);
 	$rowRateList = mysqli_fetch_array($resultRateList);
 	?>
@@ -244,7 +429,44 @@ if(isset($_GET["id"])){
 			</div>
 			<?php
 			}
+	
 			?>
+			<div class="words">
+				<?php
+				if($row["extras"]!="" && $row["extras"]!="[]"){
+					$words = json_decode(stripslashes(strip_tags(htmlspecialchars_decode(html_entity_decode($row["extras"])))));
+					foreach($words[0] as $key => $word){
+						?>
+						<div><?php echo $key.": <b>".$word."</b>"; ?></div>
+						<?php
+					}
+				}
+				?>
+				<div>Хаяг байршил: <?php echo "<b>".$row["address"]."</b>"; ?></div>
+			</div>
+			<div class="description"><?php echo stripslashes(strip_tags(htmlspecialchars_decode(html_entity_decode($row["description"])))); ?></div>
+			<hr/>
+			<h3>Ижил зарууд</h3>
+			<div class="list">
+			<?php
+			$queryOthers = "SELECT *, (SELECT image FROM images WHERE item.id=images.item LIMIT 1) AS image FROM item WHERE category IN (".$joinedCategories.") AND isactive=4 ORDER BY datetime DESC LIMIT 12";
+			$resultOthers = $conn->query($queryOthers);
+			while($rowOthers = mysqli_fetch_array($resultOthers)){
+				?>
+				<div class="item">
+					<div class="image">
+						<div class="badge_vip" data-top="VIP"></div>
+						<i class="count"><i class="fa-solid fa-camera"></i> 3</i>
+						<i class="fa-solid fa-star"></i>
+						<img src="<?php echo $path."/".$rowOthers["image"]; ?>" />
+					</div>
+					<div class="price"><?php echo convertPriceToText($rowOthers["price"]); ?> ₮</div>
+					<div class="title"><?php echo $rowOthers["title"]; ?></div>
+				</div>
+				<?php
+			}
+			?>
+			</div>
 		</div>
 		<div class="right removable">
 			<div class="importantRight">
