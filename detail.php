@@ -70,7 +70,7 @@ include_once "info.php";
 
 .importantLeft {
 	margin-top: 10px;
-	display: flex;
+	display: none;
 }
 
 .importantLeft .owner {
@@ -89,9 +89,11 @@ include_once "info.php";
 	color: blue;
 	cursor: pointer;
 }
-
+	
 .importantRight {
 	max-width: 180px;
+	position: sticky;
+	top: 20px;
 }
 	
 .detailMain {
@@ -99,7 +101,7 @@ include_once "info.php";
 }
 
 .detailMain .left {
-	width: 80%;
+	width: 100%;
 }
 	
 .detailMain .left .images {
@@ -270,10 +272,18 @@ include_once "info.php";
 	.detailMain .left .list .item {
 		width: 165px;
 	}
+	
+	.importantLeft {
+		display: flex;
+	}
+	
+	.right {
+		display: none;
+	}
 }
 
 /* For Tablets and Desktop */
-@media screen and (min-width: 540px) {
+@media screen and (min-width: 541px) {
 	.detailMain .left .list .item {
 		width: 190px;	
 	}
@@ -341,15 +351,35 @@ if(isset($_GET["id"])){
 	$splita = explode("_", $row["category"]);
 	$tableID = intval(substr($splita[0], 1));
 	$id = intval($splita[1]);
+	$tableID_before = $tableID;
+	$id_before = $id;
+	$tableID_after = $tableID;
+	$id_after = $id;
 	$arrCategories = array();
-	for($i=$tableID; $i>=1; $i--){
-		$queryCategory = "SELECT * FROM category".$i." WHERE id=".$id;
+	
+	for($i=$tableID_before; $i>=1; $i--){
+		$queryCategory = "SELECT * FROM category".$i." WHERE id=".$id_before;
 		$resultCategory = $conn->query($queryCategory);
 		$rowCategory = mysqli_fetch_array($resultCategory);
-		$arrCategories["id"][] = "'c".$i."_".$id."'";
+		$arrCategories["id"][] = "'c".$i."_".$id_before."'";
 		$arrCategories["text"][] = $rowCategory["title"];
-		if($i>1) $id = $rowCategory["parent"];
+		if($i>1) $id_before = $rowCategory["parent"];
 	}
+	
+	//use recursive
+//	for($i=$tableID_after; $i<=4; $i++){
+//		$queryCategory = "SELECT * FROM category".$i." WHERE parent=".$id_after;
+//		if($i==1) $queryCategory = "SELECT * FROM category".$i." WHERE id=".$id_after;
+//		$resultCategory = $conn->query($queryCategory);
+//		while($rowCategory = mysqli_fetch_array($resultCategory)){
+//			$arrCategories["id"][] = "'c".$i."_".$id_after."'";
+//			$arrCategories["text"][] = $rowCategory["title"];	
+//		}
+//		if($i<4) $id_after = $rowCategory["id"];
+//	}
+	
+	print_r($arrCategories);
+	
 	$arrCategories["id"] = array_reverse($arrCategories["id"]);
 	$arrCategories["text"] = array_reverse($arrCategories["text"]);
 	
@@ -436,29 +466,50 @@ if(isset($_GET["id"])){
 				if($row["extras"]!="" && $row["extras"]!="[]"){
 					$words = json_decode(stripslashes(strip_tags(htmlspecialchars_decode(html_entity_decode($row["extras"])))));
 					foreach($words[0] as $key => $word){
+						if($word!=""){
 						?>
 						<div><?php echo $key.": <b>".$word."</b>"; ?></div>
 						<?php
+						}
 					}
 				}
+				if($row["address"]!=""){
 				?>
 				<div>Хаяг байршил: <?php echo "<b>".$row["address"]."</b>"; ?></div>
+				<?php
+				}
+				?>
 			</div>
 			<div class="description"><?php echo stripslashes(strip_tags(htmlspecialchars_decode(html_entity_decode($row["description"])))); ?></div>
 			<hr/>
 			<h3>Ижил зарууд</h3>
 			<div class="list">
 			<?php
-			$queryOthers = "SELECT *, (SELECT image FROM images WHERE item.id=images.item LIMIT 1) AS image FROM item WHERE category IN (".$joinedCategories.") AND isactive=4 ORDER BY datetime DESC LIMIT 12";
+			$queryOthers = "SELECT *, (SELECT image FROM images WHERE item.id=images.item LIMIT 1) AS image, (SELECT COUNT(*) FROM images WHERE item.id=images.item) AS count_images FROM item WHERE category IN (".$joinedCategories.") AND id NOT IN (".$_GET["id"].") AND isactive=4 ORDER BY datetime DESC LIMIT 12";
 			$resultOthers = $conn->query($queryOthers);
 			while($rowOthers = mysqli_fetch_array($resultOthers)){
 				?>
-				<div class="item">
+				<div class="item" onClick="javascript:pagenavigation('detail&id=<?php echo $rowOthers["id"]; ?>')">
 					<div class="image">
+						<?php
+						if($rowOthers["status"]==2){
+						?>
 						<div class="badge_vip" data-top="VIP"></div>
-						<i class="count"><i class="fa-solid fa-camera"></i> 3</i>
+						<?php
+						}
+						else if($rowOthers["status"]==1){
+						?>
+						<div class="badge_special" data-top="Онцгой"></div>
+						<?php
+						}
+						if($rowOthers["count_images"]>0){
+						?>
+						<i class="count"><i class="fa-solid fa-camera"></i> <?php echo $rowOthers["count_images"]; ?></i>
+						<?php
+						}
+						?>
 						<i class="fa-solid fa-star"></i>
-						<img src="<?php echo $path."/".$rowOthers["image"]; ?>" />
+						<img src="<?php echo $path."/".$rowOthers["image"]; ?>" onerror="this.onerror=null; this.src='image-solid.svg'" />
 					</div>
 					<div class="price"><?php echo convertPriceToText($rowOthers["price"]); ?> ₮</div>
 					<div class="title"><?php echo $rowOthers["title"]; ?></div>
@@ -468,7 +519,7 @@ if(isset($_GET["id"])){
 			?>
 			</div>
 		</div>
-		<div class="right removable">
+		<div class="right">
 			<div class="importantRight">
 				<div class="button_yellow price">
 					<div><?php echo convertPriceToText($row["price"]); ?> ₮</div>
