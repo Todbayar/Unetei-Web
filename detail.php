@@ -161,9 +161,9 @@ if(isset($_GET["id"])){
 		$queryCategory = "SELECT * FROM category".$i." WHERE id=".$id;
 		$resultCategory = $conn->query($queryCategory);
 		$rowCategory = mysqli_fetch_array($resultCategory);
-		if($i>1) $id = $rowCategory["parent"];
 		$arrCategories["id"][] = "'c".$i."_".$id."'";
 		$arrCategories["text"][] = $rowCategory["title"];
+		if($i>1) $id = $rowCategory["parent"];
 	}
 	$arrCategories["id"] = array_reverse($arrCategories["id"]);
 	$arrCategories["text"] = array_reverse($arrCategories["text"]);
