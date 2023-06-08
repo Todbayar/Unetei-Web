@@ -427,6 +427,8 @@ if(isset($_GET["id"])){
 	$arrCategories["id"] = array_reverse($arrCategories["id"]);
 	$arrCategories["text"] = array_reverse($arrCategories["text"]);
 	
+	echo fetchRecursiveCategoriesDebug($arrCategories["id"][0], false);
+	
 	//rate calculate
 	$joinedCategories = implode(",",$arrCategories["id"]);
 	$queryRateList = "SELECT *, (SELECT COUNT(*) FROM item WHERE category IN (".$joinedCategories.")) AS count_category, (SELECT COUNT(*) FROM item) AS count_global, ((item_viewer+phone_viewer)/2) AS average, (((item_viewer+phone_viewer)/2)/(SELECT COUNT(*) FROM item WHERE category IN (".$joinedCategories."))) AS rate_category, (((item_viewer+phone_viewer)/2)/(SELECT COUNT(*) FROM item)) AS rate_global FROM item WHERE category IN (".$joinedCategories.") AND id=".$_GET["id"]." ORDER BY rate_category DESC, rate_global DESC";
