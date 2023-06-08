@@ -96,4 +96,14 @@ function fetchRecursiveCategories($categories, $isDone){
 		return $categories;
 	}
 }
+
+function findTypeOfVideo($name){
+	$type = substr($name, strrpos($name,'.')+1);
+	if($type == "mp4"){
+		return "video/mp4";
+   	}
+	else if($type == "mov"){
+		return "video/quicktime";
+	}
+}
 ?>

@@ -121,6 +121,12 @@ include_once "info.php";
 	border-radius: 10px;
 	object-fit: contain;
 }
+	
+.detailMain .left .images .big video {
+	width: 100%;
+	height: 450px;
+	border-radius: 10px;
+}
 
 .detailMain .left .images .thumbnails {
 	margin-top: 5px;
@@ -130,6 +136,20 @@ include_once "info.php";
 	width: 80px;
 	height: 80px;
 	object-fit:cover;
+	border-radius: 5px;
+	cursor: pointer;
+}
+	
+.detailMain .left .images .thumbnails iframe {
+	width: 80px;
+	height: 80px;
+	border-radius: 5px;
+	cursor: pointer;
+}
+	
+.detailMain .left .images .thumbnails video {
+	width: 80px;
+	height: 80px;
 	border-radius: 5px;
 	cursor: pointer;
 }
@@ -330,13 +350,35 @@ include_once "info.php";
 	padding-right: 5px;
 	padding-bottom: 5px;
 }
-
 </style>
 
+<script src="misc.js"></script>
+
 <script>
-function showBigImage(id){
+$(document).ready(function() {
+	incrementRate("item");
+});
+
+function showBigImage(type,id){
 	$("#imageBig").empty();
-	$("#imageBig").append("<img src=\""+$("#thumbnail"+id).attr("src")+"\" />");
+	if(type == "image"){
+		$("#imageBig").append("<img src=\""+$("#thumbnail"+id).attr("src")+"\" />");
+	}
+	else if(type == "video"){
+		$("#imageBig").append("<video controls=\"controls\" preload=\"metadata\"><source src=\""+id+"#t=0.5\" type=\""+findTypeOfVideo(id)+"\"></video>");
+	}
+}
+
+function showPhone(){
+	if($("div[id='phoneFull']").css('display')=='none'){
+		$("div[id='phoneHidden']").hide();
+		$("div[id='phoneFull']").show();
+		incrementRate("phone");
+	}
+}
+	
+function incrementRate(type){
+	$.post("mysql_item_increment.php",{type:type,id:<?php echo $_GET["id"]; ?>});
 }
 </script>
 
@@ -399,13 +441,13 @@ if(isset($_GET["id"])){
 					<div class="button_yellow price">
 						<div><?php echo convertPriceToText($row["price"]); ?> ₮</div>
 					</div>
-					<div class="button_yellow phone">
+					<div onClick="showPhone()" class="button_yellow phone">
 						<i class="fa-solid fa-phone"></i>
-						<div style="margin-left: 10px">
+						<div id="phoneHidden" style="margin-left: 10px">
 							<div>Дугаар харах</div>
 							<div class="hided" style="display: flex; font-family:RobotoRegular; font-size: 14px"><?php echo substr($row["item_phone"],4,4); ?>-<div style="color: #FFA718">XXXX</div></div>
 						</div>
-						<div class="full" style="display: none; margin-left: 10px"><?php echo substr($row["item_phone"],4); ?></div>
+						<div id="phoneFull" class="full" style="display: none; margin-left: 10px"><?php echo substr($row["item_phone"],4); ?></div>
 					</div>
 					<div class="button_yellow chatlah" style="margin-top: 10px; background: #e60803">
 						<i class="fa-solid fa-comments"></i>
@@ -420,7 +462,7 @@ if(isset($_GET["id"])){
 			<?php
 			$queryImages = "SELECT * FROM images WHERE item=".$_GET["id"];
 			$resultImages = $conn->query($queryImages);
-			if(mysqli_num_rows($resultImages)>0){
+			if(mysqli_num_rows($resultImages)>0 || $row["youtube"]!="" || $row["video"]!=""){
 			?>
 			<div class="images">
 				<div id="imageBig" class="big"></div>
@@ -429,12 +471,30 @@ if(isset($_GET["id"])){
 				$i = 1;
 				while($rowImages = mysqli_fetch_array($resultImages)){
 					?>
-					<img id="thumbnail<?php echo $i; ?>" onClick="showBigImage(<?php echo $i; ?>)" src="<?php echo $path; ?>/<?php echo $rowImages["image"]; ?>" />
+					<img id="thumbnail<?php echo $i; ?>" onClick="showBigImage('image',<?php echo $i; ?>)" src="<?php echo $path; ?>/<?php echo $rowImages["image"]; ?>" />
 					<?php
 					$i++;
 				}
+				
+				if($row["youtube"]!=""){
+					echo "<iframe src=\"".$row["youtube"]."?controls=1\" frameborder=\"0\" allowfullscreen></iframe>";
+				}
+				
+				if($row["video"]!=""){
+					echo "<video onClick=\"showBigImage('video','".$path."/".$row["video"]."')\" preload=\"metadata\"><source src=\"".$path."/".$row["video"]."#t=0.5\" type=\"".findTypeOfVideo($row["video"])."\"></video>";
+				}
+				
+				if(mysqli_num_rows($resultImages)>0){
+					?>
+					<script>showBigImage('image',1);</script>
+					<?php
+				}
+				else if($row["video"]!="") {
+					?>
+					<script>showBigImage('video','<?php echo $path."/".$row["video"]; ?>');</script>
+					<?php
+				}
 				?>
-				<script>showBigImage(1);</script>
 				</div>
 			</div>
 			<?php
@@ -506,13 +566,13 @@ if(isset($_GET["id"])){
 				<div class="button_yellow price">
 					<div><?php echo convertPriceToText($row["price"]); ?> ₮</div>
 				</div>
-				<div class="button_yellow phone">
+				<div onClick="showPhone()" class="button_yellow phone">
 					<i class="fa-solid fa-phone"></i>
-					<div style="margin-left: 10px">
+					<div id="phoneHidden" style="margin-left: 10px">
 						<div>Дугаар харах</div>
 						<div class="hided" style="display: flex; font-family:RobotoRegular; font-size: 14px"><?php echo substr($row["item_phone"],4,4); ?>-<div style="color: #FFA718">XXXX</div></div>
 					</div>
-					<div class="full" style="display: none; margin-left: 10px"><?php echo substr($row["item_phone"],4); ?></div>
+					<div id="phoneFull" class="full" style="display: none; margin-left: 10px"><?php echo substr($row["item_phone"],4); ?></div>
 				</div>
 				<div class="button_yellow chatlah" style="margin-top: 10px; background: #e60803">
 					<i class="fa-solid fa-comments"></i>
