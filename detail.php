@@ -380,6 +380,28 @@ function showPhone(){
 function incrementRate(type){
 	$.post("mysql_item_increment.php",{type:type,id:<?php echo $_GET["id"]; ?>});
 }
+		   
+function startChat(toID, message){
+	var chatSubmitData = new FormData();
+	chatSubmitData.append("fromID", <?php echo $_COOKIE["userID"]; ?>);
+	chatSubmitData.append("toID", toID);
+	chatSubmitData.append("type", 0);
+	chatSubmitData.append("message", message);
+	
+	const reqChatSubmit = new XMLHttpRequest();
+	reqChatSubmit.onload = function() {
+		if(this.responseText=="OK"){
+			pagenavigation("chat");
+			sessionStorage.setItem("startChatToID", toID);
+		}
+	};
+	reqChatSubmit.onerror = function(){
+		console.log("<chat_send>:" + reqChatSubmit.status);
+	};
+
+	reqChatSubmit.open("POST", "chat_process.php", true);
+	reqChatSubmit.send(chatSubmitData);		
+}
 </script>
 
 <div class="detail">
@@ -449,7 +471,13 @@ if(isset($_GET["id"])){
 						</div>
 						<div id="phoneFull" class="full" style="display: none; margin-left: 10px"><?php echo substr($row["item_phone"],4); ?></div>
 					</div>
-					<div class="button_yellow chatlah" style="margin-top: 10px; background: #e60803">
+					<?php
+					$message = "<b>".$row["title"]."</b><br/>";
+					$message .= convertPriceToText($row["price"])." ₮<br/>";
+					$message .= "#".$row["id"]."<br/>";
+					$message .= implode(" > ",$arrCategories["text"]);
+					?>
+					<div onClick="startChat(<?php echo $row["userID"]; ?>,'<?php echo $message; ?>')" class="button_yellow chatlah" style="margin-top: 10px; background: #e60803">
 						<i class="fa-solid fa-comments"></i>
 						<div style="margin-left: 10px">Чатлах</div>
 					</div>
@@ -574,7 +602,7 @@ if(isset($_GET["id"])){
 					</div>
 					<div id="phoneFull" class="full" style="display: none; margin-left: 10px"><?php echo substr($row["item_phone"],4); ?></div>
 				</div>
-				<div class="button_yellow chatlah" style="margin-top: 10px; background: #e60803">
+				<div onClick="startChat(<?php echo $row["userID"]; ?>,'<?php echo $message; ?>')" class="button_yellow chatlah" style="margin-top: 10px; background: #e60803">
 					<i class="fa-solid fa-comments"></i>
 					<div style="margin-left: 10px">Чатлах</div>
 				</div>

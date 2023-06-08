@@ -20,6 +20,11 @@ $(document).ready(function(){
 //	$(".chat .right .top").scroll(function(){
 //		console.log("<scroll>:"+$(".chat .right .top").scrollTop()+", "+$(".chat .right .top").height()+", "+$(".chat .right .top").innerHeight());
 //	});
+	
+	if(sessionStorage.getItem("startChatToID")!=null){
+		chat_select(sessionStorage.getItem("startChatToID"));
+		sessionStorage.removeItem("startChatToID");
+	}
 });
 	
 function chat_send(toID){
@@ -277,6 +282,7 @@ function chat_action(action, type, id){
 
 <div class="chat">
 	<div class="left">
+<!--
 		<div id="chatSelect0" class="user" onClick="chat_select(0)">
 			<div class="container">
 				<div class="box">
@@ -290,6 +296,7 @@ function chat_action(action, type, id){
 				</div>
 			</div>
 		</div>
+-->
 		<?php
 		$queryFetchSender = "SELECT *, (SELECT name FROM user WHERE id=chat.fromID) AS name, (SELECT image FROM user WHERE id=chat.fromID) AS image, (SELECT role FROM user WHERE id=chat.fromID) AS role FROM chat WHERE toID=".$_COOKIE["userID"];
 //		if($_COOKIE["role"]>0){

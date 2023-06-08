@@ -21,8 +21,8 @@ if(isset($_GET["toID"])){
 		$message->sender = $sender;
 		
 		if($row["type"] == 0){
-//			$message->body = stripslashes(htmlspecialchars_decode($row["message"]));
-			$message->body = $row["message"];
+			$message->body = stripslashes(htmlspecialchars_decode($row["message"]));
+//			$message->body = $row["message"];
 		}
 		else if($row["type"] == 1){
 			$message->body = fetchCategory($row["message"]);
