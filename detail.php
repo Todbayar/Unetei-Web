@@ -351,35 +351,15 @@ if(isset($_GET["id"])){
 	$splita = explode("_", $row["category"]);
 	$tableID = intval(substr($splita[0], 1));
 	$id = intval($splita[1]);
-	$tableID_before = $tableID;
-	$id_before = $id;
-	$tableID_after = $tableID;
-	$id_after = $id;
 	$arrCategories = array();
-	
-	for($i=$tableID_before; $i>=1; $i--){
-		$queryCategory = "SELECT * FROM category".$i." WHERE id=".$id_before;
+	for($i=$tableID; $i>=1; $i--){
+		$queryCategory = "SELECT * FROM category".$i." WHERE id=".$id;
 		$resultCategory = $conn->query($queryCategory);
 		$rowCategory = mysqli_fetch_array($resultCategory);
-		$arrCategories["id"][] = "'c".$i."_".$id_before."'";
+		$arrCategories["id"][] = "'c".$i."_".$id."'";
 		$arrCategories["text"][] = $rowCategory["title"];
-		if($i>1) $id_before = $rowCategory["parent"];
+		if($i>1) $id = $rowCategory["parent"];
 	}
-	
-	//use recursive
-//	for($i=$tableID_after; $i<=4; $i++){
-//		$queryCategory = "SELECT * FROM category".$i." WHERE parent=".$id_after;
-//		if($i==1) $queryCategory = "SELECT * FROM category".$i." WHERE id=".$id_after;
-//		$resultCategory = $conn->query($queryCategory);
-//		while($rowCategory = mysqli_fetch_array($resultCategory)){
-//			$arrCategories["id"][] = "'c".$i."_".$id_after."'";
-//			$arrCategories["text"][] = $rowCategory["title"];	
-//		}
-//		if($i<4) $id_after = $rowCategory["id"];
-//	}
-	
-	print_r($arrCategories);
-	
 	$arrCategories["id"] = array_reverse($arrCategories["id"]);
 	$arrCategories["text"] = array_reverse($arrCategories["text"]);
 	
@@ -478,7 +458,9 @@ if(isset($_GET["id"])){
 				<div>Хаяг байршил: <?php echo "<b>".$row["address"]."</b>"; ?></div>
 				<?php
 				}
+				$quality = $row["quality"]==0 ? "Шинэ" : "Хуучин";
 				?>
+				<div>Шинэ/хуучин: <?php echo "<b>".$quality."</b>"; ?></div>
 			</div>
 			<div class="description"><?php echo stripslashes(strip_tags(htmlspecialchars_decode(html_entity_decode($row["description"])))); ?></div>
 			<hr/>
@@ -509,7 +491,7 @@ if(isset($_GET["id"])){
 						}
 						?>
 						<i class="fa-solid fa-star"></i>
-						<img src="<?php echo $path."/".$rowOthers["image"]; ?>" onerror="this.onerror=null; this.src='image-solid.svg'" />
+						<img src="<?php echo $path."/".$rowOthers["image"]; ?>" onerror="this.onerror=null; this.src='notfound.png'" />
 					</div>
 					<div class="price"><?php echo convertPriceToText($rowOthers["price"]); ?> ₮</div>
 					<div class="title"><?php echo $rowOthers["title"]; ?></div>

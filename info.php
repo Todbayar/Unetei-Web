@@ -33,6 +33,6 @@ $item_publish_price_special = number_format("10000");
 $superduperadmin = "+97699213557";
 
 //pages
-$pageCountHome = 10;
+$pageCountHome = 12;
 $pageCountList = 60;
 ?>
