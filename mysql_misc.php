@@ -59,45 +59,7 @@ function convertPriceToNumber($price){
 	}
 }
 
-function fetchRecursiveCategories($categories, $isDone){
-	global $conn;
-	if($categories != "" && $isDone === false){
-		$tableID = 0;
-		$id = 0;
-		if(strpos($categories,",")!==false){
-			$split = explode(",", $categories);
-			$splita = explode("_", trim($split[count($split)-1],"'"));
-			$tableID = intval(substr($splita[0], 1));
-			$id = intval($splita[1]);
-		}
-		else {
-			$splita = explode("_", trim($categories,"'"));
-			$tableID = intval(substr($splita[0], 1));
-			$id = intval($splita[1]);
-		}
-		
-		if($tableID == 4){
-			return $categories;
-		}
-		else {
-			$query = "SELECT id FROM category".($tableID+1)." WHERE parent=".$id." AND active=2";
-			$result = $conn->query($query);
-			if(mysqli_num_rows($result) > 0){
-				while($row = mysqli_fetch_array($result)){
-					return fetchRecursiveCategories($categories.",'c".($tableID+1)."_".$row["id"]."'", false);
-				}
-			}
-			else {
-				return fetchRecursiveCategories($categories, true);
-			}
-		}
-	}
-	else {
-		return $categories;
-	}
-}
-
-function fetchRecursiveCategoriesDebug($category, $conn, $isInit){
+function fetchRecursiveCategories($category, $conn, $isInit){
 	$categories = [];
 	
 	if($isInit) $categories[] = $category;
@@ -110,7 +72,7 @@ function fetchRecursiveCategoriesDebug($category, $conn, $isInit){
 	$result = $conn->query($query);
 	while($row = mysqli_fetch_array($result)){
 		$categories[] = "'c".($tableID+1)."_".$row["id"]."'";
-		$categories = array_merge($categories, fetchRecursiveCategoriesDebug("'c".($tableID+1)."_".$row["id"]."'", $conn, false));
+		$categories = array_merge($categories, fetchRecursiveCategories("'c".($tableID+1)."_".$row["id"]."'", $conn, false));
 	}
 	
 	return $categories;

@@ -29,7 +29,7 @@ if(isset($_POST["search"]) && $_POST["search"] != ""){
 }
 
 if(isset($_POST["category"]) && $_POST["category"] != ""){
-	$search .= " category IN (".implode(",",fetchRecursiveCategoriesDebug($_POST["category"], $conn, true)).") AND";
+	$search .= " category IN (".implode(",",fetchRecursiveCategories($_POST["category"], $conn, true)).") AND";
 }
 
 if(isset($_POST["order"]) && $_POST["order"] != ""){
@@ -119,7 +119,7 @@ if(isset($_POST["type"])){
 		}
 		
 		//fetch first regular
-		$queryCountItems = "SELECT * FROM item WHERE status=1 AND".substr($search, 0, strrpos($search, "AND"));
+		$queryCountItems = "SELECT * FROM item WHERE status=0 AND".substr($search, 0, strrpos($search, "AND"));
 		$rowCountItemsRegular = mysqli_num_rows($conn->query($queryCountItems));
 		$totalCountItems += $rowCountItemsRegular;
 		if($rowCountItems<$rowCountItemsRegular) $rowCountItems=$rowCountItemsRegular;
@@ -134,7 +134,7 @@ if(isset($_POST["type"])){
 		$arr["page"]["perpage"] = $pageCount;
 		$arr["page"]["countItems"] = $totalCountItems;
 		$arr["page"]["countPages"] = ceil($rowCountItems/$pageCount);
-		$arr["queryPage"] = $queryCountItems;
+//		$arr["queryPage"] = $queryCountItems;
 		
 		echo json_encode($arr);
 	}
