@@ -29,7 +29,7 @@ if(isset($_POST["search"]) && $_POST["search"] != ""){
 }
 
 if(isset($_POST["category"]) && $_POST["category"] != ""){
-	$search .= " category IN (".fetchRecursiveCategories($_POST["category"], false).") AND";
+	$search .= " category IN (".implode(",",fetchRecursiveCategoriesDebug($_POST["category"], $conn, true)).") AND";
 }
 
 if(isset($_POST["order"]) && $_POST["order"] != ""){

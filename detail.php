@@ -420,14 +420,13 @@ if(isset($_GET["id"])){
 		$queryCategory = "SELECT * FROM category".$i." WHERE id=".$id;
 		$resultCategory = $conn->query($queryCategory);
 		$rowCategory = mysqli_fetch_array($resultCategory);
-		$arrCategories["id"][] = "'c".$i."_".$id."'";
+//		$arrCategories["id"][] = "'c".$i."_".$id."'";
 		$arrCategories["text"][] = $rowCategory["title"];
 		if($i>1) $id = $rowCategory["parent"];
 	}
-	$arrCategories["id"] = array_reverse($arrCategories["id"]);
+//	$arrCategories["id"] = array_reverse($arrCategories["id"]);
+	$arrCategories["id"] = fetchRecursiveCategoriesDebug("'".$row["category"]."'", $conn, true);
 	$arrCategories["text"] = array_reverse($arrCategories["text"]);
-	
-	echo fetchRecursiveCategoriesDebug($arrCategories["id"][0], false);
 	
 	//rate calculate
 	$joinedCategories = implode(",",$arrCategories["id"]);
