@@ -108,15 +108,6 @@ $(document).ready(function(){
 		}
 	});
 	
-	<?php
-	if($_COOKIE["role"] <= 1){
-	?>
-	$("#bank_name").attr("disabled", true);
-	$("#socialpay").removeAttr("onclick");
-	<?php
-	}
-	?>
-	
 	$("#buttonUpgradeUserRole").click(function(){
 		window.scrollTo(0, 0);
 		$("body").css("overflow-y", "hidden");
@@ -241,6 +232,16 @@ function submitProfile(){
 $query = "SELECT * FROM user WHERE id=".$_COOKIE["userID"];
 $result = $conn->query($query);
 $row = mysqli_fetch_array($result);
+if($row["role"] <= 1){
+?>
+<script>
+$(document).ready(function(){
+	$("#bank_name").attr("disabled", true);
+	$("#socialpay").removeAttr("onclick");
+});
+</script>
+<?php
+}
 ?>
 <div class="profile">
 	<div class="container" style="margin-bottom: 20px">

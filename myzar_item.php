@@ -155,7 +155,7 @@ mysqli_free_result($resultFetchListItemsStateCountInActive);
 
 <div class="myzar_content_list_items">
 	<?php
-	$queryFetchListItems = "SELECT *, (SELECT COUNT(*) FROM images WHERE item=item.id) AS count_images, (SELECT image FROM images WHERE item=item.id LIMIT 1) AS image FROM item WHERE userID=".$_COOKIE["userID"];
+	$queryFetchListItems = "SELECT *, (SELECT role FROM user WHERE id=item.userID) AS role, (SELECT COUNT(*) FROM images WHERE item=item.id) AS count_images, (SELECT image FROM images WHERE item=item.id LIMIT 1) AS image FROM item WHERE userID=".$_COOKIE["userID"];
 	
 	if((isset($_GET["myzar"]) && $_GET["myzar"] == "item") && (isset($_GET["state"]) && $_GET["state"] == "active")){
 		$queryFetchListItems .= " AND isactive=4";
@@ -252,12 +252,21 @@ mysqli_free_result($resultFetchListItemsStateCountInActive);
 			<div class="myzar_content_list_item_detail" style="margin-left: 10px"></div>
 		</table>
 		<div class="myzar_content_list_item_bottom">
-<!--
-			<div class="button_yellow" style="float: left; font-size: 14px; margin: 5px">
-				<div style="margin-left: 5px">Онцгой зар болгох</div>
-			</div>
--->
-			<div class="button_yellow" style="float: left; background: #a0cf0a; font-size: 14px; margin: 5px">
+			<?php
+			$splita = explode("_", $rowFetchListItems["category"]);
+			$tableID = intval(substr($splita[0], 1));
+			$id = intval($splita[1]);
+			$categories = array();
+			for($i=$tableID; $i>=1; $i--){
+				$queryCategory = "SELECT * FROM category".$i." WHERE id=".$id;
+				$resultCategory = $conn->query($queryCategory);
+				$rowCategory = mysqli_fetch_array($resultCategory);
+				$categories[] = $rowCategory["title"];
+				if($i>1) $id = $rowCategory["parent"];
+			}
+			$categories = array_reverse($categories);
+			?>
+			<div onClick="myzar_item_update(<?php echo $rowFetchListItems["id"]; ?>,'<?php echo $rowFetchListItems["title"]; ?>','<?php echo implode(",",$categories); ?>',<?php echo $rowFetchListItems["role"]; ?>)" class="button_yellow" style="float: left; background: #a0cf0a; font-size: 14px; margin: 5px">
 				<div style="margin-left: 5px; color: white">Шинэчлэх</div>
 			</div>
 			<div onClick="myzar_category_selected_item_edit(<?php echo $rowFetchListItems["id"]; ?>)" class="button_yellow" style="float: left; background: transparent; font-size: 14px; margin: 5px">

@@ -261,7 +261,7 @@ function selectCity(city){
 		<div id="myzar_item_button" onClick="myzar_item_add_submit()" class="button_yellow" style="margin-bottom: 10px; margin-top: 10px; height: 30px; font: bold 16px Arial">
 			<div style="margin-left: 5px; width: 100px; margin: 0 auto; text-transform: uppercase">Зар нэмэх</div>
 		</div>
-		<p style="margin-left: 5px; font: normal 14px Arial; color: #9F9F9F">Техникийн тусламжийг <b><?php echo $phone_service; ?></b> дугаарт холбогдож лавлана уу.<br/>Товчлуурыг дарснаар та <?php echo $domain; ?> сайтын үйлчилгээний нөхцөл болон Монгол улсын холбогдох хууль тогтоомжийг хүлээн зөвшөөрч буй болно. Зар нэмэх Сайтын дүрэм, зар нийтлэх журам болон нууцлалын бодлого.</p>
+		<p style="margin-left: 5px; font: normal 14px Arial; color: #9F9F9F">Техникийн тусламжийг <b><?php echo $service_phone; ?></b> дугаарт холбогдож лавлана уу.<br/>Товчлуурыг дарснаар та <?php echo $domain; ?> сайтын үйлчилгээний нөхцөл болон Монгол улсын холбогдох хууль тогтоомжийг хүлээн зөвшөөрч буй болно. Зар нэмэх Сайтын дүрэм, зар нийтлэх журам болон нууцлалын бодлого.</p>
 	</div>
 	<hr/>
 </div>

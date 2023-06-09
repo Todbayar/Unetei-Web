@@ -38,7 +38,7 @@ function myzar_tab(name){
 			<div class="removable" style="margin-left: 5px">Тохиргоо</div>
 		</div>
 		<hr/>
-		<div class="myzar_tab_credit" style="display: flex; align-items: center; margin-right: 20px">
+		<div class="myzar_tab_credit" style="display: flex; align-items: center; margin-right: 20px; visibility: hidden">
 			<div class="removable" style="margin-right: 5px">Таны дансанд:</div>
 			<div class="myzar_tab_credit_amount">0 ₮</div>
 			<div class="button_yellow" style="margin-left: 5px">

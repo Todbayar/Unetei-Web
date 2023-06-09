@@ -1,14 +1,47 @@
 @charset "utf-8";
-/*
+
+@font-face {
+	font-family: "RobotoRegular";
+	src: url("include/Fonts/Roboto/Roboto-Regular.ttf");
+	src: url("include/Fonts/Roboto/roboto-regular-webfont.woff") format("woff"),
+	/*
+	url("CustomFont.otf") format("opentype"),
+	url("CustomFont.svg#filename") format("svg");
+	*/
+}
+@font-face {
+	font-family: "RobotoBold";
+	src: url("include/Fonts/Roboto/Roboto-Bold.ttf");
+}
+
+body {
+	border: 0;
+	padding: 0;
+	margin: 0;
+	font-family: "Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, "sans-serif";
+	/*overflow-y: hidden;*/
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+.mid {
+	margin-bottom: 10px;
+}
+
 .footer {
 	width: 100%;
 	height: 70px;
 	background: #42c200;
-	position: absolute;
-	bottom: 0px;
-	display: block;
+	margin-top: auto;
 }
-*/
+
+.footer .contact {
+	margin-left: 10px;
+	margin-right: 10px;
+	color: #174400;
+	font-family: RobotoBold;
+}
 
 .wrap {
 	position: relative;

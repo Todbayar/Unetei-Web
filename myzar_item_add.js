@@ -31,7 +31,7 @@ $(document).ready(function(){
 	
 	$(".popup.item_publish_option input[name='publish_option']").change(function(){
 		selectedPublishOption = $(this);
-		itemData.set("status", selectedPublishOption.val());
+		if(itemData!=null) itemData.set("status", selectedPublishOption.val());
 		$(".popup.item_publish_option #buttonPublish").attr("disabled", false);
 	});
 	
@@ -40,7 +40,7 @@ $(document).ready(function(){
 		selectedPublishOption = $(this);
 		const findSelPubOpt = selectedPublishOption.find("input");
 		findSelPubOpt.prop("checked", true);
-		itemData.set("status", findSelPubOpt.val());
+		if(itemData!=null) itemData.set("status", findSelPubOpt.val());
 		$(".popup.item_publish_option #buttonPublish").attr("disabled", false);
 	});
 });
@@ -215,6 +215,23 @@ function myzar_item_video_remove(){
 	reqMyZarItemVideoRemoveSubmit.send(myZarItemAddVideoRemoveSubmitData);
 }
 
+function myzar_item_update(itemID, title, categories, role){
+	console.log("<myzar_item_update>:"+itemID);
+	$(".popup.item_publish_option").show();
+	$(".popup.item_publish_option .title").html(title);
+	$(".popup.item_publish_option .category").empty();
+	$(".popup.item_publish_option button").attr("onclick", "publishItemUpdate("+itemID+",'"+title+"',"+role+")");
+	const arrCategories = categories.split(",");
+	arrCategories.forEach(function(title, index, arr){
+		if(arrCategories.length-1>index){
+			$(".popup.item_publish_option .category").append(title+"<i class=\"fas fa-angle-right\" style=\"font-size:12px; margin-left:2px; margin-right:2px\"></i>");
+		}
+		else {
+			$(".popup.item_publish_option .category").append(title);
+		}
+	});
+}
+
 function myzar_item_add_submit(){
 	itemData = getItemDataForm();
 	if(itemData != ""){
@@ -232,6 +249,44 @@ function myzar_item_add_submit(){
 			}
 		});
 	}
+}
+
+function publishItemUpdate(itemID, title, role){
+	const selPriceOpt = $(".popup.item_publish_option input[name='publish_option']:checked").val();
+	$.post("mysql_myzar_item_update_process.php", {id:itemID,status:selPriceOpt}).done(function(response){
+	   if(response=="OK"){
+			$(".popup.item_publish_option").hide();
+			const itemPrice = selPriceOpt==1?convertPriceToTextJS(10000.00):selPriceOpt==2?convertPriceToTextJS(20000.00):0;
+			if(role>=3 || selPriceOpt==0){
+				var eventOk = new CustomEvent("itemUpdateDone");
+				window.addEventListener("itemUpdateDone", function(){
+					location.reload();
+				});
+				confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Зар амжилттай <b>шинэчлэгдэж</b>, шалгагдаж байна.", eventOk);
+			}
+			else {
+				$.post("mysql_billing.php", {type:"item"}).done(function (response){
+					$(".popup.billing").show();
+					const res = JSON.parse(response);
+					$(".popup.billing .container #billing_type").html("Зар шинэчлэх");
+					$(".popup.billing .container #billing_number").html("#" + itemID);
+					$(".popup.billing .container #billing_title").html(title);
+					$(".popup.billing .container #billing_price").html(itemPrice + " ₮");
+					$(".popup.billing .container #billing_bank #name").html("<b>" + res.bank_name + "</b>");
+					$(".popup.billing .container #billing_bank #account").html("<b>" + res.bank_account + "</b>");
+					$(".popup.billing .container #billing_bank #owner").html("<b>" + res.bank_owner + "</b>");
+					$(".popup.billing .container #billing_socialpay img").attr("src", "user_files/"+res.socialpay);
+
+					$(".popup.billing .container .button_yellow").click(function(){
+						location.reload();
+					});
+				});
+			}
+	   }
+	   else {
+			alert("Алдаа гарлаа:publishItemUpdate");
+	   }
+   });
 }
 
 function publishItemSubmit(role){
@@ -286,5 +341,5 @@ function publishItemSubmit(role){
 		console.log("<error>:" + reqMyZarItemAdd.status);
 	};
 	reqMyZarItemAdd.open("POST", "mysql_myzar_item_add_process.php", true);
-	if(itemData !== "") reqMyZarItemAdd.send(itemData);	
+	if(itemData !== "") reqMyZarItemAdd.send(itemData);
 }

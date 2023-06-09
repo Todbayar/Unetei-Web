@@ -17,44 +17,14 @@ include "mysql_myzar_item_remove_process.php";	//for auto removal of expired ite
 		<script src="https://www.gstatic.com/firebasejs/9.12.1/firebase-auth-compat.js"></script>
 		<script src="jquery-3.6.4.min.js"></script>
 		<script src="jquery-ui.js"></script>
-		<script src="https://kit.fontawesome.com/64e3bec699.js" crossorigin="anonymous"></script>
+		<script src="kit.fontawesome.com_64e3bec699.js"></script>
 		<script src="misc.js"></script>
 		
 		<link rel="stylesheet" href="main.css">
 		<link rel="stylesheet" href="topbar.css">
 		<link rel="stylesheet" href="buttons.css">
 		<link rel="stylesheet" href="dropdowns.css">
-		
 		<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
-		
-		<style>
-		@font-face {
-			font-family: "RobotoRegular";
-			src: url("include/Fonts/Roboto/Roboto-Regular.ttf");
-			src: url("include/Fonts/Roboto/roboto-regular-webfont.woff") format("woff"),
-			/*
-			url("CustomFont.otf") format("opentype"),
-			url("CustomFont.svg#filename") format("svg");
-			*/
-		}
-		@font-face {
-			font-family: "RobotoBold";
-			src: url("include/Fonts/Roboto/Roboto-Bold.ttf");
-		}
-			
-		body.main {
-/*			background: #ccc;*/
-			border: 0;
-			padding: 0;
-			margin: 0;
-			font-family: "Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, "sans-serif";
-			/*overflow-y: hidden;*/
-			position: relative;
-			width: 100%;
-    		max-width: 100%;
-			height: 100%;
-		}
-		</style>
 		
 		<script>
 		const firebaseConfig = {
@@ -98,7 +68,7 @@ include "mysql_myzar_item_remove_process.php";	//for auto removal of expired ite
 		</script>
 	</head>
 	
-	<body class="main">
+	<body>
 		<div class="topbar">
 			<div class="wrap">
 			<?php include "topbar.php"; ?>
@@ -129,10 +99,16 @@ include "mysql_myzar_item_remove_process.php";	//for auto removal of expired ite
 			?>
 			</div>
 		</div>
-		<div class="bottom" style="display: none">
+		<div class="footer">
+			<div class="wrap">
+				<div class="contact">Холбоо барих: <?php echo $contact_phone; ?></div>
+			</div>
 		</div>
 		
-		<!--here comes footer-->
+		<!--here comes popups-->
+		<?php
+		if(isset($_COOKIE["userID"])) $rowPopupUser = mysqli_fetch_array($conn->query("SELECT * FROM user WHERE id=".$_COOKIE["userID"]));
+		?>
 		<div class="popup yesno" style="display: none">
 			<div class="container">
 				<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('popup yesno')[0].style.display='none'; javascript:document.body.style.overflowY='auto'"></i>
@@ -168,7 +144,7 @@ include "mysql_myzar_item_remove_process.php";	//for auto removal of expired ite
 				<div id="myzar_category_enter_msg" class="msg"></div>
 				<div id="myzar_category_enter_error" class="error"></div>
 				<?php
-				if($_COOKIE["role"]>=2){
+				if(isset($rowPopupUser) && $rowPopupUser["role"]>=3){
 				?>
 				<div style="margin-left: 10px">
 					<div>Ангиллын төрөл</div>
@@ -226,7 +202,7 @@ include "mysql_myzar_item_remove_process.php";	//for auto removal of expired ite
 						<div style="margin-left: 25px"><?php echo $role_price_manager; ?> ₮</div>
 						<ul style="font-size: 14px">
 							<li>Өөрийн дагагчдаас <i>орлого</i> хүлээн авах</li>
-							<li>10 ангилал нэмэх эсвэл брэнд үүсгэх</li>
+							<li>10 ангилал нэмэх</li>
 							<li>Хязгааргүй Энгийн зар нэмэх</li>
 						</ul>
 					</div>
@@ -375,7 +351,7 @@ include "mysql_myzar_item_remove_process.php";	//for auto removal of expired ite
 				<div class="options">
 					<div class="selection">
 						<div style="font: bold 16px Arial"><input type="radio" id="publish_option" name="publish_option" value="2"> VIP</div>						
-						<div style="margin-left: 25px"><?php echo $_COOKIE["role"]>=3 ? "Үнэгүй" : $item_publish_price_vip; ?> ₮</div>
+						<div style="margin-left: 25px"><?php echo isset($rowPopupUser) && $rowPopupUser["role"]>=3 ? "Үнэгүй" : $item_publish_price_vip; ?> ₮</div>
 						<ul style="font-size: 14px">
 							<li>Facebook ads хийх хүсэлт</li>
 							<li>Онцгой заруудын дээр</li>
@@ -384,7 +360,7 @@ include "mysql_myzar_item_remove_process.php";	//for auto removal of expired ite
 					</div>
 					<div class="selection">
 						<div style="font: bold 16px Arial"><input type="radio" id="publish_option" name="publish_option" value="1"> Онцгой</div>
-						<div style="margin-left: 25px"><?php echo $_COOKIE["role"]>=3 ? "Үнэгүй" : $item_publish_price_special; ?> ₮</div>
+						<div style="margin-left: 25px"><?php echo isset($rowPopupUser) && $rowPopupUser["role"]>=3 ? "Үнэгүй" : $item_publish_price_special; ?> ₮</div>
 						<ul style="font-size: 14px">
 							<li>Энгийн заруудын дээр</li>
 							<li>20 хоног нийтлэгдэнэ</li>
@@ -400,7 +376,7 @@ include "mysql_myzar_item_remove_process.php";	//for auto removal of expired ite
 						</ul>
 					</div>
 				</div>
-				<button onClick="publishItemSubmit(<?php echo $_COOKIE["role"]; ?>)" id="buttonPublish" class="button_yellow" style="margin-top: 10px; margin-left: auto; margin-right: auto" disabled>Нийтлэх</button>
+				<button onClick="publishItemSubmit(<?php echo isset($rowPopupUser)?$rowPopupUser["role"]:0; ?>)" id="buttonPublish" class="button_yellow" style="margin-top: 10px; margin-left: auto; margin-right: auto" disabled>Нийтлэх</button>
 			</div>
 		</div>
 	</body>

@@ -25,6 +25,8 @@ $(document).ready(function(){
 		chat_select(sessionStorage.getItem("startChatToID"));
 		sessionStorage.removeItem("startChatToID");
 	}
+	
+	$(".footer").hide();
 });
 	
 function chat_send(toID){
@@ -299,9 +301,6 @@ function chat_action(action, type, id){
 -->
 		<?php
 		$queryFetchSender = "SELECT *, (SELECT name FROM user WHERE id=chat.fromID) AS name, (SELECT image FROM user WHERE id=chat.fromID) AS image, (SELECT role FROM user WHERE id=chat.fromID) AS role FROM chat WHERE toID=".$_COOKIE["userID"];
-//		if($_COOKIE["role"]>0){
-//			$queryFetchSender .= " OR toID=0";
-//		}
 		$queryFetchSender .= " GROUP BY fromID ORDER BY datetime DESC";
 		$resultFetchSender = $conn->query($queryFetchSender);
 		while($rowFetchSender = mysqli_fetch_array($resultFetchSender)){

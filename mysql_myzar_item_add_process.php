@@ -32,7 +32,7 @@ if($isDuplication == 0){
 	if($status == 2){
 		$days = 10;
 	}
-	else {
+	else if($status == 1) {
 		$days = 20;
 	}
 	
