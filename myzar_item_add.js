@@ -296,7 +296,7 @@ function publishItemSubmit(role){
 			alert("Уг гарчиг бүхий зар таны зарын жагсаалтанд байна!");
 		}
 		else if(this.responseText == "Fail 54"){
-			alert("Зарыг нэмэх боломжгүй байна!");
+			alert("Зарыг нэмэх боломжгүй байна! Зарын гарчиг, хаяг байршлийн текст хэт урт байна.");
 		}
 		else if(this.responseText == "Fail 46"){
 			alert("Зарын зургийг оруулах боломжгүй байна!");
