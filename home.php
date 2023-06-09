@@ -60,13 +60,13 @@ include "info.php";
 
 .searchResult .list .item {
 /*	max-height: 230px;*/
-	float: left;
 	margin-left: 5px;
 	margin-right: 5px;
 	margin-top: 5px;
 	margin-bottom: 10px;
 	cursor: pointer;
-	position: relative;
+	display: inline-block;
+	vertical-align: top;
 }
 	
 .searchResult .list .item .badge_vip {
@@ -211,7 +211,18 @@ include "info.php";
 	margin-top: 5px;
 	padding-left: 5px;
 	padding-right: 5px;
-	padding-bottom: 5px;
+	padding-bottom: 3px !important;
+/*
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+    -webkit-line-clamp: 2;
+*/
+	overflow: hidden;
+	display: -webkit-box;
+	-webkit-line-clamp: 3; /* number of lines to show */
+		   line-clamp: 3; 
+	-webkit-box-orient: vertical;
 }
 
 .searchPage {
