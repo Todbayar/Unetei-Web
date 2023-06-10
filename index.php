@@ -24,6 +24,7 @@ include "mysql_myzar_item_remove_process.php";	//for auto removal of expired ite
 		<link rel="stylesheet" href="topbar.css">
 		<link rel="stylesheet" href="buttons.css">
 		<link rel="stylesheet" href="dropdowns.css">
+		<link rel="stylesheet" href="animation.css">
 		<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
 		
 		<script>
@@ -73,6 +74,22 @@ include "mysql_myzar_item_remove_process.php";	//for auto removal of expired ite
 			<div class="wrap">
 			<?php include "topbar.php"; ?>
 			</div>
+			<!--Waves Container-->
+			<div class="animation_waves">
+				<svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+				viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+					<defs>
+						<path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+					</defs>
+					<g class="parallax">
+						<use xlink:href="#gentle-wave" x="40" y="0" fill="rgba(255,167,64,0.7" />
+						<use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(0,125,197,0.7)" />
+						<use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,74,151,0.7)" />
+						<use xlink:href="#gentle-wave" x="48" y="7" fill="#fff" />
+					</g>
+				</svg>
+			</div>
+			<!--Waves end-->
 		</div>
 		<div class="mid">
 			<div class="wrap">

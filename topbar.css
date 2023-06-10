@@ -2,7 +2,8 @@
 
 .topbar {
 	height: 70px;
-	background: #42c200;
+/*	background: #42c200;*/
+	background: linear-gradient(60deg, rgba(66,194,0,1) 50%, rgba(55,163,0,1) 100%);
 }
 
 .topbar .wrap img {
