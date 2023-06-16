@@ -330,18 +330,6 @@ $(document).ready(function() {
 		}
 	});
 });
-
-function toggleFavorite(isFav){
-	console.log("<toggleFavorite>:"+isFav);
-	if(isFav){
-		$(this).addClass("nohover");
-		$(this).css("color", "#FFA718");
-	}
-	else {
-		$(this).removeClass("nohover");
-		$(this).css("color", "gray");
-	}
-}
 	
 function recursiveFetchCategory(tableID, parentID, title, icon){
 	//removes hierarchical depth after current selected category
@@ -465,7 +453,9 @@ function fetchItems(){
 	const vCategory = typeof selectedCategories !== "undefined" && selectedCategories.length > 0 ? "'c"+selectedCategories[selectedCategories.length-1].tableID+"_"+selectedCategories[selectedCategories.length-1].id+"'" : "";	
 	
 	$.post("mysql_item_list_process.php", {type:searchType, page:searchPage, category:vCategory, search:$("#searchInput").val(), quality:$("#searchQuality option:selected").val(), order:$("#searchOrder option:selected").val(), priceLowest:$("#searchPriceLimitLowest option:selected").val(), priceHighest:$("#searchPriceLimitHighest option:selected").val(), city:$("#searchCity option:selected").val(), rate:$("#searchRate option:selected").val()}).done(function(responseText){
+		console.log("<mysql_item_list_process>:"+responseText);
 		const vObj = JSON.parse(responseText);
+		console.log("<mysql_item_list_process1>:"+vObj.query);
 		$("#searchInput").prop("placeholder",vObj.page.countItems+" зар байна");
 		searchPageLast = vObj.page.countPages-1;
 		
@@ -513,49 +503,52 @@ function fetchItems(){
 		
 		if(vObj.data != null){
 			for(var i=0; i<vObj.data.length; i++){
+				var star = "<i id=\"itemStar"+vObj.data[i].id+"\" onClick=\"toggleFavorite(false,"+vObj.data[i].id+")\" class=\"fa-solid fa-star\"></i>";
+				if(vObj.data[i].isFavorite==1) var star = "<i id=\"itemStar"+vObj.data[i].id+"\" onClick=\"toggleFavorite(true,"+vObj.data[i].id+")\" class=\"fa-solid fa-star nohover\" style=\"color: rgb(255, 167, 24)\"></i>";
+				
 				var media = "";
 				if(vObj.data[i].image != null){
 					if(vObj.data[i].status == 2){
-						media = "<div class=\"image\"><div class=\"badge_vip\" data-top=\"VIP\"></div><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i><i onClick=\"toggleFavorite(false)\" class=\"fa-solid fa-star\"></i><img src=\"<?php echo $path."/"; ?>"+vObj.data[i].image+"\" onerror=\"this.onerror=null; this.src='image-solid.svg'\" /></div>";
+						media = "<div class=\"image\"><div class=\"badge_vip\" data-top=\"VIP\"></div><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i>"+star+"<img src=\"<?php echo $path."/"; ?>"+vObj.data[i].image+"\" onerror=\"this.onerror=null; this.src='image-solid.svg'\" /></div>";
 					}
 					else if(vObj.data[i].status == 1){
-						media = "<div class=\"image\"><div class=\"badge_special\" data-top=\"Онцгой\"></div><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i><i onClick=\"toggleFavorite(false)\" class=\"fa-solid fa-star\"></i><img src=\"<?php echo $path."/"; ?>"+vObj.data[i].image+"\" onerror=\"this.onerror=null; this.src='image-solid.svg'\" /></div>";
+						media = "<div class=\"image\"><div class=\"badge_special\" data-top=\"Онцгой\"></div><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i>"+star+"<img src=\"<?php echo $path."/"; ?>"+vObj.data[i].image+"\" onerror=\"this.onerror=null; this.src='image-solid.svg'\" /></div>";
 					}
 					else if(vObj.data[i].status == 0){
-						media = "<div class=\"image\"><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i><i onClick=\"toggleFavorite(false)\" class=\"fa-solid fa-star\"></i><img src=\"<?php echo $path."/"; ?>"+vObj.data[i].image+"\" onerror=\"this.onerror=null; this.src='image-solid.svg'\" /></div>";
+						media = "<div class=\"image\"><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i>"+star+"<img src=\"<?php echo $path."/"; ?>"+vObj.data[i].image+"\" onerror=\"this.onerror=null; this.src='image-solid.svg'\" /></div>";
 					}
 				}
 				else if(vObj.data[i].youtube != ""){
 					if(vObj.data[i].status == 2){
-						media = "<div class=\"image\"><div class=\"badge_vip\" data-top=\"VIP\"></div><i onClick=\"toggleFavorite(false)\" class=\"fa-solid fa-star\"></i><iframe src=\""+vObj.data[i].youtube+"\" allowfullscreen></iframe></div>";
+						media = "<div class=\"image\"><div class=\"badge_vip\" data-top=\"VIP\"></div>"+star+"<iframe src=\""+vObj.data[i].youtube+"\" allowfullscreen></iframe></div>";
 					}
 					else if(vObj.data[i].status == 1){
-						media = "<div class=\"image\"><div class=\"badge_special\" data-top=\"Онцгой\"></div><i onClick=\"toggleFavorite(false)\" class=\"fa-solid fa-star\"></i><iframe src=\""+vObj.data[i].youtube+"\" allowfullscreen></iframe></div>";
+						media = "<div class=\"image\"><div class=\"badge_special\" data-top=\"Онцгой\"></div>"+star+"<iframe src=\""+vObj.data[i].youtube+"\" allowfullscreen></iframe></div>";
 					}
 					else if(vObj.data[i].status == 0){
-						media = "<div class=\"image\"><i onClick=\"toggleFavorite(false)\" class=\"fa-solid fa-star\"></i><iframe src=\""+vObj.data[i].youtube+"\" allowfullscreen></iframe></div>";
+						media = "<div class=\"image\">"+star+"<iframe src=\""+vObj.data[i].youtube+"\" allowfullscreen></iframe></div>";
 					}
 				}
 				else if(vObj.data[i].video != ""){
 					if(vObj.data[i].status == 2){
-						media = "<div class=\"image\"><div class=\"badge_vip\" data-top=\"VIP\"></div><i onClick=\"toggleFavorite(false)\" class=\"fa-solid fa-star\"></i><video controls=\"controls\" preload=\"metadata\" style=\"border-radius: 5px\"><source src=\"<?php echo $path."/"; ?>"+vObj.data[i].video+"#t=0.5\" type=\""+findTypeOfVideo(vObj.data[i].video)+"\"></video></div>";
+						media = "<div class=\"image\"><div class=\"badge_vip\" data-top=\"VIP\"></div>"+star+"<video controls=\"controls\" preload=\"metadata\" style=\"border-radius: 5px\"><source src=\"<?php echo $path."/"; ?>"+vObj.data[i].video+"#t=0.5\" type=\""+findTypeOfVideo(vObj.data[i].video)+"\"></video></div>";
 					}
 					else if(vObj.data[i].status == 1){
-						media = "<div class=\"image\"><div class=\"badge_special\" data-top=\"Онцгой\"></div><i onClick=\"toggleFavorite(false)\" class=\"fa-solid fa-star\"></i><video controls=\"controls\" preload=\"metadata\" style=\"border-radius: 5px\"><source src=\"<?php echo $path."/"; ?>"+vObj.data[i].video+"#t=0.5\" type=\""+findTypeOfVideo(vObj.data[i].video)+"\"></video></div>";
+						media = "<div class=\"image\"><div class=\"badge_special\" data-top=\"Онцгой\"></div>"+star+"<video controls=\"controls\" preload=\"metadata\" style=\"border-radius: 5px\"><source src=\"<?php echo $path."/"; ?>"+vObj.data[i].video+"#t=0.5\" type=\""+findTypeOfVideo(vObj.data[i].video)+"\"></video></div>";
 					}
 					else if(vObj.data[i].status == 0){
-						media = "<div class=\"image\"><i onClick=\"toggleFavorite(false)\" class=\"fa-solid fa-star\"></i><video controls=\"controls\" preload=\"metadata\" style=\"border-radius: 5px\"><source src=\"<?php echo $path."/"; ?>"+vObj.data[i].video+"#t=0.5\" type=\""+findTypeOfVideo(vObj.data[i].video)+"\"></video></div>";
+						media = "<div class=\"image\">"+star+"<video controls=\"controls\" preload=\"metadata\" style=\"border-radius: 5px\"><source src=\"<?php echo $path."/"; ?>"+vObj.data[i].video+"#t=0.5\" type=\""+findTypeOfVideo(vObj.data[i].video)+"\"></video></div>";
 					}
 				}
 				else {
 					if(vObj.data[i].status == 2){
-						media = "<div class=\"image\"><div class=\"badge_vip\" data-top=\"VIP\"></div><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i><i onClick=\"toggleFavorite(false)\" class=\"fa-solid fa-star\"></i><img src=\"notfound.png\" onerror=\"this.onerror=null; this.src='image-solid.svg'\" /></div>";
+						media = "<div class=\"image\"><div class=\"badge_vip\" data-top=\"VIP\"></div><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i>"+star+"<img src=\"notfound.png\" onerror=\"this.onerror=null; this.src='image-solid.svg'\" /></div>";
 					}
 					else if(vObj.data[i].status == 1){
-						media = "<div class=\"image\"><div class=\"badge_special\" data-top=\"Онцгой\"></div><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i><i onClick=\"toggleFavorite(false)\" class=\"fa-solid fa-star\"></i><img src=\"notfound.png\" onerror=\"this.onerror=null; this.src='image-solid.svg'\" /></div>";
+						media = "<div class=\"image\"><div class=\"badge_special\" data-top=\"Онцгой\"></div><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i>"+star+"<img src=\"notfound.png\" onerror=\"this.onerror=null; this.src='image-solid.svg'\" /></div>";
 					}
 					else if(vObj.data[i].status == 0){
-						media = "<div class=\"image\"><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i><i onClick=\"toggleFavorite(false)\" class=\"fa-solid fa-star\"></i><img src=\"notfound.png\" onerror=\"this.onerror=null; this.src='image-solid.svg'\" /></div>";
+						media = "<div class=\"image\"><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i>"+star+"<img src=\"notfound.png\" onerror=\"this.onerror=null; this.src='image-solid.svg'\" /></div>";
 					}
 				}
 				//onClick=\"pagenavigation('detail&id="+vObj.data[i].id+"')\"

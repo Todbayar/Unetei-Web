@@ -232,3 +232,17 @@ function convertPriceToTextJS(number){
 			return parseFloat(number).toLocaleString("en-US");
 	}
 }
+
+function toggleFavorite(isFav, id){
+	if(!isFav){
+		$("#itemStar"+id).addClass("nohover");
+		$("#itemStar"+id).css("color", "#FFA718");
+		$("#itemStar"+id).attr("onclick", "toggleFavorite(true, "+id+")");
+	}
+	else {
+		$("#itemStar"+id).removeClass("nohover");
+		$("#itemStar"+id).css("color", "gray");
+		$("#itemStar"+id).attr("onclick", "toggleFavorite(false, "+id+")");
+	}
+	$.post("mysql_item_toggle_favorite.php", {id:id});
+}
