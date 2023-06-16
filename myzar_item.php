@@ -19,6 +19,11 @@ include_once "mysql_misc.php";
 	
 .myzar_content_list_item .myzar_content_list_item_top {
 	padding: 4px;
+	cursor: pointer;
+}
+
+.myzar_content_list_item .myzar_content_list_item_top:hover {
+	background: #f3f3f3;
 }
 	
 .myzar_content_list_item .myzar_content_list_item_top img {
@@ -181,7 +186,7 @@ mysqli_free_result($resultFetchListItemsStateCountInActive);
 		$days_remain = (new DateTime($expire_datetime))->diff(new DateTime("now"))->format("%a");
 	?>
 	<div class="myzar_content_list_item">
-		<table class="myzar_content_list_item_top" style="display: flex">
+		<table class="myzar_content_list_item_top" style="display: flex" onClick="pagenavigation('detail&id=<?php echo $rowFetchListItems["id"]; ?>')">
 			<tr>
 				<?php
 				if($rowFetchListItems["image"] != "" || $rowFetchListItems["youtube"] != "" || $rowFetchListItems["video"]) {

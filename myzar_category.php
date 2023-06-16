@@ -343,28 +343,40 @@ function myzar_category_fetch_list(tableID, parentID, title, icon, hasChildren, 
 						}
 					}
 					else {
-						if(objMyZarCategoryList[i].count_category_children > 0){
-							if(objMyZarCategoryList[i].icon != null){
-								$("#myzar_content_category_list").append("<div onClick=\"myzar_category_fetch_list("+(tableID+1)+", "+objMyZarCategoryList[i].id+", '"+objMyZarCategoryList[i].title+"', '"+objMyZarCategoryList[i].icon+"', true, false)\" class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: "+buttonColor+"; height:18px\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"32px\" height=\"32px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div><i class=\"fa-solid fa-ellipsis-vertical\" style=\"color:#68ceee; margin-left: 10px; font-size: 20px\"></i></div>");
+						//category of others
+						if(objMyZarCategoryList[i].status == 0){
+							if(objMyZarCategoryList[i].count_category_children > 0){
+								if(objMyZarCategoryList[i].icon != null){
+									$("#myzar_content_category_list").append("<div onClick=\"myzar_category_fetch_list("+(tableID+1)+", "+objMyZarCategoryList[i].id+", '"+objMyZarCategoryList[i].title+"', '"+objMyZarCategoryList[i].icon+"', true, false)\" class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: "+buttonColor+"; height:18px\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"32px\" height=\"32px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div><i class=\"fa-solid fa-ellipsis-vertical\" style=\"color:#68ceee; margin-left: 10px; font-size: 20px\"></i></div>");
+								}
+								else {
+									$("#myzar_content_category_list").append("<div onClick=\"myzar_category_fetch_list("+(tableID+1)+", "+objMyZarCategoryList[i].id+", '"+objMyZarCategoryList[i].title+"', '', true, false)\" class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: "+buttonColor+"; height:18px\"><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div><i class=\"fa-solid fa-ellipsis-vertical\" style=\"color:#68ceee; margin-left: 10px; font-size: 20px\"></i></div>");
+								}
+							}
+							else if(objMyZarCategoryList[i].count_item_children > 0){
+								if(objMyZarCategoryList[i].icon != null){
+									$("#myzar_content_category_list").append("<div onClick=\"myzar_category_fetch_list("+(tableID+1)+", "+objMyZarCategoryList[i].id+", '"+objMyZarCategoryList[i].title+"', '"+objMyZarCategoryList[i].icon+"', true, true)\" class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: "+buttonColor+"; height:18px\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"32px\" height=\"32px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div><i class=\"fa-solid fa-ellipsis-vertical\" style=\"color:#68ceee; margin-left: 10px; font-size: 20px\"></i></div>");
+								}
+								else {
+									$("#myzar_content_category_list").append("<div onClick=\"myzar_category_fetch_list("+(tableID+1)+", "+objMyZarCategoryList[i].id+", '"+objMyZarCategoryList[i].title+"', '', true, true)\" class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: "+buttonColor+"; height:18px\"><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div><i class=\"fa-solid fa-ellipsis-vertical\" style=\"color:#68ceee; margin-left: 10px; font-size: 20px\"></i></div>");
+								}
 							}
 							else {
-								$("#myzar_content_category_list").append("<div onClick=\"myzar_category_fetch_list("+(tableID+1)+", "+objMyZarCategoryList[i].id+", '"+objMyZarCategoryList[i].title+"', '', true, false)\" class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: "+buttonColor+"; height:18px\"><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div><i class=\"fa-solid fa-ellipsis-vertical\" style=\"color:#68ceee; margin-left: 10px; font-size: 20px\"></i></div>");
+								if(objMyZarCategoryList[i].icon != null){
+									$("#myzar_content_category_list").append("<div onClick=\"myzar_category_fetch_list("+(tableID+1)+", "+objMyZarCategoryList[i].id+", '"+objMyZarCategoryList[i].title+"', '"+objMyZarCategoryList[i].icon+"', false, false)\" class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: "+buttonColor+"; height:18px\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"32px\" height=\"32px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div></div>");
+								}
+								else {
+									$("#myzar_content_category_list").append("<div onClick=\"myzar_category_fetch_list("+(tableID+1)+", "+objMyZarCategoryList[i].id+", '"+objMyZarCategoryList[i].title+"', '', false, false)\" class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: "+buttonColor+"; height:18px\"><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div></div>");
+								}
 							}
 						}
-						else if(objMyZarCategoryList[i].count_item_children > 0){
+						else if(objMyZarCategoryList[i].status == 1) {
+							//category brand of others
 							if(objMyZarCategoryList[i].icon != null){
-								$("#myzar_content_category_list").append("<div onClick=\"myzar_category_fetch_list("+(tableID+1)+", "+objMyZarCategoryList[i].id+", '"+objMyZarCategoryList[i].title+"', '"+objMyZarCategoryList[i].icon+"', true, true)\" class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: "+buttonColor+"; height:18px\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"32px\" height=\"32px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div><i class=\"fa-solid fa-ellipsis-vertical\" style=\"color:#68ceee; margin-left: 10px; font-size: 20px\"></i></div>");
+								$("#myzar_content_category_list").append("<div class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: "+buttonColor+"; height:18px\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"32px\" height=\"32px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div><i class=\"fa-solid fa-lock\" style=\"color:#9ad2ff; margin-left: 10px; font-size: 20px\"></i></div>");
 							}
 							else {
-								$("#myzar_content_category_list").append("<div onClick=\"myzar_category_fetch_list("+(tableID+1)+", "+objMyZarCategoryList[i].id+", '"+objMyZarCategoryList[i].title+"', '', true, true)\" class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: "+buttonColor+"; height:18px\"><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div><i class=\"fa-solid fa-ellipsis-vertical\" style=\"color:#68ceee; margin-left: 10px; font-size: 20px\"></i></div>");
-							}
-						}
-						else {
-							if(objMyZarCategoryList[i].icon != null){
-								$("#myzar_content_category_list").append("<div onClick=\"myzar_category_fetch_list("+(tableID+1)+", "+objMyZarCategoryList[i].id+", '"+objMyZarCategoryList[i].title+"', '"+objMyZarCategoryList[i].icon+"', false, false)\" class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: "+buttonColor+"; height:18px\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"32px\" height=\"32px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div></div>");
-							}
-							else {
-								$("#myzar_content_category_list").append("<div onClick=\"myzar_category_fetch_list("+(tableID+1)+", "+objMyZarCategoryList[i].id+", '"+objMyZarCategoryList[i].title+"', '', false, false)\" class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: "+buttonColor+"; height:18px\"><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div></div>");
+								$("#myzar_content_category_list").append("<div class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: "+buttonColor+"; height:18px\"><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div><i class=\"fa-solid fa-lock\" style=\"color:#9ad2ff; margin-left: 10px; font-size: 20px\"></i></div>");
 							}
 						}
 					}
