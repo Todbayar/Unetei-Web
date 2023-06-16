@@ -372,7 +372,16 @@ function recursiveFetchCategory(tableID, parentID, title, icon){
 				   	var html = "<div";
 				   	html += " onClick=\"recursiveFetchCategory("+(tableID+1)+","+objCategoryList[i].id+",'"+objCategoryList[i].title+"','"+objCategoryList[i].icon+"')\"";
 				   	html += " class=\"button_yellow\" style=\"float:left; margin:5px; height:18px; background: #f3f3f3\">";
-				   	if(objCategoryList[i].icon != null) html += "<img src=\"./<?php echo $path; ?>/"+objCategoryList[i].icon+"\" width=\"32px\" height=\"32px\">";
+				   	if(objCategoryList[i].icon != null){
+						var img = new Image();
+						img.progressload("./<?php echo $path; ?>/"+objCategoryList[i].icon, function (percent) {
+							console.log("<download>:"+objCategoryList[i].icon+" ("+Math.round(percent)+"/100%)")
+						}, function (image) {
+							console.log("<Done>");
+							$("#categoryImage"+objCategoryList[i].id).attr("src", image);
+						});
+						html += "<img id=\"categoryImage"+objCategoryList[i].id+"\" src=\"Loading.gif\" width=\"32px\" height=\"32px\">";
+					}
 				   	html += "<div style=\"margin-left: 5px\">"+objCategoryList[i].title+"</div></div>";
 				   	$(".searchCategoryListAvailable").append(html);
 			   	}
@@ -383,6 +392,44 @@ function recursiveFetchCategory(tableID, parentID, title, icon){
 	reqMyZarCategoryListData.send(myZarCategoryListData);
 }
 
+Image.prototype.progressload = function (image_url, progress_callback, done_callback) {
+	var this_img, xhr = new XMLHttpRequest();
+
+	xhr.open("get", image_url, true);
+	xhr.responseType = "arraybuffer";
+
+	xhr.onload = function () {
+
+		var blob = new Blob([this.response]);
+		this_img = URL.createObjectURL(blob);
+
+		if (typeof done_callback == "function") {
+			done_callback(this_img);
+		}
+		setTimeout(function () { URL.revokeObjectURL(this_img); }, 5000); // NOTE: this frees the resource after it has presumably been used
+	};
+
+	xhr.onprogress = function (ev) {
+		if (ev.lengthComputable && typeof progress_callback == "function") {
+			progress_callback((ev.loaded / ev.total) * 100);
+		}
+	};
+
+	xhr.onloadstart = function () {
+		if (typeof progress_callback == "function") {
+			progress_callback(0);
+		}
+	};
+
+	xhr.onloadend = function () {
+		if (typeof progress_callback == "function") {
+			progress_callback(100);
+		}
+	}
+
+	xhr.send();
+};
+	
 function showSearch(){
 	window.scrollTo(0, 0);
 	$("body").css("overflow-y", "hidden");

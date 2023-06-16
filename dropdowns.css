@@ -2,6 +2,10 @@
 
 .dropdown {
 	position: absolute;
+	z-index: 1; 
+	left: 0;
+	bottom: -110px;
+	width: 123px;
 	background: #FFFFFF;
 	padding: 10px;
 	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 2px 10px 0 rgba(0, 0, 0, 0.19);

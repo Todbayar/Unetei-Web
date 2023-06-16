@@ -13,7 +13,8 @@ $(document).ready(function(){
 	$("#myzar_category_enter_icon_file").change(function(){
 		const vIconType = $(this)[0].files[0].type;
 		const vIconName = $(this)[0].files[0].name;
-		if(vIconType == "image/svg+xml" || vIconType == "image/png"){
+		const vIconSize = $(this)[0].files[0].size;
+		if((vIconType == "image/svg+xml" || vIconType == "image/png") && vIconSize <= 594944){
 			var reader = new FileReader();
 			reader.onload = function (e) {
 				$("#myzar_category_enter_icon_image").attr("src", e.target.result);
@@ -32,7 +33,7 @@ $(document).ready(function(){
 		else {
 			$("#myzar_category_enter_icon_file").val(null);
 			$("#myzar_category_enter_msg").text("");
-			$("#myzar_category_enter_error").text("Файлын төрөл буруу байна!");
+			$("#myzar_category_enter_error").text("Файлын төрөл буруу эсвэл хэмжээ 581KB-аас их байна!");
 			document.getElementById("myzar_category_enter_icon_image").src = "image-solid.svg";
 			isMyZarCategoryAddIconValid = false;
 		}

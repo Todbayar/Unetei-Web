@@ -38,7 +38,9 @@ include "mysql_myzar_item_remove_process.php";	//for auto removal of expired ite
 			measurementId: "G-Q1YLJDB3KC"
 		};
 		firebase.initializeApp(firebaseConfig);
-
+		
+		var timerDropDownMenu;
+			
 		$(document).ready(function(){
 			<?php
 			if(isset($_COOKIE["uid"]) && isset($_COOKIE["phone"])){
@@ -54,10 +56,20 @@ include "mysql_myzar_item_remove_process.php";	//for auto removal of expired ite
 			$(".myzar").hover(function(){
 				$(".dropdown").show();
 			}, function(){
+				timerDropDownMenu = setTimeout(function(){
+					$(".myzar .dropdown").hide();
+					clearTimeout(timerDropDownMenu);
+				}, 3000);
+			});
+			
+			$(".myzar .dropdown").hover(function(){
+				clearTimeout(timerDropDownMenu);
+				$(".dropdown").show();
+			}, function(){
 				$(".dropdown").hide();
 			});
 		});
-			
+		
 		function clearSearch(){
 			$("#searchQuality option").eq(0).prop("selected", true);
 			$("#searchOrder option").eq(0).prop("selected", true);
