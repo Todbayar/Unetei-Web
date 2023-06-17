@@ -59,7 +59,6 @@ include "info.php";
 }
 
 .searchResult .list .item {
-/*	max-height: 230px;*/
 	margin-left: 5px;
 	margin-right: 5px;
 	margin-top: 5px;
@@ -453,9 +452,9 @@ function fetchItems(){
 	const vCategory = typeof selectedCategories !== "undefined" && selectedCategories.length > 0 ? "'c"+selectedCategories[selectedCategories.length-1].tableID+"_"+selectedCategories[selectedCategories.length-1].id+"'" : "";	
 	
 	$.post("mysql_item_list_process.php", {type:searchType, page:searchPage, category:vCategory, search:$("#searchInput").val(), quality:$("#searchQuality option:selected").val(), order:$("#searchOrder option:selected").val(), priceLowest:$("#searchPriceLimitLowest option:selected").val(), priceHighest:$("#searchPriceLimitHighest option:selected").val(), city:$("#searchCity option:selected").val(), rate:$("#searchRate option:selected").val()}).done(function(responseText){
-		console.log("<mysql_item_list_process>:"+responseText);
+//		console.log("<mysql_item_list_process>:"+responseText);
 		const vObj = JSON.parse(responseText);
-		console.log("<mysql_item_list_process1>:"+vObj.query);
+//		console.log("<mysql_item_list_process1>:"+vObj.query);
 		$("#searchInput").prop("placeholder",vObj.page.countItems+" зар байна");
 		searchPageLast = vObj.page.countPages-1;
 		
@@ -551,8 +550,7 @@ function fetchItems(){
 						media = "<div class=\"image\"><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i>"+star+"<img src=\"notfound.png\" onerror=\"this.onerror=null; this.src='image-solid.svg'\" /></div>";
 					}
 				}
-				//onClick=\"pagenavigation('detail&id="+vObj.data[i].id+"')\"
-				var html = "<div class=\"item\">"+media+"<div class=\"price\">"+convertPriceToTextJS(vObj.data[i].price)+" ₮</div><div class=\"title\">"+vObj.data[i].title+"</div></div>";
+				var html = "<div class=\"item\">"+media+"<div onClick=\"pagenavigation('detail&id="+vObj.data[i].id+"')\"><div class=\"price\">"+convertPriceToTextJS(vObj.data[i].price)+" ₮</div><div class=\"title\">"+vObj.data[i].title+"</div></div></div>";
 
 				if(searchType == -1){
 					if(vObj.data[i].status==2){

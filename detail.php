@@ -103,6 +103,22 @@ include_once "info.php";
 .detailMain .left {
 	width: 100%;
 }
+
+.detailMain .left .title {
+	align-items: center;
+	display: flex;
+}
+	
+.detailMain .left .title .fa-star {
+	margin-left: 10px;
+	font-size: 28px;
+	cursor: pointer;
+}
+	
+.detailMain .left .title .fa-star:not(.nohover):hover {
+	opacity: 0.9;
+	color: #FFA718;
+}
 	
 .detailMain .left .images {
 	margin-top: 10px;
@@ -188,14 +204,13 @@ include_once "info.php";
 }
 	
 .detailMain .left .list .item {
-/*	max-height: 230px;*/
-	float: left;
 	margin-left: 5px;
 	margin-right: 5px;
 	margin-top: 5px;
 	margin-bottom: 10px;
 	cursor: pointer;
-	position: relative;
+	display: inline-block;
+	vertical-align: top;
 }
 	
 .detailMain .left .list .item .badge_vip {
@@ -331,7 +346,7 @@ include_once "info.php";
 	z-index: 1;
 }
 
-.detailMain .left .list .item .image .fa-star:hover {
+.detailMain .left .list .item .image .fa-star:not(.nohover):hover {
 	opacity: 0.9;
 	color: #FFA718;
 }
@@ -348,7 +363,12 @@ include_once "info.php";
 	margin-top: 5px;
 	padding-left: 5px;
 	padding-right: 5px;
-	padding-bottom: 5px;
+	padding-bottom: 3px !important;
+	overflow: hidden;
+	display: -webkit-box;
+	-webkit-line-clamp: 3; /* number of lines to show */
+		   line-clamp: 3; 
+	-webkit-box-orient: vertical;
 }
 </style>
 
@@ -407,7 +427,7 @@ function startChat(toID, message){
 <div class="detail">
 <?php
 if(isset($_GET["id"])){
-	$query = "SELECT *, item.phone AS item_phone FROM item RIGHT JOIN user ON user.id=item.userID WHERE item.id=".$_GET["id"];
+	$query = "SELECT *, (SELECT IF(COUNT(*)>0, 1, 0) FROM favorite WHERE itemID=item.id AND userID=".$_COOKIE["userID"].") AS isFavorite, item.phone AS item_phone FROM item RIGHT JOIN user ON user.id=item.userID WHERE item.id=".$_GET["id"];
 	$result = $conn->query($query);
 	$row = mysqli_fetch_array($result);
 	
@@ -449,7 +469,22 @@ if(isset($_GET["id"])){
 	</div>
 	<div class="detailMain">
 		<div class="left">
-			<div class="title"><?php echo $row["title"]; ?> <i class="fa-regular fa-star" style="color:#a4a4a4"></i></div>
+			<div class="title">
+				<?php 
+				echo $row["title"]; 
+				
+				if($row["isFavorite"]==0){
+					?>
+					<i id="itemStar<?php echo $_GET["id"]; ?>" onClick="toggleFavorite(false,<?php echo $_GET["id"]; ?>)" class="fa-solid fa-star"></i>
+					<?php
+				}
+				else if($row["isFavorite"]==1){
+					?>
+					<i id="itemStar<?php echo $_GET["id"]; ?>" onClick="toggleFavorite(true,<?php echo $_GET["id"]; ?>)" class="fa-solid fa-star nohover" style="color: rgb(255, 167, 24)"></i>
+					<?php
+				}
+				?>
+			</div>
 			<div><?php echo $row["city"]; ?></div>
 			<div class="data1" style="margin-top: 5px; display: flex">
 				<div>Нийтэлсэн: <?php echo $row["datetime"]; ?></div>
@@ -556,11 +591,11 @@ if(isset($_GET["id"])){
 			<h3>Ижил зарууд</h3>
 			<div class="list">
 			<?php
-			$queryOthers = "SELECT *, (SELECT image FROM images WHERE item.id=images.item LIMIT 1) AS image, (SELECT COUNT(*) FROM images WHERE item.id=images.item) AS count_images FROM item WHERE category IN (".$joinedCategories.") AND id NOT IN (".$_GET["id"].") AND isactive=4 ORDER BY datetime DESC LIMIT 12";
+			$queryOthers = "SELECT *, (SELECT IF(COUNT(*)>0, 1, 0) FROM favorite WHERE itemID=item.id AND userID=".$_COOKIE["userID"].") AS isFavorite, (SELECT image FROM images WHERE item.id=images.item LIMIT 1) AS image, (SELECT COUNT(*) FROM images WHERE item.id=images.item) AS count_images FROM item WHERE category IN (".$joinedCategories.") AND id NOT IN (".$_GET["id"].") AND isactive=4 ORDER BY datetime DESC LIMIT 12";
 			$resultOthers = $conn->query($queryOthers);
 			while($rowOthers = mysqli_fetch_array($resultOthers)){
 				?>
-				<div class="item" onClick="javascript:pagenavigation('detail&id=<?php echo $rowOthers["id"]; ?>')">
+				<div class="item">
 					<div class="image">
 						<?php
 						if($rowOthers["status"]==2){
@@ -578,12 +613,23 @@ if(isset($_GET["id"])){
 						<i class="count"><i class="fa-solid fa-camera"></i> <?php echo $rowOthers["count_images"]; ?></i>
 						<?php
 						}
+						if($rowOthers["isFavorite"]==0){
 						?>
-						<i class="fa-solid fa-star"></i>
+						<i id="itemStar<?php echo $rowOthers["id"]; ?>" onClick="toggleFavorite(false,<?php echo $rowOthers["id"]; ?>)" class="fa-solid fa-star"></i>
+						<?php
+						}
+						else if($rowOthers["isFavorite"]==1){
+						?>
+						<i id="itemStar<?php echo $rowOthers["id"]; ?>" onClick="toggleFavorite(true,<?php echo $rowOthers["id"]; ?>)" class="fa-solid fa-star nohover" style="color: rgb(255, 167, 24)"></i>
+						<?php
+						}
+						?>
 						<img src="<?php echo $path."/".$rowOthers["image"]; ?>" onerror="this.onerror=null; this.src='notfound.png'" />
 					</div>
-					<div class="price"><?php echo convertPriceToText($rowOthers["price"]); ?> ₮</div>
-					<div class="title"><?php echo $rowOthers["title"]; ?></div>
+					<div onClick="javascript:pagenavigation('detail&id=<?php echo $rowOthers["id"]; ?>')">
+						<div class="price"><?php echo convertPriceToText($rowOthers["price"]); ?> ₮</div>
+						<div class="title"><?php echo $rowOthers["title"]; ?></div>
+					</div>
 				</div>
 				<?php
 			}
