@@ -120,6 +120,9 @@ include "mysql_myzar_item_remove_process.php";	//for auto removal of expired ite
 					case "detail":
 						include "detail.php";
 						break;
+					case "favorite":
+						include "favorite.php";
+						break;
 				}
 			}
 			else {

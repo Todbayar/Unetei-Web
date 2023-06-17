@@ -39,7 +39,7 @@ include "mysql_config.php";
 	<?php
 	if(isset($_COOKIE["userID"])){
 		?>
-		<i class="fa-regular fa-star" style="font-size: 24px; color: #FFFFFF; font: normal; margin-left: 10px; cursor: pointer"></i>
+		<i onClick="pagenavigation('favorite')" class="fa-regular fa-star" style="font-size: 24px; color: #FFFFFF; font: normal; margin-left: 10px; cursor: pointer"></i>
 		<?php
 		$query = "SELECT * FROM chat WHERE (toID=".$_COOKIE["userID"]." OR toID=0) AND isRead=0";
 		$result = $conn->query($query);
