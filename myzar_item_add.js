@@ -216,7 +216,8 @@ function myzar_item_video_remove(){
 }
 
 function myzar_item_update(itemID, title, categories, role){
-	console.log("<myzar_item_update>:"+itemID);
+	window.scrollTo(0, 0);
+	$("body").css("overflow-y", "hidden");
 	$(".popup.item_publish_option").show();
 	$(".popup.item_publish_option .title").html(title);
 	$(".popup.item_publish_option .category").empty();
