@@ -4,8 +4,8 @@ date_default_timezone_set("Asia/Ulaanbaatar");
 
 //info
 $service_phone = "(+976)99213557";
-$title = "Unetei";
-$domain = "Unetei.mn";
+$domain_title = "Zarchi";
+$domain = "zarchi.mn";
 $contact_phone = "(+976)99213557";
 
 //files

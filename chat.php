@@ -4,12 +4,6 @@ include "info.php";
 ?>
 <script>
 $(document).ready(function(){
-	Notification.requestPermission().then((permission) => {
-		if (permission === 'granted') {
-		  console.log('Notification permission granted.');
-		}
-	});
-	
 	$(".chat .right .bottom #chatMessage").keydown( function( event ) {
 		if(event.which === 13){
 			event.preventDefault();

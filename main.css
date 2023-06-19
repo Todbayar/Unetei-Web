@@ -37,11 +37,16 @@ body {
 	margin-top: auto;
 }
 
-.footer .contact {
+.footer .wrap .left {
+	display: block;
+}
+
+.footer .wrap .left div {
 	margin-left: 10px;
 	margin-right: 10px;
 	color: #174400;
-	font-family: RobotoBold;
+	font-family: RobotoRegular;
+	font-size: 14px;
 }
 
 .wrap {

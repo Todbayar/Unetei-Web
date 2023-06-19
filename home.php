@@ -63,9 +63,9 @@ include "info.php";
 	margin-right: 5px;
 	margin-top: 5px;
 	margin-bottom: 10px;
-	cursor: pointer;
 	display: inline-block;
 	vertical-align: top;
+	cursor: pointer;
 }
 	
 .searchResult .list .item .badge_vip {
@@ -128,6 +128,11 @@ include "info.php";
 	background: #f3f3f3;
 	border-radius: 10px;
 	box-shadow: 2px 2px 10px #888888;
+}
+	
+.searchResult .list .item:hover > div:nth-child(2){
+/*	color: #3DB300;*/
+	color: #007DC5;
 }
 
 .searchResult .list .item .image {
@@ -268,13 +273,6 @@ var searchPageRangeCount = 2;
 var searchPageLast = 0;
 
 $(document).ready(function() {
-//	$(".searchResult .list .item").click(function(e){
-//		console.log(e.target.nodeName+", "+e.target.nodeType+", "+e.target.nodeValue);
-//		if(!$(e.target).is(".fa-star")){
-//			pagenavigation("detail&id="+$(this).attr("id"));
-//		}
-//	});
-	
 	if(sessionStorage.getItem("searchUserID")!=null){
 		searchUserID = sessionStorage.getItem("searchUserID");
 		sessionStorage.removeItem("searchUserID");
@@ -564,7 +562,7 @@ function fetchItems(){
 						media = "<div class=\"image\"><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i>"+star+"<img src=\"notfound.png\" onerror=\"this.onerror=null; this.src='image-solid.svg'\" /></div>";
 					}
 				}
-				var html = "<div id=\""+vObj.data[i].id+"\" class=\"item\">"+media+"<div onClick=\"pagenavigation('detail&id="+vObj.data[i].id+"')\"><div class=\"price\">"+convertPriceToTextJS(vObj.data[i].price)+" ₮</div><div class=\"title\">"+vObj.data[i].title+"</div></div></div>";
+				var html = "<div id=\""+vObj.data[i].id+"\" class=\"item\">"+media+"<div><div class=\"price\">"+convertPriceToTextJS(vObj.data[i].price)+" ₮</div><div class=\"title\">"+vObj.data[i].title+"</div></div></div>";
 
 				if(searchType == -1){
 					if(vObj.data[i].status==2){
@@ -597,6 +595,13 @@ function fetchItems(){
 				}
 			}
 		}
+		$(document).ready(function() {
+			$(".searchResult .list .item").click(function(e){
+				if(!$(e.target).is(".fa-star")){
+					pagenavigation("detail&id="+$(this).attr("id"));
+				}
+			});
+		});
 	});
 }
 </script>

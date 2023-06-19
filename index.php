@@ -42,6 +42,12 @@ include "mysql_myzar_item_remove_process.php";	//for auto removal of expired ite
 		var timerDropDownMenu;
 			
 		$(document).ready(function(){
+			Notification.requestPermission().then((permission) => {
+				if (permission === 'granted') {
+				  console.log('Notification permission granted.');
+				}
+			});
+			
 			<?php
 			if(isset($_COOKIE["uid"]) && isset($_COOKIE["phone"])){
 				?>
@@ -133,7 +139,11 @@ include "mysql_myzar_item_remove_process.php";	//for auto removal of expired ite
 		</div>
 		<div class="footer">
 			<div class="wrap">
-				<div class="contact">Холбоо барих: <?php echo $contact_phone; ?></div>
+				<img src="icon.png" width="40" height="40" style="object-fit: contain" />
+				<div class="left">
+					<div class="service">Техникийн тусламж: <?php echo $service_phone; ?></div>
+					<div class="contact">Холбоо барих: <?php echo $contact_phone; ?></div>
+				</div>
 			</div>
 		</div>
 		

@@ -1,5 +1,6 @@
 <?php
 include "mysql_config.php";
+include_once "info.php";
 ?>
 <script>
 
@@ -17,8 +18,8 @@ include "mysql_config.php";
 }
 </style>
 <div onClick="javascript:location.href='./'" style="display: flex; align-items: center; cursor: pointer">
-	<img src="icon.png" width="50" height="50" />
-	<div class="title">Unetei</div>
+	<img src="icon.png" width="40" height="40" style="object-fit: contain" />
+	<div class="title"><?php echo $domain_title; ?></div>
 </div>
 <div class="control">
 	<div class="myzar">
