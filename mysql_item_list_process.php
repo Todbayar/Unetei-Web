@@ -5,8 +5,14 @@ include_once "mysql_misc.php";
 
 $search = " isactive=4 AND";
 $order = "";
+$orderPlus = "ORDER BY count_images DESC";
+$favorite = "";
 $priceLowest = 0;
 $priceHighest = 0;
+
+if(isset($_COOKIE["userID"])){
+	$favorite = "(SELECT IF(COUNT(*)>0, 1, 0) FROM favorite WHERE itemID=item.id AND userID=".$_COOKIE["userID"].") AS isFavorite,";
+}
 
 if(isset($_POST["quality"]) && $_POST["quality"] != ""){
 	$search .= " quality=".$_POST["quality"]." AND";
@@ -51,10 +57,12 @@ if(isset($_POST["order"]) && $_POST["order"] != ""){
 
 if(isset($_POST["rate"]) && $_POST["rate"] != ""){
 	if($_POST["rate"] == 0){
-		$order .= ",((item_viewer+phone_viewer)/2) DESC";
+		if($order!="") $order .= ",((item_viewer+phone_viewer)/2) DESC";
+		else $order = "ORDER BY ((item_viewer+phone_viewer)/2) DESC";
 	}
 	else if($_POST["rate"] == 1){
-		$order .= ",((item_viewer+phone_viewer)/2) ASC";
+		if($order!="") $order .= ",((item_viewer+phone_viewer)/2) ASC";
+		else $order = "ORDER BY ((item_viewer+phone_viewer)/2) ASC";
 	}
 }
 
@@ -99,12 +107,14 @@ if(isset($_POST["type"])){
 		$pageOffset = $_POST["page"]*$pageCount;
 		$limit = " LIMIT ".$pageOffset.",".$pageCount;
 		
+		if($order!="") $orderPlus = ",count_images DESC";
+		
 		//fetch first vip
 		$queryCountItems = "SELECT * FROM item WHERE status=2 AND".substr($search, 0, strrpos($search, "AND"));
 		$rowCountItems = mysqli_num_rows($conn->query($queryCountItems));
 		$totalCountItems = $rowCountItems;
 		
-		$queryVip = "SELECT *, (SELECT IF(COUNT(*)>0, 1, 0) FROM favorite WHERE itemID=item.id AND userID=".$_COOKIE["userID"].") AS isFavorite, (SELECT COUNT(*) FROM images WHERE item=item.id) AS count_images, (SELECT image FROM images WHERE item=item.id LIMIT 1) AS image FROM item WHERE status=2 AND".substr($search, 0, strrpos($search, "AND")).$order.$limit;
+		$queryVip = "SELECT *, ".$favorite." (SELECT COUNT(*) FROM images WHERE item=item.id) AS count_images, (SELECT image FROM images WHERE item=item.id LIMIT 1) AS image FROM item WHERE status=2 AND".substr($search, 0, strrpos($search, "AND")).$order.$orderPlus.$limit;
 		$resultVip = $conn->query($queryVip);
 		while($rowVip = mysqli_fetch_object($resultVip)){
 			$arr["data"][] = $rowVip;
@@ -116,7 +126,7 @@ if(isset($_POST["type"])){
 		$totalCountItems += $rowCountItemsSpecial;
 		if($rowCountItems<$rowCountItemsSpecial) $rowCountItems=$rowCountItemsSpecial;
 		
-		$querySpecial = "SELECT *, (SELECT IF(COUNT(*)>0, 1, 0) FROM favorite WHERE itemID=item.id AND userID=".$_COOKIE["userID"].") AS isFavorite, (SELECT COUNT(*) FROM images WHERE item=item.id) AS count_images, (SELECT image FROM images WHERE item=item.id LIMIT 1) AS image FROM item WHERE status=1 AND".substr($search, 0, strrpos($search, "AND")).$order.$limit;
+		$querySpecial = "SELECT *, ".$favorite." (SELECT COUNT(*) FROM images WHERE item=item.id) AS count_images, (SELECT image FROM images WHERE item=item.id LIMIT 1) AS image FROM item WHERE status=1 AND".substr($search, 0, strrpos($search, "AND")).$order.$orderPlus.$limit;
 		$resultSpecial = $conn->query($querySpecial);
 		while($rowSpecial = mysqli_fetch_object($resultSpecial)){
 			$arr["data"][] = $rowSpecial;
@@ -128,7 +138,7 @@ if(isset($_POST["type"])){
 		$totalCountItems += $rowCountItemsRegular;
 		if($rowCountItems<$rowCountItemsRegular) $rowCountItems=$rowCountItemsRegular;
 		
-		$queryRegular = "SELECT *, (SELECT IF(COUNT(*)>0, 1, 0) FROM favorite WHERE itemID=item.id AND userID=".$_COOKIE["userID"].") AS isFavorite, (SELECT COUNT(*) FROM images WHERE item=item.id) AS count_images, (SELECT image FROM images WHERE item=item.id LIMIT 1) AS image FROM item WHERE status=0 AND".substr($search, 0, strrpos($search, "AND")).$order.$limit;
+		$queryRegular = "SELECT *, ".$favorite." (SELECT COUNT(*) FROM images WHERE item=item.id) AS count_images, (SELECT image FROM images WHERE item=item.id LIMIT 1) AS image FROM item WHERE status=0 AND".substr($search, 0, strrpos($search, "AND")).$order.$orderPlus.$limit;
 		$resultRegular = $conn->query($queryRegular);
 		while($rowRegular = mysqli_fetch_object($resultRegular)){
 			$arr["data"][] = $rowRegular;
@@ -138,7 +148,7 @@ if(isset($_POST["type"])){
 		$arr["page"]["perpage"] = $pageCount;
 		$arr["page"]["countItems"] = $totalCountItems;
 		$arr["page"]["countPages"] = ceil($rowCountItems/$pageCount);
-//		$arr["queryPage"] = $queryRegular;
+//		$arr["query"] = $queryRegular;
 		
 		echo json_encode($arr);
 	}
@@ -157,9 +167,11 @@ if(isset($_POST["type"])){
 		$arr["page"]["countPages"] = ceil($rowCountItems/$pageCount);
 //		$arr["queryPage"] = $queryCountItems;
 		
-		$query = "SELECT *, (SELECT IF(COUNT(*)>0, 1, 0) FROM favorite WHERE itemID=item.id AND userID=".$_COOKIE["userID"].") AS isFavorite, (SELECT COUNT(*) FROM images WHERE item=item.id) AS count_images, (SELECT image FROM images WHERE item=item.id LIMIT 1) AS image FROM item WHERE ".substr($search, 0, strrpos($search, "AND"));
+		if($order!="") $orderPlus = ",count_images DESC";
+		
+		$query = "SELECT *, ".$favorite." (SELECT COUNT(*) FROM images WHERE item=item.id) AS count_images, (SELECT image FROM images WHERE item=item.id LIMIT 1) AS image FROM item WHERE ".substr($search, 0, strrpos($search, "AND")).$order.$orderPlus.$limit;
 //		$arr["query"] = $query;
-		$result = $conn->query($query.$order.$limit);
+		$result = $conn->query($query);
 		while($row = mysqli_fetch_object($result)){
 			$arr["data"][] = $row;
 		}

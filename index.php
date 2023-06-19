@@ -11,7 +11,8 @@ include "mysql_myzar_item_remove_process.php";	//for auto removal of expired ite
 		<meta http-equiv="Permissions-Policy" content="interest-cohort=()">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		
-		<title><?php echo $title; ?></title>
+		<title><?php echo $domain_title; ?></title>
+		<link rel="icon" type="image/x-icon" href="android-chrome-512x512.png">
 		
 		<script src="https://www.gstatic.com/firebasejs/9.12.1/firebase-app-compat.js"></script>
 		<script src="https://www.gstatic.com/firebasejs/9.12.1/firebase-auth-compat.js"></script>
