@@ -54,7 +54,7 @@ include "mysql_myzar_item_remove_process.php";	//for auto removal of expired ite
 				?>
 				$("#myzar_phone").text("+"<?php echo $_COOKIE["phone"]; ?>);
 				$("#myzar_nav").text("Миний зар");
-				$("#myzar_nav").attr("onclick","pagenavigation('myzar')");
+				$("#myzar_button").attr("onclick","pagenavigation('myzar')");
 				$("#logoutButton").css("display", "flex");
 				<?php
 			}

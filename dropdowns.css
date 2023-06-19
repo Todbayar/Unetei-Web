@@ -2,9 +2,9 @@
 
 .dropdown {
 	position: absolute;
-	z-index: 1; 
-	left: 0;
-	bottom: -110px;
+	z-index: 1000; 
+	left: -5px;
+	top: 70px;
 	width: 123px;
 	background: #FFFFFF;
 	padding: 10px;

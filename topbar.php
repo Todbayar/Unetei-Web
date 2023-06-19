@@ -23,11 +23,12 @@ include_once "info.php";
 </div>
 <div class="control">
 	<div class="myzar">
-		<div style="display: flex; align-items: center; height: 70px; cursor: pointer; position: relative">
+		<div id="myzar_button" onClick="pagenavigation('login')" style="display: flex; align-items: center; height: 70px; cursor: pointer; position: relative">
 			<i class="fa-regular fa-user" style="font-size: 24px; color: #FFFFFF"></i>
 			<div class="removable" style="color:#FFFFFF; margin-left: 5px">Миний зарууд</div>
 			<div id="myzar_phone" class="removable" style="color: #174400">Нэвтрэх ба бүртгэл</div>
 			<i class="fas fa-angle-down removable" style="margin-left: 2px; font-size: 12px; color: #174400; margin-top: 4px; margin-right: 20px"></i>
+<!--
 			<div class="dropdown">
 				<div id="myzar_nav" class="button_yellow" align="center" onClick="pagenavigation('login')">Нэвтрэх</div>
 				<div id="logoutButton" onClick="logout()" class="button_yellow" style="margin-top: 10px; background:#F05557; display: none">
@@ -35,6 +36,7 @@ include_once "info.php";
 					<i class="fa-solid fa-right-from-bracket"></i>
 				</div>
 			</div>
+-->
 		</div>
 	</div>
 	<?php
