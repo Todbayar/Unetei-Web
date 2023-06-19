@@ -262,14 +262,28 @@ include "info.php";
 <script>
 var categoryTableID, categoryParentID, selectedCategories;
 var searchType = -1;
+var searchUserID = -1;
 var searchPage = 0;
 var searchPageRangeCount = 2;
 var searchPageLast = 0;
 
 $(document).ready(function() {
+//	$(".searchResult .list .item").click(function(e){
+//		console.log(e.target.nodeName+", "+e.target.nodeType+", "+e.target.nodeValue);
+//		if(!$(e.target).is(".fa-star")){
+//			pagenavigation("detail&id="+$(this).attr("id"));
+//		}
+//	});
+	
+	if(sessionStorage.getItem("searchUserID")!=null){
+		searchUserID = sessionStorage.getItem("searchUserID");
+		sessionStorage.removeItem("searchUserID");
+	}
+	
+	selectedCategories = [];
 	recursiveFetchCategory(1, 0);
 	fetchItems();
-	selectedCategories = [];
+
 	$("#searchSubmit").click(fetchItems);
 	
 	$("#moreVip").click(function(){
@@ -451,7 +465,7 @@ function fetchItems(){
 	
 	const vCategory = typeof selectedCategories !== "undefined" && selectedCategories.length > 0 ? "'c"+selectedCategories[selectedCategories.length-1].tableID+"_"+selectedCategories[selectedCategories.length-1].id+"'" : "";	
 	
-	$.post("mysql_item_list_process.php", {type:searchType, page:searchPage, category:vCategory, search:$("#searchInput").val(), quality:$("#searchQuality option:selected").val(), order:$("#searchOrder option:selected").val(), priceLowest:$("#searchPriceLimitLowest option:selected").val(), priceHighest:$("#searchPriceLimitHighest option:selected").val(), city:$("#searchCity option:selected").val(), rate:$("#searchRate option:selected").val()}).done(function(responseText){
+	$.post("mysql_item_list_process.php", {userID:searchUserID, type:searchType, page:searchPage, category:vCategory, search:$("#searchInput").val(), quality:$("#searchQuality option:selected").val(), order:$("#searchOrder option:selected").val(), priceLowest:$("#searchPriceLimitLowest option:selected").val(), priceHighest:$("#searchPriceLimitHighest option:selected").val(), city:$("#searchCity option:selected").val(), rate:$("#searchRate option:selected").val()}).done(function(responseText){
 //		console.log("<mysql_item_list_process>:"+responseText);
 		const vObj = JSON.parse(responseText);
 //		console.log("<mysql_item_list_process1>:"+vObj.query);
@@ -550,7 +564,7 @@ function fetchItems(){
 						media = "<div class=\"image\"><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i>"+star+"<img src=\"notfound.png\" onerror=\"this.onerror=null; this.src='image-solid.svg'\" /></div>";
 					}
 				}
-				var html = "<div class=\"item\">"+media+"<div onClick=\"pagenavigation('detail&id="+vObj.data[i].id+"')\"><div class=\"price\">"+convertPriceToTextJS(vObj.data[i].price)+" ₮</div><div class=\"title\">"+vObj.data[i].title+"</div></div></div>";
+				var html = "<div id=\""+vObj.data[i].id+"\" class=\"item\">"+media+"<div onClick=\"pagenavigation('detail&id="+vObj.data[i].id+"')\"><div class=\"price\">"+convertPriceToTextJS(vObj.data[i].price)+" ₮</div><div class=\"title\">"+vObj.data[i].title+"</div></div></div>";
 
 				if(searchType == -1){
 					if(vObj.data[i].status==2){

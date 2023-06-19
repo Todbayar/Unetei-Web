@@ -411,8 +411,8 @@ function startChat(toID, message){
 	const reqChatSubmit = new XMLHttpRequest();
 	reqChatSubmit.onload = function() {
 		if(this.responseText=="OK"){
-			pagenavigation("chat");
 			sessionStorage.setItem("startChatToID", toID);
+			pagenavigation("chat");
 		}
 	};
 	reqChatSubmit.onerror = function(){
@@ -421,6 +421,11 @@ function startChat(toID, message){
 
 	reqChatSubmit.open("POST", "chat_process.php", true);
 	reqChatSubmit.send(chatSubmitData);		
+}
+	
+function showOtherItems(userID){
+	sessionStorage.setItem("searchUserID", userID);
+	location.href = "./";
 }
 </script>
 
@@ -520,7 +525,7 @@ if(isset($_GET["id"])){
 				</div>
 				<div class="owner">
 					<div class="name"><?php echo $row["name"]; ?></div>
-					<div class="other_items">Зарын эзний бусад зарууд</div>
+					<div onClick="showOtherItems(<?php echo $row["userID"]; ?>)" class="other_items">Зарын эзний бусад зарууд</div>
 				</div>
 			</div>
 			<?php
@@ -655,7 +660,7 @@ if(isset($_GET["id"])){
 				</div>
 				<div class="owner" style="margin-top: 10px">
 					<div class="name"><?php echo $row["name"]; ?></div>
-					<div class="other_items">Зарын эзний бусад зарууд</div>
+					<div onClick="showOtherItems(<?php echo $row["userID"]; ?>)" class="other_items">Зарын эзний бусад зарууд</div>
 				</div>
 			</div>
 		</div>

@@ -72,6 +72,10 @@ if(isset($_POST["type"])){
 	}
 }
 
+if(isset($_POST["userID"]) && $_POST["userID"]!=-1){
+	$search .= " userID=".$_POST["userID"]." AND";
+}
+
 if(isset($_POST["type"])){
 	if($priceLowest === $priceHighest && $priceLowest>0){
 		$search = " price ".$priceLowest." AND";
