@@ -1,6 +1,6 @@
 <?php
 include "mysql_config.php";
-include "info.php";
+include_once "info.php";
 
 function update_profile($name, $email, $city, $userID, $image = null){
 	global $conn;
@@ -89,7 +89,7 @@ function findTypeOfVideo($name){
 }
 
 function sendNotification($title, $body, $image, $link, $token, $authKey){
-	$conn = common::createConnection();
+//	$conn = common::createConnection();
     
     $data = [
         "notification" => [

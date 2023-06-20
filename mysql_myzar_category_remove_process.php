@@ -1,6 +1,6 @@
 <?php
 include "mysql_config.php";
-include "chat_remove.php";
+include_once "chat_remove.php";
 
 if(isset($_REQUEST["tableID"]) && isset($_REQUEST["rowID"])){
 	$queryFetchIcon = "SELECT icon FROM category".$_REQUEST["tableID"]." WHERE id=".$_REQUEST["rowID"];

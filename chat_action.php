@@ -1,6 +1,6 @@
 <?php
 include "mysql_config.php";
-include "info.php";
+include_once "info.php";
 
 if(isset($_REQUEST["action"]) && isset($_REQUEST["type"]) && isset($_REQUEST["id"])){
 	$type = $_REQUEST["type"];

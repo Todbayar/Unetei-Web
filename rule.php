@@ -1,3 +1,7 @@
+<?php
+include_once "info.php";
+?>
+
 <!doctype html>
 <html>
 <head>
@@ -7,8 +11,8 @@
 
 <body>
 <h1 bis_size="{'x':20,'y':90,'w':795,'h':31,'abs_x':241,'abs_y':895}">Лицензийн гэрээ</h1>
-<p bis_size="{'x':20,'y':138,'w':795,'h':40,'abs_x':241,'abs_y':943}">Энэхүү гэрээ нь <a bis_size="{'x':124,'y':140,'w':202,'h':15,'abs_x':345,'abs_y':945}" href="https://www.unegui.mn/about/rules/">https://www.unegui.mn/about/rules/</a> -д нийтлэгдсэн Үйлчилгээний нөхцөл дээр нэмэлт бөгөөд зөвхөн сүүлчийн &ldquo;Unegui.mn мэдээллийн сан&rdquo; -г ашиглах үед Лиценз олгогч ба Лиценз ашиглагчийн хооронд үүсэх харилцааг зохицуулна.</p>
-<p bis_size="{'x':20,'y':191,'w':795,'h':80,'abs_x':241,'abs_y':996}">Энэхүү гэрээ нь Лиценз олгогчоос ямар нэгэн үйлчилгээ үзүүлэхийг заагаагүй боловч &ldquo;Unegui.mn&rdquo; програм хангамжийн модулаар дамжуулан автоматжуулсан горимд мэдээллийн сантай бие даан харилцан ажиллах, өгөгдөл оруулах, засварлах, устгах, хадгалах болон бусад үйлдлийг гүйцэтгэх эрх (боломж) олгоно. Мэдээллийн санг ашиглах эрхийн хүрээ нь сонгосон Лицензийн төрлөөс хамаарна.</p>
+<p bis_size="{'x':20,'y':138,'w':795,'h':40,'abs_x':241,'abs_y':943}">Энэхүү гэрээ нь <a bis_size="{'x':124,'y':140,'w':202,'h':15,'abs_x':345,'abs_y':945}" href="https://www.<?php echo $domain; ?>/rule.php">https://www.<?php echo $domain; ?>/rule.php</a> -д нийтлэгдсэн Үйлчилгээний нөхцөл дээр нэмэлт бөгөөд зөвхөн сүүлчийн &ldquo;<?php echo $domain; ?> мэдээллийн сан&rdquo; -г ашиглах үед Лиценз олгогч ба Лиценз ашиглагчийн хооронд үүсэх харилцааг зохицуулна.</p>
+<p bis_size="{'x':20,'y':191,'w':795,'h':80,'abs_x':241,'abs_y':996}">Энэхүү гэрээ нь Лиценз олгогчоос ямар нэгэн үйлчилгээ үзүүлэхийг заагаагүй боловч &ldquo;<?php echo $domain; ?>&rdquo; програм хангамжийн модулаар дамжуулан автоматжуулсан горимд мэдээллийн сантай бие даан харилцан ажиллах, өгөгдөл оруулах, засварлах, устгах, хадгалах болон бусад үйлдлийг гүйцэтгэх эрх (боломж) олгоно. Мэдээллийн санг ашиглах эрхийн хүрээ нь сонгосон Лицензийн төрлөөс хамаарна.</p>
 <p bis_size="{'x':20,'y':284,'w':795,'h':20,'abs_x':241,'abs_y':1089}">Мэдээллийн санг ашиглахын өмнө Лиценз ашиглагч дараах зүйлийг баталгаажуулна:</p>
 <ul bis_size="{'x':20,'y':317,'w':795,'h':100,'abs_x':241,'abs_y':1122}">
   <li bis_size="{'x':60,'y':317,'w':715,'h':40,'abs_x':281,'abs_y':1122}">тэрээр энэхүү гэрээг сайн дураараа зөвшөөрч өөрийгөө гэрээний нөхцөлүүдтэй бүрэн танилцаж, тэдгээрийн утга учрыг бүрэн ойлгож, энэхүү гэрээг байгуулах үр дагаврыг ойлгосон байх;</li>
@@ -17,11 +21,11 @@
 </ul>
 <p bis_size="{'x':20,'y':430,'w':795,'h':20,'abs_x':241,'abs_y':1235}">1. Нэр томъё, тодорхойлолт</p>
 <p bis_size="{'x':20,'y':463,'w':795,'h':60,'abs_x':241,'abs_y':1268}">1.1. Лиценз - Мэдээллийн санг ашиглах эрх олгох тухай лицензийн гэрээний бүх шаардлагатай, чухал нөхцөлийг агуулсан Лиценз олгогч ба Лиценз ашиглагчийн хооронд байгуулсан энэхүү лицензийн гэрээ. Эрхийн хамрах хүрээнээс хамаарч үндсэн, арилжааны лиценз гэж хуваадаг болно.</p>
-<p bis_size="{'x':20,'y':536,'w':795,'h':60,'abs_x':241,'abs_y':1341}">1.2. Unegui.mn вебсайт дахь мэдээллийн санг (цаашид &ldquo;Мэдээллийн сан&rdquo; гэх) компьютер, тэр дундаа &ldquo;Unegui.mn&rdquo; програмыг ашиглан олж болох объектив байдлаар харуулсан зар сурталчилгаа бүхий текст, график материал болно. Мэдээллийн санд хандах онцгой эрх нь Лиценз олгогчид байна.</p>
-<p bis_size="{'x':20,'y':609,'w':795,'h':60,'abs_x':241,'abs_y':1414}">1.3. Сайт - лиценз олгогчийн сервер дээр байрлах, http://www.unegui.mn/ хаягаар болон интернетэд холбогдсон төхөөрөмж дээрх "Unegui.mn" гар утасны програм ашиглан нэвтрэх боломжтой компьютерын програм, веб хуудас, мэдээллийн сан, график, текстийн элементүүдийн цуглуулга бүхий оюуны өмчийн объект.</p>
+<p bis_size="{'x':20,'y':536,'w':795,'h':60,'abs_x':241,'abs_y':1341}">1.2. <?php echo $domain; ?> вебсайт дахь мэдээллийн санг (цаашид &ldquo;Мэдээллийн сан&rdquo; гэх) компьютер, тэр дундаа &ldquo;<?php echo $domain; ?>&rdquo; програмыг ашиглан олж болох объектив байдлаар харуулсан зар сурталчилгаа бүхий текст, график материал болно. Мэдээллийн санд хандах онцгой эрх нь Лиценз олгогчид байна.</p>
+<p bis_size="{'x':20,'y':609,'w':795,'h':60,'abs_x':241,'abs_y':1414}">1.3. Сайт - лиценз олгогчийн сервер дээр байрлах, http://www.<?php echo $domain; ?>/ хаягаар болон интернетэд холбогдсон төхөөрөмж дээрх "<?php echo $domain; ?>" гар утасны програм ашиглан нэвтрэх боломжтой компьютерын програм, веб хуудас, мэдээллийн сан, график, текстийн элементүүдийн цуглуулга бүхий оюуны өмчийн объект.</p>
 <p bis_size="{'x':20,'y':682,'w':795,'h':20,'abs_x':241,'abs_y':1487}">1.4. Лиценз олгогч - Мэдээллийн сангийн зохиогчийн эрх эзэмшигч &ldquo;Үнэгүй групп&rdquo; ХХК.</p>
 <p bis_size="{'x':20,'y':715,'w':795,'h':20,'abs_x':241,'abs_y':1520}">1.5. Лиценз ашиглагч - Мэдээллийн санг ашиглах 18 нас хүрсэн хууль ёсны чадвартай хүн.</p>
-<p bis_size="{'x':20,'y':748,'w':795,'h':20,'abs_x':241,'abs_y':1553}">1.6. "Unegui.mn" аппликейшн нь мэдээллийн сан дахь зарыг хүсэлтийн дагуу хайлт хийдэг цогц програм юм.</p>
+<p bis_size="{'x':20,'y':748,'w':795,'h':20,'abs_x':241,'abs_y':1553}">1.6. "<?php echo $domain; ?>" аппликейшн нь мэдээллийн сан дахь зарыг хүсэлтийн дагуу хайлт хийдэг цогц програм юм.</p>
 <p bis_size="{'x':20,'y':781,'w':795,'h':40,'abs_x':241,'abs_y':1586}">1.7. Бичлэг - Мэдээллийн санд мэдээлэл хадгалах нэгж. Сайтад зар нэмэх явцад шинэ мөр нэмж бий болно. Бичлэг хийх зөвшөөрөгдсөн өгөгдлийн төрлүүд: текст, зураг, тоо.</p>
 <p bis_size="{'x':20,'y':834,'w':795,'h':40,'abs_x':241,'abs_y':1639}">1.8. Зар сурталчилгаа - Сайт дээр байрлуулсан мэдээлэл. Зар сурталчилгаа нь сайт дээр тодорхой хугацаанд (зар сурталчилгааны идэвхтэй хугацаа) нийтлэгдэнэ. Тэдгээрийг нийтэлсэн / сурталчилсан огнооны буурах дарааллаар харуулдаг.</p>
 <p bis_size="{'x':20,'y':887,'w':795,'h':60,'abs_x':241,'abs_y':1692}">1.9. Лиценз ашиглагчийн данс (Хэрэглэгчийн хувийн данс) нь хэрэглэгчийн интерфейс, хувийн дансны үлдэгдэл, Мэдээллийн сан болон төлбөрийн хэрэгслийг ашигласан түүхтэй хослуулсан Лиценз ашиглагчийн тухай багц мэдээлэл (утас, нууц үг гэх мэт) юм. Хувийн дансанд нэвтрэхэд нэвтрэх нэр болон нууц үг ашиглагддаг.</p>
@@ -38,7 +42,7 @@
 <p bis_size="{'x':20,'y':1530,'w':795,'h':20,'abs_x':241,'abs_y':2335}">2. Гэрээний хүрээ</p>
 <p bis_size="{'x':20,'y':1563,'w':795,'h':40,'abs_x':241,'abs_y':2368}">2.1. Лиценз олгогч нь энэхүү гэрээний нөхцөлийн дагуу Лиценз ашиглагчид сайт дээр байрлуулсан мэдээллийн санг ашиглах онцгой бус (энгийн) эрх олгоно.</p>
 <p bis_size="{'x':20,'y':1616,'w':795,'h':40,'abs_x':241,'abs_y':2421}">2.2. Лиценз ашиглагч хэрэглэгчийн дугаар (id) бүхий данс бүртгүүлэх аль эсхүл хэрэглэгчийн интерфейсийг идэвхжүүлснээр энэхүү гэрээг баталгаажуулах бөгөөд лиценз ашиглагч энэ гэрээний бүх нөхцөлүүдийг болзолгүй зөвшөөрч буйг хэлнэ.</p>
-<p bis_size="{'x':20,'y':1669,'w':795,'h':40,'abs_x':241,'abs_y':2474}">2.3. Мэдээллийн санг ашиглахдаа лиценз ашиглагч нь энэхүү гэрээ, https://www.unegui.mn/about/rules/ дээр нийтлэгдсэн Зар нийтлэх журам болон холбогдох хууль тогтоомжийг удирдлага болгоно.</p>
+<p bis_size="{'x':20,'y':1669,'w':795,'h':40,'abs_x':241,'abs_y':2474}">2.3. Мэдээллийн санг ашиглахдаа лиценз ашиглагч нь энэхүү гэрээ, https://www.<?php echo $domain; ?>/rule.php дээр нийтлэгдсэн Зар нийтлэх журам болон холбогдох хууль тогтоомжийг удирдлага болгоно.</p>
 <p bis_size="{'x':20,'y':1722,'w':795,'h':60,'abs_x':241,'abs_y':2527}">2.4. Мэдээллийн санг ашиглахыг зөвхөн энэхүү Лицензийн нөхцөлийн дагуу зөвшөөрнө. Хэрэв лиценз ашиглагч нь Лицензийн нөхцөлийг бүрэн хүлээн зөвшөөрөөгүй бол лиценз ашиглагч нь Мэдээллийн санг ямар ч зорилгоор ашиглах эрхгүй. Лицензийн аль нэг нөхцөлийг зөрчсөн (биелүүлээгүй) үед мэдээллийн санг ашиглахыг хориглоно.</p>
 <p bis_size="{'x':20,'y':1795,'w':795,'h':40,'abs_x':241,'abs_y':2600}">2.5. Хэрэглэгчийн интерфейсийг идэвхжүүлэх үед Лиценз олгогч нь Мэдээллийн санг ашиглах хязгаарлагдмал эрхийг (үндсэн лиценз) лиценз ашиглагчид шилжүүлдэг.</p>
 <p bis_size="{'x':20,'y':1848,'w':795,'h':40,'abs_x':241,'abs_y':2653}">2.6. Мэдээллийн санг ашиглах нэмэлт эрхийг (арилжааны лиценз) лиценз олгогчийн үзэмжээр Лиценз ашиглагчид шилжүүлдэг.</p>
@@ -49,7 +53,7 @@
 <p bis_size="{'x':20,'y':2113,'w':795,'h':40,'abs_x':241,'abs_y':2918}">3.4. Лиценз ашиглагчийг цаашид танихдаа гараар бичсэн гарын үсгийн адилд тооцогдох нэвтрэх нэр-нууц үгийн холбоосыг үргэлж дагаж мөрдөнө.</p>
 <p bis_size="{'x':20,'y':2166,'w':795,'h':40,'abs_x':241,'abs_y':2971}">3.5. Нэвтрэх нэр, нууц үгээ оруулсны дараа Лиценз ашиглагчийн данснаас гүйцэтгэсэн Мэдээллийн сантай холбоотой бүх үйлдлийг Лиценз ашиглагчийн үйлдэл гэж үзнэ.</p>
 <p bis_size="{'x':20,'y':2219,'w':795,'h':40,'abs_x':241,'abs_y':3024}">3.6. Лиценз ашиглагчийг үндсэн лицензийн нөхцөлийн дагуу сайт дээр бүртгүүлэх үед мэдээллийн санд хязгаарлагдмал эрх шилжинэ.</p>
-<p bis_size="{'x':20,'y':2272,'w':795,'h':80,'abs_x':241,'abs_y':3077}">3.7. Лицензээр тодорхойлсон эрхийг Лиценз ашиглагч сайт дээр зөвхөн Лиценз олгогчийн програм хангамж (хувийн данс, хэрэглэгчийн интерфейс, "Unegui.mn" програм хангамжийн модуль) ашиглан эдэлнэ. Лиценз ашиглагч нь Лиценз олгогчийн програм хангамжийн системийн үйл ажиллагаанд ямар нэгэн байдлаар саад учруулах аль эсвэл мэдээллийн санд нэвтрэхийн тулд гуравдагч этгээдийн програм ашиглахыг хориглоно.</p>
+<p bis_size="{'x':20,'y':2272,'w':795,'h':80,'abs_x':241,'abs_y':3077}">3.7. Лицензээр тодорхойлсон эрхийг Лиценз ашиглагч сайт дээр зөвхөн Лиценз олгогчийн програм хангамж (хувийн данс, хэрэглэгчийн интерфейс, "<?php echo $domain; ?>" програм хангамжийн модуль) ашиглан эдэлнэ. Лиценз ашиглагч нь Лиценз олгогчийн програм хангамжийн системийн үйл ажиллагаанд ямар нэгэн байдлаар саад учруулах аль эсвэл мэдээллийн санд нэвтрэхийн тулд гуравдагч этгээдийн програм ашиглахыг хориглоно.</p>
 <p bis_size="{'x':20,'y':2365,'w':795,'h':40,'abs_x':241,'abs_y':3170}">3.8. Суурь лицензийг арилжааны лиценз болгон өргөжүүлэх үед Лиценз олгогч нь нэмэлт эрхүүдийг шилжүүлэн, хэрэглэгчийн интерфейс дээр идэвхжүүлнэ. Төлбөр, эрх шилжүүлэх тухай баримтыг хувийн дансанд тэмдэглэнэ.</p>
 <p bis_size="{'x':20,'y':2418,'w':795,'h':40,'abs_x':241,'abs_y':3223}">3.9. Лиценз ашиглагч энэхүү гэрээний нөхцөлийг дагаж мөрдөж байгаа тохиолдолд үндсэн лицензийн хүчинтэй байх хугацаа хязгаарлагдахгүй.</p>
 <p bis_size="{'x':20,'y':2471,'w':795,'h':40,'abs_x':241,'abs_y':3276}">3.10. Арилжааны лицензийн хүчинтэй байх хугацааг энэ лицензэд тодорхойлсон нэмэлт эрхийг хэрэгжүүлэх хугацаагаар хязгаарлагдана.</p>
@@ -74,7 +78,7 @@
 <p bis_size="{'x':20,'y':3298,'w':795,'h':20,'abs_x':241,'abs_y':4103}">5.1.6. Гэрээний бүх хугацаанд Лиценз ашиглагчийн бүртгэлийг мэдээллийн санд хадгалах.</p>
 <p bis_size="{'x':20,'y':3331,'w':795,'h':20,'abs_x':241,'abs_y':4136}">5.1.7. Лиценз ашиглагчийн бүртгэлийг боловсруулах.</p>
 <p bis_size="{'x':20,'y':3364,'w':795,'h':20,'abs_x':241,'abs_y':4169}">5.2. Лиценз олгогч дараах эрхтэй:</p>
-<p bis_size="{'x':20,'y':3397,'w':795,'h':40,'abs_x':241,'abs_y':4202}">5.2.1. Гэрээний бүх хугацаанд Лиценз ашиглагчид урьдчилан мэдэгдэлгүйгээр Сайтын үйл ажиллагаа, Unegui.mn програм хангамжийн багц, Мэдээллийн сан, түүнчлэн энэхүү гэрээний нөхцөлүүдэд өөрчлөлт оруулах.</p>
+<p bis_size="{'x':20,'y':3397,'w':795,'h':40,'abs_x':241,'abs_y':4202}">5.2.1. Гэрээний бүх хугацаанд Лиценз ашиглагчид урьдчилан мэдэгдэлгүйгээр Сайтын үйл ажиллагаа, <?php echo $domain; ?> програм хангамжийн багц, Мэдээллийн сан, түүнчлэн энэхүү гэрээний нөхцөлүүдэд өөрчлөлт оруулах.</p>
 <p bis_size="{'x':20,'y':3450,'w':795,'h':40,'abs_x':241,'abs_y':4255}">5.2.2. Лиценз ашиглагчийн зар сурталчилгаа нь Сайтын аль эсвэл хууль тогтоомжийн зөрчилтэй, түүнчлэн гуравдагч этгээдийн эрхийг зөрчсөн тохиолдолд устгах, татгалзах, засах.</p>
 <p bis_size="{'x':20,'y':3503,'w':795,'h':20,'abs_x':241,'abs_y':4308}">5.2.3. Мэдээллийн санг ашиглах эрх олгох хугацаа, холбогдох үнэ хөлсний хэмжээг нэг талт өөрчлөх.</p>
 <p bis_size="{'x':20,'y':3536,'w':795,'h':20,'abs_x':241,'abs_y':4341}">5.2.4. Дараах тохиолдолд лиценз ашиглагчийн мэдээллийн санг ашиглах эрхийг цуцалж, лицензийг цуцална:</p>
@@ -121,9 +125,9 @@
 <p bis_size="{'x':20,'y':5152,'w':795,'h':80,'abs_x':241,'abs_y':5957}">7.6. Лиценз олгогч нь энэхүү Гэрээний нөхцөлийг хэдийд ч өөрчлөх, нэмэх эрхтэй бөгөөд лиценз ашиглагч энэ эрхийг хүлээн зөвшөөрч байгаа болно. Энэхүү Гэрээнд оруулсан нэмэлт, өөрчлөлт сайтын хуудсан дээр нийтлэгдсэнээс хойш хүчин төгөлдөр болно. Лиценз ашиглагч нь ийм өөрчлөлт, нэмэлт өөрчлөлтөөс татгалзах эрхтэй бөгөөд энэ нь Лиценз ашиглагч Гэрээг хэрэгжүүлэхээс татгалзсан гэсэн үг юм.</p>
 <p bis_size="{'x':20,'y':5245,'w':795,'h':20,'abs_x':241,'abs_y':6050}">7.7. Энэхүү Лицензийн гэрээний хугацаанд Лиценз ашиглагч худалдан авч болох лицензийн тоог хязгаарлахгүй.</p>
 <h2 bis_size="{'x':20,'y':5281,'w':795,'h':25,'abs_x':241,'abs_y':6086}"><a id="1" name="1"></a><a id="1" name="1"></a><span bis_size="{'x':56,'y':5284,'w':187,'h':22,'abs_x':277,'abs_y':6089}"><strong bis_size="{'x':56,'y':5284,'w':187,'h':22,'abs_x':277,'abs_y':6089}">I.License agreement</strong></span></h2>
-<p>to use the app "Unegui.mn" for mobile devices</p>
-<p>This agreement is in addition to the Rules published at https://www.unegui.mn/about/rules/ and governs only those relations that arise between the Licensor and the Licensee when using the latter &ldquo;Unegui.mn Database&rdquo;.</p>
-<p>This agreement does not provide for the provision of any services by the Licensor, but provides the rights (opportunities) in an automated mode through the Unegui.mn software module to independently interact with the Database and enter data into it, edit it, delete, store and perform other actions. The scope of the rights to use the Database depends on the selected type of License.</p>
+<p>to use the app "<?php echo $domain; ?>" for mobile devices</p>
+<p>This agreement is in addition to the Rules published at https://www.<?php echo $domain; ?>/rule.php and governs only those relations that arise between the Licensor and the Licensee when using the latter &ldquo;<?php echo $domain; ?> Database&rdquo;.</p>
+<p>This agreement does not provide for the provision of any services by the Licensor, but provides the rights (opportunities) in an automated mode through the <?php echo $domain; ?> software module to independently interact with the Database and enter data into it, edit it, delete, store and perform other actions. The scope of the rights to use the Database depends on the selected type of License.</p>
 <p>Before using the Database, the Licensee guarantees that:</p>
 <ul>
   <li>he/she enters into this agreement voluntarily, while the Licensee has fully familiarized himself/herself with the terms of this agreement, understands their meaning and the consequences of his/her actions upon conclusion of this agreement;</li>
@@ -133,11 +137,11 @@
 <p> </p>
 <p>1. Terms and definitions</p>
 <p>1.1. License - this license agreement between the Licensor and the Licensee, containing all the necessary and essential terms of the license agreement on the granting of the rights to use the Database. Depending on the scope of rights, it is divided into a basic license and a commercial license.</p>
-<p>1.2. Database on the website Unegui.mn (hereinafter referred to as the Database) is an objectively presented set of text and graphic materials, Advertisements, systematized in such a way that these Advertisements can be found and processed using a computer, in particular, the software complex &ldquo;Unegui.mn ". The exclusive right to the Database belongs to the Licensor</p>
-<p>1.3. Site - an object of intellectual property, which is a collection of computer programs, web pages, databases, graphic and text elements located on the Licensor's server and available for use at http://www.unegui.mn/, as well as in a mobile application "Unegui.mn" on devices connected to the Internet.</p>
-<p>1.4. Licensor – Unegui Group LLC, which is the copyright holder of the rights to the Database.</p>
+<p>1.2. Database on the website <?php echo $domain; ?> (hereinafter referred to as the Database) is an objectively presented set of text and graphic materials, Advertisements, systematized in such a way that these Advertisements can be found and processed using a computer, in particular, the software complex &ldquo;<?php echo $domain; ?> ". The exclusive right to the Database belongs to the Licensor</p>
+<p>1.3. Site - an object of intellectual property, which is a collection of computer programs, web pages, databases, graphic and text elements located on the Licensor's server and available for use at http://www.<?php echo $domain; ?>/, as well as in a mobile application "<?php echo $domain; ?>" on devices connected to the Internet.</p>
+<p>1.4. Licensor – <?php echo $domain_title; ?> Group LLC, which is the copyright holder of the rights to the Database.</p>
 <p>1.5. Licensee - any legally capable person who has reached the age of 18 using the Database.</p>
-<p>1.6. The program module "Unegui.mn" is a complex of programs that, upon request, searches for Ads in the Database.</p>
+<p>1.6. The program module "<?php echo $domain; ?>" is a complex of programs that, upon request, searches for Ads in the Database.</p>
 <p>1.7. Record - a unit of information storage in the Database. Created by adding a new line in the process of adding an ad to the Site. Allowed data types for recording: text, image, number.</p>
 <p>1.8. Advertisement - data posted on the Site. Advertisements are published on the Site for a certain period (the period of actuality of the advertisement) and are displayed in descending order of the date of their creation / promotion.</p>
 <p>1.9. The Licensee's account (User's personal account) is a set of data about the Licensee (phone, password, etc.), combined with the user interface, the balance of the personal account, the history of using the Database and the payment instrument. Access to personal account is carried out by login and password.</p>
@@ -154,7 +158,7 @@
 <p>2. Subject of the contract</p>
 <p>2.1. The Licensor grants the Licensee a non-exclusive (simple) license to use the Database posted on the Site in accordance with the terms of this Agreement.</p>
 <p>2.2. Registration of an account by the Licensee under a dedicated identification number (id) and / or activation of the user interface is the conclusion by the Licensee of this Agreement and means the unconditional consent of the Licensee with all the terms of this Agreement.</p>
-<p>2.3. When using the Database, the Licensee is guided by this agreement, the Rules for posting advertisements published at https://www.unegui.mn/about/rules/, and applicable law.</p>
+<p>2.3. When using the Database, the Licensee is guided by this agreement, the Rules for posting advertisements published at https://www.<?php echo $domain; ?>/rule.php, and applicable law.</p>
 <p>2.4. The use of the Database is permitted only under the terms of this License. If the Licensee does not accept the terms of the License in full, the Licensee has no right to use the Database for any purpose. The use of the Database in violation (non-fulfillment) of any of the terms of the License is prohibited.</p>
 <p>2.5. At the moment of activation of the user interface, the Licensor transfers to the Licensee limited rights (basic license) to use the Database.</p>
 <p>2.6. Additional rights (commercial license) to use the Database are transferred to the Licensee at the discretion of the Licensee.</p>
@@ -165,7 +169,7 @@
 <p>3.4. Further identification of the Licensee always follows a login-password link, which is an analogue of a handwritten signature.</p>
 <p>3.5. All actions with the Database performed from the Licensee's account after entering the login and password are considered actions of the Licensee.</p>
 <p>3.6. At the time of registration of the Licensee on the Site under the terms of the basic license, limited rights to the Database are transferred to him/her.</p>
-<p>3.7. The rights described by the license are exercised by the Licensee on the Site exclusively using the software of the Licensor (personal account, user interface, software module "Unegui.mn"). The Licensee is not allowed to interfere with the operation of the Licensor's software systems in any way and / or use third-party programs to access the Database.</p>
+<p>3.7. The rights described by the license are exercised by the Licensee on the Site exclusively using the software of the Licensor (personal account, user interface, software module "<?php echo $domain; ?>"). The Licensee is not allowed to interfere with the operation of the Licensor's software systems in any way and / or use third-party programs to access the Database.</p>
 <p>3.8. When expanding the base license to a commercial license, the Licensor transfers additional rights or rights to the Licensee and activates them in the user interface. The fact of payment and transfer of rights is recorded in the personal account.</p>
 <p>3.9. Subject to the Licensee's compliance with the terms of this agreement, the validity period of the base license is not limited.</p>
 <p>3.10. The term of validity of a commercial license is limited by the period of exercise of the additional rights described in this license.</p>
@@ -190,7 +194,7 @@
 <p>5.1.6. Store the Licensee's records in the Database during the entire term of the agreement.</p>
 <p>5.1.7. Process Licensee records.</p>
 <p>5.2. The licensor has the rights to:</p>
-<p>5.2.1. Make changes to the operation of the Site, the Unegui.mn software package, the Database, as well as the terms of this agreement without prior notice to the Licensee during the entire term of the agreement.</p>
+<p>5.2.1. Make changes to the operation of the Site, the <?php echo $domain; ?> software package, the Database, as well as the terms of this agreement without prior notice to the Licensee during the entire term of the agreement.</p>
 <p>5.2.2. Delete, reject, edit the Licensee's ads if they contradict the rules of the Site and / or legislation, as well as if the Ads violate the rights of third parties.</p>
 <p>5.2.3. Unilaterally amend the term for granting the right to use the Database and the amount of the corresponding remuneration.</p>
 <p>5.2.4. Terminate the Licensee's right to use the Database and terminate the License in the following cases:</p>

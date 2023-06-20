@@ -1,5 +1,5 @@
 <?php
-include "info.php";
+include_once "info.php";
 
 if(isset($_FILES["file"])){
 	$vNewFile = date("Ymdhis")."_".$_FILES["file"]["name"];

@@ -1,9 +1,10 @@
+<script src="misc.js"></script>
 <script src="myzar_item_add.js"></script>
 <script src="myzar_item_edit.js"></script>
 
 <?php 
 include "mysql_config.php";
-include "myzar_item_form.php"; 
+include_once "myzar_item_form.php"; 
 include_once "mysql_misc.php";
 ?>
 

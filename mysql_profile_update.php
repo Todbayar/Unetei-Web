@@ -1,6 +1,6 @@
 <?php
 include "mysql_config.php";
-include "info.php";
+include_once "info.php";
 
 if(isset($_REQUEST["userID"]) && isset($_REQUEST["name"]) && isset($_REQUEST["email"]) && isset($_REQUEST["city"])){
 	$vNewFile = isset($_FILES["image"]) ? date("Ymdhis")."_".$_FILES["image"]["name"] : "";

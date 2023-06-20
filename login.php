@@ -14,8 +14,8 @@
 				   style="margin-left: 10px; height: 30px; padding: 5px; font: bold 18px Arial">
 		</div>
 		<div style="margin-top: 10px; display: flex; align-items: center">
-			<input id="loginAgree" type="checkbox">
-			<p style="margin-left: 10px">Би Unetei.mn сайтын үйлчилгээний нөхцөл, зар нийтлэх журмыг хүлээн зөвшөөрч, мөн өөрийгөө 18 нас хүрсэн болохыг баталж байна.</p>
+			<input id="loginAgree" type="checkbox" style="border: 2px solid #c1c1c1; width: 15px; height: 15px; border-radius: 5px; transform:scale(2); margin:5px">
+			<p style="margin-left: 10px">Би <?php echo $domain; ?> сайтын <a href="policy.php">үйлчилгээний нөхцөл</a>, <a href="rule.php">зар нийтлэх журмыг</a> хүлээн зөвшөөрч, мөн өөрийгөө 18 нас хүрсэн болохыг баталж байна.</p>
 		</div>
 		<div id="recaptcha-container"></div>
 		<div>
@@ -26,7 +26,7 @@
 	<div id="phoneverifier_container" style="display: none">
 		<div>Таны утасруу баталгаажуулах код бүхий мессеж илгээгдлээ.<p id="phoneverifier_number"></p></div>
 		<p>Доорх талбарт код оруулна уу.</p>
-		<input type="text" id="phoneverificationcode" maxlength="6" pattern="[0-9]{6}" placeholder=" _ _ _ _ _ _" style="height: 30px; padding: 5px; font: bold 18px Arial">
+		<input type="number" id="phoneverificationcode" maxlength="6" pattern="[0-9]{6}" placeholder=" _ _ _ _ _ _" style="height: 30px; padding: 5px; font: bold 18px Arial">
 		<br/>
 		<p id="loginVerificationError" style="color: #FF0004"></p>
 		<input type="button" id="verify" value="Үргэлжлүүлэх"  class="button_yellow" style="font: normal 18px Arial" onClick="phoneCodeVerify()">

@@ -1,6 +1,6 @@
 <?php
 include "mysql_config.php";
-include "info.php";
+include_once "info.php";
 
 if(isset($_REQUEST["file"])){
 	$query = "DELETE FROM images WHERE image='".$_REQUEST["file"]."' AND userID=".$_COOKIE["userID"];

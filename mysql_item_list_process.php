@@ -14,10 +14,6 @@ if(isset($_COOKIE["userID"])){
 	$favorite = "(SELECT IF(COUNT(*)>0, 1, 0) FROM favorite WHERE itemID=item.id AND userID=".$_COOKIE["userID"].") AS isFavorite,";
 }
 
-if(isset($_POST["quality"]) && $_POST["quality"] != ""){
-	$search .= " quality=".$_POST["quality"]." AND";
-}
-
 if(isset($_POST["priceLowest"]) && $_POST["priceLowest"]>0){
 	$priceLowest = $_POST["priceLowest"];
 }
@@ -52,6 +48,17 @@ if(isset($_POST["order"]) && $_POST["order"] != ""){
 		case 3:
 			$order .= " ORDER BY price DESC";
 			break;
+	}
+}
+
+if(isset($_POST["quality"]) && $_POST["quality"] != ""){
+	if($_POST["quality"]==0){
+		if($order!="") $order .= ",quality DESC";
+		else $order .= "ORDER BY quality DESC";
+	}
+	else if($_POST["quality"]==1){
+		if($order!="") $order .= ",quality ASC";
+		else $order .= "ORDER BY quality ASC";
 	}
 }
 

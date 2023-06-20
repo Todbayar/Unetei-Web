@@ -1,8 +1,8 @@
 <?php
 include "mysql_config.php";
-include "mysql_misc.php";
-include "info.php";
-include "chat_process.php";
+include_once "mysql_misc.php";
+include_once "info.php";
+include_once "chat_process.php";
 
 $userID = $_COOKIE["userID"];
 $itemID = $_REQUEST["itemID"];

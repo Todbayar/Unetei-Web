@@ -24,17 +24,42 @@ include_once "mysql_misc.php";
 	position: relative;
 	margin-left: 10px;
 	margin-right: 10px;
-	float: left;
+	width: 165px;
+	height: 152px;
 }
 	
 .favorite .container .item .image img {
 	object-fit: cover; 
 	background: #dddddd; 
 	border-radius: 5px;
-	width: 170px;
-	height: 130px;
-	min-width: 136px;
-	min-height: 104px;
+	width: 100%;
+	height: 100%;
+}
+	
+.favorite .container .item .image iframe {
+	width: 100%;
+	height: 100%;
+	border-radius: 10px;
+}
+	
+.favorite .container .item .image video {
+	width: 100%;
+	height: 100%;
+	border-radius: 10px;
+}
+
+/* For Mobile */
+@media screen and (max-width: 540px) {
+	.favorite .container .item .image {
+		width: 165px;
+	}
+}
+
+/* For Tablets and Desktop */
+@media screen and (min-width: 540px) {
+	.favorite .container .item .image {
+		width: 190px;	
+	}
 }
 	
 .favorite .container .item .image div {

@@ -1,6 +1,6 @@
 <?php
 include "mysql_config.php"; 
-include "info.php";
+include_once "info.php";
 ?>
 
 <meta charset="utf-8">
@@ -158,7 +158,7 @@ include "info.php";
 	
 .searchResult .list .item .image video {
 	width: 100%;
-	height: 152px;
+	height: 100%;
 	border-radius: 10px;
 }
 

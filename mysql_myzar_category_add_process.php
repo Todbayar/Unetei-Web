@@ -1,8 +1,8 @@
 <?php
 include "mysql_config.php";
-include "chat_process.php";
-include "mysql_misc.php";
-include "info.php";
+include_once "chat_process.php";
+include_once "mysql_misc.php";
+include_once "info.php";
 
 if(isset($_REQUEST["tableID"]) && isset($_REQUEST["title"]) && isset($_FILES["iconfile"]) && isset($_REQUEST["parentID"])){
 	if(isset($_REQUEST["type"])){

@@ -1,8 +1,8 @@
 <?php 
 include "mysql_config.php";
 include_once "mysql_misc.php";
-include "info.php";
-include "mysql_myzar_item_remove_process.php";	//for auto removal of expired item
+include_once "info.php";
+include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expired item
 ?>
 <!doctype html>
 <html>
@@ -41,41 +41,37 @@ include "mysql_myzar_item_remove_process.php";	//for auto removal of expired ite
 		};
 		firebase.initializeApp(firebaseConfig);
 		
- 		const messaging = firebase.messaging();
-			
-//	 	messaging.requestPermission().then(function () {
-//			console.log("Notification permission granted.");
-//			return messaging.getToken()
-//		}).then(function(token) {
-//			console.log("<token>:"+token);
-//		}).catch(function (err) {
-//			console.log("Unable to get permission to notify.", err);
-//	 	});
+// 		const messaging = firebase.messaging();
 			
 		var timerDropDownMenu;
 			
 		$(document).ready(function(){
-			if('serviceWorker' in navigator){				
-				navigator.serviceWorker.register('firebase-messaging-sw.js');
-			} else {
-				console.log('Service Worker not supported');
-			}
-			
-			Notification.requestPermission().then((permission) => {
-				if (permission === 'granted') {
-					console.log('Notification permission granted.');
-					messaging.getToken({vapidKey: "<?php echo $firebase_public_vapid_key; ?>"}).then((currentToken) => {
-						if (currentToken) {
-							$.post("mysql_user_fcm.php", {token:currentToken});
-						} 
-						else {
-							console.log("<fcm>:permission required");
-						}
-					}).catch((err) => {
-						console.log('<fcm>:An error occurred while retrieving token.', err);
-					});
-				}
-			});
+//			if('serviceWorker' in navigator){				
+//				navigator.serviceWorker.register('firebase-messaging-sw.js');
+//			} else {
+//				console.log('Service Worker not supported');
+//				alert("Service Worker not supported");
+//			}
+//			
+//			Notification.requestPermission().then((permission) => {
+//				if (permission === 'granted') {
+//					console.log('Notification permission granted.');
+//					alert("Notification permission granted.");
+//					messaging.getToken({vapidKey: "<?php echo $firebase_public_vapid_key; ?>"}).then((currentToken) => {
+//						if (currentToken) {
+//							alert("token received.");
+//							$.post("mysql_user_fcm.php", {token:currentToken});
+//						} 
+//						else {
+//							alert("<fcm>:permission required");
+//							console.log("<fcm>:permission required");
+//						}
+//					}).catch((err) => {
+//						alert("<fcm>:An error occurred while retrieving token."+err);
+//						console.log('<fcm>:An error occurred while retrieving token.', err);
+//					});
+//				}
+//			});
 			
 			<?php
 			if(isset($_COOKIE["uid"]) && isset($_COOKIE["phone"])){
@@ -170,8 +166,13 @@ include "mysql_myzar_item_remove_process.php";	//for auto removal of expired ite
 			<div class="wrap">
 				<img src="icon.png" width="40" height="40" style="object-fit: contain" />
 				<div class="left">
-					<div class="service">Техникийн тусламж: <?php echo $service_phone; ?></div>
-					<div class="contact">Холбоо барих: <?php echo $contact_phone; ?></div>
+					<div class="service" style="color: white">Техникийн тусламж: <?php echo $service_phone; ?></div>
+					<div class="contact" style="color: white">Холбоо барих: <?php echo $contact_phone; ?></div>
+				</div>
+				<div class="center" style="font-size: 14px">
+					<div><a href="policy.php" style="text-decoration: none; color: white">Үйлчилгээний нөхцөл</a></div>
+					<div><a href="rule.php" style="text-decoration: none; color: white">Зар нийтлэх журам</a></div>
+					<div><a href="agreement.php" style="text-decoration: none; color: white">Аюулгүй ажиллагаа</a></div>
 				</div>
 			</div>
 		</div>
@@ -406,7 +407,7 @@ include "mysql_myzar_item_remove_process.php";	//for auto removal of expired ite
 					</select>
 				</div>
 				<div style="display: flex; margin-top: 10px; justify-content: center">
-					<button onClick="javascript:document.getElementsByClassName('popup search')[0].style.display='none'; javascript:document.body.style.overflowY='auto'" class="button_yellow">За</button>
+					<button onClick="javascript:document.getElementsByClassName('popup search')[0].style.display='none'; javascript:document.body.style.overflowY='auto'; fetchItems()" class="button_yellow">За</button>
 					<button onClick="clearSearch()" class="button_yellow" style="margin-left: 10px; background:rgb(240,85,87)">Арилгах</button>
 				</div>
 			</div>

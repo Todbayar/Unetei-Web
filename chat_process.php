@@ -1,6 +1,6 @@
 <?php
 include "mysql_config.php";
-include "info.php";
+include_once "info.php";
 include_once "mysql_misc.php";
 
 use PHPMailer\PHPMailer\PHPMailer;

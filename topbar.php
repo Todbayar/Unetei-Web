@@ -2,9 +2,6 @@
 include "mysql_config.php";
 include_once "info.php";
 ?>
-<script>
-
-</script>
 
 <style>
 .notification_number {

@@ -1,3 +1,7 @@
+<?php 
+include_once "info.php";
+?>
+
 <!doctype html>
 <html>
 <head>
@@ -7,26 +11,17 @@
 
 <body>
 <h1>Үйлчилгээний нөхцөл</h1>
-<p><a href="https://www.unegui.mn/about/rules/?fbclid=IwAR0G6afo97vM7k9POOzTdNDKVvqxwf2LcTPDZR0pUuhVyzlqOOA7xsA8UVghttps://www.unegui.mn/about/rules/?fbclid=IwAR0G6afo97vM7k9POOzTdNDKVvqxwf2LcTPDZR0pUuhVyzlqOOA7xsA8UVg#1">I.       Нийтлэг үндэслэл</a></p>
-<p><a href="https://www.unegui.mn/about/rules/?fbclid=IwAR0G6afo97vM7k9POOzTdNDKVvqxwf2LcTPDZR0pUuhVyzlqOOA7xsA8UVghttps://www.unegui.mn/about/rules/?fbclid=IwAR0G6afo97vM7k9POOzTdNDKVvqxwf2LcTPDZR0pUuhVyzlqOOA7xsA8UVg#2">II.      Зар нийтлэх журам</a></p>
-<p><a href="https://www.unegui.mn/about/rules/?fbclid=IwAR0G6afo97vM7k9POOzTdNDKVvqxwf2LcTPDZR0pUuhVyzlqOOA7xsA8UVghttps://www.unegui.mn/about/rules/?fbclid=IwAR0G6afo97vM7k9POOzTdNDKVvqxwf2LcTPDZR0pUuhVyzlqOOA7xsA8UVg#3">III.     Талуудын эрх үүрэг</a></p>
-<p><a href="https://www.unegui.mn/about/rules/?fbclid=IwAR0G6afo97vM7k9POOzTdNDKVvqxwf2LcTPDZR0pUuhVyzlqOOA7xsA8UVghttps://www.unegui.mn/about/rules/?fbclid=IwAR0G6afo97vM7k9POOzTdNDKVvqxwf2LcTPDZR0pUuhVyzlqOOA7xsA8UVg#4">IV.     Үйлчилгээний төлбөр</a></p>
-<p><a href="https://www.unegui.mn/about/rules/?fbclid=IwAR0G6afo97vM7k9POOzTdNDKVvqxwf2LcTPDZR0pUuhVyzlqOOA7xsA8UVghttps://www.unegui.mn/about/rules/?fbclid=IwAR0G6afo97vM7k9POOzTdNDKVvqxwf2LcTPDZR0pUuhVyzlqOOA7xsA8UVg#5">V.      Компанийн хариуцлагын хязгаарлалт</a></p>
-<p><a href="https://www.unegui.mn/about/rules/?fbclid=IwAR0G6afo97vM7k9POOzTdNDKVvqxwf2LcTPDZR0pUuhVyzlqOOA7xsA8UVghttps://www.unegui.mn/about/rules/?fbclid=IwAR0G6afo97vM7k9POOzTdNDKVvqxwf2LcTPDZR0pUuhVyzlqOOA7xsA8UVg#6">VI.    Үйлчилгээний нөхцөлийн хамрах хугацаа</a></p>
-<p><a href="https://www.unegui.mn/about/rules/?fbclid=IwAR0G6afo97vM7k9POOzTdNDKVvqxwf2LcTPDZR0pUuhVyzlqOOA7xsA8UVghttps://www.unegui.mn/about/rules/?fbclid=IwAR0G6afo97vM7k9POOzTdNDKVvqxwf2LcTPDZR0pUuhVyzlqOOA7xsA8UVg#7">VII.   Үйлчилгээний нөхцлиийн нэмэлт өөрчлөлт</a></p>
-<p><a href="https://www.unegui.mn/about/rules/?fbclid=IwAR0G6afo97vM7k9POOzTdNDKVvqxwf2LcTPDZR0pUuhVyzlqOOA7xsA8UVghttps://www.unegui.mn/about/rules/?fbclid=IwAR0G6afo97vM7k9POOzTdNDKVvqxwf2LcTPDZR0pUuhVyzlqOOA7xsA8UVg#8">VIII.  Нэг барааны дүрэм</a></p>
 <h2><a id="1" name="1"></a><a id="1" name="1"></a><strong>I.Нийтлэг үндэслэл</strong></h2>
-<p>1.1.    Үнэгүй Групп ХХК (цаашид <strong>&ldquo;Компани&rdquo;</strong> гэх) нь интернет сайт болох Unegui.mn болон iOS, Android үйлдлийн системтэй гар утасны програм дээр үзүүлэх үйлчилгээний нөхцөлийг нийтэлж байна.</p>
+<p>1.1.    Интернет сайт болох <?php echo $domain; ?> болон iOS, Android үйлдлийн системтэй гар утасны програм дээр үзүүлэх үйлчилгээний нөхцөлийг нийтэлж байна.</p>
 <p>1.2.    Энэхүү нөхцөл нь Хэрэглэгч (цаашид <strong>&ldquo;Хэрэглэгч&rdquo;</strong> гэх) сайтаар үйлчлүүлэхээсээ өмнө хүлээн зөвшөөрч баталгаажуулсны үндсэн дээр хэрэгжинэ.</p>
 <p>1.3.    Энэхүү нөхцөлд өөрөөр заагаагүй бол дараах нэр томьёог дор дурдсан утгаар ойлгоно:</p>
 <ul>
-  <li>Компани – Үнэгүй Групп ХХК;</li>
-  <li>Сайт – Unegui.mn интернет сайт болон iOS, Android үйлдлийн системтэй гар утасны аппликейшн болох түр хугацааны зар байршуулах платформ (цаашид <strong>&ldquo;Сайт&rdquo;</strong> гэх);</li>
+  <li>Сайт – <?php echo $domain; ?> интернет сайт болон iOS, Android үйлдлийн системтэй гар утасны аппликейшн болох түр хугацааны зар байршуулах платформ (цаашид <strong>&ldquo;Сайт&rdquo;</strong> гэх);</li>
   <li>Хэрэглэгч – энэхүү нөхцөлийг хүлээн зөвшөөрөн Компанийн үйлчилгээг авч буй хувь хүн болон хуулийн этгээд;</li>
-  <li>Unegui.mn үйлчилгээ – сайтын туслалцаатай Компанийн үзүүлж буй төлбөргүй болон төлбөртэй үйлчилгээ.</li>
+  <li><?php echo $domain; ?> үйлчилгээ – сайтын туслалцаатай Компанийн үзүүлж буй төлбөргүй болон төлбөртэй үйлчилгээ.</li>
 </ul>
-<p>1.4.    Хэрэв Хэрэглэгч нь энэхүү нөхцөлийг хүлээн зөвшөөрөөгүй бол сайтыг орхин, аппликейшнийг устгахыг зөвлөж байна. Unegui.mn сайтын үйлчилгээг Хэрэглэгч авахыг энэхүү үйлчилгээний нөхцөлөөр зохицуулна. Unegui.mn-ээр үйлчлүүлснээр Хэрэглэгч энэхүү нөхцөлтэй танилцаж, хүлээн зөвшөөрсөн гэж ойлгоно.</p>
-<p>1.5.    Unegui.mn дэх аль нэг үйлчилгээг ашиглаж эхлэх, аппликэйшн суулгах эсвэл бүртгүүлснээр Хэрэглэгч нь үйлчилгээний нөхцөлийг бүрэн эхээр нь хүлээн зөвшөөрсөнд тооцно. Хэрэв Хэрэглэгч энэхүү нөхцөлийн аль нэг заалтыг хүлээн зөвшөөрөөгүй тохиолдолд Unegui.mn-ий үйлчилгээг авах эрхгүй болно.</p>
+<p>1.4.    Хэрэв Хэрэглэгч нь энэхүү нөхцөлийг хүлээн зөвшөөрөөгүй бол сайтыг орхин, аппликейшнийг устгахыг зөвлөж байна. <?php echo $domain; ?> сайтын үйлчилгээг Хэрэглэгч авахыг энэхүү үйлчилгээний нөхцөлөөр зохицуулна. <?php echo $domain; ?>-ээр үйлчлүүлснээр Хэрэглэгч энэхүү нөхцөлтэй танилцаж, хүлээн зөвшөөрсөн гэж ойлгоно.</p>
+<p>1.5.    <?php echo $domain; ?> дэх аль нэг үйлчилгээг ашиглаж эхлэх, аппликэйшн суулгах эсвэл бүртгүүлснээр Хэрэглэгч нь үйлчилгээний нөхцөлийг бүрэн эхээр нь хүлээн зөвшөөрсөнд тооцно. Хэрэв Хэрэглэгч энэхүү нөхцөлийн аль нэг заалтыг хүлээн зөвшөөрөөгүй тохиолдолд <?php echo $domain; ?>-ий үйлчилгээг авах эрхгүй болно.</p>
 <p>1.6.    Компани нь интернет Хэрэглэгчдэд тус нөхцөлийн дагуу үйлчилгээг ашиглахыг санал болгож байна.</p>
 <p>1.7.    Хэрэглэгчдийн дунд явагдаж буй бүх хэлэлцээр Компанийн оролцоогүйгээр явагддаг болно. Компани нь зар байршуулах худалдааны платформоор л хангадаг болно.</p>
 <h2><a id="2" name="2"></a><a id="2" name="2"></a><strong>II.Зар нийтлэх журам</strong></h2>
@@ -56,7 +51,7 @@
   <li>Зарын гарчигт цэг тэмдэг болон өөр бусад тэмдэгтүүд бичих;</li>
   <li>Зарын гарчиг, оруулсан зураг, зарын тайлбар нь хоорондоо утга санааны зөрчилтэй байх;</li>
   <li>Нэг зар дээр хэд хэдэн бараа бүтээгдэхүүн зэрэг зарлах;</li>
-  <li>Зар нийтлэхдээ өөр бусад сайтын холбоос (линк), нийтийн сүлжээний (сошиал медиа) хаяг болон unegui.mn-ий холбоос бичиж оруулах;</li>
+  <li>Зар нийтлэхдээ өөр бусад сайтын холбоос (линк), нийтийн сүлжээний (сошиал медиа) хаяг болон <?php echo $domain; ?>-ий холбоос бичиж оруулах;</li>
   <li>Улсын хэмжээний хориотой бараа бүтээгдэхүүнийг зарлан нийтлэх;</li>
   <li>Нийтэлж буй зарын утга, байршил нь тухайн зарлагчийн сайтад бүртгүүлсэн хотын байршлаас зөрөх.</li>
 </ul>
@@ -259,7 +254,7 @@
 <p>6.2.    Хэрэглэгч нь өөрийн бүртгэлийг сайтаас компанид урдьчилан мэдэгдэлгүй, тайлбар өгөлгүй хасах эрхтэй.</p>
 <p>6.3.    Хэрэв компани 7 дугаар бүлэгт заасанчлан Үйлчилгээний нөхцөлд нэмэлт өөрчлөлтөөр оруулсан аль нэг заалтыг Хэрэглэгч хүлээн зөвшөөрөхгүй байгаа тохиолдолд Хэрэглэгч сайтын үйлчилгээг ашиглахаа дуусгавар болгох үүрэгтэй. Хэрэглэгч сайтыг ашигласан хэвээр байгаа тохиолдолд нэмэлт өөрчлөлтийг хүлээн зөвшөөрсөнд тооцно.</p>
 <h2><a id="7" name="7"></a><a id="7" name="7"></a><strong>VII.Үйлчилгээний нөхцлиийн нэмэлт өөрчлөлт</strong></h2>
-<p>7.1.    Компани нь урдьчилан мэдэгдэлгүйгээр үйлчилгээний нөхцөлд нэмэлт өөрчлөлт оруулж болно. Үйлчилгээний нөхцөлийн шинэ хувилбар доорх интернет хаяг дээр байршсан өдрөөс даган мөрдөгдөнө. Үйлчилгээний нөхцөлийн хүчин төгөлдөр найруулга <a href="https://www.unegui.mn/about/rules/">https://www.unegui.mn/about/rules/</a> хаяг дээр байрлана.</p>
+<p>7.1.    Компани нь урдьчилан мэдэгдэлгүйгээр үйлчилгээний нөхцөлд нэмэлт өөрчлөлт оруулж болно. Үйлчилгээний нөхцөлийн шинэ хувилбар доорх интернет хаяг дээр байршсан өдрөөс даган мөрдөгдөнө. Үйлчилгээний нөхцөлийн хүчин төгөлдөр найруулга <a href="https://www.<?php echo $domain; ?>/about/rules/">https://www.<?php echo $domain; ?>/about/rules/</a> хаяг дээр байрлана.</p>
 <h2><a id="8" name="8"></a><a id="8" name="8"></a><strong>VIII.Нэг барааны дүрэм</strong></h2>
 <ul>
   <li>Нэг зард зөвхөн нэг бараа/үйлчилгээ оруулна.</li>

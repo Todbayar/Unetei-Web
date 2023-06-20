@@ -32,13 +32,10 @@ body {
 
 .footer {
 	width: 100%;
-	height: 70px;
+	padding-top: 10px;
+	padding-bottom: 10px;
 	background: #42c200;
 	margin-top: auto;
-}
-
-.footer .wrap .left {
-	display: block;
 }
 
 .footer .wrap .left div {

@@ -1,7 +1,7 @@
 <?php
 include "mysql_config.php";
-include "chat_process.php";
-include "info.php";
+include_once "chat_process.php";
+include_once "info.php";
 
 if(isset($_POST["type"])){
 	if($_POST["type"] == "role"){

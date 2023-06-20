@@ -1,6 +1,6 @@
 <?php
 include "mysql_config.php";
-include "info.php";
+include_once "info.php";
 ?>
 <style>
 .profile {
@@ -313,7 +313,7 @@ $(document).ready(function(){
 				<input id="phone" class="phone" type="tel" maxlength="12" value="<?php echo substr($row["phone"], 4); ?>" disabled>
 			</div>
 		</div>
-		<div class="divcontainer">
+		<div class="divcontainer" style="display: none">
 			<div>Дансны үлдэгдэл</div>
 			<div style="display: flex; align-items: center">
 				<label style="margin-right: 5px"><?php echo $row["topup"] > 0 ? $row["topup"] : 0; ?> ₮</label>
@@ -415,10 +415,17 @@ $(document).ready(function(){
 				<input type="file" id="socialpay_file" accept="image/png, image/gif, image/jpeg, .svg" style="display: none">
 			</div>
 		</div>
-		<div style="width: 100%; float: left; margin-top: 10px; justify-content: center; display: flex">
+		<div style="width: 100%; float: left; margin-top: 10px; margin-bottom: 20px; justify-content: center; display: flex">
 			<div class="button_yellow button" style="float: left" onClick="submitProfile()">
 				<i class="fa-solid fa-floppy-disk"></i>
 				<div style="margin-left: 5px">Хадгалах</div>
+			</div>
+		</div>
+		<hr/>
+		<div style="width: 100%; float: left; margin-top: 10px; justify-content: center; display: flex">
+			<div onClick="logout()" class="button_yellow" style="background: red; color: white">
+				<div style="font-size: 16px; margin-right: 10px; font-family: RobotoBold">Гарах</div>
+				<i class="fa-solid fa-right-from-bracket"></i>
 			</div>
 		</div>
 	</div>

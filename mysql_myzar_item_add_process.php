@@ -1,7 +1,7 @@
 <?php
 include "mysql_config.php";
-include "mysql_misc.php";
-include "chat_process.php";
+include_once "mysql_misc.php";
+include_once "chat_process.php";
 
 $userID = $_COOKIE["userID"];
 $category = $_REQUEST["category"];

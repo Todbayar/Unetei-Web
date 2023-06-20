@@ -1,7 +1,7 @@
 <?php
 include "mysql_config.php";
 include_once "mysql_misc.php";
-include "info.php";
+include_once "info.php";
 ?>
 <script>
 var isMyZarCategoryAddIconValid = false;

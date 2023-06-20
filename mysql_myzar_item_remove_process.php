@@ -1,6 +1,6 @@
 <?php
 include "mysql_config.php";
-include "info.php";
+include_once "info.php";
 
 $queryFetchItems = "SELECT * FROM item WHERE isactive=0 AND NOW()>(datetime+INTERVAL ".$days_item_remove." DAY)";
 $resultFetchItems = @$conn->query($queryFetchItems);
