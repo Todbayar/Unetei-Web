@@ -464,7 +464,7 @@ function fetchItems(){
 	const vCategory = typeof selectedCategories !== "undefined" && selectedCategories.length > 0 ? "'c"+selectedCategories[selectedCategories.length-1].tableID+"_"+selectedCategories[selectedCategories.length-1].id+"'" : "";	
 	
 	$.post("mysql_item_list_process.php", {userID:searchUserID, type:searchType, page:searchPage, category:vCategory, search:$("#searchInput").val(), quality:$("#searchQuality option:selected").val(), order:$("#searchOrder option:selected").val(), priceLowest:$("#searchPriceLimitLowest option:selected").val(), priceHighest:$("#searchPriceLimitHighest option:selected").val(), city:$("#searchCity option:selected").val(), rate:$("#searchRate option:selected").val()}).done(function(responseText){
-		console.log("<mysql_item_list_process>:"+responseText);
+//		console.log("<mysql_item_list_process>:"+responseText);
 		const vObj = JSON.parse(responseText);
 //		console.log("<mysql_item_list_process1>:"+vObj.query);
 		$("#searchInput").prop("placeholder",vObj.page.countItems+" зар байна");

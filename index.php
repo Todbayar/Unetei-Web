@@ -16,6 +16,7 @@ include "mysql_myzar_item_remove_process.php";	//for auto removal of expired ite
 		
 		<script src="https://www.gstatic.com/firebasejs/9.12.1/firebase-app-compat.js"></script>
 		<script src="https://www.gstatic.com/firebasejs/9.12.1/firebase-auth-compat.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/9.12.1/firebase-messaging-compat.js"></script>
 		<script src="jquery-3.6.4.min.js"></script>
 		<script src="jquery-ui.js"></script>
 		<script src="kit.fontawesome.com_64e3bec699.js"></script>
@@ -40,12 +41,39 @@ include "mysql_myzar_item_remove_process.php";	//for auto removal of expired ite
 		};
 		firebase.initializeApp(firebaseConfig);
 		
+ 		const messaging = firebase.messaging();
+			
+//	 	messaging.requestPermission().then(function () {
+//			console.log("Notification permission granted.");
+//			return messaging.getToken()
+//		}).then(function(token) {
+//			console.log("<token>:"+token);
+//		}).catch(function (err) {
+//			console.log("Unable to get permission to notify.", err);
+//	 	});
+			
 		var timerDropDownMenu;
 			
 		$(document).ready(function(){
+			if('serviceWorker' in navigator){				
+				navigator.serviceWorker.register('firebase-messaging-sw.js');
+			} else {
+				console.log('Service Worker not supported');
+			}
+			
 			Notification.requestPermission().then((permission) => {
 				if (permission === 'granted') {
-				  console.log('Notification permission granted.');
+					console.log('Notification permission granted.');
+					messaging.getToken({vapidKey: "<?php echo $firebase_public_vapid_key; ?>"}).then((currentToken) => {
+						if (currentToken) {
+							$.post("mysql_user_fcm.php", {token:currentToken});
+						} 
+						else {
+							console.log("<fcm>:permission required");
+						}
+					}).catch((err) => {
+						console.log('<fcm>:An error occurred while retrieving token.', err);
+					});
 				}
 			});
 			
