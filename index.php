@@ -243,10 +243,10 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 		</div>
 		
 		<div class="popup myzar_user_upgrade" style="display: none">
-			<div class="container" style="width: 320px; top: 5vh">
+			<div class="container" style="width: 320px; top: 5vh; height:600px">
 				<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('popup myzar_user_upgrade')[0].style.display='none'; javascript:document.body.style.overflowY='auto'"></i>
 				<div class="header">Хэрэглэгчийн эрх</div>
-				<div style="display:block">
+				<div style="height:520px; overflow-y: scroll">
 					<div style="font-size: 14px; margin-bottom: 5px; margin-top: 10px; margin-left: 10px; margin-right: 10px"><a id="affiliate"></a><br/><a style="font-size: 12px; color: red">Өөрчлөхийг хүсвэл уг цонхыг хаагаад Миний зар->Тохиргоо-ны "Дагагч болох"-ын доор утасны дугаарыг нь оруулаад дахин энэ цонхыг нээнэ үү.</a></div>
 					<div class="selection">
 						<div style="font: bold 16px Arial"><input type="radio" id="role" name="role" value="4"> Сүпер админ</div>

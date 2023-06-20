@@ -205,7 +205,16 @@ function chat_list_category_show(categories, title){
 }
 	
 function chat_list_category_words_show(words){
-	return "<div style=\"font-size:12px; color:gray; margin-top:5px\">"+words+"</div>";
+	var vWords = "";
+	words.split(',').forEach(function(word, i, arr){
+		if(i<arr.length){
+			vWords += word+", ";
+		}
+		else {
+			vWords += word;
+		}
+	});
+	return "<div style=\"font-size:12px; color:gray; margin-top:5px\">"+vWords+"</div>";
 }
 
 function chat_list_category_action_show(isactive, id, isMe = false){

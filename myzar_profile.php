@@ -352,7 +352,7 @@ $(document).ready(function(){
 			</div>
 		</div>
 		<div class="divcontainer" style="color: #42c200; font-size: 14px">
-			<div>Таньд <?php echo $domain; ?>-ыг санал болгосон хүний утасны дугаар. Хоосон тохиолдолд сүпер админы дагагч болохыг анхаарна уу.</div>
+			<div>Таньд <?php echo $domain; ?>-ыг санал болгосон хүний утасны дугаар. Хоосон тохиолдолд сүпер дүпер админы дагагч болохыг анхаарна уу.</div>
 		</div>
 		<div class="divcontainer" style="width: 60%">
 			<div>Утасны дугаар:</div>
@@ -398,17 +398,17 @@ $(document).ready(function(){
 		?>
 		<div class="divcontainer" style="width: 60%">
 			<div>Socialpay QRCode:</div>
-			<div style="color: #42c200; font-size: 14px">Голомт банкны Socialpay аппын хэтэвч хуудасны Socialpay дансны QRCode-ийг скрийншот хийгээд тайрч энэ хэсэгт оруулах.</div>
+			<div style="color: #42c200; font-size: 14px">Голомт банкны Socialpay аппнаас өөрийнхөө дансны QRCode-ийг скрийншот хийгээд тайрч энэ хэсэгт оруулах.</div>
 			<div style="display: flex; align-items: center">
 				<?php
 				if($row["socialpay"] != ""){
 				?>
-				<img id="socialpay" src="<?php echo $path.DIRECTORY_SEPARATOR.$row["socialpay"]; ?>" onClick="profile_socialpay_button()" style="cursor: pointer" />
+				<img id="socialpay" src="<?php echo $path.DIRECTORY_SEPARATOR.$row["socialpay"]; ?>" onClick="profile_socialpay_button()" style="cursor: pointer; object-fit:contain; width:300px; height:300px" />
 				<?php
 				}
 				else {
 				?>
-				<img id="socialpay" src="image-solid.svg" onClick="profile_socialpay_button()" style="cursor: pointer" />
+				<img id="socialpay" src="image-solid.svg" onClick="profile_socialpay_button()" style="cursor: pointer; object-fit:contain; width:300px; height:300px" />
 				<?php
 				}
 				?>
