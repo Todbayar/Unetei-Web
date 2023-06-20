@@ -352,20 +352,24 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 					<select id="searchPriceLimitLowest" style="width: 120px; height: 30px; font: normal 15px Arial; border-radius: 10px">
 						<option value="0" disabled selected>Доод</option>
 						<?php
-						for($price=$rowPriceRange["max"]; $price>=0; $price -= $rowPriceRange["step"]){
-							?>
-							<option value="<?php echo convertPriceToNumber($price); ?>"><?php echo convertPriceToText($price); ?></option>
-							<?php
+						if($rowPriceRange["max"]!=null){
+							for($price=$rowPriceRange["max"]; $price>=0; $price -= $rowPriceRange["step"]){
+								?>
+								<option value="<?php echo convertPriceToNumber($price); ?>"><?php echo convertPriceToText($price); ?></option>
+								<?php
+							}
 						}
 						?>
 					</select>
 					<select id="searchPriceLimitHighest" style="width: 120px; height: 30px; font: normal 15px Arial; border-radius: 10px">
 						<option value="0" disabled selected>Дээд</option>
 						<?php
-						for($price=$rowPriceRange["max"]; $price>=0; $price -= $rowPriceRange["step"]){
-							?>
-							<option value="<?php echo convertPriceToNumber($price); ?>"><?php echo convertPriceToText($price); ?></option>
-							<?php
+						if($rowPriceRange["max"]!=null){
+							for($price=$rowPriceRange["max"]; $price>=0; $price -= $rowPriceRange["step"]){
+								?>
+								<option value="<?php echo convertPriceToNumber($price); ?>"><?php echo convertPriceToText($price); ?></option>
+								<?php
+							}
 						}
 						?>
 					</select>

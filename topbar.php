@@ -6,7 +6,8 @@ include_once "info.php";
 <style>
 .notification_number {
 	position: absolute; 
-	top:6px; right:14.3%; 
+	top:-15px;
+	right: 0;
 	font-size: 10px; 
 	background: red; 
 	color: white; 
@@ -47,12 +48,12 @@ include_once "info.php";
 		
 		if(!isset($_GET["page"]) || $_GET["page"] != "chat"){
 		?>
-		<i class="fa-regular fa-comments" style="font-size: 24px; color: #FFFFFF; font: normal; margin-left: 10px; cursor: pointer" onClick="javascript:location.href='?page=chat'"><p class="notification_number"><?php echo $countChat; ?></p></i>
+		<i class="fa-regular fa-comments" style="font-size: 24px; color: #FFFFFF; font: normal; margin-left: 10px; cursor: pointer; position: relative" onClick="javascript:location.href='?page=chat'"><p class="notification_number"><?php echo $countChat; ?></p></i>
 		<?php
 		}
 		else {
 		?>
-		<i class="fa-solid fa-comments" style="font-size: 24px; color: #FFFFFF; font: normal; margin-left: 10px; cursor: pointer" onClick="javascript:location.href='?page=chat'"><p class="notification_number"><?php echo $countChat; ?></p></i>
+		<i class="fa-solid fa-comments" style="font-size: 24px; color: #FFFFFF; font: normal; margin-left: 10px; cursor: pointer; position: relative" onClick="javascript:location.href='?page=chat'"><p class="notification_number"><?php echo $countChat; ?></p></i>
 		<?php
 		}
 		?>

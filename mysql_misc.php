@@ -1,5 +1,5 @@
 <?php
-include "mysql_config.php";
+include_once "mysql_config.php";
 include_once "info.php";
 
 function update_profile($name, $email, $city, $userID, $image = null){
@@ -88,45 +88,45 @@ function findTypeOfVideo($name){
 	}
 }
 
-function sendNotification($title, $body, $image, $link, $token, $authKey){
-//	$conn = common::createConnection();
-    
-    $data = [
-        "notification" => [
-            "body"  => $body,
-            "title" => $title,
-            "image" => $image
-        ],
-        "priority" =>  "high",
-        "data" => [
-            "click_action"  =>  "FLUTTER_NOTIFICATION_CLICK",
-            "id"            =>  "1",
-            "status"        =>  "done",
-            "info"          =>  [
-                "title"  => $title,
-                "link"   => $link,
-                "image"  => $image
-            ]
-        ],
-		//<YOUR_FIREBASE_TOKEN>
-        "to" => $token
-    ];
-
-    $ch = curl_init();
-
-    curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-    curl_setopt($ch, CURLOPT_POST, 1);
-
-    $headers = array();
-    $headers[] = 'Content-Type: application/json';
-    $headers[] = 'Authorization: key='.$authKey;
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-
-    $result = curl_exec($ch);
-    curl_close ($ch);
-    
-    echo "request sent";
-}
+//function sendNotification($title, $body, $image, $link, $token, $authKey){
+////	$conn = common::createConnection();
+//    
+//    $data = [
+//        "notification" => [
+//            "body"  => $body,
+//            "title" => $title,
+//            "image" => $image
+//        ],
+//        "priority" =>  "high",
+//        "data" => [
+//            "click_action"  =>  "FLUTTER_NOTIFICATION_CLICK",
+//            "id"            =>  "1",
+//            "status"        =>  "done",
+//            "info"          =>  [
+//                "title"  => $title,
+//                "link"   => $link,
+//                "image"  => $image
+//            ]
+//        ],
+//		//<YOUR_FIREBASE_TOKEN>
+//        "to" => $token
+//    ];
+//
+//    $ch = curl_init();
+//
+//    curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+//    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+//    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+//    curl_setopt($ch, CURLOPT_POST, 1);
+//
+//    $headers = array();
+//    $headers[] = 'Content-Type: application/json';
+//    $headers[] = 'Authorization: key='.$authKey;
+//    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+//
+//    $result = curl_exec($ch);
+//    curl_close ($ch);
+//    
+//    echo "request sent";
+//}
 ?>
