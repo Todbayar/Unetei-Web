@@ -292,56 +292,105 @@ function chat_action(action, type, id){
 <div class="chat">
 	<div class="left">
 		<?php
-		$queryFetchSender = "SELECT *, (SELECT name FROM user WHERE id=chat.fromID) AS name, (SELECT image FROM user WHERE id=chat.fromID) AS image, (SELECT role FROM user WHERE id=chat.fromID) AS role FROM chat WHERE toID=".$_COOKIE["userID"]." OR fromID=".$_COOKIE["userID"];
-		$queryFetchSender .= " GROUP BY fromID ORDER BY datetime DESC";
+		$queryFetchSender = "SELECT *, (SELECT name FROM user WHERE id=chat.fromID) AS sender_name, (SELECT image FROM user WHERE id=chat.fromID) AS sender_image, (SELECT role FROM user WHERE id=chat.fromID) AS sender_role, (SELECT name FROM user WHERE id=chat.toID) AS receiver_name, (SELECT image FROM user WHERE id=chat.toID) AS receiver_image, (SELECT role FROM user WHERE id=chat.toID) AS receiver_role FROM chat WHERE toID=".$_COOKIE["userID"]." OR fromID=".$_COOKIE["userID"]." GROUP BY fromID ORDER BY datetime DESC";
 		$resultFetchSender = $conn->query($queryFetchSender);
 		while($rowFetchSender = mysqli_fetch_array($resultFetchSender)){
-		?>
-		<div id="chatSelect<?php echo $rowFetchSender["fromID"]; ?>" class="user" onClick="chat_select(<?php echo $rowFetchSender["fromID"]; ?>)">
-			<div class="container">
-				<div class="box">
-					<div class="profile">
-						<?php
-						if($rowFetchSender["image"] != ""){
-						?>
-						<img src="<?php echo $path.DIRECTORY_SEPARATOR.$rowFetchSender["image"]; ?>" onerror="this.onerror=null; this.src='user.png'">
-						<?php
-						}
-						else {
-						?>
-						<img src="user.png">
-						<?php
-						}
-						?>
-					</div>
-					<div>
-						<div class="name"><?php echo $rowFetchSender["name"]; ?></div>
-						<div class="role">
-							<?php
-							switch($rowFetchSender["role"]){
-								case 0:
-									echo $role_rank_user;
-									break;
-								case 1:
-									echo $role_rank_publisher;
-									break;
-								case 2:
-									echo $role_rank_manager;
-									break;
-								case 3:
-									echo $role_rank_admin;
-									break;
-								case 4:
-									echo $role_rank_superadmin;
-									break;
-							}
-							?>
+			if($rowFetchSender["toID"]==$_COOKIE["userID"]){
+				?>
+				<div id="chatSelect<?php echo $rowFetchSender["fromID"]; ?>" class="user" onClick="chat_select(<?php echo $rowFetchSender["fromID"]; ?>)">
+					<div class="container">
+						<div class="box">
+							<div class="profile">
+								<?php
+								if($rowFetchSender["sender_image"] != ""){
+								?>
+								<img src="<?php echo $path.DIRECTORY_SEPARATOR.$rowFetchSender["sender_image"]; ?>" onerror="this.onerror=null; this.src='user.png'">
+								<?php
+								}
+								else {
+								?>
+								<img src="user.png">
+								<?php
+								}
+								?>
+							</div>
+							<div>
+								<div class="name"><?php echo $rowFetchSender["sender_name"]; ?></div>
+								<div class="role">
+									<?php
+									switch($rowFetchSender["sender_role"]){
+										case 0:
+											echo $role_rank_user;
+											break;
+										case 1:
+											echo $role_rank_publisher;
+											break;
+										case 2:
+											echo $role_rank_manager;
+											break;
+										case 3:
+											echo $role_rank_admin;
+											break;
+										case 4:
+											echo $role_rank_superadmin;
+											break;
+									}
+									?>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
-		<?php
+				<?php
+			}
+			else if($rowFetchSender["fromID"]==$_COOKIE["userID"]){
+				?>
+				<div id="chatSelect<?php echo $rowFetchSender["toID"]; ?>" class="user" onClick="chat_select(<?php echo $rowFetchSender["toID"]; ?>)">
+					<div class="container">
+						<div class="box">
+							<div class="profile">
+								<?php
+								if($rowFetchSender["receiver_image"] != ""){
+								?>
+								<img src="<?php echo $path.DIRECTORY_SEPARATOR.$rowFetchSender["receiver_image"]; ?>" onerror="this.onerror=null; this.src='user.png'">
+								<?php
+								}
+								else {
+								?>
+								<img src="user.png">
+								<?php
+								}
+								?>
+							</div>
+							<div>
+								<div class="name"><?php echo $rowFetchSender["receiver_name"]; ?></div>
+								<div class="role">
+									<?php
+									switch($rowFetchSender["receiver_role"]){
+										case 0:
+											echo $role_rank_user;
+											break;
+										case 1:
+											echo $role_rank_publisher;
+											break;
+										case 2:
+											echo $role_rank_manager;
+											break;
+										case 3:
+											echo $role_rank_admin;
+											break;
+										case 4:
+											echo $role_rank_superadmin;
+											break;
+									}
+									?>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<?php
+			}
 		}
 		?>
 	</div>

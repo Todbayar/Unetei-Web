@@ -19,14 +19,14 @@ function getAffiliateID($id){
 }
 
 //check before remove
-function getCountListCategory(){
-	global $conn;
-	$count = 0;
-	for($i=1; $i<=4; $i++){
-		$count += mysqli_num_rows($conn->query("SELECT * FROM category".$i." WHERE userID=".$_COOKIE["userID"]));
-	}
-	return $count;
-}
+//function getCountListCategory(){
+//	global $conn;
+//	$count = 0;
+//	for($i=1; $i<=4; $i++){
+//		$count += mysqli_num_rows($conn->query("SELECT * FROM category".$i." WHERE userID=".$_COOKIE["userID"]));
+//	}
+//	return $count;
+//}
 
 function getCountCategory($status, $userID){
 	global $conn;
@@ -60,6 +60,8 @@ function convertPriceToText($price){
 			return $digits[0].",000";
 		case 0:
 			return number_format($price);
+		default:
+			return "";
 	}
 }
 
@@ -76,6 +78,8 @@ function convertPriceToNumber($price){
 			return intval($digits[0]."000");
 		case 0:
 			return intval($price);
+		default:
+			return 0;
 	}
 }
 

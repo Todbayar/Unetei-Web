@@ -3,7 +3,7 @@ include "mysql_config.php";
 
 if(isset($_GET["toID"])){
 	//AND toID=".$_COOKIE["userID"]."
-	$query = "SELECT *, (SELECT name FROM user WHERE id=fromID) AS sender_name, (SELECT image FROM user WHERE id=fromID) AS sender_image FROM chat WHERE fromID=".$_COOKIE["userID"]." AND toID=".$_GET["toID"]." OR fromID=".$_GET["toID"]." ORDER BY datetime DESC";
+	$query = "SELECT *, (SELECT name FROM user WHERE id=fromID) AS sender_name, (SELECT image FROM user WHERE id=fromID) AS sender_image FROM chat WHERE (toID=".$_COOKIE["userID"]." AND fromID=".$_GET["toID"].") OR (toID=".$_GET["toID"]." AND fromID=".$_COOKIE["userID"].") ORDER BY datetime DESC";
 	$result = $conn->query($query);
 	$objArr = array();
 	while($row = mysqli_fetch_array($result)){
