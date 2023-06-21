@@ -48,12 +48,28 @@ include_once "info.php";
 		
 		if(!isset($_GET["page"]) || $_GET["page"] != "chat"){
 		?>
-		<i class="fa-regular fa-comments" style="font-size: 24px; color: #FFFFFF; font: normal; margin-left: 10px; cursor: pointer; position: relative" onClick="javascript:location.href='?page=chat'"><p class="notification_number"><?php echo $countChat; ?></p></i>
+		<i class="fa-regular fa-comments" style="font-size: 24px; color: #FFFFFF; font: normal; margin-left: 10px; cursor: pointer; position: relative" onClick="javascript:location.href='?page=chat'">
+			<?php
+			if($countChat>0){
+			?>
+			<p class="notification_number"><?php echo $countChat; ?></p>
+			<?php
+			}
+			?>
+		</i>
 		<?php
 		}
 		else {
 		?>
-		<i class="fa-solid fa-comments" style="font-size: 24px; color: #FFFFFF; font: normal; margin-left: 10px; cursor: pointer; position: relative" onClick="javascript:location.href='?page=chat'"><p class="notification_number"><?php echo $countChat; ?></p></i>
+		<i class="fa-solid fa-comments" style="font-size: 24px; color: #FFFFFF; font: normal; margin-left: 10px; cursor: pointer; position: relative" onClick="javascript:location.href='?page=chat'">
+			<?php
+			if($countChat>0){
+			?>
+			<p class="notification_number"><?php echo $countChat; ?></p>
+			<?php
+			}
+			?>
+		</i>
 		<?php
 		}
 		?>

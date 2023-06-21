@@ -249,7 +249,7 @@ $(document).ready(function(){
 			<?php
 			if($row["image"] != ""){
 			?>
-			<img id="image" src="<?php echo $path.DIRECTORY_SEPARATOR.$row["image"]; ?>" onClick="profile_image_button()" />
+			<img id="image" src="<?php echo $path.DIRECTORY_SEPARATOR.$row["image"]; ?>" onClick="profile_image_button()" onerror="this.onerror=null; this.src='user.png'" />
 			<?php
 			}
 			else {

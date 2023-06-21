@@ -147,7 +147,7 @@ function myzar_category_enter_submit(tableID = null, id = null){
 				}
 			}
 			else {
-				$("#myzar_category_enter_error").text(this.responseText);
+				$("#myzar_category_enter_error").html(this.responseText);
 			}
 		};
 		reqMyZarCategoryAddSubmit.onerror = function(){
@@ -159,7 +159,7 @@ function myzar_category_enter_submit(tableID = null, id = null){
 		reqMyZarCategoryAddSubmit.send(myZarCategoryEnterSubmitData);
 	}
 	else {
-		$("#myzar_category_enter_error").text("Ангиллын гарчиг буруу байна!");
+		$("#myzar_category_enter_error").text("Ангиллын гарчиг буруу байна! Тусгай тэмдэгт агуулаагүй байх ёстой.");
 	}
 }
 
@@ -334,11 +334,14 @@ function myzar_category_fetch_list(tableID, parentID, title, icon, hasChildren, 
 						}
 						else {							
 							if(objMyZarCategoryList[i].icon != null){
-								//Don't forget to count its item adv because of preventing to be deleted
-								$("#myzar_content_category_list").append("<div id=\"categoryButton"+objMyZarCategoryList[i].id+"\" class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: "+buttonColor+"; height:18px\"><div onClick=\"myzar_category_fetch_list("+(tableID+1)+", "+objMyZarCategoryList[i].id+", '"+objMyZarCategoryList[i].title+"', '"+objMyZarCategoryList[i].icon+"', false, false)\" style=\"display:flex; align-items: center\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"32px\" height=\"32px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div></div><i onClick=\"myzar_category_remove("+tableID+","+objMyZarCategoryList[i].id+")\" class=\"fa-solid fa-circle-minus\" style=\"color:#FF4649; margin-left: 10px; font-size: 20px\"></i></div>");
+								var buttonTraverse = "onClick=\"myzar_category_fetch_list("+(tableID+1)+", "+objMyZarCategoryList[i].id+", '"+objMyZarCategoryList[i].title+"', '"+objMyZarCategoryList[i].icon+"', false, false)\"";
+								if(parseInt(objMyZarCategoryList[i].active)==1) buttonTraverse = "";
+								$("#myzar_content_category_list").append("<div id=\"categoryButton"+objMyZarCategoryList[i].id+"\" class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: "+buttonColor+"; height:18px\"><div "+buttonTraverse+" style=\"display:flex; align-items: center\"><img src=\"./user_files/"+objMyZarCategoryList[i].icon+"\" width=\"32px\" height=\"32px\" /><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div></div><i onClick=\"myzar_category_remove("+tableID+","+objMyZarCategoryList[i].id+")\" class=\"fa-solid fa-circle-minus\" style=\"color:#FF4649; margin-left: 10px; font-size: 20px\"></i></div>");
 							}
 							else {
-								$("#myzar_content_category_list").append("<div id=\"categoryButton"+objMyZarCategoryList[i].id+"\" class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: "+buttonColor+"; height:18px\"><div onClick=\"myzar_category_fetch_list("+(tableID+1)+", "+objMyZarCategoryList[i].id+", '"+objMyZarCategoryList[i].title+"', '', false, false)\" style=\"display:flex; align-items: center\"><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div></div><i onClick=\"myzar_category_remove("+tableID+","+objMyZarCategoryList[i].id+")\" class=\"fa-solid fa-circle-minus\" style=\"color:#FF4649; margin-left: 10px; font-size: 20px\"></i></div>");
+								var buttonTraverse = "onClick=\"myzar_category_fetch_list("+(tableID+1)+", "+objMyZarCategoryList[i].id+", '"+objMyZarCategoryList[i].title+"', '', false, false)\"";
+								if(parseInt(objMyZarCategoryList[i].active)==1) buttonTraverse = "";
+								$("#myzar_content_category_list").append("<div id=\"categoryButton"+objMyZarCategoryList[i].id+"\" class=\"button_yellow\" style=\"float: left; margin-left: 10px; margin-bottom: 10px; background: "+buttonColor+"; height:18px\"><div "+buttonTraverse+" style=\"display:flex; align-items: center\"><div style=\"margin-left: 5px\">"+objMyZarCategoryList[i].title+"</div></div><i onClick=\"myzar_category_remove("+tableID+","+objMyZarCategoryList[i].id+")\" class=\"fa-solid fa-circle-minus\" style=\"color:#FF4649; margin-left: 10px; font-size: 20px\"></i></div>");
 							}
 						}
 					}
@@ -404,7 +407,8 @@ function myzar_category_fetch_list(tableID, parentID, title, icon, hasChildren, 
 	</div>
 	<div>
 		<?php
-		if($_COOKIE["role"]==0){
+		$rowUser = mysqli_fetch_array($conn->query("SELECT role FROM user WHERE id=".$_COOKIE["userID"]));
+		if($rowUser["role"]==0){
 			?>
 			<div id="myzar_category_add_button" onClick="javascript:confirmation_ok('Та хэрэглэгчийн эрхээ дээшлүүлнэ үү. <b>Тохиргоо</b> хэсэгт хэрэглэгчийн эрхээ дээшлүүлэх тохиргоо байгаа.')" class="button_yellow" style="background-color: #ccc; margin-left:10px; margin-bottom: 10px; width: 75px; float: left; height: 18px">
 				<i class="fa-solid fa-plus"></i>
@@ -412,32 +416,13 @@ function myzar_category_fetch_list(tableID, parentID, title, icon, hasChildren, 
 			</div>
 			<?php
 		}
-		else if($_COOKIE["role"]==1 || $_COOKIE["role"]==2){
-			$countLimitCategory = getCountListCategory();
-			if($countLimitCategory<$category_count_limit_publisher_manager){
-				?>
-				<div id="myzar_category_add_button" onClick="myzar_category_add_show()" class="button_yellow" style="margin-left:10px; margin-bottom: 10px; width: 75px; float: left; height: 18px">
-					<i class="fa-solid fa-plus"></i>
-					<div style="margin-left: 5px">Ангилал нэмэх</div>
-				</div>
-				<?php
-			}
-			else {
-				?>
-				<div id="myzar_category_add_button" onClick="javascript:confirmation_ok('Та хэрэглэгчийн эрхийнхээ хүрээнд <?php echo $countLimitCategory; ?> ангилал нэмжээ, эсвэл та хэрэглэгчийн эрхээ дээшлүүлнэ үү.')" class="button_yellow" style="background-color: #ccc; margin-left:10px; margin-bottom: 10px; width: 75px; float: left; height: 18px">
-					<i class="fa-solid fa-plus"></i>
-					<div style="margin-left: 5px">Ангилал нэмэх</div>
-				</div>
-				<?php
-			}
-		}
-		else if($_COOKIE["role"]>2){
-		?>
-		<div id="myzar_category_add_button" onClick="myzar_category_add_show()" class="button_yellow" style="margin-left:10px; margin-bottom: 10px; width: 75px; float: left; height: 18px">
-			<i class="fa-solid fa-plus"></i>
-			<div style="margin-left: 5px">Ангилал нэмэх</div>
-		</div>
-		<?php
+		else if($rowUser["role"]>0){
+			?>
+			<div id="myzar_category_add_button" onClick="myzar_category_add_show()" class="button_yellow" style="margin-left:10px; margin-bottom: 10px; width: 75px; float: left; height: 18px">
+				<i class="fa-solid fa-plus"></i>
+				<div style="margin-left: 5px">Ангилал нэмэх</div>
+			</div>
+			<?php
 		}
 	   	?>
 		<!--Category added list-->

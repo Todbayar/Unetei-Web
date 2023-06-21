@@ -68,7 +68,8 @@ function chat_select(toID){
 				else {
 					chat_list_message(chatRow.sender, chatRow.body, chatRow.datetime, chatRow.isEdit);
 				}
-				$(".chat .right .top").scrollTop($(".chat .right .top").innerHeight()*2);
+//				$(".chat .right .top").scrollTop($(".chat .right .top").innerHeight()*2);
+				$(".chat .right .top").scrollTop(0);
 			});
 			$("div.message:last-child").css("margin-bottom","35px");
 		}
@@ -116,7 +117,10 @@ function chat_list_role_action_show(isactive, id, isMe){
 
 function chat_list_category(sender, body, datetime, isEdit){
 	if(sender.id == <?php echo $_COOKIE["userID"]; ?>){
-		var htmlCategory = "<div class=\"message me\"><div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-sitemap\" style=\"position:absolute; top:0; left:-15px; padding:5px; border-radius:10px; background: #fff4d0; color:#878787\"></i>";
+	   	var typeColor = "#878787";
+	   	if(body.status==1) typeColor = "#39a600";
+		
+		var htmlCategory = "<div class=\"message me\"><div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-sitemap\" style=\"position:absolute; top:0; left:-15px; padding:5px; border-radius:10px; background: #fff4d0; color:"+typeColor+"\"></i>";
 	   	if(body.isActive == 1){
 			htmlCategory += "<i class=\"fa-solid fa-arrow-rotate-left\" style=\"position:absolute; top:20px; left:-15px; padding:5px; border-radius:10px; background: #fff4d0; color:#878787\"></i>";
 		}
@@ -184,17 +188,17 @@ function chat_list_item(sender, body, datetime, isEdit){
 
 function chat_list_message(sender, body, datetime){
 	if(sender.id == <?php echo $_COOKIE["userID"]; ?>){
-		$(".chat .right .top").append("<div class=\"message me\"><div class=\"container\"><div class=\"text\">"+body+"</div><div class=\"datetime\">"+datetime+"</div></div><img src=\"<?php echo $path; ?>/"+sender.image+"\"></div>");
+		$(".chat .right .top").append("<div class=\"message me\"><div class=\"container\"><div class=\"text\">"+body+"</div><div class=\"datetime\">"+datetime+"</div></div>"+chat_profile_image_show(sender.image)+"</div>");
 	}
 	else {
-		$(".chat .right .top").append("<div class=\"message\"><img src=\"<?php echo $path; ?>/"+sender.image+"\"><div class=\"container\"><div class=\"text\">"+body+"</div><div class=\"datetime\">"+datetime+"</div></div></div>");
+		$(".chat .right .top").append("<div class=\"message\">"+chat_profile_image_show(sender.image)+"<div class=\"container\"><div class=\"text\">"+body+"</div><div class=\"datetime\">"+datetime+"</div></div></div>");
 	}
 }
 
 function chat_list_category_show(categories, title){
 	var vCategory = "<div style=\"font-size:12px; color:gray; margin-top:5px\">";
 	for(let i=0; i<categories.length; i++){
-		if(i+1<categories.length){
+		if(i<categories.length-1){
 			vCategory += categories[i]+"<i class=\"fas fa-angle-right\" style=\"font-size:10px; margin-left:2px; margin-right:2px\"></i>";   
 		}
 		else {
@@ -207,7 +211,7 @@ function chat_list_category_show(categories, title){
 function chat_list_category_words_show(words){
 	var vWords = "";
 	words.split(',').forEach(function(word, i, arr){
-		if(i<arr.length){
+		if(i<arr.length-1){
 			vWords += word+", ";
 		}
 		else {
@@ -247,7 +251,7 @@ function chat_list_item_action_show(isactive, id, isMe = false){
 
 function chat_profile_image_show(image){
 	if(image != ""){
-		return "<img src=\"<?php echo $path; ?>/"+image+"\">";
+		return "<img src=\"<?php echo $path; ?>/"+image+"\" onerror=\"this.onerror=null; this.src='user.png'\">";
 	}
 	else {
 		return "<img src=\"user.png\">";
@@ -287,23 +291,8 @@ function chat_action(action, type, id){
 
 <div class="chat">
 	<div class="left">
-<!--
-		<div id="chatSelect0" class="user" onClick="chat_select(0)">
-			<div class="container">
-				<div class="box">
-					<div class="profile">
-						<img src="user.png">
-					</div>
-					<div>
-						<div class="name"><?php echo $title; ?></div>
-						<div class="role">Сүпер админ</div>
-					</div>
-				</div>
-			</div>
-		</div>
--->
 		<?php
-		$queryFetchSender = "SELECT *, (SELECT name FROM user WHERE id=chat.fromID) AS name, (SELECT image FROM user WHERE id=chat.fromID) AS image, (SELECT role FROM user WHERE id=chat.fromID) AS role FROM chat WHERE toID=".$_COOKIE["userID"];
+		$queryFetchSender = "SELECT *, (SELECT name FROM user WHERE id=chat.fromID) AS name, (SELECT image FROM user WHERE id=chat.fromID) AS image, (SELECT role FROM user WHERE id=chat.fromID) AS role FROM chat WHERE toID=".$_COOKIE["userID"]." OR fromID=".$_COOKIE["userID"];
 		$queryFetchSender .= " GROUP BY fromID ORDER BY datetime DESC";
 		$resultFetchSender = $conn->query($queryFetchSender);
 		while($rowFetchSender = mysqli_fetch_array($resultFetchSender)){
@@ -315,7 +304,7 @@ function chat_action(action, type, id){
 						<?php
 						if($rowFetchSender["image"] != ""){
 						?>
-						<img src="<?php echo $path.DIRECTORY_SEPARATOR.$rowFetchSender["image"]; ?>">
+						<img src="<?php echo $path.DIRECTORY_SEPARATOR.$rowFetchSender["image"]; ?>" onerror="this.onerror=null; this.src='user.png'">
 						<?php
 						}
 						else {
@@ -331,16 +320,19 @@ function chat_action(action, type, id){
 							<?php
 							switch($rowFetchSender["role"]){
 								case 0:
-									echo "Хэрэглэгч";
+									echo $role_rank_user;
 									break;
 								case 1:
-									echo "Нийтлэгч";
+									echo $role_rank_publisher;
 									break;
 								case 2:
-									echo "Менежер";
+									echo $role_rank_manager;
 									break;
 								case 3:
-									echo "Админ";
+									echo $role_rank_admin;
+									break;
+								case 4:
+									echo $role_rank_superadmin;
 									break;
 							}
 							?>

@@ -34,18 +34,17 @@ if(isset($_REQUEST["action"]) && isset($_REQUEST["type"]) && isset($_REQUEST["id
 			$queryFetchRole = "SELECT fromID, message FROM chat WHERE id=".$id;
 			$resultFetchRole = $conn->query($queryFetchRole);
 			$rowFetchRole = mysqli_fetch_array($resultFetchRole);
-			$priceFetchRole = explode(' ',$rowFetchRole["message"])[5];
 			$queryUpdateRole = "UPDATE user SET";
-			if($priceFetchRole === $role_price_superadmin){
+			if(str_contains($rowFetchRole["message"], $role_rank_superadmin)){
 				$queryUpdateRole .= " role=4";
 			}
-			else if($priceFetchRole === $role_price_admin){
+			else if(str_contains($rowFetchRole["message"], $role_rank_admin)){
 				$queryUpdateRole .= " role=3";
 			}
-			else if($priceFetchRole === $role_price_manager){
+			else if(str_contains($rowFetchRole["message"], $role_rank_manager)){
 				$queryUpdateRole .= " role=2";
 			}
-			else if($priceFetchRole === $role_price_publisher){
+			else if(str_contains($rowFetchRole["message"], $role_rank_publisher)){
 				$queryUpdateRole .= " role=1";
 			}
 			$queryUpdateRole .= " WHERE id=".$rowFetchRole["fromID"];

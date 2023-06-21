@@ -18,20 +18,20 @@ if(isset($_POST["type"])){
 		$price = 0;
 		switch($_POST["role"]){
 			case 1:
-				$price = 50000;
-				$shortMessage = "Нийтлэгч, ".number_format($price)." ₮";
+				$price = $role_price_publisher;
+				$shortMessage = $role_rank_publisher.", ".number_format($role_price_publisher)." ₮";
 				break;
 			case 2:
-				$price = 100000;
-				$shortMessage = "Менежер, ".number_format($price)." ₮";
+				$price = $role_price_manager;
+				$shortMessage = $role_rank_manager.", ".number_format($role_price_manager)." ₮";
 				break;
 			case 3:
-				$price = 300000;
-				$shortMessage = "Админ, ".number_format($price)." ₮";
+				$price = $role_price_admin;
+				$shortMessage = $role_rank_admin.", ".number_format($role_price_admin)." ₮";
 				break;
 			case 4:
-				$price = 1000000;
-				$shortMessage = "Сүпер админ, ".number_format($price)." ₮";
+				$price = $role_price_superadmin;
+				$shortMessage = $role_rank_superadmin.", ".number_format($role_price_superadmin)." ₮";
 				break;
 		}
 		
@@ -42,7 +42,7 @@ if(isset($_POST["type"])){
 		$billing->type = "Хэрэглэгчийн эрхээ дээшлүүлэх";
 		$billing->number = $requester["phone"];
 		$billing->title = $requester["name"];
-		$billing->price = $price;
+		$billing->price = number_format($price);
 		$billing->bank_name = $affiliate["bank_name"];
 		$billing->bank_owner = $affiliate["bank_owner"];
 		$billing->bank_account = $affiliate["bank_account"];

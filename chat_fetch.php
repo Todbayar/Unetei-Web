@@ -2,11 +2,12 @@
 include "mysql_config.php";
 
 if(isset($_GET["toID"])){
-	$query = "SELECT *, (SELECT name FROM user WHERE id=fromID) AS sender_name, (SELECT image FROM user WHERE id=fromID) AS sender_image FROM chat WHERE fromID=".$_COOKIE["userID"]." AND toID=".$_GET["toID"]." OR fromID=".$_GET["toID"]." AND toID=".$_COOKIE["userID"]." ORDER BY datetime ASC";
+	//AND toID=".$_COOKIE["userID"]."
+	$query = "SELECT *, (SELECT name FROM user WHERE id=fromID) AS sender_name, (SELECT image FROM user WHERE id=fromID) AS sender_image FROM chat WHERE fromID=".$_COOKIE["userID"]." AND toID=".$_GET["toID"]." OR fromID=".$_GET["toID"]." ORDER BY datetime DESC";
 	$result = $conn->query($query);
 	$objArr = array();
 	while($row = mysqli_fetch_array($result)){
-		@$conn->query("UPDATE chat SET isRead=1 WHERE id=".$row["id"]." NOT type=3");
+		@$conn->query("UPDATE chat SET isRead=1 WHERE id=".$row["id"]." AND NOT type=3");
 		
 		$message = new stdClass();
 		$message->type = $row["type"];
@@ -75,6 +76,7 @@ function fetchCategory($id){
 	$body = new stdClass();
 	if(mysqli_num_rows($result) > 0){
 		$body->id = $row["id"];
+		$body->status = $row["status"];	//category type: regular, brand/shop
 		$body->title = $row["title"];
 		$body->isActive = $row["active"];
 		$body->words = $row["words"];

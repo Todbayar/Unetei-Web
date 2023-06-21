@@ -19,7 +19,7 @@
 		</div>
 		<div id="recaptcha-container"></div>
 		<div>
-			<p id="loginError" style="color: #FF0004">Та үйлчилгээний нөхцөлийг зөвшөөрснөө баталж чагтална уу!</p>
+			<p id="loginError" style="color: #FF0004">Та үйлчилгээний нөхцөлийг зөвшөөрснөө баталж чагтална уу мөн өөрийгөө хүн гэдгээ батална уу!</p>
 			<button id="loginButton" class="button_yellow" type="button" style="font: normal 18px Arial" onClick="phoneAuth()">Мессежээр нэвтрэх</button>
 		</div>
 	</div>

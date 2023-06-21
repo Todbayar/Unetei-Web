@@ -18,6 +18,7 @@ function getAffiliateID($id){
 	return ($rowAffiliate["affiliate_id"] != null && $rowAffiliate["affiliate_id"] != "") ? $rowAffiliate["affiliate_id"] : $rowSuperDuper["id"];
 }
 
+//check before remove
 function getCountListCategory(){
 	global $conn;
 	$count = 0;
@@ -25,6 +26,25 @@ function getCountListCategory(){
 		$count += mysqli_num_rows($conn->query("SELECT * FROM category".$i." WHERE userID=".$_COOKIE["userID"]));
 	}
 	return $count;
+}
+
+function getCountCategory($status, $userID){
+	global $conn;
+	$count = 0;
+	for($i=1; $i<=4; $i++){
+		$queryCategory = "SELECT * FROM category".$i." WHERE status=".$status." AND userID=".$userID;
+		$resultCategory = $conn->query($queryCategory);
+		$count += mysqli_num_rows($resultCategory);
+	}
+	return $count;
+}
+
+function getUserRole($userID){
+	global $conn;
+	$queryRole = "SELECT role FROM user WHERE id=".$userID;
+	$resultRole = $conn->query($queryRole);
+	$rowRole = mysqli_fetch_array($resultRole);
+	return $rowRole["role"];
 }
 
 function convertPriceToText($price){

@@ -25,7 +25,8 @@ else {
 }
 
 function InsertCategoryEntry($pTableID, $pUID , $pTitle, $pFile, $pParentID, $pWords, $type){
-	global $conn, $category_count_limit_publisher_manager;
+	global $conn, $category_regular_count_limit_superadmin, $category_brand_count_limit_superadmin, $category_regular_count_limit_admin, $category_brand_count_limit_admin, $category_regular_count_limit_manager, $category_brand_count_limit_manager, $category_regular_count_limit_publisher, $category_brand_count_limit_publisher;
+	
 	$vType = $type != "undefined" ? $type : 0;
 	
 	$IsInsertCategoryOK = true;
@@ -37,15 +38,7 @@ function InsertCategoryEntry($pTableID, $pUID , $pTitle, $pFile, $pParentID, $pW
 	}
 	
 	if($IsInsertCategoryOK){
-		$IsInsertCategoryCountLimitOK = true;
-		if(($_COOKIE["role"]==1 || $_COOKIE["role"]==2) && getCountListCategory()>=$category_count_limit_publisher_manager){
-			$IsInsertCategoryCountLimitOK = false;
-		}
-		else if($_COOKIE["role"]==0){
-			$IsInsertCategoryCountLimitOK = false;
-		}
-		
-		if($IsInsertCategoryCountLimitOK){
+		if(!IsCategoryCountLimitReached($vType, $pUID)){
 			if(!is_null($pFile)){
 				$vNewFile = date("Ymdhis")."_".$pFile["name"];
 				if (move_uploaded_file($pFile["tmp_name"], "user_files/".$vNewFile)) {
@@ -102,11 +95,78 @@ function InsertCategoryEntry($pTableID, $pUID , $pTitle, $pFile, $pParentID, $pW
 			}
 		}
 		else {
-			echo "Таны хэрэглэгчийн эрхийн хүрээнд ".$category_count_limit_publisher_manager." ангилал оруулах эрх дууссан байна, та хэрэглэгчийн эрхээ дээшлүүлж болно! Тохиргоо хэсэгт харна уу.";	
+			$msg = 'Таны хэрэглэгчийн эрхийн хүрээнд энгийн (%1$d/%2$s), брэнд/дэлгүүр (%3$d/%4$s) ангилал оруулах боломжтой байна, та хэрэглэгчийн эрхээ дээшлүүлж болно! Тохиргоо хэсэгт харна уу.';
+			switch(getUserRole($pUID)){
+				case 4:
+					$categoryRegularCount = ($category_regular_count_limit_superadmin==-1)?0:($category_regular_count_limit_superadmin==0?"&infin;":$category_regular_count_limit_superadmin);
+					$categoryBrandCount = ($category_brand_count_limit_superadmin==-1)?0:($category_brand_count_limit_superadmin==0?"&infin;":$category_brand_count_limit_superadmin);
+					echo sprintf($msg, getCountCategory(0, $pUID), $categoryRegularCount, getCountCategory(1, $pUID), $categoryBrandCount);
+					break;
+				case 3:
+					$categoryRegularCount = ($category_regular_count_limit_admin==-1)?0:($category_regular_count_limit_admin==0?"&infin;":$category_regular_count_limit_admin);
+					$categoryBrandCount = ($category_brand_count_limit_admin==-1)?0:($category_brand_count_limit_admin==0?"&infin;":$category_brand_count_limit_admin);
+					echo sprintf($msg, getCountCategory(0, $pUID), $categoryRegularCount, getCountCategory(1, $pUID), $categoryBrandCount);
+					break;
+				case 2:
+					$categoryRegularCount = ($category_regular_count_limit_manager==-1)?0:($category_regular_count_limit_manager==0?"&infin;":$category_regular_count_limit_manager);
+					$categoryBrandCount = ($category_brand_count_limit_manager==-1)?0:($category_brand_count_limit_manager==0?"&infin;":$category_brand_count_limit_manager);
+					echo sprintf($msg, getCountCategory(0, $pUID), $categoryRegularCount, getCountCategory(1, $pUID), $categoryBrandCount);
+					break;
+				case 1:
+					$categoryRegularCount = ($category_regular_count_limit_publisher==-1)?0:($category_regular_count_limit_publisher==0?"&infin;":$category_regular_count_limit_publisher);
+					$categoryBrandCount = ($category_brand_count_limit_publisher==-1)?0:($category_brand_count_limit_publisher==0?"&infin;":$category_brand_count_limit_publisher);
+					echo sprintf($msg, getCountCategory(0, $pUID), $categoryRegularCount, getCountCategory(1, $pUID), $categoryBrandCount);
+					break;
+			}
 		}
 	}
 	else {
 		echo "Таны оруулсан ангилал жагсаалтанд байсан байна!";
+	}
+}
+
+function IsCategoryCountLimitReached($type, $userID){
+	global $conn, $category_regular_count_limit_superadmin, $category_brand_count_limit_superadmin, $category_regular_count_limit_admin, $category_brand_count_limit_admin, $category_regular_count_limit_manager, $category_brand_count_limit_manager, $category_regular_count_limit_publisher, $category_brand_count_limit_publisher;
+	
+	$currentCountCategory = getCountCategory($type, $userID);
+	$countCategory = -1;	//not accepted
+	
+	$queryUser = "SELECT * FROM user WHERE id=".$_COOKIE["userID"];
+	$resultUser = $conn->query($queryUser);
+	$rowUser = mysqli_fetch_array($resultUser);
+	
+	switch($rowUser["role"]){
+		case 4:
+			if($type==0) $countCategory = $category_regular_count_limit_superadmin;
+			else if($type==1) $countCategory = $category_brand_count_limit_superadmin;
+			break;
+		case 3:
+			if($type==0) $countCategory = $category_regular_count_limit_admin;
+			else if($type==1) $countCategory = $category_brand_count_limit_admin;
+			break;
+		case 2:
+			if($type==0) $countCategory = $category_regular_count_limit_manager;
+			else if($type==1) $countCategory = $category_brand_count_limit_manager;
+			break;
+		case 1:
+			if($type==0) $countCategory = $category_regular_count_limit_publisher;
+			else if($type==1) $countCategory = $category_brand_count_limit_publisher;
+			break;
+	}
+	
+	if($countCategory == -1){
+		return true;	//not accepted
+	}
+	else if($countCategory == 0){
+		return false;	//unlimited
+	}
+	else if($countCategory > 0) {
+		if($countCategory > $currentCountCategory){
+			return false;	//more available
+		}
+		else {
+			return true;	//not accepted and reached limit
+		}
 	}
 }
 
