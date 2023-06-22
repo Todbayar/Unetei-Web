@@ -44,6 +44,17 @@ $category_brand_count_limit_manager = -1;
 $category_regular_count_limit_publisher = 10;
 $category_brand_count_limit_publisher = -1;
 
+//item limit
+//-1 (not accepted), 0 (unlimited), 0<n (accepted but limited)
+$item_regular_count_limit_superadmin = 0;
+$item_vipspecial_count_limit_superadmin = 0;
+$item_regular_count_limit_admin = 0;
+$item_vipspecial_count_limit_admin = 10;
+$item_regular_count_limit_manager = 0;
+$item_vipspecial_count_limit_manager = -1;
+$item_regular_count_limit_publisher = 0;
+$item_vipspecial_count_limit_publisher = -1;
+
 //item publish option prices
 $item_publish_price_vip = number_format("20000");
 $item_publish_price_special = number_format("10000");

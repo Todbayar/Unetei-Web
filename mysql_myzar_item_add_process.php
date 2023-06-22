@@ -2,6 +2,7 @@
 include "mysql_config.php";
 include_once "mysql_misc.php";
 include_once "chat_process.php";
+include_once "info.php";
 
 $userID = $_COOKIE["userID"];
 $category = $_REQUEST["category"];
@@ -24,7 +25,8 @@ $queryDuplication = "SELECT * FROM item WHERE title='".$title."' AND userID=".$u
 $resultDuplication = $conn->query($queryDuplication);
 $isDuplication = mysqli_num_rows($resultDuplication);
 if($isDuplication == 0){
-	if($_COOKIE["role"] == 0){
+	$userRole = getUserRole($userID);
+	if($userRole == 0){
 		$phone = $_COOKIE["phone"];
 	}
 	
@@ -34,6 +36,23 @@ if($isDuplication == 0){
 	}
 	else if($status == 1) {
 		$days = 20;
+	}
+	
+	$payAmount = 0;
+	$countItem = getCountItem($userID);
+	switch($userRole){
+		case 4:
+			$payAmount = 0;
+		case 3:
+			if($countItem["total"]>$item_vipspecial_count_limit_admin){
+				if($status==2) $payAmount = $item_publish_price_vip;
+				else if($status==1) $payAmount = $item_publish_price_special;
+			}
+			break;
+		default:
+			if($status==2) $payAmount = $item_publish_price_vip;
+			else if($status==1) $payAmount = $item_publish_price_special;
+			break;
 	}
 	
 	$queryItem = "INSERT INTO item (title, quality, address, price, youtube, video, extras, description, city, name, phone, email, userID, category, item_viewer, phone_viewer, datetime, expire_days, status, isactive) VALUES ('".$title."', ".$quality.", '".$address."', ".$price.", '".$youtube."', '".$video."', '".$extras."', '".$description."', '".$city."', '".$name."', '".$phone."', '".$email."', ".$userID.", '".$category."', 0, 0, '".date("Y-m-d h:i:s")."', ".$days.", ".$status.", 1)";
@@ -55,7 +74,7 @@ if($isDuplication == 0){
 			if($isImagesInsert){
 				chat_send($userID, getAffiliateID($userID), 2, $itemID, false);
 				update_profile($name, $email, $city, $userID);
-				echo $itemID;
+				echo json_encode(array("id"=>$itemID, "pay_amount"=>$payAmount));
 			}
 			else {
 				echo "Fail 46";
@@ -64,7 +83,7 @@ if($isDuplication == 0){
 		else {
 			chat_send($userID, getAffiliateID($userID), 2, $itemID, false);
 			update_profile($name, $email, $city, $userID);
-			echo $itemID;
+			echo json_encode(array("id"=>$itemID, "pay_amount"=>$payAmount));
 		}
 	}
 	else {

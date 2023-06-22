@@ -304,13 +304,10 @@ function publishItemSubmit(role){
 		}
 		else {
 			$(".myzar_content_add_item").hide();
-			
-			const itemAddedID = this.responseText;
-			const selPriceOpt = $(".popup.item_publish_option input[name='publish_option']:checked").val();
-			const itemPrice = selPriceOpt==1?convertPriceToTextJS(10000.00):selPriceOpt==2?convertPriceToTextJS(20000.00):0;
 			$(".popup.item_publish_option").hide();
 			
-			if(role>=3 || selPriceOpt==0){
+			const itemResponse = JSON.parse(this.responseText);
+			if(itemResponse.pay_amount == 0){
 				var eventOk = new CustomEvent("itemAddDone");
 				window.addEventListener("itemAddDone", function(){
 					location.reload();
@@ -323,9 +320,9 @@ function publishItemSubmit(role){
 					$(".popup.billing").show();
 					const res = JSON.parse(response);
 					$(".popup.billing .container #billing_type").html("Зар нэмэх");
-					$(".popup.billing .container #billing_number").html("#" + itemAddedID);
+					$(".popup.billing .container #billing_number").html("#" + itemResponse.id);
 					$(".popup.billing .container #billing_title").html(itemData.get("title"));
-					$(".popup.billing .container #billing_price").html(itemPrice + " ₮");
+					$(".popup.billing .container #billing_price").html(itemResponse.pay_amount + " ₮");
 					$(".popup.billing .container #billing_bank #name").html("<b>" + res.bank_name + "</b>");
 					$(".popup.billing .container #billing_bank #account").html("<b>" + res.bank_account + "</b>");
 					$(".popup.billing .container #billing_bank #owner").html("<b>" + res.bank_owner + "</b>");

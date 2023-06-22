@@ -179,7 +179,10 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 		
 		<!--here comes popups-->
 		<?php
-		if(isset($_COOKIE["userID"])) $rowPopupUser = mysqli_fetch_array($conn->query("SELECT * FROM user WHERE id=".$_COOKIE["userID"]));
+		if(isset($_COOKIE["userID"])){ 
+			$rowPopupUser = mysqli_fetch_array($conn->query("SELECT * FROM user WHERE id=".$_COOKIE["userID"]));
+			$rowPopupUser["item_publish_option"] = getCountItem($_COOKIE["userID"]);
+		}
 		?>
 		<div class="popup yesno" style="display: none">
 			<div class="container">
@@ -322,7 +325,6 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 				<button onClick="javascript:document.getElementsByClassName('popup billing')[0].style.display='none'; javascript:document.body.style.overflowY='auto'" class="button_yellow" style="margin-top: 10px; margin-left: auto; margin-right: auto">За</button>
 			</div>
 		</div>
-		
 		<div class="popup search" style="display: none">
 			<div class="container" style="width: 320px; top: 5vh">
 				<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('popup search')[0].style.display='none'; javascript:document.body.style.overflowY='auto'"></i>
@@ -344,36 +346,48 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 						<option value="3">Үнэтэй нь эхэндээ</option>
 					</select>
 				</div>
-				<div style="margin: 10px">
-					<label for="searchPriceLimit">Үнэ:</label>
-					<?php
-					$rowPriceRange = mysqli_fetch_array($conn->query("SELECT MAX(price) AS max, MIN(price) as min, (MAX(price)-MIN(price))/10 AS step FROM item"));
+				<?php
+				$queryPriceRange = "SELECT MAX(price) AS max, MIN(price) as min, (MAX(price)-MIN(price))/10 AS step FROM item WHERE isactive=4 LIMIT 1";
+				$resultPriceRange = $conn->query($queryPriceRange);
+				if(mysqli_num_rows($resultPriceRange)>0){
+					$rowPriceRange = mysqli_fetch_array($resultPriceRange);
 					?>
-					<select id="searchPriceLimitLowest" style="width: 120px; height: 30px; font: normal 15px Arial; border-radius: 10px">
-						<option value="0" disabled selected>Доод</option>
-						<?php
-						if($rowPriceRange["max"]!=null){
-							for($price=$rowPriceRange["max"]; $price>=0; $price -= $rowPriceRange["step"]){
+					<div style="margin: 10px">
+						<label for="searchPriceLimit">Үнэ:</label>
+						<select id="searchPriceLimitLowest" style="width: 120px; height: 30px; font: normal 15px Arial; border-radius: 10px">
+							<option value="0" disabled selected>Доод</option>
+							<?php
+							if($rowPriceRange["max"]!=null){
+								for($price=$rowPriceRange["max"]; $price>$rowPriceRange["min"]; $price -= $rowPriceRange["step"]){
+									?>
+									<option value="<?php echo convertPriceToNumber($price); ?>"><?php echo convertPriceToText($price); ?></option>
+									<?php
+								}
 								?>
-								<option value="<?php echo convertPriceToNumber($price); ?>"><?php echo convertPriceToText($price); ?></option>
+								<option value="<?php echo convertPriceToNumber($rowPriceRange["min"]); ?>"><?php echo convertPriceToText($rowPriceRange["min"]); ?></option>
 								<?php
 							}
-						}
-						?>
-					</select>
-					<select id="searchPriceLimitHighest" style="width: 120px; height: 30px; font: normal 15px Arial; border-radius: 10px">
-						<option value="0" disabled selected>Дээд</option>
-						<?php
-						if($rowPriceRange["max"]!=null){
-							for($price=$rowPriceRange["max"]; $price>=0; $price -= $rowPriceRange["step"]){
+							?>
+						</select>
+						<select id="searchPriceLimitHighest" style="width: 120px; height: 30px; font: normal 15px Arial; border-radius: 10px">
+							<option value="0" disabled selected>Дээд</option>
+							<?php
+							if($rowPriceRange["max"]!=null){
+								for($price=$rowPriceRange["max"]; $price>$rowPriceRange["min"]; $price -= $rowPriceRange["step"]){
+									?>
+									<option value="<?php echo convertPriceToNumber($price); ?>"><?php echo convertPriceToText($price); ?></option>
+									<?php
+								}
 								?>
-								<option value="<?php echo convertPriceToNumber($price); ?>"><?php echo convertPriceToText($price); ?></option>
+								<option value="<?php echo convertPriceToNumber($rowPriceRange["min"]); ?>"><?php echo convertPriceToText($rowPriceRange["min"]); ?></option>
 								<?php
 							}
-						}
-						?>
-					</select>
-				</div>
+							?>
+						</select>
+					</div>
+					<?php
+				}
+				?>
 				<div style="margin: 10px">
 					<label for="searchCity">Байршил:</label>
 					<select id="searchCity" style="width: 203px; height: 30px; font: normal 15px Arial; border-radius: 10px">
@@ -426,8 +440,25 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 				
 				<div class="options">
 					<div class="selection">
-						<div style="font: bold 16px Arial"><input type="radio" id="publish_option" name="publish_option" value="2"> VIP</div>						
-						<div style="margin-left: 25px"><?php echo isset($rowPopupUser) && $rowPopupUser["role"]>=3 ? "Үнэгүй" : $item_publish_price_vip; ?> ₮</div>
+						<div style="font: bold 16px Arial"><input type="radio" id="publish_option" name="publish_option" value="2"> VIP</div>
+						<div style="margin-left: 25px">
+							<?php
+							$price_vip = $item_publish_price_vip." ₮";
+							if(isset($rowPopupUser)){
+								switch($rowPopupUser["role"]){
+									case 4:
+										$price_vip = "Үнэгүй";
+										break;
+									case 3:
+										if($rowPopupUser["item_publish_option"]["total"]<$item_vipspecial_count_limit_admin){
+											$price_vip = "Үнэгүй";	
+										}
+										break;
+								}
+							}
+							echo $price_vip;
+							?>
+						</div>
 						<ul style="font-size: 14px">
 							<li>Facebook ads хийх хүсэлт</li>
 							<li>Онцгой заруудын дээр</li>
@@ -436,7 +467,24 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 					</div>
 					<div class="selection">
 						<div style="font: bold 16px Arial"><input type="radio" id="publish_option" name="publish_option" value="1"> Онцгой</div>
-						<div style="margin-left: 25px"><?php echo isset($rowPopupUser) && $rowPopupUser["role"]>=3 ? "Үнэгүй" : $item_publish_price_special; ?> ₮</div>
+						<div style="margin-left: 25px">
+							<?php
+							$price_vip = $item_publish_price_special." ₮";
+							if(isset($rowPopupUser)){
+								switch($rowPopupUser["role"]){
+									case 4:
+										$price_vip = "Үнэгүй";
+										break;
+									case 3:
+										if($rowPopupUser["item_publish_option"]["total"]<$item_vipspecial_count_limit_admin){
+											$price_vip = "Үнэгүй";	
+										}
+										break;
+								}
+							}
+							echo $price_vip;
+							?>
+						</div>
 						<ul style="font-size: 14px">
 							<li>Энгийн заруудын дээр</li>
 							<li>20 хоног нийтлэгдэнэ</li>

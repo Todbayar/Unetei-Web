@@ -292,7 +292,7 @@ function chat_action(action, type, id){
 <div class="chat">
 	<div class="left">
 		<?php
-		$queryFetchSender = "SELECT *, (SELECT name FROM user WHERE id=chat.fromID) AS sender_name, (SELECT image FROM user WHERE id=chat.fromID) AS sender_image, (SELECT role FROM user WHERE id=chat.fromID) AS sender_role, (SELECT name FROM user WHERE id=chat.toID) AS receiver_name, (SELECT image FROM user WHERE id=chat.toID) AS receiver_image, (SELECT role FROM user WHERE id=chat.toID) AS receiver_role FROM chat WHERE toID=".$_COOKIE["userID"]." OR fromID=".$_COOKIE["userID"]." GROUP BY fromID ORDER BY datetime DESC";
+		$queryFetchSender = "SELECT *, (SELECT name FROM user WHERE id=chat.fromID) AS sender_name, (SELECT image FROM user WHERE id=chat.fromID) AS sender_image, (SELECT role FROM user WHERE id=chat.fromID) AS sender_role, (SELECT name FROM user WHERE id=chat.toID) AS receiver_name, (SELECT image FROM user WHERE id=chat.toID) AS receiver_image, (SELECT role FROM user WHERE id=chat.toID) AS receiver_role FROM chat WHERE toID=".$_COOKIE["userID"]." GROUP BY fromID ORDER BY datetime DESC";
 		$resultFetchSender = $conn->query($queryFetchSender);
 		while($rowFetchSender = mysqli_fetch_array($resultFetchSender)){
 			if($rowFetchSender["toID"]==$_COOKIE["userID"]){

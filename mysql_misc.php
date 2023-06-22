@@ -39,6 +39,14 @@ function getCountCategory($status, $userID){
 	return $count;
 }
 
+function getCountItem($userID){
+	global $conn;
+	$queryItem = "SELECT (SELECT COUNT(*) FROM item WHERE status=2 AND userID=".$userID." LIMIT 1) AS vip, (SELECT COUNT(*) FROM item WHERE status=1 AND userID=".$userID." LIMIT 1) AS special;";
+	$resultItem = $conn->query($queryItem);
+	$rowItem = mysqli_fetch_array($resultItem);
+	return array("vip"=>$rowItem["vip"], "special"=>$rowItem["special"], "total"=>$rowItem["vip"]+$rowItem["special"]);
+}
+
 function getUserRole($userID){
 	global $conn;
 	$queryRole = "SELECT role FROM user WHERE id=".$userID;
