@@ -1,5 +1,6 @@
 <?php
 include "mysql_config.php";
+include_once "mysql_misc.php";
 
 if(isset($_GET["toID"])){
 	//AND toID=".$_COOKIE["userID"]."
@@ -33,7 +34,7 @@ if(isset($_GET["toID"])){
 			$message->body = fetchCategory($row["message"]);
 		}
 		else if($row["type"] == 2){
-			$message->body = fetchItem($row["message"]);
+			$message->body = fetchItem($row["message"], $row["fromID"]);
 		}
 		else if($row["type"] == 3){
 			$body = new stdClass();
@@ -48,9 +49,9 @@ if(isset($_GET["toID"])){
 	echo json_encode($objArr);
 }
 
-function fetchItem($id){
+function fetchItem($itemID, $userID){
 	global $conn;
-	$query = "SELECT * FROM item WHERE id=".$id;
+	$query = "SELECT * FROM item WHERE id=".$itemID;
 	$result = $conn->query($query);
 	$row = mysqli_fetch_array($result);
 	$body = new stdClass();
@@ -59,6 +60,8 @@ function fetchItem($id){
 		$body->title = $row["title"];
 		$body->isActive = $row["isactive"];
 		$body->category = harvestCategory($row["category"]);
+		$body->pay = getPayAmount($row["status"], $userID);
+		$body->status = $row["status"];
 	}
 	else {
 		$body = null;

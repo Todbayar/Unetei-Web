@@ -2,6 +2,9 @@
 include "mysql_config.php";
 include_once "info.php";
 ?>
+
+<script src="misc.js"></script>
+
 <script>
 $(document).ready(function(){
 	$(".chat .right .bottom #chatMessage").keydown( function( event ) {
@@ -154,31 +157,37 @@ function chat_list_category(sender, body, datetime, isEdit){
 }
 
 function chat_list_item(sender, body, datetime, isEdit){
+	var statusColor = "#878787";
+	if(body.status == 2) statusColor = "#f00";
+	else if(body.status == 1) statusColor = "#00d300";
+	
 	if(sender.id == <?php echo $_COOKIE["userID"]; ?>){
-	   	var htmlItem = "<div class=\"message me\"><div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-cart-shopping\" style=\"position:absolute; top:0; left:-15px; padding:5px; border-radius:10px; background: #fff4d0; color:#878787\"></i>";
+	   	var htmlItem = "<div class=\"message me\"><div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-cart-shopping\" style=\"position:absolute; top:0; left:-15px; padding:5px; border-radius:10px; background: #fff4d0; color:"+statusColor+"\"></i>";
 	   	if(body.isActive == 3){
 			htmlItem += "<i class=\"fa-solid fa-arrow-rotate-left\" style=\"position:absolute; top:20px; left:-15px; padding:5px; border-radius:10px; background: #fff4d0; color:#878787\"></i>";
 		}
 		else if(body.isActive == 4){
 			htmlItem += "<i class=\"fa-solid fa-check\" style=\"position:absolute; top:20px; left:-15px; padding:5px; border-radius:10px; background: #fff4d0; color:#878787\"></i>";
 		}
-	   	htmlItem += body.title;
+	   	htmlItem += body.title+" (#"+body.id+")";
 	   	htmlItem += chat_list_category_show(body.category, "");
+		htmlItem += "<div style=\"font-size:12px; color:gray; margin-top:5px\">Төлөх:"+(body.pay==0?"Үнэгүй":(body.pay+"₮"))+"</div>";
 		htmlItem += "</div><div class=\"datetime\">"+datetime+"</div>";
 		if(isEdit) htmlItem += chat_list_item_action_show(body.isActive, body.id, true);
 		htmlItem += "</div>"+chat_profile_image_show(sender.image)+"</div>";
 		$(".chat .right .top").append(htmlItem);
 	}
 	else {
-		var htmlItem = "<div class=\"message\">"+chat_profile_image_show(sender.image)+"<div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-cart-shopping\" style=\"position:absolute; top:0; right:-15px; padding:5px; border-radius:10px; background: #e7e7e7; color:#878787\"></i>";
+		var htmlItem = "<div class=\"message\">"+chat_profile_image_show(sender.image)+"<div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-cart-shopping\" style=\"position:absolute; top:0; right:-15px; padding:5px; border-radius:10px; background: #e7e7e7; color:"+statusColor+"\"></i>";
 		if(body.isActive == 3){
 			htmlItem += "<i class=\"fa-solid fa-arrow-rotate-left\" style=\"position:absolute; top:20px; right:-15px; padding:5px; border-radius:10px; background: #e7e7e7; color:#878787\"></i>";
 		}
 		else if(body.isActive == 4){
 			htmlItem += "<i class=\"fa-solid fa-check\" style=\"position:absolute; top:20px; right:-15px; padding:5px; border-radius:10px; background: #e7e7e7; color:#878787\"></i>";
 		}
-		htmlItem += body.title;
+		htmlItem += body.title+" (#"+body.id+")";
 		htmlItem += chat_list_category_show(body.category, "");
+		htmlItem += "<div style=\"font-size:12px; color:gray; margin-top:5px\">Төлөх:"+(body.pay==0?"Үнэгүй":(body.pay+"₮"))+"</div>";
 		htmlItem += "</div><div class=\"datetime\">"+datetime+"</div>";
 		if(isEdit) htmlItem += chat_list_item_action_show(body.isActive, body.id);
 		htmlItem += "</div></div>";

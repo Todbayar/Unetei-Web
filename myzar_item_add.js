@@ -254,11 +254,11 @@ function myzar_item_add_submit(){
 
 function publishItemUpdate(itemID, title, role){
 	const selPriceOpt = $(".popup.item_publish_option input[name='publish_option']:checked").val();
-	$.post("mysql_myzar_item_update_process.php", {id:itemID,status:selPriceOpt}).done(function(response){
-	   if(response=="OK"){
+	$.post("mysql_myzar_item_update_process.php", {id:itemID,status:selPriceOpt}).done(function(responseText){
+	   if(responseText!="FAIL"){
 			$(".popup.item_publish_option").hide();
-			const itemPrice = selPriceOpt==1?convertPriceToTextJS(10000.00):selPriceOpt==2?convertPriceToTextJS(20000.00):0;
-			if(role>=3 || selPriceOpt==0){
+		   	const itemResponse = JSON.parse(responseText);
+			if(itemResponse.pay_amount == 0){
 				var eventOk = new CustomEvent("itemUpdateDone");
 				window.addEventListener("itemUpdateDone", function(){
 					location.reload();
@@ -269,15 +269,15 @@ function publishItemUpdate(itemID, title, role){
 				$.post("mysql_billing.php", {type:"item"}).done(function (response){
 					$(".popup.billing").show();
 					const res = JSON.parse(response);
-					$(".popup.billing .container #billing_type").html("Зар шинэчлэх");
-					$(".popup.billing .container #billing_number").html("#" + itemID);
+					$(".popup.billing .container #billing_type").html("Зар нэмэх");
+					$(".popup.billing .container #billing_number").html("#" + itemResponse.id);
 					$(".popup.billing .container #billing_title").html(title);
-					$(".popup.billing .container #billing_price").html(itemPrice + " ₮");
+					$(".popup.billing .container #billing_price").html(itemResponse.pay_amount + " ₮");
 					$(".popup.billing .container #billing_bank #name").html("<b>" + res.bank_name + "</b>");
 					$(".popup.billing .container #billing_bank #account").html("<b>" + res.bank_account + "</b>");
 					$(".popup.billing .container #billing_bank #owner").html("<b>" + res.bank_owner + "</b>");
 					$(".popup.billing .container #billing_socialpay img").attr("src", "user_files/"+res.socialpay);
-
+					
 					$(".popup.billing .container .button_yellow").click(function(){
 						location.reload();
 					});

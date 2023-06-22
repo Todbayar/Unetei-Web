@@ -18,15 +18,25 @@ function getAffiliateID($id){
 	return ($rowAffiliate["affiliate_id"] != null && $rowAffiliate["affiliate_id"] != "") ? $rowAffiliate["affiliate_id"] : $rowSuperDuper["id"];
 }
 
-//check before remove
-//function getCountListCategory(){
-//	global $conn;
-//	$count = 0;
-//	for($i=1; $i<=4; $i++){
-//		$count += mysqli_num_rows($conn->query("SELECT * FROM category".$i." WHERE userID=".$_COOKIE["userID"]));
-//	}
-//	return $count;
-//}
+function getPayAmount($status, $userID){
+	global $item_vipspecial_count_limit_admin, $item_publish_price_vip, $item_publish_price_special;
+	$payAmount = 0;
+	switch(getUserRole($userID)){
+		case 4:
+			$payAmount = 0;
+		case 3:
+			if(getCountItem($userID)["total"]>$item_vipspecial_count_limit_admin){
+				if($status==2) $payAmount = $item_publish_price_vip;
+				else if($status==1) $payAmount = $item_publish_price_special;
+			}
+			break;
+		default:
+			if($status==2) $payAmount = $item_publish_price_vip;
+			else if($status==1) $payAmount = $item_publish_price_special;
+			break;
+	}
+	return $payAmount;
+}
 
 function getCountCategory($status, $userID){
 	global $conn;
@@ -53,6 +63,14 @@ function getUserRole($userID){
 	$resultRole = $conn->query($queryRole);
 	$rowRole = mysqli_fetch_array($resultRole);
 	return $rowRole["role"];
+}
+
+function getUserIDFromItem($itemID){
+	global $conn;
+	$queryUserIDFromItem = "SELECT userID FROM item WHERE id=".$itemID;
+	$resultUserIDFromItem = $conn->query($queryUserIDFromItem);
+	$rowUserIDFromItem = mysqli_fetch_array($resultUserIDFromItem);
+	return $rowUserIDFromItem["userID"];
 }
 
 function convertPriceToText($price){

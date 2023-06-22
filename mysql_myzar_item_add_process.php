@@ -38,22 +38,7 @@ if($isDuplication == 0){
 		$days = 20;
 	}
 	
-	$payAmount = 0;
-	$countItem = getCountItem($userID);
-	switch($userRole){
-		case 4:
-			$payAmount = 0;
-		case 3:
-			if($countItem["total"]>$item_vipspecial_count_limit_admin){
-				if($status==2) $payAmount = $item_publish_price_vip;
-				else if($status==1) $payAmount = $item_publish_price_special;
-			}
-			break;
-		default:
-			if($status==2) $payAmount = $item_publish_price_vip;
-			else if($status==1) $payAmount = $item_publish_price_special;
-			break;
-	}
+	$payAmount = getPayAmount($status, $userID);
 	
 	$queryItem = "INSERT INTO item (title, quality, address, price, youtube, video, extras, description, city, name, phone, email, userID, category, item_viewer, phone_viewer, datetime, expire_days, status, isactive) VALUES ('".$title."', ".$quality.", '".$address."', ".$price.", '".$youtube."', '".$video."', '".$extras."', '".$description."', '".$city."', '".$name."', '".$phone."', '".$email."', ".$userID.", '".$category."', 0, 0, '".date("Y-m-d h:i:s")."', ".$days.", ".$status.", 1)";
 	
