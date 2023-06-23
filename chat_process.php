@@ -14,7 +14,7 @@ if(isset($_REQUEST["fromID"]) && isset($_REQUEST["toID"]) && isset($_REQUEST["ty
 	chat_send($_REQUEST["fromID"], $_REQUEST["toID"], $_REQUEST["type"], htmlspecialchars(addslashes($_REQUEST["message"])), true);
 }
 
-function chat_send($from, $to, $type, $message, $isPrint = true){
+function chat_send($from, $to, $type, $message, $isPrint = true, $isEdit = false){
 	global $conn, $smtp_host, $smtp_port, $smtp_username, $smtp_password;
 	if($message != ""){
 		if(!isChatExist($from, $to, $type, $message)){
@@ -27,7 +27,9 @@ function chat_send($from, $to, $type, $message, $isPrint = true){
 			}
 		}
 		else {
-			$query = "UPDATE chat SET isRead=0, datetime='".date("Y-m-d H:i:s")."' WHERE fromID=".$from." AND toID=".$to." AND type=".$type." AND message='".$message."'";
+			$query = "UPDATE chat SET isRead=0, datetime='".date("Y-m-d H:i:s")."'";
+			if($isEdit) $query .= ", action=".EDIT;
+			$query .= " WHERE fromID=".$from." AND toID=".$to." AND type=".$type." AND message='".$message."'";
 			if($conn->query($query)){
 				if($isPrint) echo "OK";
 			}

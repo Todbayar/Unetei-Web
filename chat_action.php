@@ -22,13 +22,35 @@ if(isset($_REQUEST["action"]) && isset($_REQUEST["type"]) && isset($_REQUEST["id
 		$query .= " WHERE id=".$category[1];
 	}
 	else if($type == 1){	//item
-		if($action == 0){
+		$rowChat = getChat($chatID);
+		if($rowChat["action"]!=EDIT){
+			$note = $rowChat["note"];
+			if($note==""){
+				$note = new stdClass();
+				$note->payment = array();
+			}
+			else {
+				$note = json_decode($note);
+			}
+
 			$payment = new stdClass();
-			$payment->isPaid = true;
 			$payment->datetime = date("Y-m-d h:i:s");
-			$note = new stdClass();
-			$note->payment = $payment;
+
+			if($action == 0){
+				$payment->isPaid = true;
+			}
+			else if($action == 1) {
+				$payment->isPaid = false;
+			}
+
+			$note->payment[] = $payment;
 			@$conn->query("UPDATE chat SET note='".json_encode($note)."' WHERE id=".$chatID);
+		}
+		else {
+			@$conn->query("UPDATE chat SET action=null WHERE id=".$chatID);
+		}
+		
+		if($action == 0){
 			$query .= " item SET isactive=4";
 		}
 		else if($action == 1) {
@@ -58,11 +80,18 @@ if(isset($_REQUEST["action"]) && isset($_REQUEST["type"]) && isset($_REQUEST["id
 			$queryUpdateRole .= " WHERE id=".$rowFetchRole["fromID"];
 			@$conn->query($queryUpdateRole);
 			
+			$note = getChat($chatID)["note"];
+			if($note==""){
+				$note = new stdClass();
+				$note->payment = array();
+			}
+			else {
+				$note = json_decode($note);
+			}
 			$payment = new stdClass();
 			$payment->isPaid = true;
 			$payment->datetime = date("Y-m-d h:i:s");
-			$note = new stdClass();
-			$note->payment = $payment;
+			$note->payment[] = $payment;			
 			$query = "UPDATE chat SET isRead=1, note='".json_encode($note)."' WHERE id=".$id;
 		}
 	}
@@ -73,5 +102,10 @@ if(isset($_REQUEST["action"]) && isset($_REQUEST["type"]) && isset($_REQUEST["id
 	else {
 		echo "Fail";
 	}
+}
+
+function getChat($chatID){
+	global $conn;
+	return mysqli_fetch_array($conn->query("SELECT * FROM chat WHERE id=".$chatID));
 }
 ?>

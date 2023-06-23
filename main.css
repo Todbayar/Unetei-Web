@@ -273,6 +273,24 @@ body {
 	font: normal 14px Arial;
 	padding: 10px;
 	position:relative;
+	cursor: pointer;
+}
+
+.chat .right .top .message .container .text:hover > .paymentHistory {
+	display: block;
+}
+
+.chat .right .top .message .container .text .paymentHistory {
+	border-radius: 10px;
+	font: normal 12px Arial;
+	color: gray;
+	padding: 3px;
+	z-index: 1;
+	width: 100%;
+	min-height: 20px;
+	max-height: 100px;
+	overflow-y: auto;
+	display: none;
 }
 
 .chat .right .top .message .container .datetime {

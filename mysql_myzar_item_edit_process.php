@@ -41,7 +41,7 @@ if($conn->query($queryUpdateItem)){
 			}
 		}
 		if($countImageEditDone == 0){
-			chat_send($userID, getAffiliateID($userID), 2, $itemID, false);
+			chat_send($userID, getAffiliateID($userID), 2, $itemID, false, true);
 			update_profile($name, $email, $city, $userID);
 			echo "OK";
 		}
@@ -50,7 +50,7 @@ if($conn->query($queryUpdateItem)){
 		}
 	}
 	else {
-		chat_send($userID, getAffiliateID($userID), 2, $itemID, false);
+		chat_send($userID, getAffiliateID($userID), 2, $itemID, false, true);
 		update_profile($name, $email, $city, $userID);
 		echo "OK";
 	}

@@ -167,15 +167,27 @@ function chat_list_item(chatID, sender, body, datetime, isEdit, note){
 	else if(body.status == 1) statusColor = "#00d300";
 	
 	var payment = "<i class=\"fa-regular fa-clock\" style=\"margin-left:5px\"></i>";
+	var paymentHistory = "<div class=\"paymentHistory\">";
 	if(note != ""){
 		const noteObj = JSON.parse(note);
-		if(noteObj.payment.isPaid){
-			payment = "<i class=\"fa-solid fa-check\" style=\"margin-left:5px\"></i>";
-	    }
+		noteObj.payment.reverse().forEach(function(obj, i, arr){
+			if(arr[i].isPaid){
+				if(i==0) payment = "<i class=\"fa-solid fa-check\" style=\"margin-left:5px\"></i>";
+				paymentHistory += "<div><i class=\"fa-solid fa-check\" style=\"margin-left:5px\"></i> "+arr[i].datetime+"</div>";
+			}
+			else {
+				if(i==0) payment = "<i class=\"fa-solid fa-xmark\" style=\"margin-left:5px\"></i>";
+				paymentHistory += "<div><i class=\"fa-solid fa-xmark\" style=\"margin-left:5px\"></i> "+arr[i].datetime+"</div>";
+			}
+		});
 	}
+	else {
+		paymentHistory += "<div>Төлбөрийн түүх алга</div>";
+	}
+	paymentHistory += "</div>";
 	
 	if(sender.id == <?php echo $_COOKIE["userID"]; ?>){
-	   	var htmlItem = "<div class=\"message me\"><div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-cart-shopping\" style=\"position:absolute; top:0; left:-15px; padding:5px; border-radius:10px; background: #fff4d0; color:"+statusColor+"\"></i>";
+	   	var htmlItem = "<div class=\"message me\"><div class=\"container\"><div onClick=\"pagenavigation('detail&id="+body.id+"')\" class=\"text\"><i class=\"fa-solid fa-cart-shopping\" style=\"position:absolute; top:0; left:-15px; padding:5px; border-radius:10px; background: #fff4d0; color:"+statusColor+"\"></i>";
 	   	if(body.isActive == 3){
 			htmlItem += "<i class=\"fa-solid fa-arrow-rotate-left\" style=\"position:absolute; top:20px; left:-15px; padding:5px; border-radius:10px; background: #fff4d0; color:#878787\"></i>";
 		}
@@ -185,13 +197,13 @@ function chat_list_item(chatID, sender, body, datetime, isEdit, note){
 	   	htmlItem += body.title+" (#"+body.id+")";
 	   	htmlItem += chat_list_category_show(body.category, "");
 		htmlItem += "<div style=\"font-size:12px; color:gray; margin-top:2px\">Төлөх:"+(body.pay==0?"Үнэгүй":(body.pay+"₮"+payment))+"</div>";
-		htmlItem += "</div><div class=\"datetime\">"+datetime+"</div>";
+		htmlItem += paymentHistory+"</div><div class=\"datetime\">"+datetime+"</div>";
 		if(isEdit) htmlItem += chat_list_item_action_show(chatID, body.isActive, body.id, true);
 		htmlItem += "</div>"+chat_profile_image_show(sender.image)+"</div>";
 		$(".chat .right .top").append(htmlItem);
 	}
 	else {
-		var htmlItem = "<div class=\"message\">"+chat_profile_image_show(sender.image)+"<div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-cart-shopping\" style=\"position:absolute; top:0; right:-15px; padding:5px; border-radius:10px; background: #e7e7e7; color:"+statusColor+"\"></i>";
+		var htmlItem = "<div class=\"message\">"+chat_profile_image_show(sender.image)+"<div class=\"container\"><div onClick=\"pagenavigation('detail&id="+body.id+"')\" class=\"text\"><i class=\"fa-solid fa-cart-shopping\" style=\"position:absolute; top:0; right:-15px; padding:5px; border-radius:10px; background: #e7e7e7; color:"+statusColor+"\"></i>";
 		if(body.isActive == 3){
 			htmlItem += "<i class=\"fa-solid fa-arrow-rotate-left\" style=\"position:absolute; top:20px; right:-15px; padding:5px; border-radius:10px; background: #e7e7e7; color:#878787\"></i>";
 		}
@@ -294,6 +306,7 @@ function chat_action(chatID, action, type, id){
 
 	const reqChatActionSubmit = new XMLHttpRequest();
 	reqChatActionSubmit.onload = function() {
+//		console.log("<chat_action>:"+this.responseText)
 		if(this.responseText == "OK"){
 			$("div#"+type+""+chatID).hide();
 		}

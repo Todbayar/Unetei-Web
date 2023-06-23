@@ -67,4 +67,8 @@ $pageCountList = 60;
 
 //firebase
 $firebase_public_vapid_key = "BKLrbPXG-cbXjadrRFHrKIvJX10ZHwXnlOuBZqMiYIIYVMdihRH_X8KV-FGD1e5xbqt30DMDBXdlqLemx_G3dfg";
+
+define("ADD",0);
+define("EDIT",1);
+define("UPDATE",2);
 ?>
