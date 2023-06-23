@@ -219,6 +219,10 @@ body {
 	font: normal 14px Arial;
 }
 
+.chat .left .user .container .box .phone {
+	font: normal 14px Arial;
+}
+
 .chat .right {
 	width: 68%;
 }

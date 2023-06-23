@@ -11,9 +11,11 @@ if(isset($_GET["toID"])){
 		@$conn->query("UPDATE chat SET isRead=1 WHERE id=".$row["id"]." AND NOT type=3");
 		
 		$message = new stdClass();
+		$message->id = $row["id"];	//chat row id
+		$message->note = $row["note"];
 		$message->type = $row["type"];
 		$message->datetime = $row["datetime"];
-		$message->isEdit = ($_COOKIE["role"]>=3 && $_COOKIE["userID"]==$row["toID"]) ? true : false;
+		$message->isEdit = ($_COOKIE["role"]>=2 && $_COOKIE["userID"]==$row["toID"]) ? true : false;	//receive income from its followers
 
 		$sender = new stdClass();
 		$sender->id = $row["fromID"];

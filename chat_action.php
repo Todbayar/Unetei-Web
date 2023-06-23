@@ -2,10 +2,11 @@
 include "mysql_config.php";
 include_once "info.php";
 
-if(isset($_REQUEST["action"]) && isset($_REQUEST["type"]) && isset($_REQUEST["id"])){
+if(isset($_REQUEST["action"]) && isset($_REQUEST["type"]) && isset($_REQUEST["id"]) && isset($_REQUEST["chatID"])){
 	$type = $_REQUEST["type"];
 	$action = $_REQUEST["action"];
 	$id = $_REQUEST["id"];
+	$chatID = $_REQUEST["chatID"];
 	
 	$query = "UPDATE ";
 	
@@ -22,6 +23,12 @@ if(isset($_REQUEST["action"]) && isset($_REQUEST["type"]) && isset($_REQUEST["id
 	}
 	else if($type == 1){	//item
 		if($action == 0){
+			$payment = new stdClass();
+			$payment->isPaid = true;
+			$payment->datetime = date("Y-m-d h:i:s");
+			$note = new stdClass();
+			$note->payment = $payment;
+			@$conn->query("UPDATE chat SET note='".json_encode($note)."' WHERE id=".$chatID);
 			$query .= " item SET isactive=4";
 		}
 		else if($action == 1) {
@@ -34,6 +41,7 @@ if(isset($_REQUEST["action"]) && isset($_REQUEST["type"]) && isset($_REQUEST["id
 			$queryFetchRole = "SELECT fromID, message FROM chat WHERE id=".$id;
 			$resultFetchRole = $conn->query($queryFetchRole);
 			$rowFetchRole = mysqli_fetch_array($resultFetchRole);
+			
 			$queryUpdateRole = "UPDATE user SET";
 			if(str_contains($rowFetchRole["message"], $role_rank_superadmin)){
 				$queryUpdateRole .= " role=4";
@@ -50,7 +58,12 @@ if(isset($_REQUEST["action"]) && isset($_REQUEST["type"]) && isset($_REQUEST["id
 			$queryUpdateRole .= " WHERE id=".$rowFetchRole["fromID"];
 			@$conn->query($queryUpdateRole);
 			
-			$query = "UPDATE chat SET isRead=1 WHERE id=".$id;
+			$payment = new stdClass();
+			$payment->isPaid = true;
+			$payment->datetime = date("Y-m-d h:i:s");
+			$note = new stdClass();
+			$note->payment = $payment;
+			$query = "UPDATE chat SET isRead=1, note='".json_encode($note)."' WHERE id=".$id;
 		}
 	}
 	

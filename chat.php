@@ -14,10 +14,6 @@ $(document).ready(function(){
 		}
 	});
 	
-//	$(".chat .right .top").scroll(function(){
-//		console.log("<scroll>:"+$(".chat .right .top").scrollTop()+", "+$(".chat .right .top").height()+", "+$(".chat .right .top").innerHeight());
-//	});
-	
 	if(sessionStorage.getItem("startChatToID")!=null){
 		chat_select(sessionStorage.getItem("startChatToID"));
 		sessionStorage.removeItem("startChatToID");
@@ -35,6 +31,7 @@ function chat_send(toID){
 	
 	const reqChatSubmit = new XMLHttpRequest();
 	reqChatSubmit.onload = function() {
+//		console.log("<chat_send>:"+this.responseText);
 		$("#chatMessage").val("");
 		chat_select(toID);
 	};
@@ -60,13 +57,13 @@ function chat_select(toID){
 			const responseChatFetch = JSON.parse(this.responseText);
 			responseChatFetch.forEach(function(chatRow){
 				if(parseInt(chatRow.type) == 1){
-					chat_list_category(chatRow.sender, chatRow.body, chatRow.datetime, chatRow.isEdit);
+					chat_list_category(chatRow.id, chatRow.sender, chatRow.body, chatRow.datetime, chatRow.isEdit);
 				}
 				else if(parseInt(chatRow.type) == 2){
-					chat_list_item(chatRow.sender, chatRow.body, chatRow.datetime, chatRow.isEdit);
+					chat_list_item(chatRow.id, chatRow.sender, chatRow.body, chatRow.datetime, chatRow.isEdit, chatRow.note);
 				}
 				else if(parseInt(chatRow.type) == 3){
-					chat_list_role(chatRow.sender, chatRow.body, chatRow.datetime, chatRow.isEdit);
+					chat_list_role(chatRow.id, chatRow.sender, chatRow.body, chatRow.datetime, chatRow.isEdit, chatRow.note);
 				}
 				else {
 					chat_list_message(chatRow.sender, chatRow.body, chatRow.datetime, chatRow.isEdit);
@@ -85,32 +82,40 @@ function chat_select(toID){
 	reqChatFetchSubmit.send();
 }
 
-function chat_list_role(sender, body, datetime, isEdit){
+function chat_list_role(chatID, sender, body, datetime, isEdit, note){
+	var payment = "<i class=\"fa-regular fa-clock\" style=\"margin-left:5px\"></i>";
+	if(note != ""){
+		const noteObj = JSON.parse(note);
+		if(noteObj.payment.isPaid){
+			payment = "<i class=\"fa-solid fa-check\" style=\"margin-left:5px\"></i>";
+	    }
+	}
+	
 	if(sender.id == <?php echo $_COOKIE["userID"]; ?>){
 	   	var htmlRole = "<div class=\"message me\"><div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-user\" style=\"position:absolute; top:0; left:-15px; padding:5px; border-radius:10px; background: #fff4d0; color:#878787\"></i>";
-	   	htmlRole += body.message;
+	   	htmlRole += body.message+payment;
 		htmlRole += "</div><div class=\"datetime\">"+datetime+"</div>";
-	    if(isEdit) htmlRole += chat_list_role_action_show(body.isActive, body.id, true);
+	    if(isEdit) htmlRole += chat_list_role_action_show(chatID, body.isActive, body.id, true);
 		htmlRole += "</div>"+chat_profile_image_show(sender.image)+"</div>";
 		$(".chat .right .top").append(htmlRole);
     }
 	else {
 	   	var htmlRole = "<div class=\"message\">"+chat_profile_image_show(sender.image)+"<div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-user\" style=\"position:absolute; top:0; right:-15px; padding:5px; border-radius:10px; background: #e7e7e7; color:#878787\"></i>";
-		htmlRole += body.message;
+		htmlRole += body.message+payment;
 		htmlRole += "</div><div class=\"datetime\">"+datetime+"</div>";
-		if(isEdit) htmlRole += chat_list_role_action_show(body.isActive, body.id, false);
+		if(isEdit) htmlRole += chat_list_role_action_show(chatID, body.isActive, body.id, false);
 		htmlRole += "</div></div>";
 		$(".chat .right .top").append(htmlRole);
     }
 }
 
-function chat_list_role_action_show(isactive, id, isMe){
+function chat_list_role_action_show(chatID, isactive, id, isMe){
 	if(isactive == 0){	//review
 		if(!isMe){
-			return "<div id=\"2"+id+"\" class=\"action\"><div onClick=\"chat_action(0,2,"+id+")\" class=\"button_yellow\" style=\"float: left\"><i class=\"fa-solid fa-check\"></i></div></div>";
+			return "<div id=\"2"+chatID+"\" class=\"action\"><div onClick=\"chat_action("+chatID+",0,2,"+id+")\" class=\"button_yellow\" style=\"float: left\"><i class=\"fa-solid fa-check\"></i></div></div>";
 	   	}
 		else {
-			return "<div id=\"2"+id+"\" class=\"action\" style=\"display:flex; justify-content: flex-end\"><div onClick=\"chat_action(0,2,"+id+")\" class=\"button_yellow\" style=\"float: left\"><i class=\"fa-solid fa-check\"></i></div></div>";
+			return "<div id=\"2"+chatID+"\" class=\"action\" style=\"display:flex; justify-content: flex-end\"><div onClick=\"chat_action("+chatID+",0,2,"+id+")\" class=\"button_yellow\" style=\"float: left\"><i class=\"fa-solid fa-check\"></i></div></div>";
 		}
 	}
 	else {
@@ -118,7 +123,7 @@ function chat_list_role_action_show(isactive, id, isMe){
 	}
 }
 
-function chat_list_category(sender, body, datetime, isEdit){
+function chat_list_category(chatID, sender, body, datetime, isEdit){
 	if(sender.id == <?php echo $_COOKIE["userID"]; ?>){
 	   	var typeColor = "#878787";
 	   	if(body.status==1) typeColor = "#39a600";
@@ -134,7 +139,7 @@ function chat_list_category(sender, body, datetime, isEdit){
 	   	htmlCategory += chat_list_category_show(body.category, body.title);
 		htmlCategory += chat_list_category_words_show(body.words);
 		htmlCategory += "</div><div class=\"datetime\">"+datetime+"</div>";
-		if(isEdit) htmlCategory += chat_list_category_action_show(body.isActive, body.category.length+"_"+body.id, true);
+		if(isEdit) htmlCategory += chat_list_category_action_show(chatID, body.isActive, body.category.length+"_"+body.id, true);
 		htmlCategory += "</div>"+chat_profile_image_show(sender.image)+"</div>";
 		$(".chat .right .top").append(htmlCategory);
 	}
@@ -150,16 +155,24 @@ function chat_list_category(sender, body, datetime, isEdit){
 		htmlCategory += chat_list_category_show(body.category, body.title);
 		htmlCategory += chat_list_category_words_show(body.words);
 		htmlCategory += "</div><div class=\"datetime\">"+datetime+"</div>";
-		if(isEdit) htmlCategory += chat_list_category_action_show(body.isActive, body.category.length+"_"+body.id);
+		if(isEdit) htmlCategory += chat_list_category_action_show(chatID, body.isActive, body.category.length+"_"+body.id);
 		htmlCategory += "</div></div>";
 		$(".chat .right .top").append(htmlCategory);
 	}
 }
 
-function chat_list_item(sender, body, datetime, isEdit){
+function chat_list_item(chatID, sender, body, datetime, isEdit, note){
 	var statusColor = "#878787";
 	if(body.status == 2) statusColor = "#f00";
 	else if(body.status == 1) statusColor = "#00d300";
+	
+	var payment = "<i class=\"fa-regular fa-clock\" style=\"margin-left:5px\"></i>";
+	if(note != ""){
+		const noteObj = JSON.parse(note);
+		if(noteObj.payment.isPaid){
+			payment = "<i class=\"fa-solid fa-check\" style=\"margin-left:5px\"></i>";
+	    }
+	}
 	
 	if(sender.id == <?php echo $_COOKIE["userID"]; ?>){
 	   	var htmlItem = "<div class=\"message me\"><div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-cart-shopping\" style=\"position:absolute; top:0; left:-15px; padding:5px; border-radius:10px; background: #fff4d0; color:"+statusColor+"\"></i>";
@@ -171,9 +184,9 @@ function chat_list_item(sender, body, datetime, isEdit){
 		}
 	   	htmlItem += body.title+" (#"+body.id+")";
 	   	htmlItem += chat_list_category_show(body.category, "");
-		htmlItem += "<div style=\"font-size:12px; color:gray; margin-top:5px\">Төлөх:"+(body.pay==0?"Үнэгүй":(body.pay+"₮"))+"</div>";
+		htmlItem += "<div style=\"font-size:12px; color:gray; margin-top:2px\">Төлөх:"+(body.pay==0?"Үнэгүй":(body.pay+"₮"+payment))+"</div>";
 		htmlItem += "</div><div class=\"datetime\">"+datetime+"</div>";
-		if(isEdit) htmlItem += chat_list_item_action_show(body.isActive, body.id, true);
+		if(isEdit) htmlItem += chat_list_item_action_show(chatID, body.isActive, body.id, true);
 		htmlItem += "</div>"+chat_profile_image_show(sender.image)+"</div>";
 		$(".chat .right .top").append(htmlItem);
 	}
@@ -187,9 +200,9 @@ function chat_list_item(sender, body, datetime, isEdit){
 		}
 		htmlItem += body.title+" (#"+body.id+")";
 		htmlItem += chat_list_category_show(body.category, "");
-		htmlItem += "<div style=\"font-size:12px; color:gray; margin-top:5px\">Төлөх:"+(body.pay==0?"Үнэгүй":(body.pay+"₮"))+"</div>";
+		htmlItem += "<div style=\"font-size:12px; color:gray; margin-top:2px\">Төлөх:"+(body.pay==0?"Үнэгүй":(body.pay+"₮"+payment))+"</div>";
 		htmlItem += "</div><div class=\"datetime\">"+datetime+"</div>";
-		if(isEdit) htmlItem += chat_list_item_action_show(body.isActive, body.id);
+		if(isEdit) htmlItem += chat_list_item_action_show(chatID, body.isActive, body.id);
 		htmlItem += "</div></div>";
 		$(".chat .right .top").append(htmlItem);
 	}
@@ -205,7 +218,7 @@ function chat_list_message(sender, body, datetime){
 }
 
 function chat_list_category_show(categories, title){
-	var vCategory = "<div style=\"font-size:12px; color:gray; margin-top:5px\">";
+	var vCategory = "<div style=\"font-size:12px; color:gray; margin-top:2px\">";
 	for(let i=0; i<categories.length; i++){
 		if(i<categories.length-1){
 			vCategory += categories[i]+"<i class=\"fas fa-angle-right\" style=\"font-size:10px; margin-left:2px; margin-right:2px\"></i>";   
@@ -227,16 +240,16 @@ function chat_list_category_words_show(words){
 			vWords += word;
 		}
 	});
-	return "<div style=\"font-size:12px; color:gray; margin-top:5px\">"+vWords+"</div>";
+	return "<div style=\"font-size:12px; color:gray; margin-top:2px\">"+vWords+"</div>";
 }
 
-function chat_list_category_action_show(isactive, id, isMe = false){
+function chat_list_category_action_show(chatID, isactive, id, isMe = false){
 	if(isactive == 0){	//review
 		if(!isMe){
-	   		return "<div id=\"0"+id+"\" class=\"action\"><div onClick=\"chat_action(0,0,'"+id+"')\" class=\"button_yellow\" style=\"float: left\"><i class=\"fa-solid fa-check\"></i></div><div onClick=\"chat_action(1,0,'"+id+"')\" class=\"button_yellow\" style=\"float: left; margin-left: 5px\"><i class=\"fa-solid fa-arrow-rotate-left\"></i></div></div>";
+	   		return "<div id=\"0"+chatID+"\" class=\"action\"><div onClick=\"chat_action("+chatID+",0,0,'"+id+"')\" class=\"button_yellow\" style=\"float: left\"><i class=\"fa-solid fa-check\"></i></div><div onClick=\"chat_action("+chatID+",1,0,'"+id+"')\" class=\"button_yellow\" style=\"float: left; margin-left: 5px\"><i class=\"fa-solid fa-arrow-rotate-left\"></i></div></div>";
 		}
 		else {
-			return "<div id=\"0"+id+"\" class=\"action\" style=\"display:flex; justify-content: flex-end\"><div onClick=\"chat_action(0,0,'"+id+"')\" class=\"button_yellow\" style=\"float: left\"><i class=\"fa-solid fa-check\"></i></div><div onClick=\"chat_action(1,0,'"+id+"')\" class=\"button_yellow\" style=\"float: left; margin-left: 5px\"><i class=\"fa-solid fa-arrow-rotate-left\"></i></div></div>";
+			return "<div id=\"0"+chatID+"\" class=\"action\" style=\"display:flex; justify-content: flex-end\"><div onClick=\"chat_action("+chatID+",0,0,'"+id+"')\" class=\"button_yellow\" style=\"float: left\"><i class=\"fa-solid fa-check\"></i></div><div onClick=\"chat_action("+chatID+",1,0,'"+id+"')\" class=\"button_yellow\" style=\"float: left; margin-left: 5px\"><i class=\"fa-solid fa-arrow-rotate-left\"></i></div></div>";
 		}
 	}
 	else {
@@ -244,13 +257,13 @@ function chat_list_category_action_show(isactive, id, isMe = false){
 	}
 }
 	
-function chat_list_item_action_show(isactive, id, isMe = false){
+function chat_list_item_action_show(chatID, isactive, id, isMe = false){
 	if(isactive == 1){	//review
 		if(!isMe){
-			return "<div id=\"1"+id+"\" class=\"action\"><div onClick=\"chat_action(0,1,"+id+")\" class=\"button_yellow\" style=\"float: left\"><i class=\"fa-solid fa-check\"></i></div><div onClick=\"chat_action(1,1,"+id+")\" class=\"button_yellow\" style=\"float: left; margin-left: 5px\"><i class=\"fa-solid fa-arrow-rotate-left\"></i></div></div>";   
+			return "<div id=\"1"+chatID+"\" class=\"action\"><div onClick=\"chat_action("+chatID+",0,1,"+id+")\" class=\"button_yellow\" style=\"float: left\"><i class=\"fa-solid fa-check\"></i></div><div onClick=\"chat_action("+chatID+",1,1,"+id+")\" class=\"button_yellow\" style=\"float: left; margin-left: 5px\"><i class=\"fa-solid fa-arrow-rotate-left\"></i></div></div>";   
 	   	}
 		else {
-			return "<div id=\"1"+id+"\" class=\"action\" style=\"display:flex; justify-content: flex-end\"><div onClick=\"chat_action(0,1,"+id+")\" class=\"button_yellow\" style=\"float: left\"><i class=\"fa-solid fa-check\"></i></div><div onClick=\"chat_action(1,1,"+id+")\" class=\"button_yellow\" style=\"float: left; margin-left: 5px\"><i class=\"fa-solid fa-arrow-rotate-left\"></i></div></div>";
+			return "<div id=\"1"+chatID+"\" class=\"action\" style=\"display:flex; justify-content: flex-end\"><div onClick=\"chat_action("+chatID+",0,1,"+id+")\" class=\"button_yellow\" style=\"float: left\"><i class=\"fa-solid fa-check\"></i></div><div onClick=\"chat_action("+chatID+",1,1,"+id+")\" class=\"button_yellow\" style=\"float: left; margin-left: 5px\"><i class=\"fa-solid fa-arrow-rotate-left\"></i></div></div>";
 		}
 	}
 	else {
@@ -267,12 +280,14 @@ function chat_profile_image_show(image){
 	}
 }
 
-function chat_action(action, type, id){
+function chat_action(chatID, action, type, id){
+	//chatID chat row id
 	//action 0=accept, 1=dismiss
 	//type 0=category, 1=item, 2=role
 	//id rowid
 	
 	var chatActionSubmitData = new FormData();
+	chatActionSubmitData.append("chatID", chatID);
 	chatActionSubmitData.append("action", action);
 	chatActionSubmitData.append("type", type);
 	chatActionSubmitData.append("id", id);
@@ -280,7 +295,7 @@ function chat_action(action, type, id){
 	const reqChatActionSubmit = new XMLHttpRequest();
 	reqChatActionSubmit.onload = function() {
 		if(this.responseText == "OK"){
-			$("div#"+type+""+id).hide();
+			$("div#"+type+""+chatID).hide();
 		}
 	};
 	reqChatActionSubmit.onerror = function(){
@@ -301,7 +316,7 @@ function chat_action(action, type, id){
 <div class="chat">
 	<div class="left">
 		<?php
-		$queryFetchSender = "SELECT *, (SELECT name FROM user WHERE id=chat.fromID) AS sender_name, (SELECT image FROM user WHERE id=chat.fromID) AS sender_image, (SELECT role FROM user WHERE id=chat.fromID) AS sender_role, (SELECT name FROM user WHERE id=chat.toID) AS receiver_name, (SELECT image FROM user WHERE id=chat.toID) AS receiver_image, (SELECT role FROM user WHERE id=chat.toID) AS receiver_role FROM chat WHERE toID=".$_COOKIE["userID"]." GROUP BY fromID ORDER BY datetime DESC";
+		$queryFetchSender = "SELECT *, (SELECT name FROM user WHERE id=chat.fromID) AS sender_name, (SELECT image FROM user WHERE id=chat.fromID) AS sender_image, (SELECT role FROM user WHERE id=chat.fromID) AS sender_role, (SELECT phone FROM user WHERE id=chat.fromID) AS sender_phone, (SELECT name FROM user WHERE id=chat.toID) AS receiver_name, (SELECT image FROM user WHERE id=chat.toID) AS receiver_image, (SELECT role FROM user WHERE id=chat.toID) AS receiver_role, (SELECT phone FROM user WHERE id=chat.toID) AS receiver_phone FROM chat WHERE toID=".$_COOKIE["userID"]." GROUP BY fromID ORDER BY datetime DESC";
 		$resultFetchSender = $conn->query($queryFetchSender);
 		while($rowFetchSender = mysqli_fetch_array($resultFetchSender)){
 			if($rowFetchSender["toID"]==$_COOKIE["userID"]){
@@ -346,6 +361,7 @@ function chat_action(action, type, id){
 									}
 									?>
 								</div>
+								<div class="phone"><?php echo substr($rowFetchSender["sender_phone"],4); ?></div>
 							</div>
 						</div>
 					</div>
@@ -394,6 +410,7 @@ function chat_action(action, type, id){
 									}
 									?>
 								</div>
+								<div class="phone"><?php echo substr($rowFetchSender["receiver_phone"]); ?></div>
 							</div>
 						</div>
 					</div>
