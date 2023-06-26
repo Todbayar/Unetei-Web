@@ -11,7 +11,7 @@ require "./include/PHPMailer/src/PHPMailer.php";
 require "./include/PHPMailer/src/SMTP.php";
 
 if(isset($_REQUEST["fromID"]) && isset($_REQUEST["toID"]) && isset($_REQUEST["type"]) && isset($_REQUEST["message"])){
-	chat_send($_REQUEST["fromID"], $_REQUEST["toID"], $_REQUEST["type"], htmlspecialchars(addslashes($_REQUEST["message"])), true);
+	chat_send($_REQUEST["fromID"], $_REQUEST["toID"], $_REQUEST["type"], htmlspecialchars(addslashes($_REQUEST["message"])), true, false);
 }
 
 function chat_send($from, $to, $type, $message, $isPrint = true, $isEdit = false){

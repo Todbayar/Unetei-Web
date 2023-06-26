@@ -23,7 +23,10 @@ if(isset($_REQUEST["action"]) && isset($_REQUEST["type"]) && isset($_REQUEST["id
 	}
 	else if($type == 1){	//item
 		$rowChat = getChat($chatID);
-		if($rowChat["action"]!=EDIT){
+		if($rowChat["action"]==EDIT){
+			@$conn->query("UPDATE chat SET action=null WHERE id=".$chatID);
+		}
+		else {
 			$note = $rowChat["note"];
 			if($note==""){
 				$note = new stdClass();
@@ -44,10 +47,7 @@ if(isset($_REQUEST["action"]) && isset($_REQUEST["type"]) && isset($_REQUEST["id
 			}
 
 			$note->payment[] = $payment;
-			@$conn->query("UPDATE chat SET note='".json_encode($note)."' WHERE id=".$chatID);
-		}
-		else {
-			@$conn->query("UPDATE chat SET action=null WHERE id=".$chatID);
+			$conn->query("UPDATE chat SET note='".json_encode($note)."' WHERE id=".$chatID);
 		}
 		
 		if($action == 0){
