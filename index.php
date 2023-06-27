@@ -503,5 +503,12 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 				<button onClick="publishItemSubmit(<?php echo isset($rowPopupUser)?$rowPopupUser["role"]:0; ?>)" id="buttonPublish" class="button_yellow" style="margin-top: 10px; margin-left: auto; margin-right: auto" disabled>Нийтлэх</button>
 			</div>
 		</div>
+		
+		<div class="popup profile_qrcrop" style="display: none">
+			<div class="container" style="width: 320px; top: 5vh">
+				<img id="cropbox" src="user_files/20230620071739_Todbayar SocialPay QR 1.jpg" class="cropbox img" style="width: 100%; height: 100%; object-fit: contain" />
+				<button id="crop" class="button_yellow" style="margin-top: 10px; margin-left: auto; margin-right: auto; visibility: hidden">Тайрах</button>
+			</div>
+		</div>
 	</body>
 </html>

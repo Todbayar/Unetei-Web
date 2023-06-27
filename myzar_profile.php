@@ -2,6 +2,11 @@
 include "mysql_config.php";
 include_once "info.php";
 ?>
+
+<link rel="stylesheet" href="jquery.Jcrop.min.css" type="text/css" />
+<script src="jquery.min.js"></script>
+<script src="jquery.Jcrop.min.js"></script>
+
 <style>
 .profile {
 	width: 100%;
@@ -92,10 +97,15 @@ $(document).ready(function(){
 	$("#socialpay_file").change(function(){
 		const vIconType = $(this)[0].files[0].type;
 //		const vIconName = $(this)[0].files[0].name;
-		if(vIconType == "image/svg+xml" || vIconType == "image/png" || vIconType == "image/jpeg"){
+		if(vIconType == "image/png" || vIconType == "image/jpeg"){
 			var reader = new FileReader();
 			reader.onload = function (e) {
-				$("#socialpay").attr("src", e.target.result);
+				$("#socialpay").attr("src", e.target.result);				
+//				window.scrollTo(0, 0);
+//				$("body").css("overflow-y", "hidden");
+//				$(".popup.profile_qrcrop").show();
+//				$(".cropbox .img").attr("src", e.target.result);
+//				$(".cropbox .img").css("width: 100%; height: 100%; object-fit: contain");
 			}
 			reader.onerror = function(){
 				$("#socialpay").attr("src", "image-solid.svg");
@@ -129,6 +139,28 @@ $(document).ready(function(){
 		lastSelectionRoleUpgradeOption.find("input").prop("checked", true);
 		$(".popup.myzar_user_upgrade #buttonSubmit").attr("disabled", false);
 	});
+	
+	//qr image crop
+	var size;
+	$('#cropbox').Jcrop({
+	  aspectRatio: 1,
+	  onSelect: function(c){
+	   size = {x:c.x,y:c.y,w:c.w,h:c.h};
+	   $("#crop").css("visibility", "visible");     
+	  }
+	});
+	
+//	$("#crop").click(function(){
+//		
+//		var img = $("#cropbox").attr('src');
+//		
+//	});
+//	
+//	$("#crop").click(function(){
+//		
+//		$("#cropped_img").show();
+//		$("#cropped_img").attr('src','image-crop.php?x='+size.x+'&y='+size.y+'&w='+size.w+'&h='+size.h+'&img='+img);
+//	});
 });
 	
 function submitRoleUpgrade(affiliatePhone){
@@ -412,7 +444,7 @@ $(document).ready(function(){
 				<?php
 				}
 				?>
-				<input type="file" id="socialpay_file" accept="image/png, image/gif, image/jpeg, .svg" style="display: none">
+				<input type="file" id="socialpay_file" accept="image/png, image/jpeg" style="display: none">
 			</div>
 		</div>
 		<div style="width: 100%; float: left; margin-top: 10px; margin-bottom: 20px; justify-content: center; display: flex">
