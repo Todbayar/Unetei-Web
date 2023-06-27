@@ -22,6 +22,9 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 		<script src="kit.fontawesome.com_64e3bec699.js"></script>
 		<script src="misc.js"></script>
 		
+		<script src="jquery.Jcrop.min.js"></script>
+		<link rel="stylesheet" href="jquery.Jcrop.min.css" type="text/css" />
+		
 		<link rel="stylesheet" href="main.css">
 		<link rel="stylesheet" href="topbar.css">
 		<link rel="stylesheet" href="buttons.css">
@@ -506,8 +509,8 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 		
 		<div class="popup profile_qrcrop" style="display: none">
 			<div class="container" style="width: 320px; top: 5vh">
-				<img id="cropbox" src="user_files/20230620071739_Todbayar SocialPay QR 1.jpg" class="cropbox img" style="width: 100%; height: 100%; object-fit: contain" />
-				<button id="crop" class="button_yellow" style="margin-top: 10px; margin-left: auto; margin-right: auto; visibility: hidden">Тайрах</button>
+				<img id="cropbox" class="cropbox img" src="cropBackground.png" style="width: 320px; height: 320px; object-fit: contain">
+				<button id="crop" class="button_yellow" style="margin-top: 10px; margin-left: auto; margin-right: auto" disabled>Тайрах</button>
 			</div>
 		</div>
 	</body>

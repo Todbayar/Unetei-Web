@@ -3,10 +3,6 @@ include "mysql_config.php";
 include_once "info.php";
 ?>
 
-<link rel="stylesheet" href="jquery.Jcrop.min.css" type="text/css" />
-<script src="jquery.min.js"></script>
-<script src="jquery.Jcrop.min.js"></script>
-
 <style>
 .profile {
 	width: 100%;
@@ -72,8 +68,8 @@ include_once "info.php";
 <script src="misc.js"></script>
 
 <script>
-var lastSelectionRoleUpgradeOption;
-	
+var lastSelectionRoleUpgradeOption, qrSize;
+
 $(document).ready(function(){		
 	$("#image_file").change(function(){
 		const vIconType = $(this)[0].files[0].type;
@@ -100,12 +96,11 @@ $(document).ready(function(){
 		if(vIconType == "image/png" || vIconType == "image/jpeg"){
 			var reader = new FileReader();
 			reader.onload = function (e) {
-				$("#socialpay").attr("src", e.target.result);				
 //				window.scrollTo(0, 0);
 //				$("body").css("overflow-y", "hidden");
 //				$(".popup.profile_qrcrop").show();
-//				$(".cropbox .img").attr("src", e.target.result);
-//				$(".cropbox .img").css("width: 100%; height: 100%; object-fit: contain");
+//				$(".cropbox.img").attr("src", );
+				$("#socialpay").attr("src", e.target.result);
 			}
 			reader.onerror = function(){
 				$("#socialpay").attr("src", "image-solid.svg");
@@ -140,27 +135,36 @@ $(document).ready(function(){
 		$(".popup.myzar_user_upgrade #buttonSubmit").attr("disabled", false);
 	});
 	
-	//qr image crop
-	var size;
 	$('#cropbox').Jcrop({
-	  aspectRatio: 1,
-	  onSelect: function(c){
-	   size = {x:c.x,y:c.y,w:c.w,h:c.h};
-	   $("#crop").css("visibility", "visible");     
-	  }
+	  	aspectRatio: 1,
+		onSelect: function(c){
+			qrSize = {x:c.x,y:c.y,w:c.w,h:c.h};
+			$("#crop").prop('disabled', false);
+		}
 	});
-	
-//	$("#crop").click(function(){
-//		
-//		var img = $("#cropbox").attr('src');
-//		
-//	});
-//	
-//	$("#crop").click(function(){
-//		
-//		$("#cropped_img").show();
-//		$("#cropped_img").attr('src','image-crop.php?x='+size.x+'&y='+size.y+'&w='+size.w+'&h='+size.h+'&img='+img);
-//	});
+
+	$("#crop").click(function(){
+		$(".popup.profile_qrcrop").hide();
+		document.body.style.overflowY='auto';
+
+		var imageCropData = new FormData();
+		imageCropData.append("x", qrSize.x);
+		imageCropData.append("y", qrSize.y);
+		imageCropData.append("w", qrSize.w);
+		imageCropData.append("h", qrSize.h);
+		imageCropData.append("img", $("#socialpay_file")[0].files[0]);
+
+		const reqCropImageSubmit = new XMLHttpRequest();
+		reqCropImageSubmit.onload = function(){
+			$("#socialpay").attr("src", this.response);
+		};
+		reqCropImageSubmit.onerror = function(){
+			console.log("<reqCropImageSubmit_error>:" + reqCropImageSubmit.status);
+		};
+
+		reqCropImageSubmit.open("POST", "image-crop.php", true);		
+		reqCropImageSubmit.send(imageCropData);
+	});
 });
 	
 function submitRoleUpgrade(affiliatePhone){
@@ -243,9 +247,11 @@ function submitProfile(){
 		profileSubmitData.append("bank_owner", vBankOwner);
 		profileSubmitData.append("bank_account", vBankAccount);
 		profileSubmitData.append("socialpay", $("#socialpay_file")[0].files[0]);
+//		profileSubmitData.append("socialpay", $("#socialpay").attr("src"));
 
 		const reqProfileSubmit = new XMLHttpRequest();
 		reqProfileSubmit.onload = function() {
+			console.log("<profileSubmitData>:"+this.response);
 			if(this.responseText == "OK"){
 				confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Амжилттай хадгалагдлаа.", null);	
 			}

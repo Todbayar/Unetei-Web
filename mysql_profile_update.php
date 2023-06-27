@@ -3,6 +3,7 @@ include "mysql_config.php";
 include_once "info.php";
 
 if(isset($_REQUEST["userID"]) && isset($_REQUEST["name"]) && isset($_REQUEST["email"]) && isset($_REQUEST["city"])){
+//	echo $_POST["socialpay"];	//base64 image
 	$vNewFile = isset($_FILES["image"]) ? date("Ymdhis")."_".$_FILES["image"]["name"] : "";
 	$vSocialPay = (isset($_FILES["socialpay"])) ? date("Ymdhis")."_".$_FILES["socialpay"]["name"] : "";
 	
