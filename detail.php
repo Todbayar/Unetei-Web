@@ -546,7 +546,7 @@ if(isset($_GET["id"])){
 				</div>
 				<div class="owner">
 					<div class="name"><?php echo $row["name"]; ?></div>
-					<div class="datetime" style="font-size: 14px"><?php echo $row["datetime"]!=""?"Элссэн огноо:<br/>".date_format(date_create($row["datetime"]),"Y/m/d"):""; ?></div>
+					<div class="datetime" style="font-size: 14px"><?php echo $row["signed"]!=""?"Элссэн огноо:<br/>".date_format(date_create($row["signed"]),"Y/m/d"):""; ?></div>
 					<div onClick="showOtherItems(<?php echo $row["userID"]; ?>)" class="other_items">Зарын эзний бусад зарууд</div>
 				</div>
 			</div>
@@ -703,7 +703,7 @@ if(isset($_GET["id"])){
 				?>
 				<div class="owner" style="margin-top: 10px">
 					<div class="name"><?php echo $row["name"]; ?></div>
-					<div class="datetime" style="font-size: 14px"><?php echo $row["datetime"]!=""?"Элссэн огноо:<br/>".date_format(date_create($row["datetime"]),"Y/m/d"):""; ?></div>
+					<div class="datetime" style="font-size: 14px"><?php echo $row["signed"]!=""?"Элссэн огноо:<br/>".date_format(date_create($row["signed"]),"Y/m/d"):""; ?></div>
 					<div onClick="showOtherItems(<?php echo $row["userID"]; ?>)" class="other_items">Зарын эзний бусад зарууд</div>
 				</div>
 			</div>
