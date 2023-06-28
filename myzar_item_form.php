@@ -206,6 +206,7 @@ function selectCity(city){
 				<td style="font: normal 14px Arial"><div id="myzar_item_city_error" style="display: none; color: #FF4649">Сонголт хийнэ үү!</div></td>
 			</tr>
 		</table>
+		<hr/>
 		<table width="100%">
 			<tr>
 				<td width="115px"><label class="required">Нэр:</label></td>
@@ -254,6 +255,17 @@ function selectCity(city){
 						<?php
 						}
 						?>
+					</div>
+				</td>
+			</tr>
+		</table>
+		<table width="100%">
+			<tr>
+				<td width="115px">Хэрэглэгч:</td>
+				<td valign="middle" align="left">
+					<div style="align-content: center; align-items: center">
+						<input id="myzar_item_isNewUser" type="checkbox" style="border: 2px solid #c1c1c1; width: 10px; height: 10px; border-radius: 5px; transform:scale(2); margin:5px" <?php echo $_COOKIE["role"]==0?"disabled":""; ?>></input>
+						<label style="margin-left: 5px; font: normal 16px Arial">Өөр хүний нэр (шинэ хэрэглэгч) дээр барааг нэмэх</label>
 					</div>
 				</td>
 			</tr>

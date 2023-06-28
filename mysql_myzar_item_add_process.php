@@ -4,7 +4,9 @@ include_once "mysql_misc.php";
 include_once "chat_process.php";
 include_once "info.php";
 
-$userID = $_COOKIE["userID"];
+$isNewUser = $_REQUEST["isNewUser"];
+$phone = (isset($_REQUEST["phone"])) ? $_REQUEST["phone"] : "";
+$userID = $isNewUser ? userNewAdd($phone) : $_COOKIE["userID"];
 $category = $_REQUEST["category"];
 $title = htmlspecialchars(addslashes($_REQUEST["title"]));
 $quality = $_REQUEST["quality"];
@@ -18,16 +20,16 @@ $description = htmlspecialchars(addslashes($_REQUEST["description"]));
 $city = $_REQUEST["city"];
 $name = $_REQUEST["name"];
 $email = (isset($_REQUEST["email"]) && filter_var($_REQUEST["email"], FILTER_VALIDATE_EMAIL)) ? $_REQUEST["email"] : "";
-$phone = (isset($_REQUEST["phone"])) ? $_REQUEST["phone"] : "";
 $status = $_REQUEST["status"];
 
 $queryDuplication = "SELECT * FROM item WHERE title='".$title."' AND userID=".$userID." AND category='".$category."'";
 $resultDuplication = $conn->query($queryDuplication);
 $isDuplication = mysqli_num_rows($resultDuplication);
 if($isDuplication == 0){
+	
 	$userRole = getUserRole($userID);
-	if($userRole == 0){
-		$phone = $_COOKIE["phone"];
+	if($userRole == 0 && !$isNewUser){
+		$phone = getPhone($_COOKIE["userID"]);
 	}
 	
 	$days = 30;

@@ -117,7 +117,7 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 				path: 'watermark.png',
 				margin: 0,
 				gravity: 'nw',
-				opacity: 1,
+				opacity: 0.73,
 				outputWidth: 400
 			});
 		});

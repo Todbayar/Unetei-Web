@@ -106,6 +106,7 @@ function getItemDataForm(id = null){
 	var vItemName = $("#myzar_item_name").val();
 	var vItemEmail = $("#myzar_item_email").val();
 	var vItemPhone = $("#myzar_item_phone").val();
+	var vItemIsNewUser = $("#myzar_item_isNewUser").prop("checked");
 	
 	const patternOnlyText = /^[а-яА-Яa-zA-ZөӨүҮ\s]+$/i;
 	const patternEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i;
@@ -139,6 +140,7 @@ function getItemDataForm(id = null){
 		itemSubmitData.append("name", vItemName);
 		itemSubmitData.append("email", vItemEmail);
 		itemSubmitData.append("phone", "+976"+vItemPhone);
+		itemSubmitData.append("isNewUser", vItemIsNewUser);
 		
 		if(id != null) itemSubmitData.append("itemID", id);
 		

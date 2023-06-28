@@ -18,6 +18,14 @@ function getAffiliateID($id){
 	return ($rowAffiliate["affiliate_id"] != null && $rowAffiliate["affiliate_id"] != "") ? $rowAffiliate["affiliate_id"] : $rowSuperDuper["id"];
 }
 
+function getPhone($id){
+	global $conn;
+	$query = "SELECT phone FROM user WHERE id=".$id;
+	$result = $conn->query($query);
+	$row = mysqli_fetch_array($result);
+	return $row["phone"];
+}
+
 function getPayAmount($status, $userID){
 	global $item_vipspecial_count_limit_admin, $item_publish_price_vip, $item_publish_price_special;
 	$payAmount = 0;
@@ -159,6 +167,24 @@ function convertRoleInString($role){
 			break;
     }
 	return $vRole;
+}
+
+function userNewAdd($uPhone){
+	global $conn;
+	$queryUser = "SELECT * FROM user WHERE phone='".$uPhone."'";
+	$resultUser = $conn->query($queryUser);
+	$rowUser = mysqli_fetch_array($resultUser);
+	if(mysqli_num_rows($resultUser)>0){
+		return $rowUser["id"];
+	}
+	else {
+		if($conn->query("INSERT IGNORE INTO user (phone, role, status, affiliate) values ('".$uPhone."', 0, 1, '".getPhone($_COOKIE["userID"])."')")){
+			return mysqli_insert_id($conn);	
+		}
+		else {
+			return -1;
+		}
+	}
 }
 
 //function sendNotification($title, $body, $image, $link, $token, $authKey){
