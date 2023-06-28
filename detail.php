@@ -404,7 +404,7 @@ function incrementRate(type){
 		   
 function startChat(toID, message){
 	var chatSubmitData = new FormData();
-	chatSubmitData.append("fromID", <?php echo $_COOKIE["userID"]; ?>);
+	chatSubmitData.append("fromID", <?php echo isset($_COOKIE["userID"])?$_COOKIE["userID"]:0; ?>);
 	chatSubmitData.append("toID", toID);
 	chatSubmitData.append("type", 0);
 	chatSubmitData.append("message", message);
@@ -433,7 +433,8 @@ function showOtherItems(userID){
 <div class="detail">
 <?php
 if(isset($_GET["id"])){
-	$query = "SELECT *, (SELECT IF(COUNT(*)>0, 1, 0) FROM favorite WHERE itemID=item.id AND userID=".$_COOKIE["userID"].") AS isFavorite, item.phone AS item_phone FROM item RIGHT JOIN user ON user.id=item.userID WHERE item.id=".$_GET["id"];
+	$queryFav = isset($_COOKIE["userID"])?"(SELECT IF(COUNT(*)>0, 1, 0) FROM favorite WHERE itemID=item.id AND userID=".$_COOKIE["userID"].") AS isFavorite,":"";
+	$query = "SELECT *, ".$queryFav." item.phone AS item_phone FROM item RIGHT JOIN user ON user.id=item.userID WHERE item.id=".$_GET["id"];
 	$result = $conn->query($query);
 	$row = mysqli_fetch_array($result);
 	
@@ -479,14 +480,21 @@ if(isset($_GET["id"])){
 				<?php 
 				echo $row["title"]; 
 				
-				if($row["isFavorite"]==0){
-					?>
-					<i id="itemStar<?php echo $_GET["id"]; ?>" onClick="toggleFavorite(false,<?php echo $_GET["id"]; ?>)" class="fa-solid fa-star"></i>
-					<?php
+				if(isset($row["isFavorite"])){
+					if($row["isFavorite"]==0){
+						?>
+						<i id="itemStar<?php echo $_GET["id"]; ?>" onClick="toggleFavorite(false,<?php echo $_GET["id"]; ?>)" class="fa-solid fa-star"></i>
+						<?php
+					}
+					else if($row["isFavorite"]==1){
+						?>
+						<i id="itemStar<?php echo $_GET["id"]; ?>" onClick="toggleFavorite(true,<?php echo $_GET["id"]; ?>)" class="fa-solid fa-star nohover" style="color: rgb(255, 167, 24)"></i>
+						<?php
+					}
 				}
-				else if($row["isFavorite"]==1){
+				else {
 					?>
-					<i id="itemStar<?php echo $_GET["id"]; ?>" onClick="toggleFavorite(true,<?php echo $_GET["id"]; ?>)" class="fa-solid fa-star nohover" style="color: rgb(255, 167, 24)"></i>
+					<i onClick="pagenavigation('login')" class="fa-solid fa-star"></i>
 					<?php
 				}
 				?>
@@ -518,14 +526,27 @@ if(isset($_GET["id"])){
 					$message .= convertPriceToText($row["price"])." ₮<br/>";
 					$message .= "#".$row["id"]."<br/>";
 					$message .= implode(" > ",$arrCategories["text"]);
+					if(isset($_COOKIE["userID"])){
+						?>
+						<div onClick="startChat(<?php echo $row["userID"]; ?>,'<?php echo $message; ?>')" class="button_yellow chatlah" style="margin-top: 10px; background: #e60803">
+							<i class="fa-solid fa-comments"></i>
+							<div style="margin-left: 10px">Чатлах</div>
+						</div>
+						<?php
+					}
+					else {
+						?>
+						<div onClick="pagenavigation('login')" class="button_yellow chatlah" style="margin-top: 10px; background: #e60803">
+							<i class="fa-solid fa-comments"></i>
+							<div style="margin-left: 10px">Чатлах</div>
+						</div>
+						<?php
+					}
 					?>
-					<div onClick="startChat(<?php echo $row["userID"]; ?>,'<?php echo $message; ?>')" class="button_yellow chatlah" style="margin-top: 10px; background: #e60803">
-						<i class="fa-solid fa-comments"></i>
-						<div style="margin-left: 10px">Чатлах</div>
-					</div>
 				</div>
 				<div class="owner">
 					<div class="name"><?php echo $row["name"]; ?></div>
+					<div class="datetime" style="font-size: 14px"><?php echo $row["datetime"]!=""?"Элссэн огноо:<br/>".date_format(date_create($row["datetime"]),"Y/m/d"):""; ?></div>
 					<div onClick="showOtherItems(<?php echo $row["userID"]; ?>)" class="other_items">Зарын эзний бусад зарууд</div>
 				</div>
 			</div>
@@ -597,7 +618,7 @@ if(isset($_GET["id"])){
 			<h3>Ижил зарууд</h3>
 			<div class="list">
 			<?php
-			$queryOthers = "SELECT *, (SELECT IF(COUNT(*)>0, 1, 0) FROM favorite WHERE itemID=item.id AND userID=".$_COOKIE["userID"].") AS isFavorite, (SELECT image FROM images WHERE item.id=images.item LIMIT 1) AS image, (SELECT COUNT(*) FROM images WHERE item.id=images.item) AS count_images FROM item WHERE category IN (".$joinedCategories.") AND id NOT IN (".$_GET["id"].") AND isactive=4 ORDER BY datetime DESC LIMIT 12";
+			$queryOthers = "SELECT *, ".$queryFav." (SELECT image FROM images WHERE item.id=images.item LIMIT 1) AS image, (SELECT COUNT(*) FROM images WHERE item.id=images.item) AS count_images FROM item WHERE category IN (".$joinedCategories.") AND id NOT IN (".$_GET["id"].") AND isactive=4 ORDER BY datetime DESC LIMIT 12";
 			$resultOthers = $conn->query($queryOthers);
 			while($rowOthers = mysqli_fetch_array($resultOthers)){
 				?>
@@ -619,15 +640,22 @@ if(isset($_GET["id"])){
 						<i class="count"><i class="fa-solid fa-camera"></i> <?php echo $rowOthers["count_images"]; ?></i>
 						<?php
 						}
-						if($rowOthers["isFavorite"]==0){
-						?>
-						<i id="itemStar<?php echo $rowOthers["id"]; ?>" onClick="toggleFavorite(false,<?php echo $rowOthers["id"]; ?>)" class="fa-solid fa-star"></i>
-						<?php
+						if(isset($rowOthers["isFavorite"])){
+							if($rowOthers["isFavorite"]==0){
+							?>
+							<i id="itemStar<?php echo $rowOthers["id"]; ?>" onClick="toggleFavorite(false,<?php echo $rowOthers["id"]; ?>)" class="fa-solid fa-star"></i>
+							<?php
+							}
+							else if($rowOthers["isFavorite"]==1){
+							?>
+							<i id="itemStar<?php echo $rowOthers["id"]; ?>" onClick="toggleFavorite(true,<?php echo $rowOthers["id"]; ?>)" class="fa-solid fa-star nohover" style="color: rgb(255, 167, 24)"></i>
+							<?php
+							}
 						}
-						else if($rowOthers["isFavorite"]==1){
-						?>
-						<i id="itemStar<?php echo $rowOthers["id"]; ?>" onClick="toggleFavorite(true,<?php echo $rowOthers["id"]; ?>)" class="fa-solid fa-star nohover" style="color: rgb(255, 167, 24)"></i>
-						<?php
+						else {
+							?>
+							<i onClick="pagenavigation('login')" class="fa-solid fa-star"></i>
+							<?php
 						}
 						?>
 						<img src="<?php echo $path."/".$rowOthers["image"]; ?>" onerror="this.onerror=null; this.src='notfound.png'" />
@@ -655,12 +683,27 @@ if(isset($_GET["id"])){
 					</div>
 					<div id="phoneFull" class="full" style="display: none; margin-left: 10px"><?php echo substr($row["item_phone"],4); ?></div>
 				</div>
-				<div onClick="startChat(<?php echo $row["userID"]; ?>,'<?php echo $message; ?>')" class="button_yellow chatlah" style="margin-top: 10px; background: #e60803">
-					<i class="fa-solid fa-comments"></i>
-					<div style="margin-left: 10px">Чатлах</div>
-				</div>
+				<?php
+				if(isset($_COOKIE["userID"])){
+					?>
+					<div onClick="startChat(<?php echo $row["userID"]; ?>,'<?php echo $message; ?>')" class="button_yellow chatlah" style="margin-top: 10px; background: #e60803">
+						<i class="fa-solid fa-comments"></i>
+						<div style="margin-left: 10px">Чатлах</div>
+					</div>
+					<?php
+				}
+				else {
+					?>
+					<div onClick="pagenavigation('login')" class="button_yellow chatlah" style="margin-top: 10px; background: #e60803">
+						<i class="fa-solid fa-comments"></i>
+						<div style="margin-left: 10px">Чатлах</div>
+					</div>
+					<?php
+				}
+				?>
 				<div class="owner" style="margin-top: 10px">
 					<div class="name"><?php echo $row["name"]; ?></div>
+					<div class="datetime" style="font-size: 14px"><?php echo $row["datetime"]!=""?"Элссэн огноо:<br/>".date_format(date_create($row["datetime"]),"Y/m/d"):""; ?></div>
 					<div onClick="showOtherItems(<?php echo $row["userID"]; ?>)" class="other_items">Зарын эзний бусад зарууд</div>
 				</div>
 			</div>

@@ -17,12 +17,12 @@ if(isset($uID) && isset($uPhone)){
 		$uRole = $row["role"];
 		SaveCookie();
 		
-		@$conn->query("UPDATE user SET uid='".$uID."' WHERE phone='".$uPhone."'");
+		@$conn->query("UPDATE user SET uid='".$uID."', lastlogged='".date("Y-m-d h:i:s")."' WHERE phone='".$uPhone."'");
 		
 		echo $_COOKIE["userID"];
 	}
 	else {
-		$query = "INSERT INTO user (uid, phone, role, status) values ('".$uID."','".$uPhone."', 0, 1)";
+		$query = "INSERT INTO user (uid, phone, role, status, datetime, lastlogged) values ('".$uID."','".$uPhone."', 0, 1, '".date("Y-m-d")."','".date("Y-m-d h:i:s")."')";
 		$result = $conn->query($query);
 		if ($result) {
 			$userID = mysqli_insert_id($conn);
