@@ -25,6 +25,8 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 		<script src="jquery.Jcrop.min.js"></script>
 		<link rel="stylesheet" href="jquery.Jcrop.min.css" type="text/css" />
 		
+		<script src="jquery.watermark.min.js" type="text/javascript"></script>
+		
 		<link rel="stylesheet" href="main.css">
 		<link rel="stylesheet" href="topbar.css">
 		<link rel="stylesheet" href="buttons.css">
@@ -101,6 +103,22 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 				$(".dropdown").show();
 			}, function(){
 				$(".dropdown").hide();
+			});
+			
+			$('.watermark').watermark({
+				text: '<?php echo strtoupper($domain); ?>',
+				textWidth: 100,
+				gravity: 'w',
+				opacity: 1,
+				margin: 12
+			});
+
+			$('.watermark2').watermark({
+				path: 'watermark.png',
+				margin: 0,
+				gravity: 'nw',
+				opacity: 1,
+				outputWidth: 400
 			});
 		});
 		

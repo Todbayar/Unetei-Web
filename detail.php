@@ -382,7 +382,7 @@ $(document).ready(function() {
 function showBigImage(type,id){
 	$("#imageBig").empty();
 	if(type == "image"){
-		$("#imageBig").append("<img src=\""+$("#thumbnail"+id).attr("src")+"\" />");
+		$("#imageBig").append("<img src=\""+$("#thumbnail"+id).attr("src")+"\" class=\"watermark2\" />");
 	}
 	else if(type == "video"){
 		$("#imageBig").append("<video controls=\"controls\" preload=\"metadata\"><source src=\""+id+"#t=0.5\" type=\""+findTypeOfVideo(id)+"\"></video>");

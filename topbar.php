@@ -17,7 +17,7 @@ include_once "info.php";
 </style>
 <div onClick="javascript:location.href='./'" style="display: flex; align-items: center; cursor: pointer">
 	<img src="icon.png" width="40" height="40" style="object-fit: contain" />
-	<div class="title"><?php echo $domain_title; ?></div>
+	<div class="title"><?php echo strtoupper($domain); ?></div>
 </div>
 <div class="control">
 	<div class="myzar">

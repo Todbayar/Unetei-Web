@@ -96,11 +96,19 @@ $(document).ready(function(){
 		if(vIconType == "image/png" || vIconType == "image/jpeg"){
 			var reader = new FileReader();
 			reader.onload = function (e) {
+				$("#socialpay").attr("src", e.target.result);
+				//image crop but doesn't get coordinate properly
 //				window.scrollTo(0, 0);
 //				$("body").css("overflow-y", "hidden");
 //				$(".popup.profile_qrcrop").show();
-//				$(".cropbox.img").attr("src", );
-				$("#socialpay").attr("src", e.target.result);
+//				$(".cropbox.img").attr("src", e.target.result);				
+//				$('#cropbox').Jcrop({
+//					aspectRatio: 1,
+//					onSelect:function(c){
+//						qrSize = {x:c.x,y:c.y,w:c.w,h:c.h};
+//						$("#crop").prop('disabled', false);
+//					}
+//				});
 			}
 			reader.onerror = function(){
 				$("#socialpay").attr("src", "image-solid.svg");
@@ -133,14 +141,6 @@ $(document).ready(function(){
 		lastSelectionRoleUpgradeOption = $(this);
 		lastSelectionRoleUpgradeOption.find("input").prop("checked", true);
 		$(".popup.myzar_user_upgrade #buttonSubmit").attr("disabled", false);
-	});
-	
-	$('#cropbox').Jcrop({
-	  	aspectRatio: 1,
-		onSelect: function(c){
-			qrSize = {x:c.x,y:c.y,w:c.w,h:c.h};
-			$("#crop").prop('disabled', false);
-		}
 	});
 
 	$("#crop").click(function(){
