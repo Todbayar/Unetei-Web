@@ -138,6 +138,29 @@ function findTypeOfVideo($name){
 	}
 }
 
+function convertRoleInString($role){
+	global $role_rank_user, $role_rank_publisher, $role_rank_manager, $role_rank_admin, $role_rank_superadmin;
+	$vRole = "";
+	switch($role){
+		case 0:
+			$vRole = $role_rank_user;
+			break;
+		case 1:
+			$vRole = $role_rank_publisher;
+			break;
+		case 2:
+			$vRole = $role_rank_manager;
+			break;
+		case 3:
+			$vRole = $role_rank_admin;
+			break;
+		case 4:
+			$vRole = $role_rank_superadmin;
+			break;
+    }
+	return $vRole;
+}
+
 //function sendNotification($title, $body, $image, $link, $token, $authKey){
 ////	$conn = common::createConnection();
 //    

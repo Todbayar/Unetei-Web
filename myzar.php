@@ -33,6 +33,11 @@ function myzar_tab(name){
 			<div class="removable" style="margin-left: 5px">Ангилалууд</div>
 		</div>
 		<hr/>
+		<div class="myzar_tab_followers" style="display: flex; align-items: center; cursor: pointer" onClick="myzar_tab('followers')">
+			<i class="fa-solid fa-users" style="font-size: 24px"></i>
+			<div class="removable" style="margin-left: 5px">Дагагчид</div>
+		</div>
+		<hr/>
 		<div class="myzar_tab_profile" style="display: flex; align-items: center; cursor: pointer" onClick="myzar_tab('profile')">
 			<i class="fa-solid fa-gear" style="font-size: 24px"></i>
 			<div class="removable" style="margin-left: 5px">Тохиргоо</div>
@@ -58,6 +63,9 @@ function myzar_tab(name){
 				break;
 			case "profile":
 				include "myzar_profile.php";
+				break;
+			case "followers":
+				include "myzar_followers.php";
 				break;
 		}
 	}
