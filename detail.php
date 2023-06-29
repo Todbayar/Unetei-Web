@@ -377,6 +377,11 @@ include_once "info.php";
 <script>
 $(document).ready(function() {
 	incrementRate("item");
+	
+	if(sessionStorage.getItem("startItemToDetail")!=null){
+		sessionStorage.removeItem("startItemToDetail");
+		showShareBottomSheet();
+	}
 });
 
 function showBigImage(type,id){
@@ -427,6 +432,19 @@ function startChat(toID, message){
 function showOtherItems(userID){
 	sessionStorage.setItem("searchUserID", userID);
 	location.href = "./";
+}
+	
+function copyToClipboard(){
+	var copyText = document.getElementById("shareUrl");
+	copyText.select();
+	copyText.setSelectionRange(0, 99999); // For mobile devices
+	navigator.clipboard.writeText(copyText.value);
+	$(".bottomsheet.share .info").show(100);
+}
+	
+function showShareBottomSheet(){
+	$(".bottomsheet.share").show();
+	$(".bottomsheet.share #shareUrl").val(window.location.href);
 }
 </script>
 
@@ -544,10 +562,14 @@ if(isset($_GET["id"])){
 					}
 					?>
 				</div>
-				<div class="owner">
+				<div class="owner" style="margin-bottom: 10px">
 					<div class="name"><?php echo $row["name"]; ?></div>
 					<div class="datetime" style="font-size: 14px"><?php echo $row["signed"]!=""?"Элссэн огноо:<br/>".date_format(date_create($row["signed"]),"Y/m/d"):""; ?></div>
 					<div onClick="showOtherItems(<?php echo $row["userID"]; ?>)" class="other_items">Зарын эзний бусад зарууд</div>
+				</div>
+				<div onClick="showShareBottomSheet()" class="button_yellow" style="margin-bottom: 10px; width: 100px; height: 29px">
+					<i class="fa-solid fa-copy" style="float:left"></i>
+					<div style="margin-left: 5px">Хуваалцах</div>
 				</div>
 			</div>
 			<?php
@@ -701,10 +723,14 @@ if(isset($_GET["id"])){
 					<?php
 				}
 				?>
-				<div class="owner" style="margin-top: 10px">
+				<div class="owner" style="margin-bottom: 10px">
 					<div class="name"><?php echo $row["name"]; ?></div>
 					<div class="datetime" style="font-size: 14px"><?php echo $row["signed"]!=""?"Элссэн огноо:<br/>".date_format(date_create($row["signed"]),"Y/m/d"):""; ?></div>
 					<div onClick="showOtherItems(<?php echo $row["userID"]; ?>)" class="other_items">Зарын эзний бусад зарууд</div>
+				</div>
+				<div onClick="showShareBottomSheet()" class="button_yellow" style="margin-bottom: 10px; width: 100px">
+					<i class="fa-solid fa-copy" style="float:left"></i>
+					<div class="removable" style="margin-left: 5px">Хуваалцах</div>
 				</div>
 			</div>
 		</div>

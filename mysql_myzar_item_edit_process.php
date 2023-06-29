@@ -21,8 +21,8 @@ $name = $_REQUEST["name"];
 $email = (isset($_REQUEST["email"]) && filter_var($_REQUEST["email"], FILTER_VALIDATE_EMAIL)) ? $_REQUEST["email"] : "";
 $phone = (isset($_REQUEST["phone"])) ? $_REQUEST["phone"] : "";
 
-if($_COOKIE["role"] == 0){
-	$phone = $_COOKIE["phone"];
+if(getUserRole($userID) == 0){
+	$phone = getPhone($userID);
 }
 
 $queryUpdateItem = "UPDATE item SET title='".$title."', quality=".$quality.", address='".$address."', price=".$price.", youtube='".$youtube."', video='".$video."', extras='".$extras."', description='".$description."', city='".$city."', name='".$name."', phone='".$phone."', email='".$email."', category='".$category."', isactive=1 WHERE id=".$itemID;
@@ -43,7 +43,7 @@ if($conn->query($queryUpdateItem)){
 		if($countImageEditDone == 0){
 			chat_send($userID, getAffiliateID($userID), 2, $itemID, false, true);
 			update_profile($name, $email, $city, $userID);
-			echo "OK";
+			echo $itemID;
 		}
 		else {
 			echo "Fail";
@@ -52,7 +52,7 @@ if($conn->query($queryUpdateItem)){
 	else {
 		chat_send($userID, getAffiliateID($userID), 2, $itemID, false, true);
 		update_profile($name, $email, $city, $userID);
-		echo "OK";
+		echo $itemID;
 	}
 }
 else {

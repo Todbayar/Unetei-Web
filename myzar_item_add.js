@@ -261,7 +261,9 @@ function publishItemUpdate(itemID, title, role){
 			if(itemResponse.pay_amount == 0){
 				var eventOk = new CustomEvent("itemUpdateDone");
 				window.addEventListener("itemUpdateDone", function(){
-					location.reload();
+//					location.reload();
+					sessionStorage.setItem("startItemToDetail", true);
+					pagenavigation("detail&id="+itemResponse.id);
 				});
 				confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Зар амжилттай <b>шинэчлэгдэж</b>, шалгагдаж байна.", eventOk);
 			}
@@ -279,7 +281,9 @@ function publishItemUpdate(itemID, title, role){
 					$(".popup.billing .container #billing_socialpay img").attr("src", "user_files/"+res.socialpay);
 					
 					$(".popup.billing .container .button_yellow").click(function(){
-						location.reload();
+//						location.reload();
+						sessionStorage.setItem("startItemToDetail", true);
+						pagenavigation("detail&id="+itemResponse.id);
 					});
 				});
 			}
@@ -310,7 +314,8 @@ function publishItemSubmit(role){
 			if(itemResponse.pay_amount == 0){
 				var eventOk = new CustomEvent("itemAddDone");
 				window.addEventListener("itemAddDone", function(){
-					location.reload();
+					sessionStorage.setItem("startItemToDetail", true);
+					pagenavigation("detail&id="+itemResponse.id);
 				});
 	//			information("success", "fa-solid fa-file-pen", "Зар амжилттай <b>нэмэгдэж</b>, шалгагдаж байна.", 6, eventInfo);
 				confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Зар амжилттай <b>нэмэгдэж</b>, шалгагдаж байна.", eventOk);
@@ -329,7 +334,8 @@ function publishItemSubmit(role){
 					$(".popup.billing .container #billing_socialpay img").attr("src", "user_files/"+res.socialpay);
 					
 					$(".popup.billing .container .button_yellow").click(function(){
-						location.reload();
+						sessionStorage.setItem("startItemToDetail", true);
+						pagenavigation("detail&id="+itemResponse.id);
 					});
 				});
 			}

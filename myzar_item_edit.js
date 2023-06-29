@@ -84,7 +84,8 @@ function myzar_category_selected_item_edit(id){
 function myzar_item_edit_submit(id){
 	const reqMyZarItemEdit = new XMLHttpRequest();
 	reqMyZarItemEdit.onload = function() {
-		console.log("<myzar_item_edit_submit>:" + this.responseText);
+		const itemResponseID = this.responseText;
+//		console.log("<myzar_item_edit_submit>:"+itemResponseID);
 		if(this.responseText == "Fail"){
 			alert("Зарыг нэмэх боломжгүй байна!");
 		}
@@ -93,7 +94,9 @@ function myzar_item_edit_submit(id){
 
 			var eventEditDone = new CustomEvent("itemEditDone");
 			window.addEventListener("itemEditDone", function(){
-				location.reload();
+//				location.reload();
+				sessionStorage.setItem("startItemToDetail", true);
+				pagenavigation("detail&id="+itemResponseID);
 			});
 
 			confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Зар амжилттай <b>засагдаж</b>, шалгагдаж байна.", eventEditDone);

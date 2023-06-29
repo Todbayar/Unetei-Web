@@ -394,3 +394,75 @@ body {
 .popup.item_publish_option .options .selection:hover {
 	background: #ddd;
 }
+
+.bottomsheet {
+	position: fixed;
+	bottom: 0;
+	background: #42c200;
+	width: 100%;
+	padding-top: 10px;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-bottom: 50px;
+}
+
+.bottomsheet.share .close {
+	right: 40px;
+	position: absolute;
+	cursor: pointer;
+}
+
+.bottomsheet.share .title {
+	margin-left: auto;
+	margin-right: auto;
+	font-family: RobotoBold;
+	font-size: 16px;
+	margin-bottom: 10px;
+}
+
+/* mobile */
+@media screen and (max-width: 540px) {
+	.bottomsheet.share .title {
+		max-width: 353px;
+	}
+}
+
+/* For Tablets and Desktop */
+@media screen and (min-width: 540px) {
+	.bottomsheet.share .title {
+		max-width: 417px;
+	}
+}
+
+.bottomsheet.share .url {
+	display: flex;
+	max-width: 417px;
+	min-width: 370px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 10px;
+}
+
+.bottomsheet.share .url input {
+	height: 40px;
+	width: 308px;
+	font-family: RobotoBold;
+	font-size: 18px;
+}
+
+.bottomsheet.share .url .button_yellow {
+	height: 27px;
+	align-content: center;
+	align-items: center;
+	display: flex;
+}
+
+.bottomsheet.share .info {
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 417px;
+	min-width: 370px;
+	font-family: RobotoRegular;
+	font-size: 14px;
+	color: blue;
+}
