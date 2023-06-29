@@ -184,7 +184,18 @@ mysqli_free_result($resultFetchListItemsStateCountInActive);
 	$resultFetchListItems = $conn->query($queryFetchListItems);
 	while($rowFetchListItems = mysqli_fetch_array($resultFetchListItems)){
 		$expire_datetime = date("Y-m-d H:i:s", strtotime("+".$rowFetchListItems["expire_days"]." day", strtotime($rowFetchListItems["datetime"])));
-		$days_remain = (new DateTime($expire_datetime))->diff(new DateTime("now"))->format("%a");
+		$days_remain = "";
+		if($rowFetchListItems["isactive"]==4){
+			$days_diff = (new DateTime($expire_datetime))->diff(new DateTime("now"));
+			if($days_diff->invert != 1){
+				?>
+				<script>myzar_category_selected_item_inactive(<?php echo $rowFetchListItems["id"]; ?>)</script>
+				<?php
+			}
+			else {
+				$days_remain = $days_diff->format("Шинэчлэхэд %a өдөр %r%h:%i:%s цаг дутуу байна.");
+			}
+		}
 	?>
 	<div class="myzar_content_list_item">
 		<table class="myzar_content_list_item_top" style="display: flex" onClick="pagenavigation('detail&id=<?php echo $rowFetchListItems["id"]; ?>')">
@@ -221,8 +232,28 @@ mysqli_free_result($resultFetchListItemsStateCountInActive);
 				}
 				?>
 				<td valign="top" style="padding-left: 5px">
-					<div class="myzar_content_list_item_title" style="font: bold 16px Arial"><?php echo $rowFetchListItems["title"]." (".convertPriceToText($rowFetchListItems["price"])." ₮)"; ?></div>
-					<div class="myzar_content_list_item_expire" style="font: normal 14px Arial; color: #6ab001">Дуусах огноо: <?php echo $expire_datetime; ?>. Шинэчлэхэд <?php echo $days_remain; ?> өдөр дутуу.</div>
+					<div class="myzar_content_list_item_title" style="font: bold 16px Arial; display: flex">
+						<?php 
+						echo $rowFetchListItems["title"]." (".convertPriceToText($rowFetchListItems["price"])." ₮)"; 
+						switch($rowFetchListItems["status"]){
+							case 2:
+								?>
+								<div class="button_yellow" style="margin-left: 5px; background:#42c200; width: 30px; height: 0px">
+									<div style="color: white; font-size: 12px; margin-left:auto; margin-right:auto">VIP</div>
+								</div>
+								<?php
+								break;
+							case 1:
+								?>
+								<div class="button_yellow" style="margin-left: 5px; background:#f00; width: 45px; height: 0px">
+									<div style="color: white; font-size: 12px; margin-left:auto; margin-right:auto">Онцгой</div>
+								</div>
+								<?php
+								break;
+						}
+						?>
+					</div>
+					<div class="myzar_content_list_item_expire" style="font: normal 14px Arial; color: #6ab001">Дуусах огноо: <?php echo $expire_datetime; ?>. <?php if(isset($days_remain)) echo $days_remain; ?></div>
 					<div class="myzar_content_list_item_category" style="font: normal 14px Arial; color: #999999">
 						<?php
 						$category = explode("_", $rowFetchListItems["category"]);
