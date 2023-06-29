@@ -249,7 +249,7 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 							<input type="radio" id="myzar_category_enter_type" name="myzar_category_enter_type" value="0" checked="checked"><label for="myzar_category_enter_type">Энгийн</label>
 						</div>
 						<div>
-							<input type="radio" id="myzar_category_enter_type" name="myzar_category_enter_type" value="1"><label for="myzar_category_enter_type">Брэнд</label>
+							<input type="radio" id="myzar_category_enter_type" name="myzar_category_enter_type" value="1"><label for="myzar_category_enter_type">Брэнд/Дэлгүүр</label>
 						</div>
 					</div>
 				</div>

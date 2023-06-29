@@ -84,6 +84,7 @@
 					const loginSubmit = new XMLHttpRequest();
 					
 					loginSubmit.onload = function() {
+						console.log("<phoneCodeVerify>:"+this.responseText);
 						if(!this.responseText.includes("Fail")){
 							location.href = "./";
 						}

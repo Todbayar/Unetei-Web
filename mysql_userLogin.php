@@ -22,7 +22,7 @@ if(isset($uID) && isset($uPhone)){
 		echo $_COOKIE["userID"];
 	}
 	else {
-		$query = "INSERT INTO user (uid, phone, role, status, datetime, lastlogged) values ('".$uID."','".$uPhone."', 0, 1, '".date("Y-m-d")."','".date("Y-m-d h:i:s")."')";
+		$query = "INSERT INTO user (uid, phone, role, status, signed, lastlogged) values ('".$uID."','".$uPhone."', 0, 1, '".date("Y-m-d")."','".date("Y-m-d h:i:s")."')";
 		$result = $conn->query($query);
 		if ($result) {
 			$userID = mysqli_insert_id($conn);
