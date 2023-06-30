@@ -86,7 +86,7 @@ function myzar_category_enter_words(event) {
 	if (event.keyCode == 13) {
 		var categoryWord = $("#myzar_category_enter_words_input").val().trim();
 		if(!isWordExist(categoryWord)){
-			$("#myzar_category_enter_words").append("<div class=\"selected\" style=\"float:left; background: #a0cf0a; padding-left: 5px; padding-right: 5px; padding-top: 3px; padding-bottom: 3px; border-radius: 10px; align-items: center; display:flex; font-size: 14px; margin:5px\"><div class=\"text\">"+categoryWord+"</div><i class=\"fa-solid fa-xmark\" onClick=\"javascript:this.parentNode.remove()\" style=\"color: #617e06; margin-left: 5px; cursor: pointer\"></i></div>");
+			$("#myzar_category_enter_words").append("<div onClick=\"javascript:this.remove()\" class=\"selected\" style=\"float:left; background: #a0cf0a; padding-left: 5px; padding-right: 5px; padding-top: 3px; padding-bottom: 3px; border-radius: 10px; align-items: center; display:flex; font-size: 14px; margin:5px; cursor: pointer\"><div class=\"text\">"+categoryWord+"</div><i class=\"fa-solid fa-xmark\" style=\"color: #617e06; margin-left: 5px\"></i></div>");
 			$("#myzar_category_enter_words_input").val("");
 		}
 		else {
@@ -109,7 +109,7 @@ function myzar_category_enter_icon_button(){
 }
 
 function myzar_category_enter_submit(tableID = null, id = null){
-	const patternText = /^[а-яА-Яa-zA-ZөӨүҮ0-9\s]+$/i;
+	const patternText = /^[а-яА-Яa-zA-ZөӨүҮёЁ0-9,+-\s]+$/i;
 	if(patternText.test($("#myzar_category_enter_title").val().trim())){
 		var myZarCategoryEnterSubmitData = new FormData();
 		if(tableID != null && id != null) {
@@ -189,14 +189,14 @@ function fetchWordsFromCategories(){
 			try {
 				vWords.forEach(function(word){
 					if(word !== ""){
-						$("#myzar_category_enter_words").append("<div class=\"selected\" style=\"float:left; background: #a0cf0a; padding-left: 5px; padding-right: 5px; padding-top: 3px; padding-bottom: 3px; border-radius: 10px; align-items: center; display:flex; font-size: 14px; margin:5px\"><div class=\"text\">"+word+"</div><i class=\"fa-solid fa-xmark\" onClick=\"javascript:this.parentNode.remove()\" style=\"color: #617e06; margin-left: 5px; cursor: pointer\"></i></div>");
+						$("#myzar_category_enter_words").append("<div onClick=\"javascript:this.remove()\" class=\"selected\" style=\"float:left; background: #a0cf0a; padding-left: 5px; padding-right: 5px; padding-top: 3px; padding-bottom: 3px; border-radius: 10px; align-items: center; display:flex; font-size: 14px; margin:5px; cursor: pointer\"><div class=\"text\">"+word+"</div><i class=\"fa-solid fa-xmark\" style=\"color: #617e06; margin-left: 5px\"></i></div>");
 					}
 				});
 			}
 			catch(err){
 				for(const [key, value] of Object.entries(vWords)){
 					if(value !== ""){
-						$("#myzar_category_enter_words").append("<div class=\"selected\" style=\"float:left; background: #a0cf0a; padding-left: 5px; padding-right: 5px; padding-top: 3px; padding-bottom: 3px; border-radius: 10px; align-items: center; display:flex; font-size: 14px; margin:5px\"><div class=\"text\">"+value+"</div><i class=\"fa-solid fa-xmark\" onClick=\"javascript:this.parentNode.remove()\" style=\"color: #617e06; margin-left: 5px; cursor: pointer\"></i></div>");
+						$("#myzar_category_enter_words").append("<div onClick=\"javascript:this.remove()\" class=\"selected\" style=\"float:left; background: #a0cf0a; padding-left: 5px; padding-right: 5px; padding-top: 3px; padding-bottom: 3px; border-radius: 10px; align-items: center; display:flex; font-size: 14px; margin:5px; cursor: pointer\"><div class=\"text\">"+value+"</div><i class=\"fa-solid fa-xmark\" style=\"color: #617e06; margin-left: 5px\"></i></div>");
 					}
 				}
 			}

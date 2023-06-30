@@ -128,9 +128,11 @@ function fetchRecursiveCategories($category, $conn, $isInit){
 	
 	$query = "SELECT id FROM category".($tableID+1)." WHERE parent=".$id." AND active=2";
 	$result = $conn->query($query);
-	while($row = mysqli_fetch_array($result)){
-		$categories[] = "'c".($tableID+1)."_".$row["id"]."'";
-		$categories = array_merge($categories, fetchRecursiveCategories("'c".($tableID+1)."_".$row["id"]."'", $conn, false));
+	if($result){
+		while($row = mysqli_fetch_array($result)){
+			$categories[] = "'c".($tableID+1)."_".$row["id"]."'";
+			$categories = array_merge($categories, fetchRecursiveCategories("'c".($tableID+1)."_".$row["id"]."'", $conn, false));
+		}
 	}
 	
 	return $categories;
