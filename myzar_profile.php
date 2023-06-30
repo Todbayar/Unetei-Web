@@ -441,7 +441,7 @@ $(document).ready(function(){
 				<?php
 				if($row["socialpay"] != ""){
 				?>
-				<img id="socialpay" src="<?php echo $path.DIRECTORY_SEPARATOR.$row["socialpay"]; ?>" onClick="profile_socialpay_button()" style="cursor: pointer; object-fit:contain; width:300px; height:300px" />
+				<img id="socialpay" src="<?php echo $path.DIRECTORY_SEPARATOR.$row["socialpay"]; ?>" onClick="profile_socialpay_button()" style="cursor: pointer; object-fit:contain; width:300px; height:300px" onerror="this.onerror=null; this.src='image-solid.svg'" />
 				<?php
 				}
 				else {
