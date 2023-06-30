@@ -109,7 +109,7 @@ function myzar_category_enter_icon_button(){
 }
 
 function myzar_category_enter_submit(tableID = null, id = null){
-	const patternText = /^[а-яА-Яa-zA-ZөӨүҮёЁ0-9,+-\s]+$/i;
+	const patternText = /^[ěščřžýáíéóúůďťňĎŇŤŠČŘŽÝÁÍÉÚŮĚÓа-яА-Яa-zA-ZөӨүҮёЁ0-9,+-/\s]+$/i;
 	if(patternText.test($("#myzar_category_enter_title").val().trim())){
 		var myZarCategoryEnterSubmitData = new FormData();
 		if(tableID != null && id != null) {
