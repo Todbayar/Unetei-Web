@@ -3,7 +3,7 @@ include "mysql_config.php";
 include_once "mysql_misc.php";
 
 if(isset($_GET["toID"])){
-	$query = "SELECT *, (SELECT name FROM user WHERE id=fromID) AS sender_name, (SELECT image FROM user WHERE id=fromID) AS sender_image, (SELECT role FROM user WHERE id=fromID) AS sender_role FROM chat WHERE (toID=".$_COOKIE["userID"]." AND fromID=".$_GET["toID"].") OR (toID=".$_GET["toID"]." AND fromID=".$_COOKIE["userID"].") ORDER BY datetime DESC";
+	$query = "SELECT *, (SELECT name FROM user WHERE id=fromID) AS sender_name, (SELECT image FROM user WHERE id=fromID) AS sender_image FROM chat WHERE (toID=".$_COOKIE["userID"]." AND fromID=".$_GET["toID"].") OR (toID=".$_GET["toID"]." AND fromID=".$_COOKIE["userID"].") ORDER BY datetime DESC";
 	$result = $conn->query($query);
 	$objArr = array();
 	while($row = mysqli_fetch_array($result)){
@@ -14,7 +14,7 @@ if(isset($_GET["toID"])){
 		$message->note = !is_null($row["note"])?$row["note"]:"";
 		$message->type = $row["type"];
 		$message->datetime = $row["datetime"];
-		$message->isEdit = ($row["sender_role"]>=2 && $_COOKIE["userID"]==$row["toID"]) ? true : false;	//receive income from its followers
+		$message->isEdit = (getUserRole($_COOKIE["userID"])>=2 && $_COOKIE["userID"]==$row["toID"]) ? true : false;	//receive income from its followers
 
 		$sender = new stdClass();
 		$sender->id = $row["fromID"];
