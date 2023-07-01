@@ -244,7 +244,7 @@ function chat_list_message(sender, body, datetime){
 function chat_list_category_show(categories, title){
 	var vCategory = "<div style=\"font-size:12px; color:gray; margin-top:2px\">";
 	for(let i=0; i<categories.length; i++){
-		if(i<categories.length-2){
+		if(i<categories.length-1){
 			vCategory += categories[i]+"<i class=\"fas fa-angle-right\" style=\"font-size:10px; margin-left:2px; margin-right:2px\"></i>";   
 		}
 		else {
@@ -341,7 +341,7 @@ function chat_action(chatID, action, type, id){
 <div class="chat">
 	<div class="left">
 		<?php
-		$queryFetchSender = "SELECT *, (SELECT name FROM user WHERE id=chat.fromID) AS sender_name, (SELECT image FROM user WHERE id=chat.fromID) AS sender_image, (SELECT role FROM user WHERE id=chat.fromID) AS sender_role, (SELECT phone FROM user WHERE id=chat.fromID) AS sender_phone, (SELECT name FROM user WHERE id=chat.toID) AS receiver_name, (SELECT image FROM user WHERE id=chat.toID) AS receiver_image, (SELECT role FROM user WHERE id=chat.toID) AS receiver_role, (SELECT phone FROM user WHERE id=chat.toID) AS receiver_phone FROM chat WHERE toID=".$_COOKIE["userID"]." GROUP BY fromID ORDER BY datetime DESC";
+		$queryFetchSender = "SELECT *, (SELECT name FROM user WHERE id=chat.fromID) AS sender_name, (SELECT image FROM user WHERE id=chat.fromID) AS sender_image, (SELECT role FROM user WHERE id=chat.fromID) AS sender_role, (SELECT phone FROM user WHERE id=chat.fromID) AS sender_phone, (SELECT name FROM user WHERE id=chat.toID) AS receiver_name, (SELECT image FROM user WHERE id=chat.toID) AS receiver_image, (SELECT role FROM user WHERE id=chat.toID) AS receiver_role, (SELECT phone FROM user WHERE id=chat.toID) AS receiver_phone FROM chat WHERE toID=".$_COOKIE["userID"]." OR fromID=".$_COOKIE["userID"]." GROUP BY sender_phone,receiver_phone ORDER BY datetime DESC";
 		$resultFetchSender = $conn->query($queryFetchSender);
 		while($rowFetchSender = mysqli_fetch_array($resultFetchSender)){
 			if($rowFetchSender["toID"]==$_COOKIE["userID"]){
@@ -435,7 +435,7 @@ function chat_action(chatID, action, type, id){
 									}
 									?>
 								</div>
-								<div class="phone"><?php echo substr($rowFetchSender["receiver_phone"]); ?></div>
+								<div class="phone"><?php echo substr($rowFetchSender["receiver_phone"],4); ?></div>
 							</div>
 						</div>
 					</div>
