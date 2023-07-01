@@ -232,10 +232,17 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 			<div class="container" style="width: 320px">
 				<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('popup myzar_category_enter')[0].style.display='none'; javascript:document.body.style.overflowY='auto'"></i>
 				<div class="header">Ангилал нэмэх</div>
-				<div style="display: flex; align-items: center; margin-left: 10px; height: 50px">
-					<img id="myzar_category_enter_icon_image" class="icon_button" src="image-solid.svg" width="32" height="32" onClick="myzar_category_enter_icon_button()" style="cursor: pointer" />
+				<div style="display: flex; margin-left: 5px; margin-right: 5px; margin-top: 5px; min-height: 50px">
+					<img id="myzar_category_enter_icon_image" class="icon_button" src="image-solid.svg" width="32" height="32" onClick="myzar_category_enter_icon_button()" style="cursor: pointer; display: inline-block;
+	vertical-align: top" />
 					<input id="myzar_category_enter_icon_file" class="icon_file" type="file" required="true" accept="image/png, .svg" style="display: none" />
-					<input id="myzar_category_enter_title" type="text" maxlength="128" placeholder="Гарчиг" style="margin-left: 10px; margin-right: 10px; width: 95%; height: 20px; padding: 5px; font: normal 14px Arial; border-radius:10px" />
+					<div class="myzar_category_enter_title_container" style="margin-left: 5px; margin-right: 5px; margin-bottom: 5px; width: 95%; display: none">
+						<textarea id="myzar_category_enter_title" placeholder="Гарчигууд" style="font: normal 14px Arial; border-radius:10px; padding: 5px; min-height: 95px; width: 95%"></textarea>
+						<div style="color: gray; font-size: 12px">Олоны гарчигыг дунд нь ; (цэг таслал) таслан бичнэ үү, жишээ нь: Audi;Nissan;Mercedes Benz</div>
+					</div>
+					<input id="myzar_category_enter_title" type="text" maxlength="128" placeholder="Гарчиг" style="margin-left: 5px; margin-right: 5px; width: 95%; height: 20px; padding: 5px; font: normal 14px Arial; border-radius:10px" />
+					<i class="fa-solid fa-square-plus myzar_category_enter_title_toggle_multi" onClick="toggleCategoryEntryLines()" style="font-size: 32px; color: #FFA718; cursor: pointer"></i>
+					<i class="fa-solid fa-square-minus myzar_category_enter_title_toggle_single" onClick="toggleCategoryEntryLines()" style="font-size: 32px; color: #FFA718; cursor: pointer; display: none"></i>
 				</div>
 				<div id="myzar_category_enter_msg" class="msg"></div>
 				<div id="myzar_category_enter_error" class="error"></div>

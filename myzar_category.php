@@ -6,7 +6,7 @@ include_once "info.php";
 <script>
 var isMyZarCategoryAddIconValid = false;
 var isMyZarCategoryAddTitleValid = false;
-
+var isSingleLine = true;
 var categoryTableID, categoryParentID, categoryTitle, selectedCategories;
 
 $(document).ready(function(){		
@@ -39,9 +39,25 @@ $(document).ready(function(){
 		}
 		myzar_category_add_button_update();
 	});
-
-	$("#myzar_category_enter_title").on('input',function(e){
-		var tmpMyZarCategoryAddTitle = $("#myzar_category_enter_title").val().trim();
+	
+	$(".popup.myzar_category_enter input[id=myzar_category_enter_title]").on('input',function(e){
+		var tmpMyZarCategoryAddTitle = $(".popup.myzar_category_enter input[id=myzar_category_enter_title]").val().trim();
+		if(tmpMyZarCategoryAddTitle.length > 0){
+			if(tmpMyZarCategoryAddTitle != null){
+				isMyZarCategoryAddTitleValid = true;
+			}
+			else {
+				isMyZarCategoryAddTitleValid = false;	
+			}
+		}
+		else {
+			isMyZarCategoryAddTitleValid = false;
+		}
+		myzar_category_add_button_update();
+	});
+	
+	$(".popup.myzar_category_enter textarea[id=myzar_category_enter_title]").on('input',function(e){
+		var tmpMyZarCategoryAddTitle = $(".popup.myzar_category_enter textarea[id=myzar_category_enter_title]").val().trim();
 		if(tmpMyZarCategoryAddTitle.length > 0){
 			if(tmpMyZarCategoryAddTitle != null){
 				isMyZarCategoryAddTitleValid = true;
@@ -64,21 +80,23 @@ $(document).ready(function(){
 
 function myzar_category_add_button_update(){
 	document.getElementById("myzar_category_enter_submit").disabled = !isMyZarCategoryAddTitleValid;
-	if($("#myzar_category_enter_title").val().trim().length == 0){
-	   document.getElementById("myzar_category_enter_submit").disabled = true;
-	}
+	if(isSingleLine && $(".popup.myzar_category_enter input[id=myzar_category_enter_title]").val().trim().length == 0) document.getElementById("myzar_category_enter_submit").disabled = true;
+	if(!isSingleLine && $(".popup.myzar_category_enter textarea[id=myzar_category_enter_title]").val().trim().length == 0) document.getElementById("myzar_category_enter_submit").disabled = true;
 }
 
 function myzar_category_add_show(){
+	isSingleLine = false;
+	toggleCategoryEntryLines();
 	$(".popup.myzar_category_enter").show();
 	$("#myzar_category_enter_msg").text("");
 	$("#myzar_category_enter_error").text("");
 	$("#myzar_category_enter_icon_file").val(null);
-	$("#myzar_category_enter_title").val("");
 	$("#myzar_category_enter_words_input").val("");
 	document.getElementById("myzar_category_enter_submit").disabled = true;
 	$("#myzar_category_enter_words").empty();
 	$("#myzar_category_enter_word_error").text("");
+	$(".popup.myzar_category_enter input[id=myzar_category_enter_title]").empty();
+	$(".popup.myzar_category_enter textarea[id=myzar_category_enter_title]").empty();
 	if(selectedCategories.length > 0) fetchWordsFromCategories();
 }
 
@@ -109,57 +127,70 @@ function myzar_category_enter_icon_button(){
 }
 
 function myzar_category_enter_submit(tableID = null, id = null){
+	var vTitles = isSingleLine ? $(".popup.myzar_category_enter input[id=myzar_category_enter_title]").val().trim() : $(".popup.myzar_category_enter textarea[id=myzar_category_enter_title]").val().trim();
+	
 	const patternText = /^[ěščřžýáíéóúůďťňĎŇŤŠČŘŽÝÁÍÉÚŮĚÓа-яА-Яa-zA-ZөӨүҮёЁ0-9,+-/\s]+$/i;
-	if(patternText.test($("#myzar_category_enter_title").val().trim())){
-		var myZarCategoryEnterSubmitData = new FormData();
-		if(tableID != null && id != null) {
-			myZarCategoryEnterSubmitData.append("id", id);
-			categoryTableID = tableID;
-		}
-		
-		myZarCategoryEnterSubmitData.append("tableID", categoryTableID);
-		myZarCategoryEnterSubmitData.append("title", $("#myzar_category_enter_title").val().trim());
-		myZarCategoryEnterSubmitData.append("iconfile", $("#myzar_category_enter_icon_file")[0].files[0]);
-		myZarCategoryEnterSubmitData.append("parentID", categoryParentID);
-		myZarCategoryEnterSubmitData.append("type", $("#myzar_category_enter_type:checked").val());
-		myZarCategoryEnterSubmitData.append("words", getWordsFromCategory());
+	
+	var vTitlesPatternError = "";
+	var vTitlesDuplicateError = "";
+	var vTitlesSuccessCount = 0;
+	const vTitlesCount = vTitles.split(";").length;
+	
+	vTitles.split(";").forEach(function(vTitle, vIndex, vArr){
+		if(patternText.test(vTitle.trim())){
+			var myZarCategoryEnterSubmitData = new FormData();
+			if(tableID != null && id != null) {
+				myZarCategoryEnterSubmitData.append("id", id);
+				categoryTableID = tableID;
+			}
+			myZarCategoryEnterSubmitData.append("tableID", categoryTableID);
+			myZarCategoryEnterSubmitData.append("iconfile", $("#myzar_category_enter_icon_file")[0].files[0]);
+			myZarCategoryEnterSubmitData.append("parentID", categoryParentID);
+			myZarCategoryEnterSubmitData.append("type", $("#myzar_category_enter_type:checked").val());
+			myZarCategoryEnterSubmitData.append("words", getWordsFromCategory());
+			myZarCategoryEnterSubmitData.append("title", vTitle.trim());
 
-		const reqMyZarCategoryAddSubmit = new XMLHttpRequest();
-		reqMyZarCategoryAddSubmit.onload = function() {
-			if(this.responseText.includes("OK")){
-				myzar_category_fetch_list(categoryTableID, categoryParentID, categoryTitle, true);
-				$("#myzar_category_enter_msg").text("Ангилал амжилттай нэмэгдлээ");
-				$("#myzar_category_enter_error").text("");
-				$("#myzar_category_enter_icon_file").val(null);
-				$("#myzar_category_enter_title").val("");
-				$("#myzar_category_enter_words").empty();
-				$("#myzar_category_enter_words_input").val("");
-				$("#myzar_category_enter_word_error").text("");
-				document.getElementById("myzar_category_enter_icon_image").src = "image-solid.svg";
-				myzar_category_add_button_update();
-				$(".popup.myzar_category_enter").hide();
-
-				if(tableID == null && id == null){
-					confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Ангилал амжилттай <b>нэмэгдэж</b>, шалгагдаж байна.", null);
+			const reqMyZarCategoryAddSubmit = new XMLHttpRequest();
+			reqMyZarCategoryAddSubmit.onload = function() {
+				if(this.responseText.includes("OK")){
+					vTitlesSuccessCount++;
+					if(vTitlesSuccessCount == vTitlesCount){
+						myzar_category_fetch_list(categoryTableID, categoryParentID, categoryTitle, true);
+						$("#myzar_category_enter_msg").text("Ангилал амжилттай нэмэгдлээ");
+						$("#myzar_category_enter_error").text("");
+						$("#myzar_category_enter_icon_file").val(null);
+						$("#myzar_category_enter_words").empty();
+						$("#myzar_category_enter_words_input").val("");
+						$("#myzar_category_enter_word_error").text("");
+						$(".popup.myzar_category_enter input[id=myzar_category_enter_title]").val("")
+						$(".popup.myzar_category_enter textarea[id=myzar_category_enter_title]").val("");
+						document.getElementById("myzar_category_enter_icon_image").src = "image-solid.svg";
+						myzar_category_add_button_update();
+						$(".popup.myzar_category_enter").hide();
+						if(tableID == null && id == null){
+							confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Ангилал амжилттай <b>нэмэгдэж</b>, шалгагдаж байна.", null);
+						}
+						else {
+							confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Ангилал амжилттай <b>засагдаж</b>, шалгагдаж байна.", null);
+						}
+					}
 				}
 				else {
-					confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Ангилал амжилттай <b>засагдаж</b>, шалгагдаж байна.", null);
+					$("#myzar_category_enter_error").append("Ангиллын гарчиг жагсаалтанд байна ("+vTitle+")");
 				}
-			}
-			else {
-				$("#myzar_category_enter_error").html(this.responseText);
-			}
-		};
-		reqMyZarCategoryAddSubmit.onerror = function(){
-			$("#myzar_category_enter_error").text(reqMyZarCategoryAddSubmit.status);
-		};
+			};
 
-		reqMyZarCategoryAddSubmit.open("POST", "mysql_myzar_category_add_process.php", true);
-		if(tableID != null && id != null) reqMyZarCategoryAddSubmit.open("POST", "mysql_myzar_category_edit_process.php", true);
-		reqMyZarCategoryAddSubmit.send(myZarCategoryEnterSubmitData);
-	}
-	else {
-		$("#myzar_category_enter_error").text("Ангиллын гарчиг буруу байна! Тусгай тэмдэгт агуулаагүй байх ёстой.");
+			reqMyZarCategoryAddSubmit.open("POST", "mysql_myzar_category_add_process.php", true);
+			if(tableID != null && id != null) reqMyZarCategoryAddSubmit.open("POST", "mysql_myzar_category_edit_process.php", true);
+			reqMyZarCategoryAddSubmit.send(myZarCategoryEnterSubmitData);
+		}
+		else {	
+			vTitlesPatternError += vTitle.trim()+", ";
+		}
+	});
+	
+	if(vTitlesPatternError!=""){
+		$("#myzar_category_enter_error").append("Ангиллын гарчиг буруу байна! Тусгай тэмдэгт агуулаагүй байх ёстой. ("+vTitlesPatternError.substr(0,vTitlesPatternError.lastIndexOf(", "))+")");
 	}
 }
 
@@ -392,6 +423,25 @@ function myzar_category_fetch_list(tableID, parentID, title, icon, hasChildren, 
 	};
 	reqMyZarCategoryListData.open("POST", "mysql_myzar_category_list_process.php", true);
 	reqMyZarCategoryListData.send(myZarCategoryListData);
+}
+
+function toggleCategoryEntryLines(){
+	if(isSingleLine){
+		$(".popup.myzar_category_enter .myzar_category_enter_title_container").show();
+		$(".popup.myzar_category_enter input[id=myzar_category_enter_title]").hide();
+		$(".popup.myzar_category_enter .myzar_category_enter_title_toggle_multi").hide();
+		$(".popup.myzar_category_enter .myzar_category_enter_title_toggle_single").show();
+		$(".popup.myzar_category_enter textarea[id=myzar_category_enter_title]").val($(".popup.myzar_category_enter input[id=myzar_category_enter_title]").val());
+		isSingleLine = false;
+   	}
+	else {
+		$(".popup.myzar_category_enter .myzar_category_enter_title_container").hide();
+		$(".popup.myzar_category_enter input[id=myzar_category_enter_title]").show();
+		$(".popup.myzar_category_enter .myzar_category_enter_title_toggle_multi").show();
+		$(".popup.myzar_category_enter .myzar_category_enter_title_toggle_single").hide();
+		$(".popup.myzar_category_enter input[id=myzar_category_enter_title]").val($(".popup.myzar_category_enter textarea[id=myzar_category_enter_title]").val());
+		isSingleLine = true;
+	}
 }
 </script>
 
