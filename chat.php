@@ -243,12 +243,13 @@ function chat_list_message(sender, body, datetime){
 
 function chat_list_category_show(categories, title){
 	var vCategory = "<div style=\"font-size:12px; color:gray; margin-top:2px\">";
-	for(let i=0; i<categories.length; i++){
+	for(let i=0; i<categories.length; i++){		
 		if(i<categories.length-1){
-			vCategory += categories[i]+"<i class=\"fas fa-angle-right\" style=\"font-size:10px; margin-left:2px; margin-right:2px\"></i>";   
+			if(i<categories.length-2) vCategory += categories[i]+"<i class=\"fas fa-angle-right\" style=\"font-size:10px; margin-left:2px; margin-right:2px\"></i>";
+			else vCategory += categories[i];
 		}
 		else {
-			if(categories[i] != title) vCategory += categories[i];
+			if(title=="") vCategory += "<i class=\"fas fa-angle-right\" style=\"font-size:10px; margin-left:2px; margin-right:2px\"></i>"+categories[i];
 		}
 	}
 	return "<br/>"+vCategory+"</div>";

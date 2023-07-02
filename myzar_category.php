@@ -102,17 +102,21 @@ function myzar_category_add_show(){
 
 function myzar_category_enter_words(event) {
 	if (event.keyCode == 13) {
+		var wordError = "";
 		var categoryWord = $("#myzar_category_enter_words_input").val().trim();
-		if(!isWordExist(categoryWord)){
-			$("#myzar_category_enter_words").append("<div onClick=\"javascript:this.remove()\" class=\"selected\" style=\"float:left; background: #a0cf0a; padding-left: 5px; padding-right: 5px; padding-top: 3px; padding-bottom: 3px; border-radius: 10px; align-items: center; display:flex; font-size: 14px; margin:5px; cursor: pointer\"><div class=\"text\">"+categoryWord+"</div><i class=\"fa-solid fa-xmark\" style=\"color: #617e06; margin-left: 5px\"></i></div>");
-			$("#myzar_category_enter_words_input").val("");
-		}
-		else {
-			$("#myzar_category_enter_word_error").text("Таны оруулсан үг дээрх жагсаалтанд байна! өөр үг оруулна уу.");
-		}
+		categoryWord.split(';').forEach(function(word, index, arr){
+			if(!isWordExist(word.trim())){
+				$("#myzar_category_enter_words").append("<div onClick=\"javascript:this.remove()\" class=\"selected\" style=\"float:left; background: #a0cf0a; padding-left: 5px; padding-right: 5px; padding-top: 3px; padding-bottom: 3px; border-radius: 10px; align-items: center; display:flex; font-size: 14px; margin:5px; cursor: pointer\"><div class=\"text\">"+word.trim()+"</div><i class=\"fa-solid fa-xmark\" style=\"color: #617e06; margin-left: 5px\"></i></div>");
+				$("#myzar_category_enter_words_input").val("");
+			}
+			else {
+				wordError += word+", ";
+			}
+		});
+		if(wordError!="") $("#myzar_category_enter_word_error").text("Таны оруулсан үг дээрх жагсаалтанд байна! өөр үг оруулна уу. ("+wordError.substr(0,wordError.lastIndexOf(", "))+")");
 	}
 	else {
-		const pattern = /^[а-яА-Яa-zA-ZөӨүҮ0-9\s]+$/i;
+		const pattern = /^[ěščřžýáíéóúůďťňĎŇŤŠČŘŽÝÁÍÉÚŮĚÓа-яА-Яa-zA-ZөӨүҮёЁ0-9(),+-/\s]+$/i;
 		if(pattern.test(String.fromCharCode(event.keyCode))){
 			return true;
 		}
@@ -129,7 +133,7 @@ function myzar_category_enter_icon_button(){
 function myzar_category_enter_submit(tableID = null, id = null){
 	var vTitles = isSingleLine ? $(".popup.myzar_category_enter input[id=myzar_category_enter_title]").val().trim() : $(".popup.myzar_category_enter textarea[id=myzar_category_enter_title]").val().trim();
 	
-	const patternText = /^[ěščřžýáíéóúůďťňĎŇŤŠČŘŽÝÁÍÉÚŮĚÓа-яА-Яa-zA-ZөӨүҮёЁ0-9,+-/\s]+$/i;
+	const patternText = /^[ěščřžýáíéóúůďťňĎŇŤŠČŘŽÝÁÍÉÚŮĚÓа-яА-Яa-zA-ZөӨүҮёЁ0-9(),+-/\s]+$/i;
 	
 	var vTitlesPatternError = "";
 	var vTitlesDuplicateError = "";
