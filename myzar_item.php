@@ -312,14 +312,14 @@ mysqli_free_result($resultFetchListItemsStateCountInActive);
 			<?php
 			if($rowFetchListItems["isactive"]!=2 && (!isset($_GET["state"]) || (isset($_GET["state"]) && $_GET["state"]!="archive"))){
 			?>
-				<div onClick="myzar_category_selected_item_archive(<?php echo $rowFetchListItems["id"]; ?>)" class="button_yellow" style="float: left; background: transparent; font-size: 14px; margin: 5px">
+				<div onClick="myzar_category_selected_item_action(<?php echo $rowFetchListItems["id"]; ?>,'archive','<?php echo $rowFetchListItems["title"]; ?>',<?php echo $rowFetchListItems["price"]; ?>)" class="button_yellow" style="float: left; background: transparent; font-size: 14px; margin: 5px">
 					<div style="margin-left: 5px; color: #0086bf">Архивлах</div>
 				</div>
 			<?php
 			}
 			if($rowFetchListItems["isactive"]!=0 && (!isset($_GET["state"]) || (isset($_GET["state"]) && $_GET["state"]!="inactive"))){
 			?>
-				<div onClick="myzar_category_selected_item_inactive(<?php echo $rowFetchListItems["id"]; ?>)" class="button_yellow" style="float: left; background: transparent; font-size: 14px; margin: 5px">
+				<div onClick="myzar_category_selected_item_action(<?php echo $rowFetchListItems["id"]; ?>,'inactive','<?php echo $rowFetchListItems["title"]; ?>',<?php echo $rowFetchListItems["price"]; ?>)" class="button_yellow" style="float: left; background: transparent; font-size: 14px; margin: 5px">
 					<div style="margin-left: 5px; color: #0086bf">Устгах</div>
 				</div>
 			<?php

@@ -30,6 +30,8 @@ include_once "info.php";
 .searchCategoryList .searchCategoryListAvailable {
 	float: left;
 	width: 100%;
+	max-height: 240px;
+	overflow-y: auto;
 }
 
 .searchResult {

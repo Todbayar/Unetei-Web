@@ -131,61 +131,49 @@ function myzar_item_edit_submit(id){
 	if(myZarItemEditSubmitData !== "") reqMyZarItemEdit.send(myZarItemEditSubmitData);
 }
 	
-function myzar_category_selected_item_archive(id){
-	const reqMyZarItemListData = new XMLHttpRequest();
-	reqMyZarItemListData.onload = function() {
-		if(this.responseText == "OK"){
-			var eventArchive = new CustomEvent("itemActionArchive");
-			window.addEventListener("itemActionArchive", function(){
-				location.reload();
-			});
-			confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Зар <b>архивлагдлаа</b>.", eventArchive);
-		}
-		else {
-			alert("Зарыг архивлахад алдаа гарлаа!");
-		}
-	};
-	reqMyZarItemListData.onerror = function() {
-		console.log("<error>:" + reqMyZarItemListData.status);
-	};
-	reqMyZarItemListData.open("GET", "mysql_myzar_item_archive_process.php?id="+id, true);
-	reqMyZarItemListData.send();
-}
-	
-function myzar_category_selected_item_inactive(id){
+function myzar_category_selected_item_action(id, type, title, price){
 	window.scrollTo(0, 0);
 	$("body").css("overflow-y", "hidden");
 	$(".popup.myzar_item_survey").show();
-	$(".popup.myzar_item_survey button#buttonSubmit").attr("onclick","myzar_category_selected_item_inactive_submit("+id+")");
+	$(".popup.myzar_item_survey #type").text("Та зараа "+(type=="inactive"?"устгах":"архивлах")+" уу?");
+	$(".popup.myzar_item_survey #title").text(title+" ("+convertPriceToTextJS(price)+" ₮)");
+	$(".popup.myzar_item_survey button#buttonSubmit").attr("onclick","myzar_category_selected_item_action_submit("+id+",'"+type+"')");
 }
 
-function myzar_category_selected_item_inactive_submit(id){
+function myzar_category_selected_item_action_submit(id, type){
 	const surveyOption = $(".popup.myzar_item_survey input[name=myzar_item_survey_option]:checked").val();
 	const surveyValue = surveyOption==0?$(".popup.myzar_item_survey textarea#myzar_item_survey_reason").val():surveyOption;
 	
-	var myZarItemSurveyData = new FormData();
-	myZarItemSurveyData.append("id", id);
-	myZarItemSurveyData.append("survey", surveyValue);
+	var myZarItemActionData = new FormData();
+	myZarItemActionData.append("id", id);
+	myZarItemActionData.append("survey", surveyValue);
 	
-	const reqMyZarItemSurveyData = new XMLHttpRequest();
-	reqMyZarItemSurveyData.onload = function() {
-		console.log("<myzar_category_selected_item_inactive_submit>:"+this.responseText+", "+surveyValue);
+	const reqMyZarItemActionData = new XMLHttpRequest();
+	reqMyZarItemActionData.onload = function() {
+		console.log("<myzar_category_selected_item_action_submit>:"+this.responseText+", "+surveyValue);
 		if(this.responseText == "OK"){
 			$("body").css("overflow-y", "auto");
 			$(".popup.myzar_item_survey").hide();
-			var eventInActive = new CustomEvent("itemActionInActive");
-			window.addEventListener("itemActionInActive", function(){
+			var eventDone = new CustomEvent("itemActionDone");
+			window.addEventListener("itemActionDone", function(){
 				location.reload();
 			});
-			confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Зар <b>идэвхгүй</b> болж 7 хоногийн дараа устaхыг анхаарна уу.", eventInActive);
+			
+			if(type=="inactive") confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Зар <b>идэвхгүй</b> болж 7 хоногийн дараа устaхыг анхаарна уу.", eventDone);
+			else if(type=="archive") confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Зар <b>архивлагдлаа</b>.", eventDone);
 		}
 		else {
-			alert("Зарыг идэвхгүй болгоход алдаа гарлаа!");
+			if(type=="inactive") alert("Зарыг идэвхгүй болгоход алдаа гарлаа!");
+			else if(type=="archive") alert("Зарыг архивлахад алдаа гарлаа!");
 		}
 	};
-	reqMyZarItemSurveyData.onerror = function() {
-		console.log("<error>:" + reqMyZarItemSurveyData.status);
+	
+	reqMyZarItemActionData.onerror = function() {
+		console.log("<error>:" + reqMyZarItemActionData.status);
 	};
-	reqMyZarItemSurveyData.open("POST", "mysql_myzar_item_inactive_process.php", true);
-	reqMyZarItemSurveyData.send(myZarItemSurveyData);
+	
+	if(type=="inactive") reqMyZarItemActionData.open("POST", "mysql_myzar_item_inactive_process.php", true);
+	else if(type=="archive") reqMyZarItemActionData.open("POST", "mysql_myzar_item_archive_process.php", true);
+	
+	reqMyZarItemActionData.send(myZarItemActionData);
 }

@@ -544,8 +544,8 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 				<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('popup myzar_item_survey')[0].style.display='none'; javascript:document.body.style.overflowY='auto'"></i>
 				<div class="header">Хэрэглэгчийн туршлага</div>
 				<div style="margin: 5px">
-					<div style="margin-bottom: 5px; font-family: RobotoBold; font-size: 18px">Та зараа идэвхгүй болгох уу?</div>
-					<div style="font-size: 16px; color: #888">Dell optiplex 3020 процессор (380,000 ₮)</div>
+					<div id="type" style="margin-bottom: 5px; font-family: RobotoBold; font-size: 18px"></div>
+					<div id="title" style="font-size: 16px; color: #888"></div>
 					<hr/>
 					<div style="text-align: justify; text-justify: inter-word">Зараа архивлах болон устгах болсон шалтгаанаа бичнэ үү. Ингэснээр <?php echo $domain; ?> сайтыг улам сайжруулахад бидэнд туслана.</div>
 					<div style="margin-top: 10px">
