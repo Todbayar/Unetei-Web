@@ -114,7 +114,6 @@ function getItemDataForm(id = null){
 	
 	//required
 	if(vItemTitle === "") $("#myzar_item_title_error").show();
-	if(vItemQuality == null) $("#myzar_item_quality_error").show();
 	if(vItemPrice === "") $("#myzar_item_price_error").show();
 	if(vItemDescription === "") $("#myzar_item_description_error").show();
 	if(vItemCity == null) $("#myzar_item_city_error").show();
@@ -124,7 +123,7 @@ function getItemDataForm(id = null){
 	if(vItemEmail !== "" && !patternEmail.test(vItemEmail)) $("#myzar_item_email_error").show();
 	if(vItemYoutube !== "" && !patternYoutube.test(vItemYoutube)) $("#myzar_item_youtube_error").show();
 	
-	if(vItemTitle !== "" && vItemQuality != null && vItemPrice !== "" && vItemDescription !== "" && vItemCity != null && (vItemName !== "" && patternOnlyText.test(vItemName)) && (vItemEmail === "" || patternEmail.test(vItemEmail)) && (vItemYoutube === "" || patternYoutube.test(vItemYoutube))){
+	if(vItemTitle !== "" && vItemPrice !== "" && vItemDescription !== "" && vItemCity != null && (vItemName !== "" && patternOnlyText.test(vItemName)) && (vItemEmail === "" || patternEmail.test(vItemEmail)) && (vItemYoutube === "" || patternYoutube.test(vItemYoutube))){
 		var itemSubmitData = new FormData();
 		itemSubmitData.append("category", "c" + selectedCategory.length + "_" + selectedCategory[selectedCategory.length-1]);
 		itemSubmitData.append("title", vItemTitle);

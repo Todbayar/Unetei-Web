@@ -612,17 +612,18 @@ if(isset($_GET["id"])){
 			</div>
 			<?php
 			}
-	
 			?>
 			<div class="words">
 				<?php
 				if($row["extras"]!="" && $row["extras"]!="[]"){
 					$words = json_decode(stripslashes(strip_tags(htmlspecialchars_decode(html_entity_decode($row["extras"])))));
-					foreach($words[0] as $key => $word){
-						if($word!=""){
-						?>
-						<div><?php echo $key.": <b>".$word."</b>"; ?></div>
-						<?php
+					for($i=0; $i<count($words); $i++){
+						foreach($words[$i] as $key => $word){
+							if($word!=""){
+							?>
+							<div><?php echo $key.": <b>".$word."</b>"; ?></div>
+							<?php
+							}
 						}
 					}
 				}
@@ -631,17 +632,26 @@ if(isset($_GET["id"])){
 				<div>Хаяг байршил: <?php echo "<b>".$row["address"]."</b>"; ?></div>
 				<?php
 				}
-				$quality = $row["quality"]==0 ? "Шинэ" : "Хуучин";
+				if($row["quality"]!=null){
 				?>
-				<div>Шинэ/хуучин: <?php echo "<b>".$quality."</b>"; ?></div>
+				<div>Шинэ/хуучин: <?php echo "<b>".($row["quality"]==0?"Шинэ":"Хуучин")."</b>"; ?></div>
+				<?php
+				}
+				?>
 			</div>
 			<div class="description"><?php echo stripslashes(strip_tags(htmlspecialchars_decode(html_entity_decode($row["description"])))); ?></div>
-			<hr/>
-			<h3>Ижил зарууд</h3>
-			<div class="list">
 			<?php
 			$queryOthers = "SELECT *, ".$queryFav." (SELECT image FROM images WHERE item.id=images.item LIMIT 1) AS image, (SELECT COUNT(*) FROM images WHERE item.id=images.item) AS count_images FROM item WHERE category IN (".$joinedCategories.") AND id NOT IN (".$_GET["id"].") AND isactive=4 ORDER BY datetime DESC LIMIT 12";
 			$resultOthers = $conn->query($queryOthers);
+			if(mysqli_num_rows($resultOthers)>0){
+			?>
+			<hr/>
+			<h3>Ижил зарууд</h3>
+			<?php
+			}
+			?>
+			<div class="list">
+			<?php
 			while($rowOthers = mysqli_fetch_array($resultOthers)){
 				?>
 				<div class="item">

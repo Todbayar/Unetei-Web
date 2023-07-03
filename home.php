@@ -221,6 +221,7 @@ include_once "info.php";
 	white-space: nowrap;
 	overflow: hidden;
     -webkit-line-clamp: 2;
+
 */
 	overflow: hidden;
 	display: -webkit-box;

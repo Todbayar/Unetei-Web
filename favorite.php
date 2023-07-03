@@ -4,6 +4,12 @@ include_once "info.php";
 include_once "mysql_misc.php";
 ?>
 <style>
+.favorite {
+	width: 100%;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
 .favorite .container .item {
 	display: flex;
 	border: solid 1px #ccc;

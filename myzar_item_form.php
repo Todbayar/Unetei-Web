@@ -60,7 +60,7 @@ function selectCity(city){
 		</table>
 		<table width="100%">
 			<tr>
-				<td width="115px"><label class="required">Шинэ/хуучин:</label></td>
+				<td width="115px"><label>Шинэ/хуучин:</label></td>
 				<td>
 					<select id="myzar_item_quality" style="width: 150px; height: 35px; font: normal 16px Arial">
 						<option value="" disabled selected>Сонгох</option>
@@ -72,18 +72,6 @@ function selectCity(city){
 			<tr>
 				<td></td>
 				<td style="font: normal 14px Arial"><div id="myzar_item_quality_error" style="display: none; color: #FF4649">Сонголт хийнэ үү!</div></td>
-			</tr>
-		</table>
-		<table width="100%">
-			<tr>
-				<td width="115px">Хаяг байршил:</td>
-				<td>
-					<input id="myzar_item_address" type="text" maxlength="200" style="width: 95%; height: 25px; padding: 5px; font: normal 16px Arial">
-				</td>
-			</tr>
-			<tr>
-				<td></td>
-				<td style="color: #9F9F9F; font: normal 14px Arial"></td>
 			</tr>
 		</table>
 		<table width="100%">
@@ -204,6 +192,18 @@ function selectCity(city){
 			<tr>
 				<td></td>
 				<td style="font: normal 14px Arial"><div id="myzar_item_city_error" style="display: none; color: #FF4649">Сонголт хийнэ үү!</div></td>
+			</tr>
+		</table>
+		<table width="100%">
+			<tr>
+				<td width="115px">Хаяг байршил:</td>
+				<td>
+					<input id="myzar_item_address" type="text" maxlength="200" style="width: 95%; height: 25px; padding: 5px; font: normal 16px Arial">
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td style="color: #9F9F9F; font: normal 14px Arial"></td>
 			</tr>
 		</table>
 		<hr/>
