@@ -91,27 +91,4 @@ function fetchCategory($id){
 	}
 	return $body;
 }
-
-function harvestCategory($categoryID){
-	global $conn;
-	$arrCategories = array();
-	$category = explode("_", $categoryID);
-	$iteration = substr($category[0], 1, strlen($category[0]));
-	$parent = 0;
-	for($i=$iteration; $i>=1; $i--){
-		if($parent == 0){
-			$queryCategory = "SELECT * FROM category".$i." WHERE id=".$category[1];
-		}
-		else {
-			$queryCategory = "SELECT * FROM category".$i." WHERE id=".$parent;
-		}
-
-		$resultCategory = $conn->query($queryCategory);
-		$rowCategory = mysqli_fetch_array($resultCategory);
-		if($i>1) $parent = $rowCategory["parent"];
-
-		$arrCategories[] = $rowCategory["title"];
-	}
-	return array_reverse($arrCategories);
-}
 ?>

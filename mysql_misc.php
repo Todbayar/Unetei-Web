@@ -81,6 +81,14 @@ function getUserIDFromItem($itemID){
 	return $rowUserIDFromItem["userID"];
 }
 
+function getUserIDFromPhone($phone){
+	global $conn;
+	$query = "SELECT id FROM user WHERE phone='".$phone."'";
+	$result = $conn->query($query);
+	$row = mysqli_fetch_array($result);
+	return $row["id"];
+}
+
 function convertPriceToText($price){
 	$digits = explode(',', number_format($price));
 	switch(count($digits)-1){
@@ -137,6 +145,30 @@ function fetchRecursiveCategories($category, $conn, $isInit){
 	
 	return $categories;
 }
+
+function harvestCategory($categoryID){
+	global $conn;
+	$arrCategories = array();
+	$category = explode("_", $categoryID);
+	$iteration = substr($category[0], 1, strlen($category[0]));
+	$parent = 0;
+	for($i=$iteration; $i>=1; $i--){
+		if($parent == 0){
+			$queryCategory = "SELECT * FROM category".$i." WHERE id=".$category[1];
+		}
+		else {
+			$queryCategory = "SELECT * FROM category".$i." WHERE id=".$parent;
+		}
+
+		$resultCategory = $conn->query($queryCategory);
+		$rowCategory = mysqli_fetch_array($resultCategory);
+		if($i>1) $parent = $rowCategory["parent"];
+
+		$arrCategories[] = $rowCategory["title"];
+	}
+	return array_reverse($arrCategories);
+}
+
 
 function findTypeOfVideo($name){
 	$type = substr($name, strrpos($name,'.')+1);

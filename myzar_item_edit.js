@@ -12,6 +12,25 @@ $(document).ready(function(){
 		$(".myzar_tab_list_item_all i").css('color', '#ffffff');
 		$(".myzar_tab_list_item_all div").css('color', '#ffffff');
 	}
+	
+	$(".popup.myzar_item_survey input[name=myzar_item_survey_option]").change(function(){
+		if(this.value==0){
+			$(".popup.myzar_item_survey button#buttonSubmit").prop("disabled",true);
+			$(".popup.myzar_item_survey textarea#myzar_item_survey_reason").prop("disabled",false);
+			$(".popup.myzar_item_survey textarea#myzar_item_survey_reason").on("change keyup paste", function(){
+				if($(this).val()==""){
+					$(".popup.myzar_item_survey button#buttonSubmit").prop("disabled",true);
+				}
+				else {
+					$(".popup.myzar_item_survey button#buttonSubmit").prop("disabled",false);
+				}
+			});
+		}
+		else {
+			$(".popup.myzar_item_survey button#buttonSubmit").prop("disabled",false);
+			$(".popup.myzar_item_survey #myzar_item_survey_reason").prop("disabled",true);
+		}
+	});
 });
 	
 function myzar_list_item_tab(state){
@@ -134,23 +153,39 @@ function myzar_category_selected_item_archive(id){
 }
 	
 function myzar_category_selected_item_inactive(id){
-	const reqMyZarItemListData = new XMLHttpRequest();
-	reqMyZarItemListData.onload = function() {
-		console.log(this.responseText);
+	window.scrollTo(0, 0);
+	$("body").css("overflow-y", "hidden");
+	$(".popup.myzar_item_survey").show();
+	$(".popup.myzar_item_survey button#buttonSubmit").attr("onclick","myzar_category_selected_item_inactive_submit("+id+")");
+}
+
+function myzar_category_selected_item_inactive_submit(id){
+	const surveyOption = $(".popup.myzar_item_survey input[name=myzar_item_survey_option]:checked").val();
+	const surveyValue = surveyOption==0?$(".popup.myzar_item_survey textarea#myzar_item_survey_reason").val():surveyOption;
+	
+	var myZarItemSurveyData = new FormData();
+	myZarItemSurveyData.append("id", id);
+	myZarItemSurveyData.append("survey", surveyValue);
+	
+	const reqMyZarItemSurveyData = new XMLHttpRequest();
+	reqMyZarItemSurveyData.onload = function() {
+		console.log("<myzar_category_selected_item_inactive_submit>:"+this.responseText+", "+surveyValue);
 		if(this.responseText == "OK"){
+			$("body").css("overflow-y", "auto");
+			$(".popup.myzar_item_survey").hide();
 			var eventInActive = new CustomEvent("itemActionInActive");
 			window.addEventListener("itemActionInActive", function(){
 				location.reload();
 			});
-			confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Зар <b>идэвхгүй</b> болж 7 хоногийн дараа устхыг анхаарна уу.", eventInActive);
+			confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Зар <b>идэвхгүй</b> болж 7 хоногийн дараа устaхыг анхаарна уу.", eventInActive);
 		}
 		else {
-			alert("Зарыг архивлахад алдаа гарлаа!");
+			alert("Зарыг идэвхгүй болгоход алдаа гарлаа!");
 		}
 	};
-	reqMyZarItemListData.onerror = function() {
-		console.log("<error>:" + reqMyZarItemListData.status);
+	reqMyZarItemSurveyData.onerror = function() {
+		console.log("<error>:" + reqMyZarItemSurveyData.status);
 	};
-	reqMyZarItemListData.open("GET", "mysql_myzar_item_inactive_process.php?id="+id, true);
-	reqMyZarItemListData.send();
+	reqMyZarItemSurveyData.open("POST", "mysql_myzar_item_inactive_process.php", true);
+	reqMyZarItemSurveyData.send(myZarItemSurveyData);
 }

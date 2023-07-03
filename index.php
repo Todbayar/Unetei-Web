@@ -539,6 +539,39 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 			</div>
 		</div>
 		
+		<div class="popup myzar_item_survey" style="display: none">
+			<div class="container" style="width: 320px; top: 5vh">
+				<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('popup myzar_item_survey')[0].style.display='none'; javascript:document.body.style.overflowY='auto'"></i>
+				<div class="header">Хэрэглэгчийн туршлага</div>
+				<div style="margin: 5px">
+					<div style="margin-bottom: 5px; font-family: RobotoBold; font-size: 18px">Та зараа идэвхгүй болгох уу?</div>
+					<div style="font-size: 16px; color: #888">Dell optiplex 3020 процессор (380,000 ₮)</div>
+					<hr/>
+					<div style="text-align: justify; text-justify: inter-word">Зараа архивлах болон устгах болсон шалтгаанаа бичнэ үү. Ингэснээр <?php echo $domain; ?> сайтыг улам сайжруулахад бидэнд туслана.</div>
+					<div style="margin-top: 10px">
+						<label for="myzar_item_survey_option1" style="cursor: pointer; display: block">
+							<input type="radio" id="myzar_item_survey_option1" name="myzar_item_survey_option" value="<?php echo $domain; ?> сайтаар зарсан">
+							<?php echo strtoupper($domain); ?> сайтаар зарсан
+						</label>
+						<label for="myzar_item_survey_option2" style="cursor: pointer; display: block; margin-top: 10px">
+							<input type="radio" id="myzar_item_survey_option2" name="myzar_item_survey_option" value="Бусад аргаар зарсан">
+							Бусад аргаар зарсан
+						</label>
+						<label for="myzar_item_survey_option3" style="cursor: pointer; display: block; margin-top: 10px">
+							<input type="radio" id="myzar_item_survey_option3" name="myzar_item_survey_option" value="Зарахаа больсон">
+							Зарахаа больсон
+						</label>
+						<label for="myzar_item_survey_option4" style="cursor: pointer; display: block; margin-top: 10px">
+							<input type="radio" id="myzar_item_survey_option4" name="myzar_item_survey_option" value="0">
+							Бусад шалтгаанаар
+						</label>
+						<textarea id="myzar_item_survey_reason" name="myzar_item_survey_reason" disabled style="width: 98%; height: 100px; margin-top: 10px"></textarea>
+					</div>
+				</div>
+				<button id="buttonSubmit" disabled class="button_yellow" style="margin-top: 10px; margin-left: auto; margin-right: auto">Батлах</button>
+			</div>
+		</div>
+		
 		<div class="bottomsheet share" style="display: none">
 			<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('bottomsheet share')[0].style.display='none'"></i>
 			<div class="title">Таны зарыг шууд холбоосоор үзэх боломжтой боллоо.</div>
