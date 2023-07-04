@@ -298,7 +298,7 @@ function chat_list_item_action_show(chatID, isactive, id, isMe = false){
 
 function chat_profile_image_show(image){
 	if(image != ""){
-		return "<img src=\"<?php echo $path; ?>/"+image+"\" onerror=\"this.onerror=null; this.src='user.png'\">";
+		return "<img src=\"<?php echo $path; ?>/"+image+"\" onerror=\"this.src='user.png'\">";
 	}
 	else {
 		return "<img src=\"user.png\">";
@@ -342,7 +342,7 @@ function chat_action(chatID, action, type, id){
 <div class="chat">
 	<div class="left">
 		<?php
-		$queryFetchSender = "SELECT *, (SELECT name FROM user WHERE id=chat.fromID) AS sender_name, (SELECT image FROM user WHERE id=chat.fromID) AS sender_image, (SELECT role FROM user WHERE id=chat.fromID) AS sender_role, (SELECT phone FROM user WHERE id=chat.fromID) AS sender_phone, (SELECT name FROM user WHERE id=chat.toID) AS receiver_name, (SELECT image FROM user WHERE id=chat.toID) AS receiver_image, (SELECT role FROM user WHERE id=chat.toID) AS receiver_role, (SELECT phone FROM user WHERE id=chat.toID) AS receiver_phone FROM chat WHERE toID=".$_COOKIE["userID"]." OR fromID=".$_COOKIE["userID"]." GROUP BY sender_phone,receiver_phone ORDER BY datetime DESC";
+		$queryFetchSender = "SELECT c.*, (SELECT name FROM user WHERE id=c.fromID) AS sender_name, (SELECT image FROM user WHERE id=c.fromID) AS sender_image, (SELECT role FROM user WHERE id=c.fromID) AS sender_role, (SELECT phone FROM user WHERE id=c.fromID) AS sender_phone, (SELECT name FROM user WHERE id=c.toID) AS receiver_name, (SELECT image FROM user WHERE id=c.toID) AS receiver_image, (SELECT role FROM user WHERE id=c.toID) AS receiver_role, (SELECT phone FROM user WHERE id=c.toID) AS receiver_phone FROM chat c JOIN (SELECT CASE WHEN fromID=".$_COOKIE["userID"]." THEN toID ELSE fromID END AS other, MAX(datetime) AS latest FROM chat WHERE fromID=".$_COOKIE["userID"]." OR toID=".$_COOKIE["userID"]." GROUP BY other) m ON (c.fromID=".$_COOKIE["userID"]." AND c.toID=m.other OR c.toID=".$_COOKIE["userID"]." AND c.fromID=m.other) AND c.datetime = m.latest";
 		$resultFetchSender = $conn->query($queryFetchSender);
 		while($rowFetchSender = mysqli_fetch_array($resultFetchSender)){
 			if($rowFetchSender["toID"]==$_COOKIE["userID"]){
@@ -354,7 +354,7 @@ function chat_action(chatID, action, type, id){
 								<?php
 								if($rowFetchSender["sender_image"] != ""){
 								?>
-								<img src="<?php echo $path.DIRECTORY_SEPARATOR.$rowFetchSender["sender_image"]; ?>" onerror="this.onerror=null; this.src='user.png'">
+								<img src="<?php echo $path.DIRECTORY_SEPARATOR.$rowFetchSender["sender_image"]; ?>" onerror="this.src='user.png'">
 								<?php
 								}
 								else {
@@ -403,7 +403,7 @@ function chat_action(chatID, action, type, id){
 								<?php
 								if($rowFetchSender["receiver_image"] != ""){
 								?>
-								<img src="<?php echo $path.DIRECTORY_SEPARATOR.$rowFetchSender["receiver_image"]; ?>" onerror="this.onerror=null; this.src='user.png'">
+								<img src="<?php echo $path.DIRECTORY_SEPARATOR.$rowFetchSender["receiver_image"]; ?>" onerror="this.src='user.png'">
 								<?php
 								}
 								else {

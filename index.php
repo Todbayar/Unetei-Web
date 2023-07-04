@@ -335,24 +335,27 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 				<div>
 					<div id="billing_bank" style="font-size: 14px; margin-left: 10px">
 						Дараах данс руу илгээнэ үү.<br/>
-						<a id="name" style="font-size: 16px"><b></b></a>ны данс: <a id="account" style="font-size: 16px"><b></b></a><br/>
-						Хүлээн авагч: <a id="owner" style="font-size: 16px"><b></b></a>
+						<a id="name" style="font-size: 16px"></a>ны данс: <a id="account" style="font-size: 16px"></a><br/>
+						Хүлээн авагч: <a id="owner" style="font-size: 16px"></a>
 					</div>
-					<div style="margin-left: 10px; margin-top: 10px">Socialpay-аар төлөх:</div>
-					<div id="billing_socialpay" style="font-size: 14px; margin-left: 10px; margin-top: 10px; text-align: center">
-						<img style="width: 200px; height: 200px" />
+					<div id="billing_qr">
+						<div style="margin-left: 10px; margin-top: 10px">Socialpay-аар төлөх:</div>
+						<div id="billing_socialpay" style="font-size: 14px; margin-left: 10px; margin-top: 10px; text-align: center">
+							<img style="width: 200px; height: 200px" />
+						</div>
 					</div>
 					<div style="font-size: 14px">
 						<ul>
 							<li><a style="text-decoration: underline">Гүйлгээний утга</a> дээр заавал: <b style="color: red">УТАСНЫ ДУГААР</b> оруулна уу.</li>
-							<li>Таны захиалсан үйлчилгээ (онцгой зар, зар шинэчлэх, ангилал, хэрэглэгч гэх мэт) мөнгө шилжсэний дараа идэвхжинэ.</li>
-							<li>Хэрвээ та заасан төлбөрөөс илүүг шилжүүлбэл хариулт мөнгө тань таны сайтны дансанд орох болно.</li>
+							<li>Таны захиалсан үйлчилгээ (онцгой зар, зар шинэчлэх, хэрэглэгчийн эрхээ дээшлүүлэх гэх мэт) мөнгө шилжсэний дараа идэвхжинэ.</li>
+<!--							<li>Хэрвээ та заасан төлбөрөөс илүүг шилжүүлбэл хариулт мөнгө тань таны сайтны дансанд орох болно.</li>-->
 						</ul>
 					</div>
 				</div>
 				<button onClick="javascript:document.getElementsByClassName('popup billing')[0].style.display='none'; javascript:document.body.style.overflowY='auto'" class="button_yellow" style="margin-top: 10px; margin-left: auto; margin-right: auto">За</button>
 			</div>
 		</div>
+		
 		<div class="popup search" style="display: none">
 			<div class="container" style="width: 320px; top: 5vh">
 				<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('popup search')[0].style.display='none'; javascript:document.body.style.overflowY='auto'"></i>

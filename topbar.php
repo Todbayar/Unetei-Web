@@ -22,7 +22,18 @@ include_once "info.php";
 <div class="control">
 	<div class="myzar">
 		<div id="myzar_button" onClick="pagenavigation('login')" style="display: flex; align-items: center; height: 70px; cursor: pointer; position: relative">
+			<?php
+			if(!isset($_GET["page"]) || $_GET["page"] != "myzar"){
+			?>
 			<i class="fa-regular fa-user" style="font-size: 24px; color: #FFFFFF"></i>
+			<?php
+			}
+			else {
+			?>
+			<i class="fa-solid fa-user" style="font-size: 24px; color: #FFFFFF"></i>
+			<?php
+			}
+			?>
 			<div class="removable" style="color:#FFFFFF; margin-left: 5px">Миний зарууд</div>
 			<div id="myzar_phone" class="removable" style="color: #174400">Нэвтрэх ба бүртгэл</div>
 			<i class="fas fa-angle-down removable" style="margin-left: 2px; font-size: 12px; color: #174400; margin-top: 4px; margin-right: 20px"></i>
@@ -39,9 +50,17 @@ include_once "info.php";
 	</div>
 	<?php
 	if(isset($_COOKIE["userID"])){
+		if(!isset($_GET["page"]) || $_GET["page"] != "favorite"){
 		?>
 		<i onClick="pagenavigation('favorite')" class="fa-regular fa-star" style="font-size: 24px; color: #FFFFFF; font: normal; margin-left: 10px; cursor: pointer"></i>
 		<?php
+		}
+		else {
+		?>
+		<i onClick="pagenavigation('favorite')" class="fa-solid fa-star" style="font-size: 24px; color: #FFFFFF; font: normal; margin-left: 10px; cursor: pointer"></i>
+		<?php
+		}
+		
 		$query = "SELECT * FROM chat WHERE (toID=".$_COOKIE["userID"]." OR toID=0) AND isRead=0";
 		$result = $conn->query($query);
 		$countChat = mysqli_num_rows($result);

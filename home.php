@@ -33,6 +33,20 @@ include_once "info.php";
 	max-height: 240px;
 	overflow-y: auto;
 }
+	
+.searchCategoryList .searchCategoryListAvailable::-webkit-scrollbar {
+  	width: 1px;
+}
+ 
+.searchCategoryList .searchCategoryListAvailable::-webkit-scrollbar-track {
+  	box-shadow: inset 0 0 1px rgba(0, 0, 0, 0);
+}
+ 
+.searchCategoryList .searchCategoryListAvailable::-webkit-scrollbar-thumb {
+  	background-color: #FFA718;
+  	outline: 2px solid #FFA718;
+	border-radius: 10px;
+}
 
 .searchResult {
 	margin-top: 10px;

@@ -10,6 +10,10 @@ if(isset($_POST["type"])){
 		$result = $conn->query($query);
 		$affiliate = mysqli_fetch_array($result);
 		
+		if((is_null($affiliate["bank_account"]) || $affiliate["bank_account"]=="") && (is_null($affiliate["socialpay"]) || $affiliate["socialpay"]=="")){
+			$affiliate = mysqli_fetch_array($conn->query("SELECT * FROM user WHERE phone='".$superduperadmin."'"));
+		}
+		
 		$query = "SELECT * FROM user WHERE phone='".$_COOKIE["phone"]."'";
 		$result = $conn->query($query);
 		$requester = mysqli_fetch_array($result);
@@ -53,11 +57,15 @@ if(isset($_POST["type"])){
 		$query = "SELECT * FROM user WHERE phone=".$_COOKIE["phone"];
 		$result = $conn->query($query);
 		$requester = mysqli_fetch_array($result);
-		$phone = $requester["affiliate"]!="" ? $requester["affiliate"] : $superduperadmin;
+		$phone = ($requester["affiliate"]!="" && $requester["affiliate"] != $_COOKIE["phone"]) ? $requester["affiliate"] : $superduperadmin;
 		
 		$queryAffiliate = "SELECT * FROM user WHERE phone='".$phone."'";
 		$resultAffiliate = $conn->query($queryAffiliate);
 		$affiliate = mysqli_fetch_array($resultAffiliate);
+		
+		if((is_null($affiliate["bank_account"]) || $affiliate["bank_account"]=="") && (is_null($affiliate["socialpay"]) || $affiliate["socialpay"]=="")){
+			$affiliate = mysqli_fetch_array($conn->query("SELECT * FROM user WHERE phone='".$superduperadmin."'"));
+		}
 		
 		$billing = new stdClass();
 		$billing->type = "Зар нэмэх";

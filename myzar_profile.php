@@ -177,10 +177,22 @@ function submitRoleUpgrade(affiliatePhone){
 		$(".popup.billing .container #billing_number").html(convertRoleInString(selRole));
 		$(".popup.billing .container #billing_title").html(res.title);
 		$(".popup.billing .container #billing_price").html(res.price + " ₮");
-		$(".popup.billing .container #billing_bank #name").html("<b>" + res.bank_name + "</b>");
-		$(".popup.billing .container #billing_bank #account").html("<b>" + res.bank_account + "</b>");
-		$(".popup.billing .container #billing_bank #owner").html("<b>" + res.bank_owner + "</b>");
-		$(".popup.billing .container #billing_socialpay img").attr("src", "user_files/"+res.socialpay);
+		
+		if(res.bank_account!=""){
+			$(".popup.billing .container #billing_bank #name").html("<b>" + res.bank_name + "</b>");
+			$(".popup.billing .container #billing_bank #account").html("<b>" + res.bank_account + "</b>");
+			$(".popup.billing .container #billing_bank #owner").html("<b>" + res.bank_owner + "</b>");
+		}
+		else {
+			$(".popup.billing .container #billing_bank").hide();
+		}
+		
+		if(res.socialpay!=""){
+			$(".popup.billing .container #billing_socialpay img").attr("src", "user_files/"+res.socialpay);
+		}
+		else {
+			$(".popup.billing .container #billing_qr").hide();
+		}
 	});
 }
 	
@@ -434,19 +446,19 @@ $(document).ready(function(){
 		<?php
 		}
 		?>
-		<div class="divcontainer" style="width: 60%">
+		<div class="divcontainer qrcode">
 			<div>Socialpay QRCode:</div>
 			<div style="color: #42c200; font-size: 14px">Голомт банкны Socialpay аппнаас өөрийнхөө дансны QRCode-ийг скрийншот хийгээд тайрч энэ хэсэгт оруулах.</div>
-			<div style="display: flex; align-items: center">
+			<div style="width: 200px; height: 200px; margin-left: auto; margin-right: auto">
 				<?php
 				if($row["socialpay"] != ""){
 				?>
-				<img id="socialpay" src="<?php echo $path.DIRECTORY_SEPARATOR.$row["socialpay"]; ?>" onClick="profile_socialpay_button()" style="cursor: pointer; object-fit:contain; width:300px; height:300px" onerror="this.onerror=null; this.src='image-solid.svg'" />
+				<img id="socialpay" src="<?php echo $path.DIRECTORY_SEPARATOR.$row["socialpay"]; ?>" onClick="profile_socialpay_button()" style="cursor: pointer; object-fit:contain; width: 100%; height: 100%" onerror="this.onerror=null; this.src='image-solid.svg'" />
 				<?php
 				}
 				else {
 				?>
-				<img id="socialpay" src="image-solid.svg" onClick="profile_socialpay_button()" style="cursor: pointer; object-fit:contain; width:300px; height:300px" />
+				<img id="socialpay" src="image-solid.svg" onClick="profile_socialpay_button()" style="cursor: pointer; object-fit:contain; width: 100%; height: 100%" />
 				<?php
 				}
 				?>
