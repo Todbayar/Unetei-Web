@@ -83,17 +83,17 @@ function chat_select(toID){
 }
 
 function chat_list_role(chatID, sender, body, datetime, isEdit, note){
-	var payment = "<i class=\"fa-regular fa-clock\" style=\"margin-left:5px\"></i>";
+	var payment = "fa-regular fa-clock";
 	var paymentHistory = "<div class=\"paymentHistory\">";
 	if(note != ""){
 		const noteObj = JSON.parse(note);
 		noteObj.payment.reverse().forEach(function(obj, i, arr){
 			if(arr[i].isPaid){
-				if(i==0) payment = "<i class=\"fa-solid fa-check\" style=\"margin-left:5px\"></i>";
+				if(i==0) payment = "fa-solid fa-check";
 				paymentHistory += "<div><i class=\"fa-solid fa-check\" style=\"margin-left:5px\"></i> "+arr[i].datetime+"</div>";
 			}
 			else {
-				if(i==0) payment = "<i class=\"fa-solid fa-xmark\" style=\"margin-left:5px\"></i>";
+				if(i==0) payment = "fa-solid fa-xmark";
 				paymentHistory += "<div><i class=\"fa-solid fa-xmark\" style=\"margin-left:5px\"></i> "+arr[i].datetime+"</div>";
 			}
 		});
@@ -104,16 +104,16 @@ function chat_list_role(chatID, sender, body, datetime, isEdit, note){
 	paymentHistory += "</div>";
 	
 	if(sender.id == <?php echo $_COOKIE["userID"]; ?>){
-	   	var htmlRole = "<div class=\"message me\"><div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-user\" style=\"position:absolute; top:0; left:-15px; padding:5px; border-radius:10px; background: #fff4d0; color:#878787\"></i>";
-	   	htmlRole += body.message+payment+paymentHistory;
+	   	var htmlRole = "<div class=\"message me\"><div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-user\" style=\"position:absolute; top:0; left:-15px; padding:5px; border-radius:10px; background: #fff4d0; color:#878787\"></i><i class=\""+payment+"\" style=\"position:absolute; top:20px; left:-15px; padding:5px; border-radius:10px; background: #fff4d0; color:#878787\"></i>";
+	   	htmlRole += body.message+paymentHistory;
 		htmlRole += "</div><div class=\"datetime\">"+datetime+"</div>";
 	    if(isEdit) htmlRole += chat_list_role_action_show(chatID, body.isActive, body.id, true);
 		htmlRole += "</div>"+chat_profile_image_show(sender.image)+"</div>";
 		$(".chat .right .top").append(htmlRole);
     }
 	else {
-	   	var htmlRole = "<div class=\"message\">"+chat_profile_image_show(sender.image)+"<div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-user\" style=\"position:absolute; top:0; right:-15px; padding:5px; border-radius:10px; background: #e7e7e7; color:#878787\"></i>";
-		htmlRole += body.message+payment+paymentHistory;
+	   	var htmlRole = "<div class=\"message\">"+chat_profile_image_show(sender.image)+"<div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-user\" style=\"position:absolute; top:0; right:-15px; padding:5px; border-radius:10px; background: #e7e7e7; color:#878787\"></i><i class=\""+payment+"\" style=\"position:absolute; top:20px; right:-15px; padding:5px; border-radius:10px; background: #e7e7e7; color:#878787\"></i>";
+		htmlRole += body.message+paymentHistory;
 		htmlRole += "</div><div class=\"datetime\">"+datetime+"</div>";
 		if(isEdit) htmlRole += chat_list_role_action_show(chatID, body.isActive, body.id, false);
 		htmlRole += "</div></div>";
@@ -199,14 +199,14 @@ function chat_list_item(chatID, sender, body, datetime, isEdit, note){
 	paymentHistory += "</div>";
 	
 	if(sender.id == <?php echo $_COOKIE["userID"]; ?>){
-	   	var htmlItem = "<div class=\"message me\"><div class=\"container\"><div onClick=\"pagenavigation('detail&id="+body.id+"')\" class=\"text\"><i class=\"fa-solid fa-cart-shopping\" style=\"position:absolute; top:0; left:-15px; padding:5px; border-radius:10px; background: #fff4d0; color:"+statusColor+"\"></i>";
+	   	var htmlItem = "<div class=\"message me\"><div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-cart-shopping\" style=\"position:absolute; top:0; left:-15px; padding:5px; border-radius:10px; background: #fff4d0; color:"+statusColor+"\"></i>";
 	   	if(body.isActive == 3){
 			htmlItem += "<i class=\"fa-solid fa-arrow-rotate-left\" style=\"position:absolute; top:20px; left:-15px; padding:5px; border-radius:10px; background: #fff4d0; color:#878787\"></i>";
 		}
 		else if(body.isActive == 4){
 			htmlItem += "<i class=\"fa-solid fa-check\" style=\"position:absolute; top:20px; left:-15px; padding:5px; border-radius:10px; background: #fff4d0; color:#878787\"></i>";
 		}
-	   	htmlItem += body.title+" (#"+body.id+")";
+	   	htmlItem += "<a onClick=\"pagenavigation('detail&id="+body.id+"')\">"+body.title+" (#"+body.id+")</a>";
 	   	htmlItem += chat_list_category_show(body.category, "");
 		htmlItem += "<div style=\"font-size:12px; color:gray; margin-top:2px\">Төлөх:"+(body.pay==0?"Үнэгүй":(body.pay+"₮"+payment))+"</div>";
 		htmlItem += paymentHistory+"</div><div class=\"datetime\">"+datetime+"</div>";
@@ -215,14 +215,14 @@ function chat_list_item(chatID, sender, body, datetime, isEdit, note){
 		$(".chat .right .top").append(htmlItem);
 	}
 	else {
-		var htmlItem = "<div class=\"message\">"+chat_profile_image_show(sender.image)+"<div class=\"container\"><div onClick=\"pagenavigation('detail&id="+body.id+"')\" class=\"text\"><i class=\"fa-solid fa-cart-shopping\" style=\"position:absolute; top:0; right:-15px; padding:5px; border-radius:10px; background: #e7e7e7; color:"+statusColor+"\"></i>";
+		var htmlItem = "<div class=\"message\">"+chat_profile_image_show(sender.image)+"<div class=\"container\"><div class=\"text\"><i class=\"fa-solid fa-cart-shopping\" style=\"position:absolute; top:0; right:-15px; padding:5px; border-radius:10px; background: #e7e7e7; color:"+statusColor+"\"></i>";
 		if(body.isActive == 3){
 			htmlItem += "<i class=\"fa-solid fa-arrow-rotate-left\" style=\"position:absolute; top:20px; right:-15px; padding:5px; border-radius:10px; background: #e7e7e7; color:#878787\"></i>";
 		}
 		else if(body.isActive == 4){
 			htmlItem += "<i class=\"fa-solid fa-check\" style=\"position:absolute; top:20px; right:-15px; padding:5px; border-radius:10px; background: #e7e7e7; color:#878787\"></i>";
 		}
-		htmlItem += body.title+" (#"+body.id+")";
+		htmlItem += "<a onClick=\"pagenavigation('detail&id="+body.id+"')\">"+body.title+" (#"+body.id+")</a>";
 		htmlItem += chat_list_category_show(body.category, "");
 		htmlItem += "<div style=\"font-size:12px; color:gray; margin-top:2px\">Төлөх:"+(body.pay==0?"Үнэгүй":(body.pay+"₮"+payment))+"</div>";
 		htmlItem += paymentHistory+"</div><div class=\"datetime\">"+datetime+"</div>";
@@ -233,6 +233,7 @@ function chat_list_item(chatID, sender, body, datetime, isEdit, note){
 }
 
 function chat_list_message(sender, body, datetime){
+	body = body.replaceAll(">", "<i class=\"fas fa-angle-right\" style=\"font-size:10px; margin-left:2px; margin-right:2px\"></i>");
 	if(sender.id == <?php echo $_COOKIE["userID"]; ?>){
 		$(".chat .right .top").append("<div class=\"message me\"><div class=\"container\"><div class=\"text\">"+body+"</div><div class=\"datetime\">"+datetime+"</div></div>"+chat_profile_image_show(sender.image)+"</div>");
 	}

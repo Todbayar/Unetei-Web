@@ -540,10 +540,9 @@ if(isset($_GET["id"])){
 						<div id="phoneFull" class="full" style="display: none; margin-left: 10px"><?php echo substr($row["item_phone"],4); ?></div>
 					</div>
 					<?php
-					$message = "<b>".$row["title"]."</b><br/>";
+					$message = $row["title"]." (#".$row["id"].")<br/>";
 					$message .= convertPriceToText($row["price"])." ₮<br/>";
-					$message .= "#".$row["id"]."<br/>";
-					$message .= implode(" > ",$arrCategories["text"]);
+					$message .= implode(" > ", $arrCategories["text"]);
 					if(isset($_COOKIE["userID"])){
 						?>
 						<div onClick="startChat(<?php echo $row["userID"]; ?>,'<?php echo $message; ?>')" class="button_yellow chatlah" style="margin-top: 10px; background: #e60803">

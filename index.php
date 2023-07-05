@@ -1,3 +1,6 @@
+<!--
+אלוהים יברך את כולם בשם האב והבן ורוח הקודש
+-->
 <?php 
 include "mysql_config.php";
 include_once "mysql_misc.php";
