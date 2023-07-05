@@ -49,37 +49,51 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 		};
 		firebase.initializeApp(firebaseConfig);
 		
-// 		const messaging = firebase.messaging();
-			
+ 		const messaging = firebase.messaging();	//not working bcz of service not supported on mobile android
 		var timerDropDownMenu;
-			
+		
 		$(document).ready(function(){
-//			if('serviceWorker' in navigator){				
-//				navigator.serviceWorker.register('firebase-messaging-sw.js');
-//			} else {
-//				console.log('Service Worker not supported');
-//				alert("Service Worker not supported");
-//			}
-//			
-//			Notification.requestPermission().then((permission) => {
-//				if (permission === 'granted') {
-//					console.log('Notification permission granted.');
-//					alert("Notification permission granted.");
-//					messaging.getToken({vapidKey: "<?php echo $firebase_public_vapid_key; ?>"}).then((currentToken) => {
-//						if (currentToken) {
-//							alert("token received.");
-//							$.post("mysql_user_fcm.php", {token:currentToken});
-//						} 
-//						else {
-//							alert("<fcm>:permission required");
-//							console.log("<fcm>:permission required");
-//						}
-//					}).catch((err) => {
-//						alert("<fcm>:An error occurred while retrieving token."+err);
-//						console.log('<fcm>:An error occurred while retrieving token.', err);
-//					});
-//				}
-//			});
+			if('serviceWorker' in navigator){				
+				navigator.serviceWorker.register('firebase-messaging-sw.js');
+			} 
+			else {
+				console.log('Service Worker not supported');
+			}
+			
+			
+			var eventNotification = new CustomEvent("notificationDone");
+			window.addEventListener("notificationDone", function(){
+				Notification.requestPermission().then((permission) => {
+					if(permission === 'granted'){
+						console.log('<notification>:Permission granted');
+						messaging.getToken({vapidKey: "<?php echo $firebase_public_vapid_key; ?>"}).then((currentToken) => {
+							if (currentToken) {
+								console.log('<notification>:token received:', currentToken);
+								$.post("mysql_user_fcm.php", {token:currentToken});
+								sessionStorage.setItem("isNotificationGranted", true);
+							}
+							else {
+								console.log("<notification>:Permission required!");
+							}
+						}).catch((err) => {
+							console.log('<notification>:An error occurred while retrieving token. ', err);
+						});
+					}
+					else {
+						sessionStorage.setItem("isNotificationGranted", false);
+					}
+				});
+			});
+			
+			<?php
+			if(isset($_COOKIE["userID"])){
+			?>
+			if(sessionStorage.getItem("isNotificationGranted")==null){	
+				confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i> Та мэдэгдэл хүлээж авхыг зөвшөөрнө үү, ингэснээр цаг алдалгүй таньд ирэх гүйлгээ, хүсэлтүүд, баталгаажуулалт зэрэг чухал мэдээллийн мэдэгдэл хүлээн авах боломжтой болж та <?php echo $domain; ?>-ыг бүрэн удирдах эрхтэй болно.", eventNotification);
+			}
+			<?php
+			}
+			?>
 			
 			<?php
 			if(isset($_COOKIE["uid"]) && isset($_COOKIE["phone"])){

@@ -67,6 +67,7 @@ function confirmation_ok(message, event){
 	$(".popup.ok").show();
 	$(".popup.ok .container .message").html(message);
 	$(".popup.ok .container .action .button_yellow").click(function(){
+		$(".popup.ok").hide();
 		$("body").css("overflow-y", "auto");
 		if(event != null) {
 			window.dispatchEvent(event);

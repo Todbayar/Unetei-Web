@@ -14,13 +14,34 @@ $(document).ready(function(){
 		}
 	});
 	
-	if(sessionStorage.getItem("startChatToID")!=null){
-		chat_select(sessionStorage.getItem("startChatToID"));
-		sessionStorage.removeItem("startChatToID");
-	}
-	
 	$(".footer").hide();
+	
+	<?php
+	if(isset($_GET["toID"])){
+		?>
+		check_chat_select(<?php echo $_GET["toID"]; ?>);	
+		<?php
+	}
+	else {
+		?>
+		check_chat_select();
+		<?php
+	}
+	?>
 });
+
+function check_chat_select(toID){
+	toID = typeof toID !== "undefined" ? toID : -1;
+	if(toID==-1){
+		if(sessionStorage.getItem("startChatToID")!=null){
+			chat_select(sessionStorage.getItem("startChatToID"));
+			sessionStorage.removeItem("startChatToID");
+		}
+	}
+	else {
+		chat_select(toID);
+	}
+}
 	
 function chat_send(toID){
 	var chatSubmitData = new FormData();

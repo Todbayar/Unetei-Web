@@ -255,6 +255,7 @@ function myzar_item_add_submit(){
 function publishItemUpdate(itemID, title, role){
 	const selPriceOpt = $(".popup.item_publish_option input[name='publish_option']:checked").val();
 	$.post("mysql_myzar_item_update_process.php", {id:itemID,status:selPriceOpt}).done(function(responseText){
+	   console.log("<publishItemUpdate>:"+responseText);
 	   if(responseText!="FAIL"){
 			$(".popup.item_publish_option").hide();
 		   	const itemResponse = JSON.parse(responseText);

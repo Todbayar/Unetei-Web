@@ -67,8 +67,12 @@ $pageCountList = 60;
 
 //firebase
 $firebase_public_vapid_key = "BKLrbPXG-cbXjadrRFHrKIvJX10ZHwXnlOuBZqMiYIIYVMdihRH_X8KV-FGD1e5xbqt30DMDBXdlqLemx_G3dfg";
+$firebase_auth = "AAAAwjhSlmk:APA91bGU-XYE_yp2023YXoxQA1GFWir8-9t_omVjNAQ5dDxQnSE2L7OIpkB0b8Vbj3Bla_wtYudRc3fjI5QwmPh0j_LbRVhq2xEWKLAOi1_PjZYxl1cDjBMcsssLXW571Ykgjat31Sfr";
 
 define("ADD",0);
 define("EDIT",1);
 define("UPDATE",2);
+
+//host
+$protocol = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] != "off") ? "https" : "http";
 ?>
