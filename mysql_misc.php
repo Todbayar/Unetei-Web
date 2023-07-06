@@ -229,48 +229,49 @@ function getUserToken($userID){
 	return $row["token"];
 }
 
-function sendNotification($link, $senderUserID, $authKey){
-//	$conn = common::createConnection();
-	
-	global $domain, $protocol;
+function sendNotification($link, $userID){
+	global $domain, $protocol, $firebase_app, $firebase_auth;
 	
 	$title = $domain;
 	$body = "Таны чатанд мэдэгдэл ирлээ.";
 	$image = $protocol."//".$_SERVER['SERVER_NAME']."/watermark.png";
 	
-    $data = [
-        "notification" => [
-            "body"  => $body,
-            "title" => $title,
-            "image" => $image
-        ],
-        "priority" =>  "high",
-        "data" => [
-            "click_action"  =>  "FLUTTER_NOTIFICATION_CLICK",
-            "id"            =>  "1",
-            "status"        =>  "done",
-            "info"          =>  [
-                "title"  => $title,
-                "link"   => $link,
-                "image"  => $image
-            ]
-        ],
-        "to" => getUserToken($senderUserID)
-    ];
-
+	$message = new stdClass();
+	$message->token = getUserToken($userID);
+	$message->notification = new stdClass();
+	$message->notification->title = $title;
+	$message->notification->body = $body;
+	$message->webpush = new stdClass();
+	$message->webpush->headers = new stdClass();
+	$message->webpush->headers->Urgency = "high";
+	$message->webpush->notification = new stdClass();
+	$message->webpush->notification->body = $body;
+	$message->webpush->notification->requireInteraction = true;
+	$message->webpush->notification->badge = $image;
+	$data = new stdClass();
+	$data->message = $message;
+	
     $ch = curl_init();
-
-    curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($ch, CURLOPT_HEADER, true);
+	curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+	curl_setopt($ch, CURLOPT_FAILONERROR, false);
+	curl_setopt($ch, CURLOPT_VERBOSE, true);
+	curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/v1/projects/'.$firebase_app.'/messages:send');
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-    curl_setopt($ch, CURLOPT_POST, 1);
 
     $headers = array();
     $headers[] = 'Content-Type: application/json';
-    $headers[] = 'Authorization: key='.$authKey;
+    $headers[] = "Authorization: Bearer ".$firebase_auth;
     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
     $result = curl_exec($ch);
+	$curl_error = curl_error($ch);
+	$curl_error_number = curl_errno($ch);
+	$http_code = curl_getinfo($ch,CURLINFO_HTTP_CODE);
     curl_close ($ch);
+	return $result.", ".$curl_error.", ".$curl_error_number.", ".$http_code.", ".json_encode($message);
 }
 ?>

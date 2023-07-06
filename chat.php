@@ -73,6 +73,7 @@ function chat_select(toID){
 	
 	const reqChatFetchSubmit = new XMLHttpRequest();
 	reqChatFetchSubmit.onload = function() {
+		console.log("<chat_select>:"+this.responseText);
 		if(this.responseText != ""){
 			$(".chat .right .top").empty();
 			const responseChatFetch = JSON.parse(this.responseText);

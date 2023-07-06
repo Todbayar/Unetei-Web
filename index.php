@@ -70,7 +70,7 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 							if (currentToken) {
 								console.log('<notification>:token received:', currentToken);
 								$.post("mysql_user_fcm.php", {token:currentToken});
-								sessionStorage.setItem("isNotificationGranted", true);
+								localStorage.setItem("isNotificationGranted", true);
 							}
 							else {
 								console.log("<notification>:Permission required!");
@@ -80,18 +80,18 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 						});
 					}
 					else {
-						sessionStorage.setItem("isNotificationGranted", false);
+						localStorage.setItem("isNotificationGranted", false);
 					}
 				});
 			});
 			
 			<?php
 			if(isset($_COOKIE["userID"])){
-			?>
-			if(sessionStorage.getItem("isNotificationGranted")==null){	
-				confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i> Та мэдэгдэл хүлээж авхыг зөвшөөрнө үү, ингэснээр цаг алдалгүй таньд ирэх гүйлгээ, хүсэлтүүд, баталгаажуулалт зэрэг чухал мэдээллийн мэдэгдэл хүлээн авах боломжтой болж та <?php echo $domain; ?>-ыг бүрэн удирдах эрхтэй болно.", eventNotification);
-			}
-			<?php
+				?>
+				if(localStorage.getItem("isNotificationGranted")==null){	
+					confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i> Та мэдэгдэл хүлээж авхыг зөвшөөрнө үү, ингэснээр цаг алдалгүй таньд ирэх <b>гүйлгээ</b>, <b>хүсэлтүүд</b>, <b>баталгаажуулалт</b> зэрэг чухал мэдээллийн мэдэгдэл хүлээн авах боломжтой болж та <?php echo $domain; ?>-ыг бүрэн удирдах эрхтэй болно.", eventNotification);
+				}
+				<?php
 			}
 			?>
 			
@@ -197,6 +197,7 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 			else {
 				include "home.php";
 			}
+//			echo sendNotification("?page=chat&toID=1", 2);
 			?>
 			</div>
 		</div>
@@ -300,17 +301,18 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 						<div style="font: bold 16px Arial"><input type="radio" id="role" name="role" value="4"> Сүпер админ</div>
 						<div style="margin-left: 25px"><?php echo number_format($role_price_superadmin); ?> ₮</div>
 						<ul style="font-size: 14px">
+							<li>Сүпер дүпер админд <?php echo $item_boost_superadmin; ?> удаа Facebook Boost хийх хүсэлт илгээх</li>
 							<li>Өөрийн дагагчдаас <i>орлого</i> хүлээн авах</li>
 							<li>Хязгааргүй ангилал нэмэх эсвэл брэнд үүсгэх</li>
 							<li>Хязгааргүй VIP, Онцгой, Энгийн зар нэмэх</li>
 							<li>Удирдах <i>бүрэн эрх</i>, хүсэлтүүдийг хянах</li>
-							<li>Бизнесийн хөгжүүлэлтэнд саналаа хэлэх</li>
 						</ul>
 					</div>
 					<div class="selection">
 						<div style="font: bold 16px Arial"><input type="radio" id="role" name="role" value="3"> Админ</div>
 						<div style="margin-left: 25px"><?php echo number_format($role_price_admin); ?> ₮</div>
 						<ul style="font-size: 14px">
+							<li>Сүпер дүпер админд <?php echo $item_boost_admin; ?> удаа Facebook Boost хийх хүсэлт илгээх</li>
 							<li>Өөрийн дагагчдаас <i>орлого</i> хүлээн авах</li>
 							<li>Хязгааргүй ангилал нэмэх эсвэл 10 брэнд үүсгэх</li>
 							<li>Хязгааргүй Энгийн зар нэмэх болон 10 VIP/Онцгой зар нэмэх </li>

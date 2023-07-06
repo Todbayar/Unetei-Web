@@ -7,6 +7,7 @@ $service_phone = "(+976)99213557";
 $domain_title = "Zarchi";
 $domain = "zarchi.mn";
 $contact_phone = "(+976)99213557";
+$superduperadmin = "+97699213557";
 
 //files
 $path = "user_files";
@@ -59,13 +60,17 @@ $item_vipspecial_count_limit_publisher = -1;
 $item_publish_price_vip = number_format("20000");
 $item_publish_price_special = number_format("10000");
 
-$superduperadmin = "+97699213557";
+//item facebook boost request counts
+$item_boost_total = 10;
+$item_boost_admin = 4;
+$item_boost_superadmin = 6;
 
 //pages
 $pageCountHome = 12;
 $pageCountList = 60;
 
 //firebase
+$firebase_app = "unetei-bc717";
 $firebase_public_vapid_key = "BKLrbPXG-cbXjadrRFHrKIvJX10ZHwXnlOuBZqMiYIIYVMdihRH_X8KV-FGD1e5xbqt30DMDBXdlqLemx_G3dfg";
 $firebase_auth = "AAAAwjhSlmk:APA91bGU-XYE_yp2023YXoxQA1GFWir8-9t_omVjNAQ5dDxQnSE2L7OIpkB0b8Vbj3Bla_wtYudRc3fjI5QwmPh0j_LbRVhq2xEWKLAOi1_PjZYxl1cDjBMcsssLXW571Ykgjat31Sfr";
 

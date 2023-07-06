@@ -89,6 +89,32 @@ include_once "mysql_misc.php";
 }
 </style>
 
+<script>
+function myzar_item_boost(isValid, itemID){
+	if(isValid){
+		$.post("myzar_item_boost.php", {fromID:<?php echo $_COOKIE["userID"]; ?>, itemID:itemID}).done(function(response){
+//			console.log("<myzar_item_boost>:"+response);
+			if(response == "OK"){
+				confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Таны Facebook Boost хийх хүсэлт илгээгдлээ. Таньд удахгүй Facebook Boost хийгдсэн тухай мэдэгдэл таны <b>чатанд</b> ирэх болно.", null);
+		   	}
+			else if(response == "FULL"){
+				confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Таны Facebook Boost хийх хүсэлт дуусчээ, та дараа дахин оролдоно уу!", null);
+			}
+			else {
+				confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Та дараа дахин Facebook Boost хийх хүсэлт илгээгээрэй. Одоо өмнөх хүсэлтүүд Facebook ads-д явж байгаа тул хэсэг хугацаанд нэмэлт хүсэлт авахгүйг анхаарна!", null);
+			}
+		});
+   	}
+	else {
+	   	var eventOk = new CustomEvent("itemBoostDone");
+		window.addEventListener("itemBoostDone", function(){
+			pagenavigation("myzar&myzar=profile");
+		});
+		confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Та <b>Facebook Boost</b> хийх хүсэлт илгээхийн тулд хэрэглэгчийн эрхээ (<b><?php echo $role_rank_superadmin; ?></b> эсвэл <b><?php echo $role_rank_admin; ?></b>) дээшлүүлнэ үү, тохиргоо хэсэгт хэрэглэгчийн эрх дээшлүүлэх заавар байгаа.", eventOk);
+    }
+}
+</script>
+
 <?php
 $queryFetchListItemsStateCountAll = "SELECT * FROM item WHERE userID=".$_COOKIE["userID"];
 $resultFetchListItemsStateCountAll = $conn->query($queryFetchListItemsStateCountAll);
@@ -306,6 +332,24 @@ mysqli_free_result($resultFetchListItemsStateCountInActive);
 			<div onClick="myzar_item_update(<?php echo $rowFetchListItems["id"]; ?>,'<?php echo $rowFetchListItems["title"]; ?>','<?php echo implode(",",$categories); ?>',<?php echo $rowFetchListItems["role"]; ?>)" class="button_yellow" style="float: left; background: #a0cf0a; font-size: 14px; margin: 5px">
 				<div style="margin-left: 5px; color: white">Шинэчлэх</div>
 			</div>
+			<?php
+			if($rowFetchListItems["role"]>=3){
+			?>
+			<div onClick="myzar_item_boost(true, <?php echo $rowFetchListItems["id"]; ?>)" class="button_yellow" style="height: 15px; float: left; background: #a0cf0a; font-size: 14px; margin: 5px">
+				<img src="boost.png" width="30px" height="35px" />
+				<div style="margin-left: 5px; color: white">Boost хүсэлт</div>
+			</div>
+			<?php
+			}
+			else {
+			?>
+			<div onClick="myzar_item_boost(false, <?php echo $rowFetchListItems["id"]; ?>)" class="button_yellow" style="height: 15px; float: left; background: #a0cf0a; font-size: 14px; margin: 5px">
+				<img src="boost.png" width="30px" height="35px" />
+				<div style="margin-left: 5px; color: white">Boost хүсэлт</div>
+			</div>
+			<?php
+			}
+			?>
 			<div onClick="myzar_category_selected_item_edit(<?php echo $rowFetchListItems["id"]; ?>)" class="button_yellow" style="float: left; background: transparent; font-size: 14px; margin: 5px">
 				<div style="margin-left: 5px; color: #0086bf">Зараа засах</div>
 			</div>
