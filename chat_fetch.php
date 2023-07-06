@@ -44,13 +44,16 @@ if(isset($_GET["toID"])){
 			$body->message = $row["message"];
 			$message->body = $body;
 		}
+		else if($row["type"] == 4){
+			$message->body = fetchItem($row["message"], $row["fromID"], true);
+		}
 		
 		$objArr[] = $message;
 	}
 	echo json_encode($objArr);
 }
 
-function fetchItem($itemID, $userID){
+function fetchItem($itemID, $userID, $isBoostRequest = false){
 	global $conn;
 	$query = "SELECT * FROM item WHERE id=".$itemID;
 	$result = $conn->query($query);
@@ -63,6 +66,7 @@ function fetchItem($itemID, $userID){
 		$body->category = harvestCategory($row["category"]);
 		$body->pay = getPayAmount($row["status"], $userID);
 		$body->status = $row["status"];
+		if($isBoostRequest) $body->isBoost = true;
 	}
 	else {
 		$body = null;

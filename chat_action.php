@@ -95,6 +95,17 @@ if(isset($_REQUEST["action"]) && isset($_REQUEST["type"]) && isset($_REQUEST["id
 			$query = "UPDATE chat SET isRead=1, note='".json_encode($note)."' WHERE id=".$id;
 		}
 	}
+	else if($type == 3){
+		if($action == 0){
+			if($action == 0){
+				$query .= " item SET isBoost=1";
+			}
+			else if($action == 1) {
+				$query .= " item SET isBoost=0";
+			}
+			$query .= " WHERE id=".$id;
+		}
+	}
 	
 	if($conn->query($query)){
 		echo "OK";

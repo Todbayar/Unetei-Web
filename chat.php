@@ -87,6 +87,9 @@ function chat_select(toID){
 				else if(parseInt(chatRow.type) == 3){
 					chat_list_role(chatRow.id, chatRow.sender, chatRow.body, chatRow.datetime, chatRow.isEdit, chatRow.note);
 				}
+				else if(parseInt(chatRow.type) == 4){
+					chat_list_item(chatRow.id, chatRow.sender, chatRow.body, chatRow.datetime, chatRow.isEdit, chatRow.note, true);
+				}
 				else {
 					chat_list_message(chatRow.sender, chatRow.body, chatRow.datetime, chatRow.isEdit);
 				}
@@ -195,7 +198,8 @@ function chat_list_category(chatID, sender, body, datetime, isEdit){
 	}
 }
 
-function chat_list_item(chatID, sender, body, datetime, isEdit, note){
+function chat_list_item(chatID, sender, body, datetime, isEdit, note, isBoost){
+	var isBoost = typeof isBoost !== undefined ? isBoost : false;
 	var statusColor = "#878787";
 	if(body.status == 2) statusColor = "#f00";
 	else if(body.status == 1) statusColor = "#00d300";
@@ -233,6 +237,7 @@ function chat_list_item(chatID, sender, body, datetime, isEdit, note){
 		htmlItem += "<div style=\"font-size:12px; color:gray; margin-top:2px\">Төлөх:"+(body.pay==0?"Үнэгүй":(body.pay+"₮"+payment))+"</div>";
 		htmlItem += paymentHistory+"</div><div class=\"datetime\">"+datetime+"</div>";
 		if(isEdit) htmlItem += chat_list_item_action_show(chatID, body.isActive, body.id, true);
+		if(isBoost) htmlItem += chat_list_item_action_boost_show(chatID, body.id, true);
 		htmlItem += "</div>"+chat_profile_image_show(sender.image)+"</div>";
 		$(".chat .right .top").append(htmlItem);
 	}
@@ -249,6 +254,7 @@ function chat_list_item(chatID, sender, body, datetime, isEdit, note){
 		htmlItem += "<div style=\"font-size:12px; color:gray; margin-top:2px\">Төлөх:"+(body.pay==0?"Үнэгүй":(body.pay+"₮"+payment))+"</div>";
 		htmlItem += paymentHistory+"</div><div class=\"datetime\">"+datetime+"</div>";
 		if(isEdit) htmlItem += chat_list_item_action_show(chatID, body.isActive, body.id);
+		if(isBoost) htmlItem += chat_list_item_action_boost_show(chatID, body.id);
 		htmlItem += "</div></div>";
 		$(".chat .right .top").append(htmlItem);
 	}
@@ -318,6 +324,15 @@ function chat_list_item_action_show(chatID, isactive, id, isMe = false){
 		return "";
 	}
 }
+	
+function chat_list_item_action_boost_show(chatID, id, isMe = false){
+	if(!isMe){
+		return "<div id=\"3"+chatID+"\" class=\"action\"><div onClick=\"chat_action("+chatID+",0,3,"+id+")\" class=\"button_yellow\" style=\"float: left\"><i class=\"fa-solid fa-check\"></i></div><div onClick=\"chat_action("+chatID+",1,3,"+id+")\" class=\"button_yellow\" style=\"float: left; margin-left: 5px\"><i class=\"fa-solid fa-arrow-rotate-left\"></i></div></div>";   
+	}
+	else {
+		return "<div id=\"3"+chatID+"\" class=\"action\" style=\"display:flex; justify-content: flex-end\"><div onClick=\"chat_action("+chatID+",0,3,"+id+")\" class=\"button_yellow\" style=\"float: left\"><i class=\"fa-solid fa-check\"></i></div><div onClick=\"chat_action("+chatID+",1,3,"+id+")\" class=\"button_yellow\" style=\"float: left; margin-left: 5px\"><i class=\"fa-solid fa-arrow-rotate-left\"></i></div></div>";
+	}
+}
 
 function chat_profile_image_show(image){
 	if(image != ""){
@@ -331,7 +346,7 @@ function chat_profile_image_show(image){
 function chat_action(chatID, action, type, id){
 	//chatID chat row id
 	//action 0=accept, 1=dismiss
-	//type 0=category, 1=item, 2=role
+	//type 0=category, 1=item, 2=role, 3=item boost
 	//id rowid
 	
 	var chatActionSubmitData = new FormData();
