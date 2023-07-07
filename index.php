@@ -49,54 +49,51 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 		};
 		firebase.initializeApp(firebaseConfig);
 		
- 		const messaging = firebase.messaging();	//not working bcz of service not supported on mobile android
 		var timerDropDownMenu;
 		
 		$(document).ready(function(){
 			if('serviceWorker' in navigator){				
 				navigator.serviceWorker.register('firebase-messaging-sw.js');
-			} 
-			else {
-				console.log('Service Worker not supported');
-			}
-			
-			
-			var eventNotification = new CustomEvent("notificationDone");
-			window.addEventListener("notificationDone", function(){
-				Notification.requestPermission().then((permission) => {
-					if(permission === 'granted'){
-						console.log('<notification>:Permission granted');
-						messaging.getToken({vapidKey: "<?php echo $firebase_public_vapid_key; ?>"}).then((currentToken) => {
-							if (currentToken) {
-								console.log('<notification>:token received:', currentToken);
-								$.post("mysql_user_fcm.php", {token:currentToken});
-								localStorage.setItem("isNotificationGranted", true);
-							}
-							else {
-								console.log("<notification>:Permission required!");
-							}
-						}).catch((err) => {
-							console.log('<notification>:An error occurred while retrieving token. ', err);
-						});
-					}
-					else {
-						localStorage.setItem("isNotificationGranted", false);
-					}
+				const messaging = firebase.messaging();	//not working bcz of service not supported on mobile android
+				var eventNotification = new CustomEvent("notificationDone");
+				window.addEventListener("notificationDone", function(){
+					Notification.requestPermission().then((permission) => {
+						if(permission === 'granted'){
+							console.log('<notification>:Permission granted');
+							messaging.getToken({vapidKey: "<?php echo $firebase_public_vapid_key; ?>"}).then((currentToken) => {
+								if (currentToken) {
+									console.log('<notification>:token received:', currentToken);
+									$.post("mysql_user_fcm.php", {token:currentToken});
+									localStorage.setItem("isNotificationGranted", true);
+								}
+								else {
+									console.log("<notification>:Permission required!");
+								}
+							}).catch((err) => {
+								console.log('<notification>:An error occurred while retrieving token. ', err);
+							});
+						}
+						else {
+							localStorage.setItem("isNotificationGranted", false);
+						}
+					});
 				});
-			});
+				<?php
+				if(isset($_COOKIE["userID"])){
+					?>
+					if(localStorage.getItem("isNotificationGranted")==null){	
+						confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i> Та мэдэгдэл хүлээж авхыг зөвшөөрнө үү, ингэснээр цаг алдалгүй таньд ирэх <b>гүйлгээ</b>, <b>хүсэлтүүд</b>, <b>баталгаажуулалт</b> зэрэг чухал мэдээллийн мэдэгдэл хүлээн авах боломжтой болж та <?php echo $domain; ?>-ыг бүрэн удирдах эрхтэй болно.", eventNotification);
+					}
+					<?php
+				}
+				?>
+			}
+			else {
+//				console.log('Service Worker not supported');
+			}
 			
 			<?php
 			if(isset($_COOKIE["userID"])){
-				?>
-				if(localStorage.getItem("isNotificationGranted")==null){	
-					confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i> Та мэдэгдэл хүлээж авхыг зөвшөөрнө үү, ингэснээр цаг алдалгүй таньд ирэх <b>гүйлгээ</b>, <b>хүсэлтүүд</b>, <b>баталгаажуулалт</b> зэрэг чухал мэдээллийн мэдэгдэл хүлээн авах боломжтой болж та <?php echo $domain; ?>-ыг бүрэн удирдах эрхтэй болно.", eventNotification);
-				}
-				<?php
-			}
-			?>
-			
-			<?php
-			if(isset($_COOKIE["uid"]) && isset($_COOKIE["phone"])){
 				?>
 				$("#myzar_phone").text("+"<?php echo $_COOKIE["phone"]; ?>);
 				$("#myzar_nav").text("Миний зар");
@@ -149,7 +146,7 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 			});
 			
 			<?php
-			if(isset($_COOKIE["userID"]) && getPhone($_COOKIE["userID"])!=$superduperadmin){
+			if(isset($_COOKIE["phone"]) && $_COOKIE["phone"]!=$superduperadmin){
 				?>
 				if(localStorage.getItem("isBecameFollower")==null){
 					$(".popup.become_follower").show();
@@ -172,7 +169,7 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 			
 		function become_follower(isBecame){
 			const affiliate = $(".popup.become_follower input#phone").val();
-			console.log("<become_follower>:"+affiliate);
+//			console.log("<become_follower>:"+affiliate);
 			if(isBecame){
 				$.post("mysql_user_follower.php", {phone:affiliate}).done(function(response){
 					if(response=="OK"){
@@ -188,6 +185,8 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 		   	}
 			else {
 				localStorage.setItem("isBecameFollower",false);
+				$("body").css("overflow-y", "auto");
+				$(".popup.become_follower").hide();
 			}
 		}
 		</script>
