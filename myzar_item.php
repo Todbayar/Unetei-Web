@@ -348,7 +348,7 @@ mysqli_free_result($resultFetchListItemsStateCountInActive);
 					}
 					else if($boostDateTime>=$nowDatetime && $rowFetchListItems["isactive"]==4) {
 						?>
-						<div onClick="confirmation_ok('<?php echo "<b>".$rowFetchListItems["title"]." ".convertPriceToText($rowFetchListItems["price"])." ₮"." (#".$rowFetchListItems["id"].")"; ?></b>-ыг Facebook Boost хийх хүсэлт баталгаажсан байна.', null)" class="button_yellow" style="height: 15px; float: left; background: #a0cf0a; font-size: 14px; margin: 5px">
+						<div onClick="confirmation_ok('<?php echo "<b>".$rowFetchListItems["title"]." ".convertPriceToText($rowFetchListItems["price"])." ₮"." (#".$rowFetchListItems["id"].")"; ?></b>-ыг Facebook Boost хийх хүсэлт баталгаажсан байна.<br/><?php echo $rowFetchListItems["boost"]; ?>-аас хойш дахин хүсэлт илгээнэ үү.', null)" class="button_yellow" style="height: 15px; float: left; background: #a0cf0a; font-size: 14px; margin: 5px">
 							<img src="boost_r.png" width="30px" height="35px" />
 							<div style="margin-left: 5px; color: white">Boost хийгдсэн</div>
 						</div>
@@ -364,7 +364,7 @@ mysqli_free_result($resultFetchListItemsStateCountInActive);
 							</div>
 							<?php
 						}
-						if($rowFetchListItems["count_boost_user"]>=$availableBoostCount){
+						else if($rowFetchListItems["count_boost_user"]>=$availableBoostCount){
 							?>
 							<div onClick="confirmation_ok('Таны Facebook Boost хийх хүсэлт дууссан байна!', null)" class="button_yellow" style="height: 15px; float: left; background: #a0cf0a; font-size: 14px; margin: 5px">
 								<img src="boost_bw.png" width="30px" height="35px" />

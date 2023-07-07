@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jul 02, 2023 at 07:54 AM
+-- Generation Time: Jul 07, 2023 at 07:31 AM
 -- Server version: 5.7.40
 -- PHP Version: 8.0.26
 
@@ -20,6 +20,37 @@ SET time_zone = "+00:00";
 --
 -- Database: `unetei`
 --
+
+DELIMITER $$
+--
+-- Functions
+--
+DROP FUNCTION IF EXISTS `get_unique_items`$$
+CREATE DEFINER=`root`@`localhost` FUNCTION `get_unique_items` (`str` VARCHAR(1000)) RETURNS VARCHAR(1000) CHARSET utf8  BEGIN
+
+        SET @String      = str;
+        SET @Occurrences = LENGTH(@String) - LENGTH(REPLACE(@String, ',', ''));
+        SET @ret='';
+        myloop: WHILE (@Occurrences > 0)
+        DO 
+            SET @myValue = SUBSTRING_INDEX(@String, ',', 1);
+            IF (TRIM(@myValue) != '') THEN
+                IF((LENGTH(@ret) - LENGTH(REPLACE(@ret, @myValue, '')))=0) THEN
+                        SELECT CONCAT(@ret,@myValue,',') INTO @ret;
+                END if;
+            END IF;
+            SET @Occurrences = LENGTH(@String) - LENGTH(REPLACE(@String, ',', ''));
+            IF (@occurrences = 0) THEN 
+                LEAVE myloop; 
+            END IF;
+            SET @String = SUBSTRING(@String,LENGTH(SUBSTRING_INDEX(@String, ',', 1))+2);
+        END WHILE;    
+SET @ret=concat(substring(@ret,1,length(@ret)-1), '');
+return @ret;
+
+END$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -1425,9 +1456,19 @@ CREATE TABLE IF NOT EXISTS `chat` (
   `isRead` tinyint(1) NOT NULL COMMENT '0-unread, 1-read',
   `datetime` datetime NOT NULL,
   `note` text COMMENT 'isPaid',
-  `action` tinyint(4) DEFAULT NULL COMMENT 'add-0, edit-1, update-2',
+  `action` tinyint(4) DEFAULT NULL COMMENT 'add-0, edit-1, boost-2, update-3',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `chat`
+--
+
+INSERT INTO `chat` (`id`, `fromID`, `toID`, `type`, `message`, `isRead`, `datetime`, `note`, `action`) VALUES
+(1, 1, 1, 2, '5', 1, '2023-07-07 15:20:09', '{\"payment\":[{\"datetime\":\"2023-07-07 02:53:56\",\"isPaid\":true},{\"datetime\":\"2023-07-07 02:54:53\",\"isPaid\":true},{\"datetime\":\"2023-07-07 03:16:54\",\"isPaid\":false},{\"datetime\":\"2023-07-07 03:20:02\",\"isPaid\":true}]}', NULL),
+(2, 1, 1, 2, '4', 1, '2023-07-07 15:26:28', NULL, NULL),
+(4, 1, 1, 2, '2', 1, '2023-07-07 15:29:01', NULL, NULL),
+(5, 2, 1, 2, '1', 1, '2023-07-07 15:30:29', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1441,7 +1482,14 @@ CREATE TABLE IF NOT EXISTS `favorite` (
   `itemID` int(10) UNSIGNED NOT NULL,
   `userID` int(10) UNSIGNED NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `favorite`
+--
+
+INSERT INTO `favorite` (`id`, `itemID`, `userID`) VALUES
+(2, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -1469,7 +1517,7 @@ DROP TABLE IF EXISTS `item`;
 CREATE TABLE IF NOT EXISTS `item` (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `title` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
-  `quality` tinyint(4) NOT NULL COMMENT '0-шинэ, 1-хуучин',
+  `quality` tinyint(4) DEFAULT NULL COMMENT '0-шинэ, 1-хуучин',
   `address` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   `price` decimal(22,2) UNSIGNED NOT NULL,
   `youtube` varchar(2048) COLLATE utf8_unicode_ci NOT NULL,
@@ -1488,15 +1536,20 @@ CREATE TABLE IF NOT EXISTS `item` (
   `expire_days` int(10) NOT NULL,
   `status` tinyint(3) NOT NULL DEFAULT '0' COMMENT '0-regular, 1-special, 2-vip',
   `isactive` tinyint(4) NOT NULL COMMENT '0-inactive, 1-review, 2-archive, 3-dismiss, 4-active',
+  `boost` datetime DEFAULT NULL COMMENT 'Facebook boost expire datetime',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `item`
 --
 
-INSERT INTO `item` (`id`, `title`, `quality`, `address`, `price`, `youtube`, `video`, `extras`, `description`, `city`, `name`, `phone`, `email`, `userID`, `category`, `item_viewer`, `phone_viewer`, `datetime`, `expire_days`, `status`, `isactive`) VALUES
-(1, 'test 123', 0, '', '97.00', '', '', '[{&quot;Размер&quot;:&quot;XS&quot;}]', 'sd', 'Улаанбаатар', 'Zulaa', '+97699031094', '', 2, 'c3_1', 7, 1, '2023-07-02 10:58:44', 10, 2, 0);
+INSERT INTO `item` (`id`, `title`, `quality`, `address`, `price`, `youtube`, `video`, `extras`, `description`, `city`, `name`, `phone`, `email`, `userID`, `category`, `item_viewer`, `phone_viewer`, `datetime`, `expire_days`, `status`, `isactive`, `boost`) VALUES
+(1, 'test 123', 1, '', '97.00', '', '', '[{&quot;Размер&quot;:&quot;XS&quot;}]', 'sd', 'Улаанбаатар', 'Zulaa', '+97699031094', '', 2, 'c3_1', 21, 2, '2023-07-06 11:08:54', 10, 2, 4, '2023-07-14 15:30:40'),
+(2, 'asd', NULL, 'ХУД Чандманийн ам', '987.00', '', '', '[{&quot;Талбай&quot;:&quot;98&quot;},{&quot;Барилгын явц&quot;:&quot;&quot;},{&quot;Лизингээр авах боломж&quot;:&quot;&quot;},{&quot;Шал&quot;:&quot;Паркет&quot;},{&quot;Тагт&quot;:&quot;1&quot;},{&quot;Ашиглалтанд орсон он&quot;:&quot;2012&quot;},{&quot;Гараж&quot;:&quot;1&quot;},{&quot;Цонх&quot;:&quot;2&quot;},{&quot;Барилгын давхар&quot;:&quot;7&quot;},{&quot;Хаалга&quot;:&quot;1&quot;},{&quot;Хэдэн давхарт&quot;:&quot;1&quot;},{&quot;Цонхны тоо&quot;:&quot;2&quot;}]', 'asd', 'Улаанбаатар', 'Тодбаяр', '+97699213557', 'atodko0513@gmail.com', 1, 'c4_1', 61, 1, '2023-07-05 05:18:27', 10, 2, 4, '2023-07-14 15:29:16'),
+(3, 'Хэлло', NULL, '', '54.00', '', '', '[{&quot;Размер&quot;:&quot;&quot;}]', 'Хы', 'Улаанбаатар', 'Алтанхуяг', '+97680104547', '', 3, 'c3_1', 14, 0, '2023-07-04 03:35:15', 20, 1, 4, '2023-07-14 11:08:54'),
+(4, 'test', NULL, '', '654.00', '', '', '[{&quot;Талбай&quot;:&quot;&quot;},{&quot;Барилгын явц&quot;:&quot;&quot;},{&quot;Лизингээр авах боломж&quot;:&quot;&quot;},{&quot;Шал&quot;:&quot;&quot;},{&quot;Тагт&quot;:&quot;&quot;},{&quot;Ашиглалтанд орсон он&quot;:&quot;&quot;},{&quot;Гараж&quot;:&quot;&quot;},{&quot;Цонх&quot;:&quot;&quot;},{&quot;Барилгын давхар&quot;:&quot;&quot;},{&quot;Хаалга&quot;:&quot;&quot;},{&quot;Хэдэн давхарт&quot;:&quot;&quot;},{&quot;Цонхны тоо&quot;:&quot;&quot;}]', 'asd', 'Улаанбаатар', 'Тодбаяр', '+97699213557', 'atodko0513@gmail.com', 1, 'c4_2', 0, 0, '2023-07-06 10:24:48', 20, 1, 4, '2023-07-14 15:26:43'),
+(5, 'asd', NULL, '', '897.00', '', '', '[{&quot;Размер&quot;:&quot;&quot;}]', 'asdf', 'Улаанбаатар', 'Тодбаяр', '+97699213557', 'atodko0513@gmail.com', 1, 'c3_2', 5, 0, '2023-07-07 03:19:53', 10, 2, 4, '2023-07-14 15:20:15');
 
 -- --------------------------------------------------------
 
@@ -1526,15 +1579,16 @@ CREATE TABLE IF NOT EXISTS `user` (
   `lastlogged` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `phone` (`phone`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `user`
 --
 
 INSERT INTO `user` (`id`, `uid`, `name`, `image`, `email`, `phone`, `city`, `affiliate`, `bank_name`, `bank_owner`, `bank_account`, `socialpay`, `topup`, `role`, `status`, `token`, `signed`, `lastlogged`) VALUES
-(1, 'P6jlLGWoZPanlSkWbxQL2FVY0PS2', 'Тодбаяр', '20230630102809_MyPic.jpg', 'atodko0513@gmail.com', '+97699213557', 'Улаанбаатар', '', 'ХААН банк', 'Тодбаяр Алтанхуяг', '5020922323', '20230630102809_Todbayar SocialPay QR 1.jpg', NULL, 4, 1, NULL, '2023-06-29 00:00:00', '2023-06-29 05:51:59'),
-(2, 'nE6uy9lDuvY9GYKQbySRcPgrjX13', 'Zulaa', NULL, '', '+97699031094', 'Улаанбаатар', '', '', '', '', NULL, NULL, 4, 1, NULL, '2023-06-30 00:00:00', '2023-06-30 05:27:41');
+(1, 'P6jlLGWoZPanlSkWbxQL2FVY0PS2', 'Тодбаяр', '20230630102809_MyPic.jpg', 'atodko0513@gmail.com', '+97699213557', 'Улаанбаатар', '', 'ХААН банк', 'Тодбаяр Алтанхуяг', '5020922323', '20230630102809_Todbayar SocialPay QR 1.jpg', NULL, 3, 1, 'f1pHQHFmw-AWscDUcoaZ1C:APA91bGXvzxF1dBqB6fesHpNBrBG6zXKBh3FW1tZ7-HNhNSTRJJOK2yrH5ndcKm_nSeFjULKsctIEzHR85mgUlzUc7NJoIUzzk1UFFtVl8erxrDgd-y_rYVXqgGlHpPWXZ5MYTM8nBZS', '2023-06-29 00:00:00', '2023-07-05 06:16:44'),
+(2, 'nE6uy9lDuvY9GYKQbySRcPgrjX13', 'Zulaa', NULL, '', '+97699031094', 'Улаанбаатар', '+97699213557', '', '', '', '20230704030409_qrcode-logo.png', NULL, 3, 1, 'f1JorrgljKyVTyz1hRnD6A:APA91bG7Wo-nMi1BZoFPmA9wUptwTUc1DDrYMtVaTDSRYaFWjgoKOBrZDvKys1GK7NyxoxrAgyjzzS4adVaDgjRR11T2ZhrZds6oqk82e8LTokp3MA-M2fDHI3ArjxvyAzraFr7Y8z1f', '2023-06-30 00:00:00', '2023-06-30 05:27:41'),
+(3, 'SF2amAVyDOOXOCEOHSdqwnpB36S2', 'Алтанхуяг', '20230703080607_FB_IMG_1688385879458.jpg', '', '+97680104547', 'Улаанбаатар', '+97699031094', '', '', '', NULL, NULL, 2, 1, NULL, '2023-07-03 00:00:00', '2023-07-05 06:12:04');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

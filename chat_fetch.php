@@ -1,6 +1,7 @@
 <?php
 include "mysql_config.php";
 include_once "mysql_misc.php";
+include_once "info.php";
 
 if(isset($_GET["toID"])){
 	$query = "SELECT *, (SELECT name FROM user WHERE id=fromID) AS sender_name, (SELECT image FROM user WHERE id=fromID) AS sender_image FROM chat WHERE (toID=".$_COOKIE["userID"]." AND fromID=".$_GET["toID"].") OR (toID=".$_GET["toID"]." AND fromID=".$_COOKIE["userID"].") ORDER BY datetime DESC";
@@ -14,7 +15,8 @@ if(isset($_GET["toID"])){
 		$message->note = !is_null($row["note"])?$row["note"]:"";
 		$message->type = $row["type"];
 		$message->datetime = $row["datetime"];
-		$message->isEdit = (getUserRole($_COOKIE["userID"])>=2 && $_COOKIE["userID"]==$row["toID"]) ? true : false;	//receive income from its followers
+		$message->isEdit = (getUserRole($_COOKIE["userID"])>=2 && $_COOKIE["userID"]==$row["toID"]) ? true : false;	//control button available for super admin, admin, manager receive income from its followers
+		$message->isBoost = $row["action"]==BOOST?true:false;
 
 		$sender = new stdClass();
 		$sender->id = $row["fromID"];
@@ -44,21 +46,19 @@ if(isset($_GET["toID"])){
 			$body->message = $row["message"];
 			$message->body = $body;
 		}
-		else if($row["type"] == 4){
-			$message->body = fetchItem($row["message"], $row["fromID"], true);
-		}
 		
 		$objArr[] = $message;
 	}
 	echo json_encode($objArr);
 }
 
-function fetchItem($itemID, $userID, $isBoostRequest = false){
+function fetchItem($itemID, $userID){
 	global $conn;
 	$query = "SELECT * FROM item WHERE id=".$itemID;
 	$result = $conn->query($query);
 	$row = mysqli_fetch_array($result);
 	$body = new stdClass();
+	$nowDatetime = new DateTime("now");
 	if(mysqli_num_rows($result) > 0){
 		$body->id = $row["id"];
 		$body->title = $row["title"];
@@ -66,7 +66,7 @@ function fetchItem($itemID, $userID, $isBoostRequest = false){
 		$body->category = harvestCategory($row["category"]);
 		$body->pay = getPayAmount($row["status"], $userID);
 		$body->status = $row["status"];
-		if($isBoostRequest) $body->isBoost = true;
+		$body->isBoosted = !is_null($row["boost"])?((new DateTime($row["boost"]))>$nowDatetime?true:false):false;
 	}
 	else {
 		$body = null;

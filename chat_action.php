@@ -26,6 +26,9 @@ if(isset($_REQUEST["action"]) && isset($_REQUEST["type"]) && isset($_REQUEST["id
 		if($rowChat["action"]==EDIT){
 			@$conn->query("UPDATE chat SET action=null WHERE id=".$chatID);
 		}
+		else if($rowChat["action"]==BOOST){
+			@$conn->query("UPDATE chat SET action=null WHERE id=".$chatID);
+		}
 		else {
 			$note = $rowChat["note"];
 			if($note==""){
@@ -51,14 +54,17 @@ if(isset($_REQUEST["action"]) && isset($_REQUEST["type"]) && isset($_REQUEST["id
 		}
 		
 		if($action == 0){
-			$query .= " item SET isactive=4";
+			$query .= " item SET isactive=4, boost=NULL";
 		}
 		else if($action == 1) {
-			$query .= " item SET isactive=3";
+			$query .= " item SET isactive=3, boost=NULL";
+		}
+		else if($action == 2){
+			$query .= " item SET boost=DATE_ADD(NOW(), INTERVAL ".BOOST_DAYS." DAY)";
 		}
 		$query .= " WHERE id=".$id;
 	}
-	else if($type == 2){
+	else if($type == 2){	//message
 		if($action == 0){
 			$queryFetchRole = "SELECT fromID, message FROM chat WHERE id=".$id;
 			$resultFetchRole = $conn->query($queryFetchRole);
@@ -93,17 +99,6 @@ if(isset($_REQUEST["action"]) && isset($_REQUEST["type"]) && isset($_REQUEST["id
 			$payment->datetime = date("Y-m-d h:i:s");
 			$note->payment[] = $payment;			
 			$query = "UPDATE chat SET isRead=1, note='".json_encode($note)."' WHERE id=".$id;
-		}
-	}
-	else if($type == 3){
-		if($action == 0){
-			if($action == 0){
-				$query .= " item SET isBoost=1";
-			}
-			else if($action == 1) {
-				$query .= " item SET isBoost=0";
-			}
-			$query .= " WHERE id=".$id;
 		}
 	}
 	

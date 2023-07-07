@@ -20,6 +20,7 @@ function chat_send($from, $to, $type, $message, $isPrint = true, $isEdit = false
 		$type_a = $type!==4?$type:2;
 		if(!isChatExist($from, $to, $type_a, $message)){
 			$query = "INSERT INTO chat (fromID, toID, type, message, isRead, datetime) VALUES (".$from.", ".$to.", ".$type_a.", '".$message."', 0, '".date("Y-m-d H:i:s")."')";
+			if($type==4) $query = "INSERT INTO chat (fromID, toID, type, message, isRead, datetime, action) VALUES (".$from.", ".$to.", ".$type_a.", '".$message."', 0, '".date("Y-m-d H:i:s")."', ".BOOST.")";
 			if($conn->query($query)){
 //				sendNotification("?page=chat&toID=".$to, $from);
 				if($isPrint) echo "OK";

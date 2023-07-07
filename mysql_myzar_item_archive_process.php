@@ -5,7 +5,7 @@ include_once "mysql_misc.php";
 include_once "chat_process.php";
 
 if(isset($_POST["id"]) && isset($_POST["survey"])){
-	$query = "UPDATE item SET isactive=2 WHERE id=".$_POST["id"];
+	$query = "UPDATE item SET isactive=2, boost=NULL WHERE id=".$_POST["id"];
 	if($conn->query($query)){
 		$queryItem = "SELECT * FROM item WHERE id=".$_POST["id"];
 		$resultItem = $conn->query($queryItem);

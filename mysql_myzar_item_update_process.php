@@ -16,7 +16,7 @@ if(isset($_POST["id"]) && isset($_POST["status"])){
 	$userID = getUserIDFromItem($itemID);
 	$payAmount = getPayAmount($_POST["status"], $userID);
 	
-	$query = "UPDATE item SET datetime='".date("Y-m-d h:i:s")."', isactive=1, expire_days=".$days.", status=".$_POST["status"]." WHERE id=".$itemID;
+	$query = "UPDATE item SET datetime='".date("Y-m-d h:i:s")."', isactive=1, expire_days=".$days.", status=".$_POST["status"].", boost=NULL WHERE id=".$itemID;
 	if($conn->query($query)){
 		chat_send($userID, getAffiliateID($userID), 2, $itemID, false);
 		echo json_encode(array("id"=>$itemID, "pay_amount"=>$payAmount));
