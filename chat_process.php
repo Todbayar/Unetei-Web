@@ -17,8 +17,9 @@ if(isset($_REQUEST["fromID"]) && isset($_REQUEST["toID"]) && isset($_REQUEST["ty
 function chat_send($from, $to, $type, $message, $isPrint = true, $isEdit = false){
 	global $conn, $smtp_host, $smtp_port, $smtp_username, $smtp_password;
 	if($message != ""){
-		if(!isChatExist($from, $to, $type, $message)){
-			$query = "INSERT INTO chat (fromID, toID, type, message, isRead, datetime) VALUES (".$from.", ".$to.", ".$type.", '".$message."', 0, '".date("Y-m-d H:i:s")."')";
+		$type_a = $type!==4?$type:2;
+		if(!isChatExist($from, $to, $type_a, $message)){
+			$query = "INSERT INTO chat (fromID, toID, type, message, isRead, datetime) VALUES (".$from.", ".$to.", ".$type_a.", '".$message."', 0, '".date("Y-m-d H:i:s")."')";
 			if($conn->query($query)){
 //				sendNotification("?page=chat&toID=".$to, $from);
 				if($isPrint) echo "OK";
@@ -30,7 +31,8 @@ function chat_send($from, $to, $type, $message, $isPrint = true, $isEdit = false
 		else {
 			$query = "UPDATE chat SET isRead=0, datetime='".date("Y-m-d H:i:s")."'";
 			if($isEdit) $query .= ", action=".EDIT;
-			$query .= " WHERE fromID=".$from." AND toID=".$to." AND type=".$type." AND message='".$message."'";
+			if($type==4) $query .= ", action=".BOOST;
+			$query .= " WHERE fromID=".$from." AND toID=".$to." AND type=".$type_a." AND message='".$message."'";
 			if($conn->query($query)){
 //				sendNotification("?page=chat&toID=".$to, $from);
 				if($isPrint) echo "OK";

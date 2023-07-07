@@ -5,7 +5,7 @@ include_once "chat_process.php";
 include_once "info.php";
 
 if(isset($_POST["fromID"]) && isset($_POST["itemID"])){
-	$queryBoostCount = "SELECT (SELECT COUNT(*) FROM item WHERE isBoost=1) AS boost_total, (SELECT COUNT(*) FROM item WHERE isBoost=1 AND userID=".$_POST["fromID"].") AS boost_user_total";
+	$queryBoostCount = "SELECT (SELECT COUNT(*) FROM item WHERE boost>NOW()) AS boost_total, (SELECT COUNT(*) FROM item WHERE boost>NOW() AND userID=".$_POST["fromID"].") AS boost_user_total";
 	$resultBoostCount = $conn->query($queryBoostCount);
 	$rowBoostCount = mysqli_fetch_array($resultBoostCount);
 	if($rowBoostCount["boost_total"]<$item_boost_total){
@@ -14,20 +14,20 @@ if(isset($_POST["fromID"]) && isset($_POST["itemID"])){
 		$superduperadminID = getUserIDFromPhone($superduperadmin);
 		if($userPhone!=$superduperadmin){
 			if($userRole==3){
-				if($rowBoostCount["boost_total"]<$item_boost_admin){
+				if($rowBoostCount["boost_user_total"]<$item_boost_admin){
 					echo chat_send($_POST["fromID"], $superduperadminID, 4, $_POST["itemID"]);
 				}
 				else {
 					echo "FULL";
-				}	
+				}
 			}
 			else if($userRole==4){
-				if($rowBoostCount["boost_total"]<$item_boost_admin){
+				if($rowBoostCount["boost_user_total"]<$item_boost_superadmin){
 					echo chat_send($_POST["fromID"], $superduperadminID, 4, $_POST["itemID"]);
 				}
 				else {
 					echo "FULL";
-				}	
+				}
 			}
 		}
 		else {

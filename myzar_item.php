@@ -6,6 +6,7 @@
 include "mysql_config.php";
 include_once "myzar_item_form.php"; 
 include_once "mysql_misc.php";
+include_once "info.php";
 ?>
 
 <style>
@@ -90,12 +91,12 @@ include_once "mysql_misc.php";
 </style>
 
 <script>
-function myzar_item_boost(isValid, itemID){
+function myzar_item_boost(isValid, itemID, title, price){
 	if(isValid){
 		$.post("myzar_item_boost.php", {fromID:<?php echo $_COOKIE["userID"]; ?>, itemID:itemID}).done(function(response){
 //			console.log("<myzar_item_boost>:"+response);
 			if(response == "OK"){
-				confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Таны Facebook Boost хийх хүсэлт илгээгдлээ. Таньд удахгүй Facebook Boost хийгдсэн тухай мэдэгдэл таны <b>чатанд</b> ирэх болно.", null);
+				confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Таны <b>"+title+" "+convertPriceToTextJS(price)+" (#"+itemID+")"+"</b>-ыг Facebook Boost хийх хүсэлт илгээгдлээ. Таньд удахгүй Facebook Boost хийгдсэн тухай мэдэгдэл таны <b>чатанд</b> ирэх болно.", null);
 		   	}
 			else if(response == "FULL"){
 				confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Таны Facebook Boost хийх хүсэлт дуусчээ, та дараа дахин оролдоно уу!", null);
@@ -187,7 +188,7 @@ mysqli_free_result($resultFetchListItemsStateCountInActive);
 
 <div class="myzar_content_list_items">
 	<?php
-	$queryFetchListItems = "SELECT *, (SELECT role FROM user WHERE id=item.userID) AS role, (SELECT COUNT(*) FROM images WHERE item=item.id) AS count_images, (SELECT image FROM images WHERE item=item.id LIMIT 1) AS image, (SELECT COUNT(isBoost) FROM item WHERE userID=item.userID AND isBoost=1) AS count_boost_user FROM item WHERE userID=".$_COOKIE["userID"];
+	$queryFetchListItems = "SELECT *, (SELECT role FROM user WHERE id=item.userID) AS role, (SELECT COUNT(*) FROM images WHERE item=item.id) AS count_images, (SELECT image FROM images WHERE item=item.id LIMIT 1) AS image, (SELECT COUNT(*) FROM item i LEFT JOIN chat c ON i.id=c.message WHERE (i.boost IS NOT NULL AND i.boost>NOW()) OR (i.boost IS NULL AND c.action=3)) AS count_boost_total, (SELECT COUNT(*) FROM item i LEFT JOIN chat c ON i.id=c.message WHERE (i.boost IS NOT NULL AND i.boost>NOW() AND i.userID=".$_COOKIE["userID"].") OR (i.boost IS NULL AND c.action=3 AND c.fromID=".$_COOKIE["userID"].")) AS count_boost_user FROM item WHERE userID=".$_COOKIE["userID"];
 	
 	if((isset($_GET["myzar"]) && $_GET["myzar"] == "item") && (isset($_GET["state"]) && $_GET["state"] == "active")){
 		$queryFetchListItems .= " AND isactive=4";
@@ -205,7 +206,7 @@ mysqli_free_result($resultFetchListItemsStateCountInActive);
 		$queryFetchListItems .= " AND isactive=0";
 	}
 	
-	$queryFetchListItems .= " ORDER BY datetime DESC";
+	$queryFetchListItems .= " ORDER BY datetime DESC, boost DESC";
 	
 	$resultFetchListItems = $conn->query($queryFetchListItems);
 	while($rowFetchListItems = mysqli_fetch_array($resultFetchListItems)){
@@ -334,35 +335,57 @@ mysqli_free_result($resultFetchListItemsStateCountInActive);
 			</div>
 			<?php
 			if($rowFetchListItems["role"]>=3){
-				if($rowFetchListItems["isBoost"]==0 && $rowFetchListItems["isactive"]==4){
-					?>
-					<div onClick="myzar_item_boost(true, <?php echo $rowFetchListItems["id"]; ?>)" class="button_yellow" style="height: 15px; float: left; background: #a0cf0a; font-size: 14px; margin: 5px">
-						<img src="boost.png" width="30px" height="35px" />
-						<div style="margin-left: 5px; color: white">Boost хүсэлт</div>
-					</div>		
-					<?php
-				}
-				else if($rowFetchListItems["isBoost"]==1 && $rowFetchListItems["isactive"]==4) {
-					?>
-					<div onClick="confirmation_ok('Таны Facebook Boost хийх хүсэлт баталгаажсан байна.', null)" class="button_yellow" style="height: 15px; float: left; background: #a0cf0a; font-size: 14px; margin: 5px">
-						<img src="boost_r.png" width="30px" height="35px" />
-						<div style="margin-left: 5px; color: white">Boost хийгдсэн</div>
-					</div>
-					<?php
-				}
-				else {
-					$availableBoostCount = $rowFetchListItems["role"]==3?$item_boost_admin:($rowFetchListItems["role"]==4?$item_boost_superadmin:0);
-					if($rowFetchListItems["count_boost_user"]<$availableBoostCount){
+				if($rowFetchListItems["count_boost_total"]<$item_boost_total){
+					$nowDatetime = new DateTime("now");
+					$boostDateTime = new DateTime(!is_null($rowFetchListItems["boost"])?$rowFetchListItems["boost"]:"yesterday");
+					if($boostDateTime<$nowDatetime && $rowFetchListItems["isactive"]==4){
 						?>
-						<div onClick="confirmation_ok('Таны Facebook Boost хийх хүсэлтээс өмнө уг зар баталгаажсан байх ёстой!', null)" class="button_yellow" style="height: 15px; float: left; background: #a0cf0a; font-size: 14px; margin: 5px">
-							<img src="boost_bw.png" width="30px" height="35px" />
+						<div onClick="myzar_item_boost(true, <?php echo $rowFetchListItems["id"]; ?>,'<?php echo $rowFetchListItems["title"]; ?>',<?php echo $rowFetchListItems["price"]; ?>)" class="button_yellow" style="height: 15px; float: left; background: #a0cf0a; font-size: 14px; margin: 5px">
+							<img src="boost.png" width="30px" height="35px" />
 							<div style="margin-left: 5px; color: white">Boost хүсэлт</div>
+						</div>		
+						<?php
+					}
+					else if($boostDateTime>=$nowDatetime && $rowFetchListItems["isactive"]==4) {
+						?>
+						<div onClick="confirmation_ok('<?php echo "<b>".$rowFetchListItems["title"]." ".convertPriceToText($rowFetchListItems["price"])." ₮"." (#".$rowFetchListItems["id"].")"; ?></b>-ыг Facebook Boost хийх хүсэлт баталгаажсан байна.', null)" class="button_yellow" style="height: 15px; float: left; background: #a0cf0a; font-size: 14px; margin: 5px">
+							<img src="boost_r.png" width="30px" height="35px" />
+							<div style="margin-left: 5px; color: white">Boost хийгдсэн</div>
 						</div>
 						<?php
 					}
-					if($rowFetchListItems["count_boost_user"]>=$availableBoostCount){
+					else {
+						$availableBoostCount = $rowFetchListItems["role"]==3?$item_boost_admin:($rowFetchListItems["role"]==4?$item_boost_superadmin:0);
+						if($rowFetchListItems["count_boost_user"]<$availableBoostCount){
+							?>
+							<div onClick="confirmation_ok('Таны Facebook Boost хийх хүсэлтээс өмнө уг зар баталгаажсан байх ёстой!', null)" class="button_yellow" style="height: 15px; float: left; background: #a0cf0a; font-size: 14px; margin: 5px">
+								<img src="boost_bw.png" width="30px" height="35px" />
+								<div style="margin-left: 5px; color: white">Boost хүсэлт</div>
+							</div>
+							<?php
+						}
+						if($rowFetchListItems["count_boost_user"]>=$availableBoostCount){
+							?>
+							<div onClick="confirmation_ok('Таны Facebook Boost хийх хүсэлт дууссан байна!', null)" class="button_yellow" style="height: 15px; float: left; background: #a0cf0a; font-size: 14px; margin: 5px">
+								<img src="boost_bw.png" width="30px" height="35px" />
+								<div style="margin-left: 5px; color: white">Boost дууссан</div>
+							</div>
+							<?php
+						}
+					}
+				}
+				else {
+					if($boostDateTime>=$nowDatetime && $rowFetchListItems["isactive"]==4) {
 						?>
-						<div onClick="confirmation_ok('Таны Facebook Boost хийх хүсэлт дууссан байна!', null)" class="button_yellow" style="height: 15px; float: left; background: #a0cf0a; font-size: 14px; margin: 5px">
+						<div onClick="confirmation_ok('<?php echo "<b>".$rowFetchListItems["title"]." ".convertPriceToText($rowFetchListItems["price"])." ₮"." (#".$rowFetchListItems["id"].")"; ?></b>-ыг Facebook Boost хийх хүсэлт баталгаажсан байна.', null)" class="button_yellow" style="height: 15px; float: left; background: #a0cf0a; font-size: 14px; margin: 5px">
+							<img src="boost_r.png" width="30px" height="35px" />
+							<div style="margin-left: 5px; color: white">Boost хийгдсэн</div>
+						</div>
+						<?php
+					}
+					else {
+						?>
+						<div onClick="confirmation_ok('Facebook Boost хийх хүсэлт дүүрсэн байна, өмнөх хүсэлтүүдийн facebook ads-д явж байгаа тул хэсэг хугацааны дараа дахин оролдоно уу!', null)" class="button_yellow" style="height: 15px; float: left; background: #a0cf0a; font-size: 14px; margin: 5px">
 							<img src="boost_bw.png" width="30px" height="35px" />
 							<div style="margin-left: 5px; color: white">Boost дууссан</div>
 						</div>
@@ -372,7 +395,7 @@ mysqli_free_result($resultFetchListItemsStateCountInActive);
 			}
 			else {
 			?>
-			<div onClick="myzar_item_boost(false, <?php echo $rowFetchListItems["id"]; ?>)" class="button_yellow" style="height: 15px; float: left; background: #a0cf0a; font-size: 14px; margin: 5px">
+			<div onClick="myzar_item_boost(false, <?php echo $rowFetchListItems["id"]; ?>,'<?php echo $rowFetchListItems["title"]; ?>',<?php echo $rowFetchListItems["price"]; ?>)" class="button_yellow" style="height: 15px; float: left; background: #a0cf0a; font-size: 14px; margin: 5px">
 				<img src="boost_bw.png" width="30px" height="35px" />
 				<div style="margin-left: 5px; color: white">Boost хүсэлт</div>
 			</div>

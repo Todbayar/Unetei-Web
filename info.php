@@ -77,6 +77,9 @@ $firebase_auth = "AAAAwjhSlmk:APA91bGU-XYE_yp2023YXoxQA1GFWir8-9t_omVjNAQ5dDxQnS
 define("ADD",0);
 define("EDIT",1);
 define("UPDATE",2);
+define("BOOST",3);
+
+define("BOOST_DAYS", 7);
 
 //host
 $protocol = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] != "off") ? "https" : "http";
