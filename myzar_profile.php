@@ -263,7 +263,7 @@ function submitProfile(){
 
 		const reqProfileSubmit = new XMLHttpRequest();
 		reqProfileSubmit.onload = function() {
-			console.log("<profileSubmitData>:"+this.response);
+//			console.log("<profileSubmitData>:"+this.response);
 			if(this.responseText == "OK"){
 				confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Амжилттай хадгалагдлаа.", null);	
 			}

@@ -234,7 +234,7 @@ function chat_list_item(chatID, sender, body, datetime, isEdit, note, isBoost){
 			htmlItem += "<i class=\"fa-solid fa-xmark\" style=\"position:absolute; top:20px; left:-15px; padding:5px; border-radius:10px; background: #fff4d0; color:#878787\"></i>";
 		}
 		else if(body.isActive == 1){
-			htmlItem += "<i class=\"fa-solid fa-clock\" style=\"position:absolute; top:20px; left:-15px; padding:5px; border-radius:10px; background: #fff4d0; color:#878787\"></i>";
+			htmlItem += "<i class=\"fa-regular fa-clock\" style=\"position:absolute; top:20px; left:-15px; padding:5px; border-radius:10px; background: #fff4d0; color:#878787\"></i>";
 		}
 		else if(body.isActive == 2){
 			htmlItem += "<i class=\"fa-solid fa-box-archive\" style=\"position:absolute; top:20px; left:-15px; padding:5px; border-radius:10px; background: #fff4d0; color:#878787\"></i>";
@@ -265,7 +265,7 @@ function chat_list_item(chatID, sender, body, datetime, isEdit, note, isBoost){
 			htmlItem += "<i class=\"fa-solid fa-xmark\" style=\"position:absolute; top:20px; right:-15px; padding:5px; border-radius:10px; background: #e7e7e7; color:#878787\"></i>";
 		}
 		else if(body.isActive == 1){
-			htmlItem += "<i class=\"fa-solid fa-clock\" style=\"position:absolute; top:20px; right:-15px; padding:5px; border-radius:10px; background: #e7e7e7; color:#878787\"></i>";
+			htmlItem += "<i class=\"fa-regular fa-clock\" style=\"position:absolute; top:20px; right:-15px; padding:5px; border-radius:10px; background: #e7e7e7; color:#878787\"></i>";
 		}
 		else if(body.isActive == 2){
 			htmlItem += "<i class=\"fa-solid fa-box-archive\" style=\"position:absolute; top:20px; right:-15px; padding:5px; border-radius:10px; background: #e7e7e7; color:#878787\"></i>";

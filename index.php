@@ -137,6 +137,28 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 				opacity: 0.73,
 				outputWidth: 400
 			});
+			
+			$(".popup.become_follower input#phone").on('input',function(){
+				var phone = $(this).val();
+				if(phone.length==8){
+				   	$(".popup.become_follower button#yes").prop("disabled",false);
+			    }
+				else {
+					$(".popup.become_follower button#yes").prop("disabled",true);
+				}
+			});
+			
+			<?php
+			if(isset($_COOKIE["userID"]) && getPhone($_COOKIE["userID"])!=$superduperadmin){
+				?>
+				if(localStorage.getItem("isBecameFollower")==null){
+					$(".popup.become_follower").show();
+					window.scrollTo(0, 0);
+					$("body").css("overflow-y", "hidden");
+				}
+				<?php
+			}
+			?>
 		});
 		
 		function clearSearch(){
@@ -146,6 +168,27 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 			$("#searchPriceLimitHighest option").eq(0).prop("selected", true);
 			$("#searchCity option").eq(0).prop("selected", true);
 			$("#searchRate option").eq(0).prop("selected", true);
+		}
+			
+		function become_follower(isBecame){
+			const affiliate = $(".popup.become_follower input#phone").val();
+			console.log("<become_follower>:"+affiliate);
+			if(isBecame){
+				$.post("mysql_user_follower.php", {phone:affiliate}).done(function(response){
+					if(response=="OK"){
+						localStorage.setItem("isBecameFollower",true);
+						$("body").css("overflow-y", "auto");
+						$(".popup.become_follower").hide();
+				    }
+					else {
+						localStorage.setItem("isBecameFollower",false);
+						$(".popup.become_follower div#error").text("Дагагч болход алдаа гарлаа!");
+					}
+				});
+		   	}
+			else {
+				localStorage.setItem("isBecameFollower",false);
+			}
 		}
 		</script>
 	</head>
@@ -605,6 +648,29 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 				</div>
 			</div>
 			<div class="info" style="display:none">Хуулагдсан</div>
+		</div>
+		
+		<div class="popup become_follower" style="display: none">
+			<div class="container">
+				<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('popup become_follower')[0].style.display='none'; javascript:document.body.style.overflowY='auto'"></i>
+				<div class="header">Дагагч болох</div>
+				<div class="message">
+					Таньд <?php echo $domain; ?>-ыг санал болгосон хүний (<?php echo $role_rank_superadmin.", ".$role_rank_admin.", ".$role_rank_manager; ?>) утасны дугаарыг доор оруулна уу.<br/>
+					<div style="margin-top: 5px; margin-bottom: 5px">
+						<label>+976</label>
+						<input id="phone" type="number" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength)" pattern="\d*" maxlength="8" placeholder="Заавал биш" style="width: 140px; height: 25px; border-radius: 10px; font: normal 16px Arial; margin-top: 5px" />
+						<div id="error" style="font-size: 14px; color: red; margin-top: 2px; display: none">Утасны дугаар буруу байна!</div>
+					</div>
+				</div>
+				<div class="action">
+					<button onClick="become_follower(true)" id="yes" class="button_yellow" style="background:#42c200" disabled>
+						<i class="fa-solid fa-check"></i>Тийм
+					</button>
+					<button onClick="become_follower(false)" id="no" class="button_yellow">
+						<i class="fa-solid fa-xmark"></i>Алгасах
+					</button>
+				</div>
+			</div>
 		</div>
 	</body>
 </html>
