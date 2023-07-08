@@ -168,25 +168,31 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 		}
 			
 		function become_follower(isBecame){
-			const affiliate = $(".popup.become_follower input#phone").val();
-//			console.log("<become_follower>:"+affiliate);
-			if(isBecame){
-				$.post("mysql_user_follower.php", {phone:affiliate}).done(function(response){
-					if(response=="OK"){
-						localStorage.setItem("isBecameFollower",true);
-						$("body").css("overflow-y", "auto");
-						$(".popup.become_follower").hide();
-				    }
-					else {
-						localStorage.setItem("isBecameFollower",false);
-						$(".popup.become_follower div#error").text("Дагагч болход алдаа гарлаа!");
-					}
-				});
-		   	}
-			else {
+			if(typeof isBecame === "boolean"){
+				const affiliate = $(".popup.become_follower input#phone").val();
+	//			console.log("<become_follower>:"+affiliate);
+				if(isBecame){
+					$.post("mysql_user_follower.php", {phone:affiliate}).done(function(response){
+						if(response=="OK"){
+							localStorage.setItem("isBecameFollower",true);
+							$("body").css("overflow-y", "auto");
+							$(".popup.become_follower").hide();
+						}
+						else {
+							localStorage.setItem("isBecameFollower",false);
+							$(".popup.become_follower div#error").text("Дагагч болход алдаа гарлаа!");
+						}
+					});
+				}
+				else {
+					localStorage.setItem("isBecameFollower",false);
+					$("body").css("overflow-y", "auto");
+					$(".popup.become_follower").hide();
+				}
+			}
+			else if(typeof isBecame === "string") {
 				localStorage.setItem("isBecameFollower",false);
-				$("body").css("overflow-y", "auto");
-				$(".popup.become_follower").hide();
+				pagenavigation(isBecame);
 			}
 		}
 		</script>
@@ -654,7 +660,8 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 				<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('popup become_follower')[0].style.display='none'; javascript:document.body.style.overflowY='auto'"></i>
 				<div class="header">Дагагч болох</div>
 				<div class="message">
-					Таньд <?php echo $domain; ?>-ыг санал болгосон хүний (<?php echo $role_rank_superadmin.", ".$role_rank_admin.", ".$role_rank_manager; ?>) утасны дугаарыг доор оруулна уу.<br/>
+					Таньд <?php echo $domain; ?>-ыг санал болгосон хүний <small>(<?php echo $role_rank_superadmin.", ".$role_rank_admin.", ".$role_rank_manager; ?>)</small> утасны дугаарыг доор оруулна уу.<br/>
+					Илүү дэлгэрэнгүйг <a href="javascript:become_follower('myzar&myzar=profile')">эндээс</a>
 					<div style="margin-top: 5px; margin-bottom: 5px">
 						<label>+976</label>
 						<input id="phone" type="number" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength)" pattern="\d*" maxlength="8" placeholder="Заавал биш" style="width: 140px; height: 25px; border-radius: 10px; font: normal 16px Arial; margin-top: 5px" />
