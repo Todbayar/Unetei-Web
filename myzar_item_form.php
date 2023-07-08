@@ -1,5 +1,6 @@
 <?php
 include "mysql_config.php";
+include_once "mysql_misc.php";
 ?>
 <style>
 /* For Mobile */
@@ -244,14 +245,14 @@ function selectCity(city){
 					<div style="align-content: center; align-items: center">
 						<label style="margin-right: 5px; font: bold 16px Arial">+976</label>
 						<?php
-						if($_COOKIE["role"] == 0){
+						if(getUserRole($_COOKIE["userID"]) == 0){
 						?>
-						<input id="myzar_item_phone" type="number" maxlength="12" style="width:60%; height: 25px; padding: 5px; font: normal 16px Arial" disabled value="<?php echo substr($_COOKIE["phone"], 4); ?>">
+						<input id="myzar_item_phone" type="number" maxlength="12" style="width:60%; height: 25px; padding: 5px; font: normal 16px Arial" disabled value="<?php echo substr(getPhone($_COOKIE["userID"]), 4); ?>">
 						<?php
 						}
 						else {
 						?>
-						<input id="myzar_item_phone" type="number" maxlength="12" style="width:60%; height: 25px; padding: 5px; font: normal 16px Arial" value="<?php echo substr($_COOKIE["phone"], 4); ?>">
+						<input id="myzar_item_phone" type="number" maxlength="12" style="width:60%; height: 25px; padding: 5px; font: normal 16px Arial" value="<?php echo substr(getPhone($_COOKIE["userID"]), 4); ?>">
 						<?php
 						}
 						?>
@@ -264,7 +265,7 @@ function selectCity(city){
 				<td width="115px">Хэрэглэгч:</td>
 				<td valign="middle" align="left">
 					<div style="align-content: center; align-items: center">
-						<input id="myzar_item_isNewUser" type="checkbox" style="border: 2px solid #c1c1c1; width: 10px; height: 10px; border-radius: 5px; transform:scale(2); margin:5px" <?php echo $_COOKIE["role"]==0?"disabled":""; ?>></input>
+						<input id="myzar_item_isNewUser" type="checkbox" style="border: 2px solid #c1c1c1; width: 10px; height: 10px; border-radius: 5px; transform:scale(2); margin:5px" <?php echo getUserRole($_COOKIE["userID"])==0?"disabled":""; ?>></input>
 						<label style="margin-left: 5px; font: normal 16px Arial">Өөр хүний нэр (шинэ хэрэглэгч) дээр барааг нэмэх</label>
 					</div>
 				</td>

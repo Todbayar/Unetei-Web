@@ -18,16 +18,20 @@ include_once "info.php";
 .detail .categories {
 	color: #8f8f8f;
     font-size: 16px;
-    line-height: 1.5;
-	display: flex;
+    line-height: 1;
 	align-items: center;
 	cursor: pointer;
 	margin-bottom: 10px;
+	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
 }
 
 .detail .categories .category {
-	margin-left: 10px;
-	margin-right: 10px;
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-top: 5px;
+	margin-bottom: 5px;
 }
 
 .detail .categories .category:first-child {
