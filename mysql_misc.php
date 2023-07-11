@@ -136,9 +136,6 @@ function fetchRecursiveCategories($category, $conn, $isInit){
 	
 	if($tableID+1<5){
 		$query = "SELECT id FROM category".($tableID+1)." WHERE parent=".$id." AND active=2";
-		?>
-		<script>console.log("<?php echo $query; ?>");</script>
-		<?php
 		$result = $conn->query($query);
 		if($result){
 			while($row = mysqli_fetch_array($result)){

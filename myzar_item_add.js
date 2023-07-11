@@ -322,7 +322,7 @@ function publishItemSubmit(role){
 		else {
 			$(".myzar_content_add_item").hide();
 			$(".popup.item_publish_option").hide();
-//			console.log("<publishItemSubmit>:"+this.responseText);
+			console.log("<publishItemSubmit>:"+this.responseText);
 			const itemResponse = JSON.parse(this.responseText);
 			if(itemResponse.pay_amount == 0){
 				var eventOk = new CustomEvent("itemAddDone");
