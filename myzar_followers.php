@@ -65,13 +65,16 @@ function showOtherItems(userID){
 	<?php
 	$queryFollowers = "SELECT * FROM user WHERE affiliate=(SELECT phone FROM user WHERE id=".$_COOKIE["userID"].")";
 	$resultFollowers = $conn->query($queryFollowers);
-	while($rowFollowers = mysqli_fetch_array($resultFollowers)){
+	if(mysqli_num_rows($resultFollowers)>0){
 	?>
 	<div class="container">
 		<div style="font-family: RobotoBold; margin-left: 10px">
 			Шууд дагагчид <a style="color: gray; font-family: RobotoRegular; font-size: 14px">(Таны утасны дугаараар дагагч болсон хүмүүс)</a>
 		</div>
 		<hr/>
+		<?php
+		while($rowFollowers = mysqli_fetch_array($resultFollowers)){
+		?>
 		<div class="followers_list">
 			<img class="image" src="<?php echo $path."/".$rowFollowers["image"]; ?>" onerror="this.onerror=null; this.src='user.png'" />
 			<div class="name"><?php echo $rowFollowers["name"]; ?></div>
@@ -86,18 +89,24 @@ function showOtherItems(userID){
 				<div style="margin-left: 5px">Зарууд</div>
 			</div>
 		</div>
+		<?php 
+		}
+		?>
 	</div>
 	<?php
 	}
-	
+		
 	if(getPhone($_COOKIE["userID"])==$superduperadmin){
 		$queryFollowers = "SELECT * FROM user WHERE affiliate='' AND phone!='".$superduperadmin."'";
 		$resultFollowers = $conn->query($queryFollowers);
-		while($rowFollowers = mysqli_fetch_array($resultFollowers)){
+		if(mysqli_num_rows($resultFollowers)>0){
 		?>
 		<div class="container" style="margin-top: 10px">
 			<div style="font-family: RobotoBold; margin-left: 10px">Шууд бус дагагчид</div>
 			<hr/>
+			<?php
+			while($rowFollowers = mysqli_fetch_array($resultFollowers)){
+			?>
 			<div class="followers_list">
 				<img class="image" src="<?php echo $path."/".$rowFollowers["image"]; ?>" onerror="this.onerror=null; this.src='user.png'" />
 				<div class="name"><?php echo $rowFollowers["name"]; ?></div>
@@ -112,6 +121,9 @@ function showOtherItems(userID){
 					<div style="margin-left: 5px">Зарууд</div>
 				</div>
 			</div>
+			<?php
+			}
+			?>
 		</div>
 		<?php
 		}

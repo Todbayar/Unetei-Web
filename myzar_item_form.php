@@ -36,6 +36,16 @@ label.required::after {
 function selectCity(city){
 	$("#myzar_item_city").val(city);
 }
+
+$(document).ready(function(){
+	$("#myzar_item_isNewUser").change(function(){
+		if($("#myzar_item_isNewUser").is(':checked')){
+			$("#myzar_item_phone").val("");
+			$("#myzar_item_name").val("");
+			$("#myzar_item_email").val("");
+	   	}
+	});
+});
 </script>
 
 <div id="information" style="display: none; margin: 10px auto; font-size: 16px; align-content: center; width: 100%"><div class="removable">Мэдээлэл</div><i id="type" class="fa-solid fa-circle-info" style="margin-left: 5px"></i><div style="margin-left: 5px">:</div><i id="icon" class="fa-solid fa-circle-plus" style="margin-left: 5px; color: #878787; display: none"></i><div id="message" style="color: #878787; margin-left: 5px"></div><div id="timer" style="color: #878787; margin-left: 5px"></div></div>
@@ -210,6 +220,17 @@ function selectCity(city){
 		<hr/>
 		<table width="100%">
 			<tr>
+				<td width="115px">Хэрэглэгч:</td>
+				<td valign="middle" align="left">
+					<div style="align-content: center; align-items: center">
+						<input id="myzar_item_isNewUser" type="checkbox" style="border: 2px solid #c1c1c1; width: 10px; height: 10px; border-radius: 5px; transform:scale(2); margin:5px" <?php echo getUserRole($_COOKIE["userID"])==0?"disabled":""; ?>></input>
+						<label style="margin-left: 5px; font: normal 16px Arial">Өөр хүний нэр (шинэ хэрэглэгч/дагагч) дээр барааг нэмэх</label>
+					</div>
+				</td>
+			</tr>
+		</table>
+		<table width="100%">
+			<tr>
 				<td width="115px"><label class="required">Нэр:</label></td>
 				<td>
 					<input id="myzar_item_name" type="text" maxlength="128" value="<?php if($rowFetchProfile["name"]!="") echo $rowFetchProfile["name"]; ?>" style="width: 85%; height: 25px; padding: 5px; font: normal 16px Arial">
@@ -220,21 +241,6 @@ function selectCity(city){
 				<td style="color: #9F9F9F; font: normal 14px Arial">
 					<div id="myzar_item_name_error" style="display: none; color: #FF4649">Хоосон байж болохгүй эсвэл тоо байж болохгүй!</div>
 					Нэр хэсэгт хориглох зүйлс!: ганцхан үсэг, дан тоо, тэмдэгт, мөн худалдагч, админ, нэр, зарын эзэн, хэрэглэгч, user, apple, samsung, iphone, galaxy, lexus, toyota, г. м. үгсийг оруулхыг хориглоно.
-				</td>
-			</tr>
-		</table>
-		<table width="100%">
-			<tr>
-				<td width="115px">Имейл хаяг:</td>
-				<td>
-					<input id="myzar_item_email" type="email" maxlength="128" value="<?php if($rowFetchProfile["email"]!="") echo $rowFetchProfile["email"]; ?>" style="width: 85%; height: 25px; padding: 5px; font: normal 16px Arial">
-				</td>
-			</tr>
-			<tr>
-				<td></td>
-				<td style="color: #9F9F9F; font: normal 14px Arial">
-					<div id="myzar_item_email_error" style="display: none; color: #FF4649">Таны оруулсан имейл буруу байна!</div>
-					Таны зарын тухай ирсэн мессэжний тухай мэдэгдэл очих болно.
 				</td>
 			</tr>
 		</table>
@@ -262,12 +268,16 @@ function selectCity(city){
 		</table>
 		<table width="100%">
 			<tr>
-				<td width="115px">Хэрэглэгч:</td>
-				<td valign="middle" align="left">
-					<div style="align-content: center; align-items: center">
-						<input id="myzar_item_isNewUser" type="checkbox" style="border: 2px solid #c1c1c1; width: 10px; height: 10px; border-radius: 5px; transform:scale(2); margin:5px" <?php echo getUserRole($_COOKIE["userID"])==0?"disabled":""; ?>></input>
-						<label style="margin-left: 5px; font: normal 16px Arial">Өөр хүний нэр (шинэ хэрэглэгч) дээр барааг нэмэх</label>
-					</div>
+				<td width="115px">Имейл хаяг:</td>
+				<td>
+					<input id="myzar_item_email" type="email" maxlength="128" value="<?php if($rowFetchProfile["email"]!="") echo $rowFetchProfile["email"]; ?>" style="width: 85%; height: 25px; padding: 5px; font: normal 16px Arial">
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td style="color: #9F9F9F; font: normal 14px Arial">
+					<div id="myzar_item_email_error" style="display: none; color: #FF4649">Таны оруулсан имейл буруу байна!</div>
+					Таны зарын тухай ирсэн мессэжний тухай мэдэгдэл очих болно.
 				</td>
 			</tr>
 		</table>
