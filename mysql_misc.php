@@ -134,12 +134,20 @@ function fetchRecursiveCategories($category, $conn, $isInit){
 	$tableID = intval(substr($splita[0], 1));
 	$id = intval($splita[1]);
 	
-	$query = "SELECT id FROM category".($tableID+1)." WHERE parent=".$id." AND active=2";
-	$result = $conn->query($query);
-	if($result){
-		while($row = mysqli_fetch_array($result)){
-			$categories[] = "'c".($tableID+1)."_".$row["id"]."'";
-			$categories = array_merge($categories, fetchRecursiveCategories("'c".($tableID+1)."_".$row["id"]."'", $conn, false));
+	if($tableID+1<5){
+		$query = "SELECT id FROM category".($tableID+1)." WHERE parent=".$id." AND active=2";
+		?>
+		<script>console.log("<?php echo $query; ?>");</script>
+		<?php
+		$result = $conn->query($query);
+		if($result){
+			while($row = mysqli_fetch_array($result)){
+				$categories[] = "'c".($tableID+1)."_".$row["id"]."'";
+				$categories = array_merge($categories, fetchRecursiveCategories("'c".($tableID+1)."_".$row["id"]."'", $conn, false));
+			}
+		}
+		else {
+			return $categories;	
 		}
 	}
 	

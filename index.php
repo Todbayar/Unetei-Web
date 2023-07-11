@@ -1,6 +1,3 @@
-<!--
-אלוהים יברך את כולם בשם האב והבן ורוח הקודש
--->
 <?php 
 include "mysql_config.php";
 include_once "mysql_misc.php";
@@ -89,7 +86,7 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 				?>
 			}
 			else {
-//				console.log('Service Worker not supported');
+				console.log('Service Worker not supported');
 			}
 			
 			<?php

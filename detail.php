@@ -473,8 +473,9 @@ if(isset($_GET["id"])){
 		$arrCategories["text"][] = $rowCategory["title"];
 		if($i>1) $id = $rowCategory["parent"];
 	}
+	
 //	$arrCategories["id"] = array_reverse($arrCategories["id"]);
-	$arrCategories["id"] = fetchRecursiveCategories("'".$row["category"]."'", $conn, true);
+	$arrCategories["id"] = fetchRecursiveCategories("'".$row["category"]."'", $conn, true);	
 	$arrCategories["text"] = array_reverse($arrCategories["text"]);
 	
 	//rate calculate
