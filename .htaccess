@@ -1,0 +1,2 @@
+RewriteEngine on
+RewriteRule ^detail/([0-9]+)$ index.php?page=detail%{QUERY_STRING}&id=$1 [QSA,L]

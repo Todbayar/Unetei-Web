@@ -9,12 +9,13 @@ include_once "mysql_misc.php";
 	margin-left: 10px;
 	margin-right: 10px;
 }
-
+	
 .favorite .container .item {
 	display: flex;
 	border: solid 1px #ccc;
 	padding-top: 5px;
 	padding-bottom: 5px;
+	padding: 10px;
 	cursor: pointer;
 }
 
@@ -28,10 +29,9 @@ include_once "mysql_misc.php";
 	
 .favorite .container .item .image {
 	position: relative;
-	margin-left: 10px;
-	margin-right: 10px;
 	width: 165px;
 	height: 152px;
+	margin-right: 10px;
 }
 	
 .favorite .container .item .image img {
@@ -57,14 +57,26 @@ include_once "mysql_misc.php";
 /* For Mobile */
 @media screen and (max-width: 540px) {
 	.favorite .container .item .image {
-		width: 165px;
+		min-width: 165px;
+	}
+	.favorite .container .item .image.right {
+		display: block;
+	}
+	.favorite .container .item .image.left {
+		display: none;
 	}
 }
 
 /* For Tablets and Desktop */
 @media screen and (min-width: 540px) {
 	.favorite .container .item .image {
-		width: 190px;	
+		min-width: 190px;	
+	}
+	.favorite .container .item .image.right {
+		display: none;
+	}
+	.favorite .container .item .image.left {
+		display: block;
 	}
 }
 	
@@ -98,11 +110,11 @@ $(document).ready(function(){
 		while($rowList = mysqli_fetch_array($resultList)){
 		?>
 		<div class="item" id="<?php echo $rowList["item_id"]; ?>">
-			<div class="image">
+			<div class="image left">
 				<?php
 				if($rowList["image"]!=""){
 				?>
-				<img src="<?php echo $rowList["image"]!=""?$path."/".$rowList["image"]:"notfound.png"; ?>" onerror="this.onerror=null; this.src='image-solid.svg'">
+				<img src="<?php echo $path."/".$rowList["image"]; ?>" onerror="this.onerror=null; this.src='notfound.png'">
 				<div><i class="fa-solid fa-camera"></i> <?php echo $rowList["count_images"]; ?></div>
 				<?php
 				}
@@ -127,6 +139,34 @@ $(document).ready(function(){
 				?>
 			</div>
 			<div class="favorite_right">
+				<div class="image right">
+					<?php
+					if($rowList["image"]!=""){
+					?>
+					<img src="<?php echo $path."/".$rowList["image"]; ?>" onerror="this.onerror=null; this.src='notfound.png'">
+					<div><i class="fa-solid fa-camera"></i> <?php echo $rowList["count_images"]; ?></div>
+					<?php
+					}
+					else if($rowList["video"] != ""){
+						$vVideoType = substr($rowList["video"], strrpos($rowList["video"], ".")+1);
+						if($vVideoType == "mp4") $vVideoType = "video/mp4";
+						else if($vVideoType == "mov") $vVideoType = "video/quicktime";
+						?>
+						<video controls="controls" preload="metadata" style="border-radius: 5px"><source src="<?php echo $path."/".$rowList["video"]; ?>#t=0.5" type="<?php echo $vVideoType; ?>"></video>
+						<?php
+					}
+					else if($rowList["youtube"] != ""){
+						?>
+						<iframe src="<?php echo $rowList["youtube"]; ?>" allowfullscreen></iframe>
+						<?php
+					}
+					else {
+						?>
+						<img src="notfound.png" onerror="this.onerror=null; this.src='image-solid.svg'">
+						<?php
+					}
+					?>
+				</div>
 				<div class="title" style="font: bold 16px Arial">
 					<?php echo $rowList["title"];
 					if($rowList["isFavorite"]==0){

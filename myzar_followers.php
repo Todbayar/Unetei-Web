@@ -17,12 +17,14 @@ include_once "mysql_misc.php";
 	float: left;
 	display:block;
 }
-	
+
 .myzar_followers .container .followers_list {
 	text-align: center;
-	float: left;
 	margin: 10px;
 	cursor: pointer;
+	width: 140px;
+	display: inline-block;
+	vertical-align: top;
 }
 	
 .myzar_followers .container .followers_list .image {

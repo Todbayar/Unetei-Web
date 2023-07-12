@@ -277,6 +277,5 @@ function sendNotification($link, $userID){
 	$curl_error_number = curl_errno($ch);
 	$http_code = curl_getinfo($ch,CURLINFO_HTTP_CODE);
     curl_close ($ch);
-	return $result.", ".$curl_error.", ".$curl_error_number.", ".$http_code.", ".json_encode($message);
 }
 ?>

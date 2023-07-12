@@ -11,6 +11,13 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 		<meta http-equiv="Permissions-Policy" content="interest-cohort=()">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		
+<!--
+		<meta property="og:title" content="test title (24,500 ₮)" />
+		<meta property="og:description" content="this is description" />
+		<meta property="og:type" content="website" />
+		<meta property="og:image" content="https://zarchi.mn/user_files/20230710104432_358116018_981795713065179_2453300629079806830_n.jpg" />
+-->
+		
 		<title><?php echo $domain_title; ?></title>
 		<link rel="icon" type="image/x-icon" href="android-chrome-512x512.png">
 		
@@ -242,7 +249,6 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 			else {
 				include "home.php";
 			}
-//			echo sendNotification("?page=chat&toID=1", 2);
 			?>
 			</div>
 		</div>
