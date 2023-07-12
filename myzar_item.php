@@ -225,7 +225,7 @@ mysqli_free_result($resultFetchListItemsStateCountInActive);
 		}
 	?>
 	<div class="myzar_content_list_item">
-		<table class="myzar_content_list_item_top" style="display: flex" onClick="pagenavigation('detail&id=<?php echo $rowFetchListItems["id"]; ?>')">
+		<table class="myzar_content_list_item_top" style="display: flex" onClick="pagenavigation('detail/<?php echo $rowFetchListItems["id"]; ?>')">
 			<tr>
 				<?php
 				if($rowFetchListItems["image"] != "" || $rowFetchListItems["youtube"] != "" || $rowFetchListItems["video"]) {

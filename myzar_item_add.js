@@ -264,7 +264,7 @@ function publishItemUpdate(itemID, title, role){
 				window.addEventListener("itemUpdateDone", function(){
 //					location.reload();
 					sessionStorage.setItem("startItemToDetail", true);
-					pagenavigation("detail&id="+itemResponse.id);
+					pagenavigation("detail/"+itemResponse.id);
 				});
 				confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Зар амжилттай <b>шинэчлэгдэж</b>, шалгагдаж байна.", eventOk);
 			}
@@ -296,7 +296,7 @@ function publishItemUpdate(itemID, title, role){
 					$(".popup.billing .container .button_yellow").click(function(){
 //						location.reload();
 						sessionStorage.setItem("startItemToDetail", true);
-						pagenavigation("detail&id="+itemResponse.id);
+						pagenavigation("detail/"+itemResponse.id);
 					});
 				});
 			}

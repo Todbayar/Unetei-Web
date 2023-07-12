@@ -244,7 +244,7 @@ function chat_list_item(chatID, sender, body, datetime, isEdit, note, isBoost){
 		   htmlItem += "<i class=\"fa-solid fa-bullhorn\" style=\"position:absolute; top:40px; left:-15px; padding:5px; border-radius:10px; background: #fff4d0; color:#878787\"></i>";
 	   	}
 		   
-	   	htmlItem += "<a onClick=\"pagenavigation('detail&id="+body.id+"')\">"+body.title+" (#"+body.id+")</a>";
+	   	htmlItem += "<a onClick=\"pagenavigation('detail/"+body.id+"')\">"+body.title+" (#"+body.id+")</a>";
 	   	htmlItem += chat_list_category_show(body.category, "");
 		htmlItem += "<div style=\"font-size:12px; color:gray; margin-top:2px\">Төлөх:"+(body.pay==0?"Үнэгүй":(body.pay+"₮"+payment))+"</div>";
 		htmlItem += paymentHistory+"</div><div class=\"datetime\">"+datetime+"</div>";
@@ -275,7 +275,7 @@ function chat_list_item(chatID, sender, body, datetime, isEdit, note, isBoost){
 			htmlItem += "<i class=\"fa-solid fa-bullhorn\" style=\"position:absolute; top:40px; right:-15px; padding:5px; border-radius:10px; background: #e7e7e7; color:#878787\"></i>";
 	   	}
 		
-		htmlItem += "<a onClick=\"pagenavigation('detail&id="+body.id+"')\">"+body.title+" (#"+body.id+")</a>";
+		htmlItem += "<a onClick=\"pagenavigation('detail/"+body.id+"')\">"+body.title+" (#"+body.id+")</a>";
 		htmlItem += chat_list_category_show(body.category, "");
 		htmlItem += "<div style=\"font-size:12px; color:gray; margin-top:2px\">Төлөх:"+(body.pay==0?"Үнэгүй":(body.pay+"₮"+payment))+"</div>";
 		htmlItem += paymentHistory+"</div><div class=\"datetime\">"+datetime+"</div>";

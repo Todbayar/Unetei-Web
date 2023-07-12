@@ -645,19 +645,6 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 			</div>
 		</div>
 		
-		<div class="bottomsheet share" style="display: none">
-			<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('bottomsheet share')[0].style.display='none'"></i>
-			<div class="title">Таны зарыг шууд холбоосоор үзэх боломжтой боллоо.</div>
-			<div class="url">
-				<input id="shareUrl" type="url" onclick="this.focus();this.select()" readonly="readonly"/>
-				<div onClick="copyToClipboard()" class="button_yellow" style="margin-left: 5px">
-					<i class="fa-solid fa-copy" style="float:left"></i>
-					<div class="removable" style="margin-left: 5px">Хуулах</div>
-				</div>
-			</div>
-			<div class="info" style="display:none">Хуулагдсан</div>
-		</div>
-		
 		<div class="popup become_follower" style="display: none">
 			<div class="container">
 				<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('popup become_follower')[0].style.display='none'; javascript:document.body.style.overflowY='auto'"></i>

@@ -10,15 +10,37 @@ include_once "info.php";
 		<meta http-equiv="Permissions-Policy" content="interest-cohort=()">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		
-<!--
-		<meta property="og:title" content="test title (24,500 ₮)" />
-		<meta property="og:description" content="this is description" />
-		<meta property="og:type" content="website" />
-		<meta property="og:image" content="https://zarchi.mn/user_files/20230710104432_358116018_981795713065179_2453300629079806830_n.jpg" />
--->
+		<?php
+		if(isset($_SERVER['PATH_INFO'])){
+			$ogDetailID = substr($_SERVER['PATH_INFO'],1);
+			$queryOG = "SELECT *, (SELECT image FROM images WHERE item=item.id LIMIT 1) AS image FROM item RIGHT JOIN user ON user.id=item.userID WHERE item.id=".$ogDetailID;
+			$resultOG = $conn->query($queryOG);
+			$rowOG = mysqli_fetch_array($resultOG);
+
+			//category
+			$splitaOG = explode("_", $rowOG["category"]);
+			$ogTableID = intval(substr($splitaOG[0], 1));
+			$ogID = intval($splitaOG[1]);
+			$arrCategoriesOG = array();
+			for($i=$ogTableID; $i>=1; $i--){
+				$queryCategoryOG = "SELECT * FROM category".$i." WHERE id=".$ogID;
+				$resultCategoryOG = $conn->query($queryCategoryOG);
+				$rowCategoryOG = mysqli_fetch_array($resultCategoryOG);
+				$arrCategoriesOG["text"][] = $rowCategoryOG["title"];
+				if($i>1) $ogID = $rowCategoryOG["parent"];
+			}
+			$arrCategoriesOG["text"] = array_reverse($arrCategoriesOG["text"]);
+			?>
+			<meta property="og:type" content="website" />
+			<meta property="og:title" content="<?php echo $rowOG["title"]." (".convertPriceToText($rowOG["price"])." ₮)"; ?>" />
+			<meta property="og:description" content="<?php echo implode('>', $arrCategoriesOG["text"]); ?>" />
+			<meta property="og:image" content="<?php echo $protocol."://".($_SERVER['HTTP_HOST']=="localhost"?($_SERVER['HTTP_HOST']."/".strtolower($domain_title)):$_SERVER['HTTP_HOST'])."/".$path."/".$rowOG["image"]; ?>" />
+			<?php
+		}
+		?>
 		
 		<title><?php echo $domain_title; ?></title>
-		<link rel="icon" type="image/x-icon" href="android-chrome-512x512.png">
+		<link rel="icon" type="image/x-icon" href="../android-chrome-512x512.png">
 		
 		<script src="https://www.gstatic.com/firebasejs/9.12.1/firebase-app-compat.js"></script>
 		<script src="https://www.gstatic.com/firebasejs/9.12.1/firebase-auth-compat.js"></script>
@@ -420,6 +442,33 @@ include_once "info.php";
 				sessionStorage.removeItem("startItemToDetail");
 				showShareBottomSheet();
 			}
+			
+			<?php
+			if(isset($_COOKIE["userID"])){
+				?>
+				$("#myzar_phone").text("+"<?php echo $_COOKIE["phone"]; ?>);
+				$("#myzar_nav").text("Миний зар");
+				$("#myzar_button").attr("onclick","pagenavigation('myzar')");
+				$("#logoutButton").css("display", "flex");
+				<?php
+			}
+			?>
+
+			$(".myzar").hover(function(){
+				$(".dropdown").show();
+			}, function(){
+				timerDropDownMenu = setTimeout(function(){
+					$(".myzar .dropdown").hide();
+					clearTimeout(timerDropDownMenu);
+				}, 3000);
+			});
+			
+			$(".myzar .dropdown").hover(function(){
+				clearTimeout(timerDropDownMenu);
+				$(".dropdown").show();
+			}, function(){
+				$(".dropdown").hide();
+			});
 		});
 
 		function showBigImage(type,id){
@@ -442,7 +491,7 @@ include_once "info.php";
 		}
 
 		function incrementRate(type){
-			$.post("mysql_item_increment.php",{type:type,id:<?php echo substr($_SERVER['PATH_INFO'],1); ?>});
+			$.post("../mysql_item_increment.php",{type:type,id:<?php echo substr($_SERVER['PATH_INFO'],1); ?>});
 		}
 
 		function startChat(toID, message){
@@ -463,13 +512,13 @@ include_once "info.php";
 				console.log("<chat_send>:" + reqChatSubmit.status);
 			};
 
-			reqChatSubmit.open("POST", "chat_process.php", true);
+			reqChatSubmit.open("POST", "../chat_process.php", true);
 			reqChatSubmit.send(chatSubmitData);		
 		}
 
 		function showOtherItems(userID){
 			sessionStorage.setItem("searchUserID", userID);
-			location.href = "./";
+			location.href = "../";
 		}
 
 		function copyToClipboard(){
@@ -484,244 +533,108 @@ include_once "info.php";
 			$(".bottomsheet.share").show();
 			$(".bottomsheet.share #shareUrl").val(window.location.href);
 		}
+			
+		function toggleFavorite(isFav, id){
+			if(!isFav){
+				$("#itemStar"+id).addClass("nohover");
+				$("#itemStar"+id).css("color", "#FFA718");
+				$("#itemStar"+id).attr("onclick", "toggleFavorite(true, "+id+")");
+			}
+			else {
+				$("#itemStar"+id).removeClass("nohover");
+				$("#itemStar"+id).css("color", "gray");
+				$("#itemStar"+id).attr("onclick", "toggleFavorite(false, "+id+")");
+			}
+			$.post("../mysql_item_toggle_favorite.php", {id:id});
+		}
 		</script>
 	</head>	
 	<body>
-		<div class="detail">
-		<?php
-		if(isset($_SERVER['PATH_INFO'])){
-			$detailID = substr($_SERVER['PATH_INFO'],1);
-			$queryFav = isset($_COOKIE["userID"])?"(SELECT IF(COUNT(*)>0, 1, 0) FROM favorite WHERE itemID=item.id AND userID=".$_COOKIE["userID"].") AS isFavorite,":"";
-			$query = "SELECT *, ".$queryFav." item.phone AS item_phone FROM item RIGHT JOIN user ON user.id=item.userID WHERE item.id=".$detailID;
-			$result = $conn->query($query);
-			$row = mysqli_fetch_array($result);
-
-			//category
-			$splita = explode("_", $row["category"]);
-			$tableID = intval(substr($splita[0], 1));
-			$id = intval($splita[1]);
-			$arrCategories = array();
-			for($i=$tableID; $i>=1; $i--){
-				$queryCategory = "SELECT * FROM category".$i." WHERE id=".$id;
-				$resultCategory = $conn->query($queryCategory);
-				$rowCategory = mysqli_fetch_array($resultCategory);
-		//		$arrCategories["id"][] = "'c".$i."_".$id."'";
-				$arrCategories["text"][] = $rowCategory["title"];
-				if($i>1) $id = $rowCategory["parent"];
-			}
-
-		//	$arrCategories["id"] = array_reverse($arrCategories["id"]);
-			$arrCategories["id"] = fetchRecursiveCategories("'".$row["category"]."'", $conn, true);	
-			$arrCategories["text"] = array_reverse($arrCategories["text"]);
-
-			//rate calculate
-			$joinedCategories = implode(",",$arrCategories["id"]);
-			$queryRateList = "SELECT *, (SELECT COUNT(*) FROM item WHERE category IN (".$joinedCategories.")) AS count_category, (SELECT COUNT(*) FROM item) AS count_global, ((item_viewer+phone_viewer)/2) AS average, (((item_viewer+phone_viewer)/2)/(SELECT COUNT(*) FROM item WHERE category IN (".$joinedCategories."))) AS rate_category, (((item_viewer+phone_viewer)/2)/(SELECT COUNT(*) FROM item)) AS rate_global FROM item WHERE category IN (".$joinedCategories.") AND id=".$detailID." ORDER BY rate_category DESC, rate_global DESC";
-			$resultRateList = $conn->query($queryRateList);
-			$rowRateList = mysqli_fetch_array($resultRateList);
-			?>
-			<div class="categories">
-				<div class="category">Бүх зар</div> <i class="fas fa-angle-right" style="font-size: 12px" aria-hidden="true"></i>
-				<?php
-				for($i=0; $i<count($arrCategories["text"]); $i++){
-					if($i!=count($arrCategories["text"])-1){
-						echo "<div class=\"category\">".$arrCategories["text"][$i]."</div> <i class=\"fas fa-angle-right\" style=\"font-size: 12px\" aria-hidden=\"true\"></i> ";
-					}
-					else {
-						echo "<div class=\"category\">".$arrCategories["text"][$i]."</div>";
-					}
-				}
-				?>
+		<div class="topbar">
+			<div class="wrap">
+			<?php include "topbar.php"; ?>
 			</div>
-			<div class="detailMain">
-				<div class="left">
-					<div class="title">
-						<?php 
-						echo $row["title"]; 
+			<!--Waves Container-->
+			<div class="animation_waves">
+				<svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+				viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+					<defs>
+						<path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+					</defs>
+					<g class="parallax">
+						<use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(55,163,0,0.7" />
+						<use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(55,163,0,0.5)" />
+						<use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(55,163,0,0.3)" />
+						<use xlink:href="#gentle-wave" x="48" y="7" fill="#fff" />
+					</g>
+				</svg>
+			</div>
+			<!--Waves end-->
+		</div>
+		<div class="mid">
+			<div class="wrap">
+				<div class="detail">
+				<?php
+				if(isset($_SERVER['PATH_INFO'])){
+					$detailID = substr($_SERVER['PATH_INFO'],1);
+					$queryFav = isset($_COOKIE["userID"])?"(SELECT IF(COUNT(*)>0, 1, 0) FROM favorite WHERE itemID=item.id AND userID=".$_COOKIE["userID"].") AS isFavorite,":"";
+					$query = "SELECT *, ".$queryFav." item.phone AS item_phone FROM item RIGHT JOIN user ON user.id=item.userID WHERE item.id=".$detailID;
+					$result = $conn->query($query);
+					$row = mysqli_fetch_array($result);
 
-						if(isset($row["isFavorite"])){
-							if($row["isFavorite"]==0){
-								?>
-								<i id="itemStar<?php echo $detailID; ?>" onClick="toggleFavorite(false,<?php echo $detailID; ?>)" class="fa-solid fa-star"></i>
-								<?php
-							}
-							else if($row["isFavorite"]==1){
-								?>
-								<i id="itemStar<?php echo $detailID; ?>" onClick="toggleFavorite(true,<?php echo $detailID; ?>)" class="fa-solid fa-star nohover" style="color: rgb(255, 167, 24)"></i>
-								<?php
-							}
-						}
-						else {
-							?>
-							<i onClick="pagenavigation('login')" class="fa-solid fa-star"></i>
-							<?php
-						}
-						?>
-					</div>
-					<div><?php echo $row["city"]; ?></div>
-					<div class="data1" style="margin-top: 5px; display: flex">
-						<div>Нийтэлсэн: <?php echo $row["datetime"]; ?></div>
-						<div style="color: #a4a4a4; margin-left: 10px">Зарын дугаар: #<?php echo $row["id"]; ?></div>
-					</div>
-					<div class="data2" style="margin-top: 5px; display: flex; color: #a4a4a4">
-						<div>Үзсэн: <i class="fa-solid fa-eye"></i> <?php echo $row["item_viewer"]; ?> <i class="fa-solid fa-phone"></i> <?php echo $row["phone_viewer"]; ?>,</div>
-						<div style="margin-left: 5px">Эрэлт: <i class="fa-solid fa-star"></i> <?php echo number_format($rowRateList["rate_category"],1).", ".number_format($rowRateList["rate_global"],1); ?></div>
-					</div>
-					<div class="importantLeft">
-						<div>
-							<div class="button_yellow price">
-								<div><?php echo convertPriceToText($row["price"]); ?> ₮</div>
-							</div>
-							<div onClick="showPhone()" class="button_yellow phone">
-								<i class="fa-solid fa-phone"></i>
-								<div id="phoneHidden" style="margin-left: 10px">
-									<div>Дугаар харах</div>
-									<div class="hided" style="display: flex; font-family:RobotoRegular; font-size: 14px"><?php echo substr($row["item_phone"],4,4); ?>-<div style="color: #FFA718">XXXX</div></div>
-								</div>
-								<div id="phoneFull" class="full" style="display: none; margin-left: 10px"><?php echo substr($row["item_phone"],4); ?></div>
-							</div>
-							<?php
-							$message = $row["title"]." (#".$row["id"].")<br/>";
-							$message .= convertPriceToText($row["price"])." ₮<br/>";
-							$message .= implode(" > ", $arrCategories["text"]);
-							if(isset($_COOKIE["userID"])){
-								?>
-								<div onClick="startChat(<?php echo $row["userID"]; ?>,'<?php echo $message; ?>')" class="button_yellow chatlah" style="margin-top: 10px; background: #e60803">
-									<i class="fa-solid fa-comments"></i>
-									<div style="margin-left: 10px">Чатлах</div>
-								</div>
-								<?php
+					//category
+					$splita = explode("_", $row["category"]);
+					$tableID = intval(substr($splita[0], 1));
+					$id = intval($splita[1]);
+					$arrCategories = array();
+					for($i=$tableID; $i>=1; $i--){
+						$queryCategory = "SELECT * FROM category".$i." WHERE id=".$id;
+						$resultCategory = $conn->query($queryCategory);
+						$rowCategory = mysqli_fetch_array($resultCategory);
+				//		$arrCategories["id"][] = "'c".$i."_".$id."'";
+						$arrCategories["text"][] = $rowCategory["title"];
+						if($i>1) $id = $rowCategory["parent"];
+					}
+
+				//	$arrCategories["id"] = array_reverse($arrCategories["id"]);
+					$arrCategories["id"] = fetchRecursiveCategories("'".$row["category"]."'", $conn, true);	
+					$arrCategories["text"] = array_reverse($arrCategories["text"]);
+					
+					//rate calculate
+					$joinedCategories = implode(",",$arrCategories["id"]);
+					$queryRateList = "SELECT *, (SELECT COUNT(*) FROM item WHERE category IN (".$joinedCategories.")) AS count_category, (SELECT COUNT(*) FROM item) AS count_global, ((item_viewer+phone_viewer)/2) AS average, (((item_viewer+phone_viewer)/2)/(SELECT COUNT(*) FROM item WHERE category IN (".$joinedCategories."))) AS rate_category, (((item_viewer+phone_viewer)/2)/(SELECT COUNT(*) FROM item)) AS rate_global FROM item WHERE category IN (".$joinedCategories.") AND id=".$detailID." ORDER BY rate_category DESC, rate_global DESC";
+					$resultRateList = $conn->query($queryRateList);
+					$rowRateList = mysqli_fetch_array($resultRateList);
+					?>
+					<div class="categories">
+						<div class="category">Бүх зар</div> <i class="fas fa-angle-right" style="font-size: 12px" aria-hidden="true"></i>
+						<?php
+						for($i=0; $i<count($arrCategories["text"]); $i++){
+							if($i!=count($arrCategories["text"])-1){
+								echo "<div class=\"category\">".$arrCategories["text"][$i]."</div> <i class=\"fas fa-angle-right\" style=\"font-size: 12px\" aria-hidden=\"true\"></i> ";
 							}
 							else {
-								?>
-								<div onClick="pagenavigation('login')" class="button_yellow chatlah" style="margin-top: 10px; background: #e60803">
-									<i class="fa-solid fa-comments"></i>
-									<div style="margin-left: 10px">Чатлах</div>
-								</div>
-								<?php
-							}
-							?>
-						</div>
-						<div class="owner" style="margin-bottom: 10px">
-							<div class="name"><?php echo $row["name"]; ?></div>
-							<div class="datetime" style="font-size: 14px"><?php echo $row["signed"]!=""?"Элссэн огноо:<br/>".date_format(date_create($row["signed"]),"Y/m/d"):""; ?></div>
-							<div onClick="showOtherItems(<?php echo $row["userID"]; ?>)" class="other_items">Зарын эзний бусад зарууд</div>
-						</div>
-						<div onClick="showShareBottomSheet()" class="button_yellow" style="margin-bottom: 10px; width: 100px; height: 29px">
-							<i class="fa-solid fa-copy" style="float:left"></i>
-							<div style="margin-left: 5px">Хуваалцах</div>
-						</div>
-					</div>
-					<?php
-					$queryImages = "SELECT * FROM images WHERE item=".$detailID;
-					$resultImages = $conn->query($queryImages);
-					if(mysqli_num_rows($resultImages)>0 || $row["youtube"]!="" || $row["video"]!=""){
-					?>
-					<div class="images">
-						<div id="imageBig" class="big"></div>
-						<div class="thumbnails">
-						<?php
-						$i = 1;
-						while($rowImages = mysqli_fetch_array($resultImages)){
-							?>
-							<img id="thumbnail<?php echo $i; ?>" onClick="showBigImage('image',<?php echo $i; ?>)" src="../<?php echo $path; ?>/<?php echo $rowImages["image"]; ?>" />
-							<?php
-							$i++;
-						}
-
-						if($row["youtube"]!=""){
-							echo "<iframe src=\"".$row["youtube"]."?controls=1\" frameborder=\"0\" allowfullscreen></iframe>";
-						}
-
-						if($row["video"]!=""){
-							echo "<video onClick=\"showBigImage('video','".$path."/".$row["video"]."')\" preload=\"metadata\"><source src=\"".$path."/".$row["video"]."#t=0.5\" type=\"".findTypeOfVideo($row["video"])."\"></video>";
-						}
-
-						if(mysqli_num_rows($resultImages)>0){
-							?>
-							<script>showBigImage('image',1);</script>
-							<?php
-						}
-						else if($row["video"]!="") {
-							?>
-							<script>showBigImage('video','<?php echo $path."/".$row["video"]; ?>');</script>
-							<?php
-						}
-						?>
-						</div>
-					</div>
-					<?php
-					}
-					?>
-					<div class="words">
-						<?php
-						if($row["extras"]!="" && $row["extras"]!="[]"){
-							$words = json_decode(stripslashes(strip_tags(htmlspecialchars_decode(html_entity_decode($row["extras"])))));
-							for($i=0; $i<count($words); $i++){
-								foreach($words[$i] as $key => $word){
-									if($word!=""){
-									?>
-									<div><?php echo $key.": <b>".$word."</b>"; ?></div>
-									<?php
-									}
-								}
+								echo "<div class=\"category\">".$arrCategories["text"][$i]."</div>";
 							}
 						}
-						if($row["address"]!=""){
-						?>
-						<div>Хаяг байршил: <?php echo "<b>".$row["address"]."</b>"; ?></div>
-						<?php
-						}
-						if($row["quality"]!=null){
-						?>
-						<div>Шинэ/хуучин: <?php echo "<b>".($row["quality"]==0?"Шинэ":"Хуучин")."</b>"; ?></div>
-						<?php
-						}
 						?>
 					</div>
-					<div class="description"><?php echo stripslashes(strip_tags(htmlspecialchars_decode(html_entity_decode($row["description"])))); ?></div>
-					<?php
-					$queryOthers = "SELECT *, ".$queryFav." (SELECT image FROM images WHERE item.id=images.item LIMIT 1) AS image, (SELECT COUNT(*) FROM images WHERE item.id=images.item) AS count_images FROM item WHERE category IN (".$joinedCategories.") AND id NOT IN (".$detailID.") AND isactive=4 ORDER BY datetime DESC LIMIT 12";
-					$resultOthers = $conn->query($queryOthers);
-					if(mysqli_num_rows($resultOthers)>0){
-					?>
-					<hr/>
-					<h3>Ижил зарууд</h3>
-					<?php
-					}
-					?>
-					<div class="list">
-					<?php
-					while($rowOthers = mysqli_fetch_array($resultOthers)){
-						?>
-						<div class="item">
-							<div class="image">
-								<?php
-								if($rowOthers["status"]==2){
-								?>
-								<div class="badge_vip" data-top="VIP"></div>
-								<?php
-								}
-								else if($rowOthers["status"]==1){
-								?>
-								<div class="badge_special" data-top="Онцгой"></div>
-								<?php
-								}
-								if($rowOthers["count_images"]>0){
-								?>
-								<i class="count"><i class="fa-solid fa-camera"></i> <?php echo $rowOthers["count_images"]; ?></i>
-								<?php
-								}
-								if(isset($rowOthers["isFavorite"])){
-									if($rowOthers["isFavorite"]==0){
-									?>
-									<i id="itemStar<?php echo $rowOthers["id"]; ?>" onClick="toggleFavorite(false,<?php echo $rowOthers["id"]; ?>)" class="fa-solid fa-star"></i>
-									<?php
+					<div class="detailMain">
+						<div class="left">
+							<div class="title">
+								<?php 
+								echo $row["title"]; 
+
+								if(isset($row["isFavorite"])){
+									if($row["isFavorite"]==0){
+										?>
+										<i id="itemStar<?php echo $detailID; ?>" onClick="toggleFavorite(false,<?php echo $detailID; ?>)" class="fa-solid fa-star"></i>
+										<?php
 									}
-									else if($rowOthers["isFavorite"]==1){
-									?>
-									<i id="itemStar<?php echo $rowOthers["id"]; ?>" onClick="toggleFavorite(true,<?php echo $rowOthers["id"]; ?>)" class="fa-solid fa-star nohover" style="color: rgb(255, 167, 24)"></i>
-									<?php
+									else if($row["isFavorite"]==1){
+										?>
+										<i id="itemStar<?php echo $detailID; ?>" onClick="toggleFavorite(true,<?php echo $detailID; ?>)" class="fa-solid fa-star nohover" style="color: rgb(255, 167, 24)"></i>
+										<?php
 									}
 								}
 								else {
@@ -730,64 +643,266 @@ include_once "info.php";
 									<?php
 								}
 								?>
-								<img src="../<?php echo $path."/".$rowOthers["image"]; ?>" onerror="this.onerror=null; this.src='notfound.png'" />
 							</div>
-							<div onClick="javascript:pagenavigation('detail&id=<?php echo $rowOthers["id"]; ?>')">
-								<div class="price"><?php echo convertPriceToText($rowOthers["price"]); ?> ₮</div>
-								<div class="title"><?php echo $rowOthers["title"]; ?></div>
+							<div><?php echo $row["city"]; ?></div>
+							<div class="data1" style="margin-top: 5px; display: flex">
+								<div>Нийтэлсэн: <?php echo $row["datetime"]; ?></div>
+								<div style="color: #a4a4a4; margin-left: 10px">Зарын дугаар: #<?php echo $row["id"]; ?></div>
 							</div>
-						</div>
-						<?php
-					}
-					?>
-					</div>
-				</div>
-				<div class="right">
-					<div class="importantRight">
-						<div class="button_yellow price">
-							<div><?php echo convertPriceToText($row["price"]); ?> ₮</div>
-						</div>
-						<div onClick="showPhone()" class="button_yellow phone">
-							<i class="fa-solid fa-phone"></i>
-							<div id="phoneHidden" style="margin-left: 10px">
-								<div>Дугаар харах</div>
-								<div class="hided" style="display: flex; font-family:RobotoRegular; font-size: 14px"><?php echo substr($row["item_phone"],4,4); ?>-<div style="color: #FFA718">XXXX</div></div>
+							<div class="data2" style="margin-top: 5px; display: flex; color: #a4a4a4">
+								<div>Үзсэн: <i class="fa-solid fa-eye"></i> <?php echo $row["item_viewer"]; ?> <i class="fa-solid fa-phone"></i> <?php echo $row["phone_viewer"]; ?>,</div>
+								<div style="margin-left: 5px">Эрэлт: <i class="fa-solid fa-star"></i> <?php echo number_format($rowRateList["rate_category"],1).", ".number_format($rowRateList["rate_global"],1); ?></div>
 							</div>
-							<div id="phoneFull" class="full" style="display: none; margin-left: 10px"><?php echo substr($row["item_phone"],4); ?></div>
-						</div>
-						<?php
-						if(isset($_COOKIE["userID"])){
-							?>
-							<div onClick="startChat(<?php echo $row["userID"]; ?>,'<?php echo $message; ?>')" class="button_yellow chatlah" style="margin-top: 10px; background: #e60803">
-								<i class="fa-solid fa-comments"></i>
-								<div style="margin-left: 10px">Чатлах</div>
+							<div class="importantLeft">
+								<div>
+									<div class="button_yellow price">
+										<div><?php echo convertPriceToText($row["price"]); ?> ₮</div>
+									</div>
+									<div onClick="showPhone()" class="button_yellow phone">
+										<i class="fa-solid fa-phone"></i>
+										<div id="phoneHidden" style="margin-left: 10px">
+											<div>Дугаар харах</div>
+											<div class="hided" style="display: flex; font-family:RobotoRegular; font-size: 14px"><?php echo substr($row["item_phone"],4,4); ?>-<div style="color: #FFA718">XXXX</div></div>
+										</div>
+										<div id="phoneFull" class="full" style="display: none; margin-left: 10px"><?php echo substr($row["item_phone"],4); ?></div>
+									</div>
+									<?php
+									$message = $row["title"]." (#".$row["id"].")<br/>";
+									$message .= convertPriceToText($row["price"])." ₮<br/>";
+									$message .= implode(" > ", $arrCategories["text"]);
+									if(isset($_COOKIE["userID"])){
+										?>
+										<div onClick="startChat(<?php echo $row["userID"]; ?>,'<?php echo $message; ?>')" class="button_yellow chatlah" style="margin-top: 10px; background: #e60803">
+											<i class="fa-solid fa-comments"></i>
+											<div style="margin-left: 10px">Чатлах</div>
+										</div>
+										<?php
+									}
+									else {
+										?>
+										<div onClick="pagenavigation('login')" class="button_yellow chatlah" style="margin-top: 10px; background: #e60803">
+											<i class="fa-solid fa-comments"></i>
+											<div style="margin-left: 10px">Чатлах</div>
+										</div>
+										<?php
+									}
+									?>
+								</div>
+								<div class="owner" style="margin-bottom: 10px">
+									<div class="name"><?php echo $row["name"]; ?></div>
+									<div class="datetime" style="font-size: 14px"><?php echo $row["signed"]!=""?"Элссэн огноо:<br/>".date_format(date_create($row["signed"]),"Y/m/d"):""; ?></div>
+									<div onClick="showOtherItems(<?php echo $row["userID"]; ?>)" class="other_items">Зарын эзний бусад зарууд</div>
+								</div>
+								<div onClick="showShareBottomSheet()" class="button_yellow" style="margin-bottom: 10px; width: 100px; height: 29px">
+									<i class="fa-solid fa-copy" style="float:left"></i>
+									<div style="margin-left: 5px">Хуваалцах</div>
+								</div>
 							</div>
 							<?php
-						}
-						else {
+							$queryImages = "SELECT * FROM images WHERE item=".$detailID;
+							$resultImages = $conn->query($queryImages);
+							if(mysqli_num_rows($resultImages)>0 || $row["youtube"]!="" || $row["video"]!=""){
 							?>
-							<div onClick="pagenavigation('login')" class="button_yellow chatlah" style="margin-top: 10px; background: #e60803">
-								<i class="fa-solid fa-comments"></i>
-								<div style="margin-left: 10px">Чатлах</div>
+							<div class="images">
+								<div id="imageBig" class="big"></div>
+								<div class="thumbnails">
+								<?php
+								$i = 1;
+								while($rowImages = mysqli_fetch_array($resultImages)){
+									?>
+									<img id="thumbnail<?php echo $i; ?>" onClick="showBigImage('image',<?php echo $i; ?>)" src="../<?php echo $path; ?>/<?php echo $rowImages["image"]; ?>" />
+									<?php
+									$i++;
+								}
+
+								if($row["youtube"]!=""){
+									echo "<iframe src=\"".$row["youtube"]."?controls=1\" frameborder=\"0\" allowfullscreen></iframe>";
+								}
+
+								if($row["video"]!=""){
+									echo "<video onClick=\"showBigImage('video','".$path."/".$row["video"]."')\" preload=\"metadata\"><source src=\"".$path."/".$row["video"]."#t=0.5\" type=\"".findTypeOfVideo($row["video"])."\"></video>";
+								}
+
+								if(mysqli_num_rows($resultImages)>0){
+									?>
+									<script>showBigImage('image',1);</script>
+									<?php
+								}
+								else if($row["video"]!="") {
+									?>
+									<script>showBigImage('video','<?php echo $path."/".$row["video"]; ?>');</script>
+									<?php
+								}
+								?>
+								</div>
 							</div>
 							<?php
-						}
-						?>
-						<div class="owner" style="margin-bottom: 10px">
-							<div class="name"><?php echo $row["name"]; ?></div>
-							<div class="datetime" style="font-size: 14px"><?php echo $row["signed"]!=""?"Элссэн огноо:<br/>".date_format(date_create($row["signed"]),"Y/m/d"):""; ?></div>
-							<div onClick="showOtherItems(<?php echo $row["userID"]; ?>)" class="other_items">Зарын эзний бусад зарууд</div>
+							}
+							?>
+							<div class="words">
+								<?php
+								if($row["extras"]!="" && $row["extras"]!="[]"){
+									$words = json_decode(stripslashes(strip_tags(htmlspecialchars_decode(html_entity_decode($row["extras"])))));
+									for($i=0; $i<count($words); $i++){
+										foreach($words[$i] as $key => $word){
+											if($word!=""){
+											?>
+											<div><?php echo $key.": <b>".$word."</b>"; ?></div>
+											<?php
+											}
+										}
+									}
+								}
+								if($row["address"]!=""){
+								?>
+								<div>Хаяг байршил: <?php echo "<b>".$row["address"]."</b>"; ?></div>
+								<?php
+								}
+								if($row["quality"]!=null){
+								?>
+								<div>Шинэ/хуучин: <?php echo "<b>".($row["quality"]==0?"Шинэ":"Хуучин")."</b>"; ?></div>
+								<?php
+								}
+								?>
+							</div>
+							<div class="description"><?php echo stripslashes(strip_tags(htmlspecialchars_decode(html_entity_decode($row["description"])))); ?></div>
+							<?php
+							$queryOthers = "SELECT *, ".$queryFav." (SELECT image FROM images WHERE item.id=images.item LIMIT 1) AS image, (SELECT COUNT(*) FROM images WHERE item.id=images.item) AS count_images FROM item WHERE category IN (".$joinedCategories.") AND id NOT IN (".$detailID.") AND isactive=4 ORDER BY datetime DESC LIMIT 12";
+							$resultOthers = $conn->query($queryOthers);
+							if(mysqli_num_rows($resultOthers)>0){
+							?>
+							<hr/>
+							<h3>Ижил зарууд</h3>
+							<?php
+							}
+							?>
+							<div class="list">
+							<?php
+							while($rowOthers = mysqli_fetch_array($resultOthers)){
+								?>
+								<div class="item">
+									<div class="image">
+										<?php
+										if($rowOthers["status"]==2){
+										?>
+										<div class="badge_vip" data-top="VIP"></div>
+										<?php
+										}
+										else if($rowOthers["status"]==1){
+										?>
+										<div class="badge_special" data-top="Онцгой"></div>
+										<?php
+										}
+										if($rowOthers["count_images"]>0){
+										?>
+										<i class="count"><i class="fa-solid fa-camera"></i> <?php echo $rowOthers["count_images"]; ?></i>
+										<?php
+										}
+										if(isset($rowOthers["isFavorite"])){
+											if($rowOthers["isFavorite"]==0){
+											?>
+											<i id="itemStar<?php echo $rowOthers["id"]; ?>" onClick="toggleFavorite(false,<?php echo $rowOthers["id"]; ?>)" class="fa-solid fa-star"></i>
+											<?php
+											}
+											else if($rowOthers["isFavorite"]==1){
+											?>
+											<i id="itemStar<?php echo $rowOthers["id"]; ?>" onClick="toggleFavorite(true,<?php echo $rowOthers["id"]; ?>)" class="fa-solid fa-star nohover" style="color: rgb(255, 167, 24)"></i>
+											<?php
+											}
+										}
+										else {
+											?>
+											<i onClick="pagenavigation('login')" class="fa-solid fa-star"></i>
+											<?php
+										}
+										?>
+										<img src="../<?php echo $path."/".$rowOthers["image"]; ?>" onerror="this.onerror=null; this.src='notfound.png'" />
+									</div>
+									<div onClick="javascript:pagenavigation(<?php echo $rowOthers["id"]; ?>)">
+										<div class="price"><?php echo convertPriceToText($rowOthers["price"]); ?> ₮</div>
+										<div class="title"><?php echo $rowOthers["title"]; ?></div>
+									</div>
+								</div>
+								<?php
+							}
+							?>
+							</div>
 						</div>
-						<div onClick="showShareBottomSheet()" class="button_yellow" style="margin-bottom: 10px; width: 100px">
-							<i class="fa-solid fa-copy" style="float:left"></i>
-							<div class="removable" style="margin-left: 5px">Хуваалцах</div>
+						<div class="right">
+							<div class="importantRight">
+								<div class="button_yellow price">
+									<div><?php echo convertPriceToText($row["price"]); ?> ₮</div>
+								</div>
+								<div onClick="showPhone()" class="button_yellow phone">
+									<i class="fa-solid fa-phone"></i>
+									<div id="phoneHidden" style="margin-left: 10px">
+										<div>Дугаар харах</div>
+										<div class="hided" style="display: flex; font-family:RobotoRegular; font-size: 14px"><?php echo substr($row["item_phone"],4,4); ?>-<div style="color: #FFA718">XXXX</div></div>
+									</div>
+									<div id="phoneFull" class="full" style="display: none; margin-left: 10px"><?php echo substr($row["item_phone"],4); ?></div>
+								</div>
+								<?php
+								if(isset($_COOKIE["userID"])){
+									?>
+									<div onClick="startChat(<?php echo $row["userID"]; ?>,'<?php echo $message; ?>')" class="button_yellow chatlah" style="margin-top: 10px; background: #e60803">
+										<i class="fa-solid fa-comments"></i>
+										<div style="margin-left: 10px">Чатлах</div>
+									</div>
+									<?php
+								}
+								else {
+									?>
+									<div onClick="pagenavigation('login')" class="button_yellow chatlah" style="margin-top: 10px; background: #e60803">
+										<i class="fa-solid fa-comments"></i>
+										<div style="margin-left: 10px">Чатлах</div>
+									</div>
+									<?php
+								}
+								?>
+								<div class="owner" style="margin-bottom: 10px">
+									<div class="name"><?php echo $row["name"]; ?></div>
+									<div class="datetime" style="font-size: 14px"><?php echo $row["signed"]!=""?"Элссэн огноо:<br/>".date_format(date_create($row["signed"]),"Y/m/d"):""; ?></div>
+									<div onClick="showOtherItems(<?php echo $row["userID"]; ?>)" class="other_items">Зарын эзний бусад зарууд</div>
+								</div>
+								<div onClick="showShareBottomSheet()" class="button_yellow" style="margin-bottom: 10px; width: 100px">
+									<i class="fa-solid fa-copy" style="float:left"></i>
+									<div class="removable" style="margin-left: 5px">Хуваалцах</div>
+								</div>
+							</div>
 						</div>
 					</div>
+					<?php
+				}
+				?>
 				</div>
 			</div>
-			<?php
-		}
-		?>
+		</div>
+		<div class="footer">
+			<div class="wrap">
+				<img src="../icon.png" width="40" height="40" style="object-fit: contain" />
+				<div class="left">
+					<div class="service" style="color: white">Техникийн тусламж: <?php echo $service_phone; ?></div>
+					<div class="contact" style="color: white">Холбоо барих: <?php echo $contact_phone; ?></div>
+				</div>
+				<div class="center" style="font-size: 14px">
+					<div><a href="../policy.php" style="text-decoration: none; color: white">Үйлчилгээний нөхцөл</a></div>
+					<div><a href="../rule.php" style="text-decoration: none; color: white">Зар нийтлэх журам</a></div>
+					<div><a href="../agreement.php" style="text-decoration: none; color: white">Аюулгүй ажиллагаа</a></div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="bottomsheet share" style="display: none">
+			<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('bottomsheet share')[0].style.display='none'"></i>
+			<div class="title">Таны зарыг шууд холбоосоор үзэх боломжтой боллоо.</div>
+			<div class="url">
+				<input id="shareUrl" type="url" onclick="this.focus();this.select()" readonly="readonly"/>
+				<div onClick="copyToClipboard()" class="button_yellow" style="margin-left: 5px">
+					<i class="fa-solid fa-copy" style="float:left"></i>
+					<div class="removable" style="margin-left: 5px">Хуулах</div>
+				</div>
+			</div>
+			<div class="info" style="display:none">Хуулагдсан</div>
 		</div>
 	</body>
 </html>

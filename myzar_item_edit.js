@@ -116,7 +116,7 @@ function myzar_item_edit_submit(id){
 			window.addEventListener("itemEditDone", function(){
 //				location.reload();
 				sessionStorage.setItem("startItemToDetail", true);
-				pagenavigation("detail&id="+itemResponseID);
+				pagenavigation("detail/"+itemResponseID);
 			});
 
 			confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Зар амжилттай <b>засагдаж</b>, шалгагдаж байна.", eventEditDone);

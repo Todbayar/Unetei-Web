@@ -15,8 +15,8 @@ include_once "info.php";
 	border-radius: 5px;
 }
 </style>
-<div onClick="javascript:location.href='./'" style="display: flex; align-items: center; cursor: pointer">
-	<img src="icon.png" width="40" height="40" style="object-fit: contain" />
+<div onClick="javascript:location.href='../'" style="display: flex; align-items: center; cursor: pointer">
+	<img src="<?php echo str_contains($_SERVER['REQUEST_URI'],"detail")?"../icon.png":"icon.png"; ?>" width="40" height="40" style="object-fit: contain" />
 	<div class="title"><?php echo strtoupper($domain); ?></div>
 </div>
 <div class="control">
@@ -67,7 +67,7 @@ include_once "info.php";
 		
 		if(!isset($_GET["page"]) || $_GET["page"] != "chat"){
 		?>
-		<i class="fa-regular fa-comments" style="font-size: 24px; color: #FFFFFF; font: normal; margin-left: 10px; cursor: pointer; position: relative" onClick="javascript:location.href='?page=chat'">
+		<i class="fa-regular fa-comments" style="font-size: 24px; color: #FFFFFF; font: normal; margin-left: 10px; cursor: pointer; position: relative" onClick="pagenavigation('chat')">
 			<?php
 			if($countChat>0){
 			?>
@@ -80,7 +80,7 @@ include_once "info.php";
 		}
 		else {
 		?>
-		<i class="fa-solid fa-comments" style="font-size: 24px; color: #FFFFFF; font: normal; margin-left: 10px; cursor: pointer; position: relative" onClick="javascript:location.href='?page=chat'">
+		<i class="fa-solid fa-comments" style="font-size: 24px; color: #FFFFFF; font: normal; margin-left: 10px; cursor: pointer; position: relative" onClick="pagenavigation('chat')'">
 			<?php
 			if($countChat>0){
 			?>
@@ -92,7 +92,7 @@ include_once "info.php";
 		<?php
 		}
 		?>
-		<div class="button_yellow" style="margin-left: 10px" onClick="javascript:location.href='?page=myzar&myzar=category'">
+		<div class="button_yellow" style="margin-left: 10px" onClick="javascript:location.href='<?php echo str_contains($_SERVER['REQUEST_URI'],"detail")?"../?page=myzar&myzar=category":"?page=myzar&myzar=category"; ?>'">
 			<i class="fa-solid fa-plus"></i>
 			<div class="removable" style="margin-left: 5px">Зар нэмэх</div>
 		</div>
