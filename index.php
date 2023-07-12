@@ -11,12 +11,36 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 		<meta http-equiv="Permissions-Policy" content="interest-cohort=()">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		
-<!--
-		<meta property="og:title" content="test title (24,500 ₮)" />
-		<meta property="og:description" content="this is description" />
-		<meta property="og:type" content="website" />
-		<meta property="og:image" content="https://zarchi.mn/user_files/20230710104432_358116018_981795713065179_2453300629079806830_n.jpg" />
--->
+		<?php
+		$queryURL = array();
+		parse_str($_SERVER['QUERY_STRING'], $queryURL);
+		if(isset($queryURL["page"]) && str_contains($queryURL["page"],"detail")){
+			$ogDetailID = $queryURL["id"];
+			$queryOG = "SELECT *, (SELECT image FROM images WHERE item=item.id LIMIT 1) AS image FROM item RIGHT JOIN user ON user.id=item.userID WHERE item.id=".$ogDetailID;
+			$resultOG = $conn->query($queryOG);
+			$rowOG = mysqli_fetch_array($resultOG);
+
+			//category
+			$splitaOG = explode("_", $rowOG["category"]);
+			$ogTableID = intval(substr($splitaOG[0], 1));
+			$ogID = intval($splitaOG[1]);
+			$arrCategoriesOG = array();
+			for($i=$ogTableID; $i>=1; $i--){
+				$queryCategoryOG = "SELECT * FROM category".$i." WHERE id=".$ogID;
+				$resultCategoryOG = $conn->query($queryCategoryOG);
+				$rowCategoryOG = mysqli_fetch_array($resultCategoryOG);
+				$arrCategoriesOG["text"][] = $rowCategoryOG["title"];
+				if($i>1) $ogID = $rowCategoryOG["parent"];
+			}
+			$arrCategoriesOG["text"] = array_reverse($arrCategoriesOG["text"]);
+			?>
+			<meta property="og:type" content="website" />
+			<meta property="og:title" content="<?php echo $rowOG["title"]." (".convertPriceToText($rowOG["price"])." ₮)"; ?>" />
+			<meta property="og:description" content="<?php echo implode('>', $arrCategoriesOG["text"]); ?>" />
+			<meta property="og:image" content="<?php echo $protocol."://".($_SERVER['HTTP_HOST']=="localhost"?($_SERVER['HTTP_HOST']."/".strtolower($domain_title)):$_SERVER['HTTP_HOST'])."/".$path."/".$rowOG["image"]; ?>" />
+			<?php
+		}
+		?>
 		
 		<title><?php echo $domain_title; ?></title>
 		<link rel="icon" type="image/x-icon" href="android-chrome-512x512.png">
@@ -24,21 +48,21 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 		<script src="https://www.gstatic.com/firebasejs/9.12.1/firebase-app-compat.js"></script>
 		<script src="https://www.gstatic.com/firebasejs/9.12.1/firebase-auth-compat.js"></script>
 		<script src="https://www.gstatic.com/firebasejs/9.12.1/firebase-messaging-compat.js"></script>
-		<script src="jquery-3.6.4.min.js"></script>
-		<script src="jquery-ui.js"></script>
-		<script src="kit.fontawesome.com_64e3bec699.js"></script>
-		<script src="misc.js"></script>
+		<script src="<?php echo  str_contains($_SERVER['REQUEST_URI'],"detail")?"../":""; ?>jquery-3.6.4.min.js"></script>
+		<script src="<?php echo  str_contains($_SERVER['REQUEST_URI'],"detail")?"../":""; ?>jquery-ui.js"></script>
+		<script src="<?php echo  str_contains($_SERVER['REQUEST_URI'],"detail")?"../":""; ?>kit.fontawesome.com_64e3bec699.js"></script>
+		<script src="<?php echo  str_contains($_SERVER['REQUEST_URI'],"detail")?"../":""; ?>misc.js"></script>
 		
-		<script src="jquery.Jcrop.min.js"></script>
-		<link rel="stylesheet" href="jquery.Jcrop.min.css" type="text/css" />
+		<script src="<?php echo  str_contains($_SERVER['REQUEST_URI'],"detail")?"../":""; ?>jquery.Jcrop.min.js"></script>
+		<link rel="stylesheet" href="<?php echo  str_contains($_SERVER['REQUEST_URI'],"detail")?"../":""; ?>jquery.Jcrop.min.css" type="text/css" />
 		
-		<script src="jquery.watermark.min.js" type="text/javascript"></script>
+		<script src="<?php echo  str_contains($_SERVER['REQUEST_URI'],"detail")?"../":""; ?>jquery.watermark.min.js" type="text/javascript"></script>
 		
-		<link rel="stylesheet" href="main.css">
-		<link rel="stylesheet" href="topbar.css">
-		<link rel="stylesheet" href="buttons.css">
-		<link rel="stylesheet" href="dropdowns.css">
-		<link rel="stylesheet" href="animation.css">
+		<link rel="stylesheet" href="<?php echo  str_contains($_SERVER['REQUEST_URI'],"detail")?"../":""; ?>main.css">
+		<link rel="stylesheet" href="<?php echo  str_contains($_SERVER['REQUEST_URI'],"detail")?"../":""; ?>topbar.css">
+		<link rel="stylesheet" href="<?php echo  str_contains($_SERVER['REQUEST_URI'],"detail")?"../":""; ?>buttons.css">
+		<link rel="stylesheet" href="<?php echo  str_contains($_SERVER['REQUEST_URI'],"detail")?"../":""; ?>dropdowns.css">
+		<link rel="stylesheet" href="<?php echo  str_contains($_SERVER['REQUEST_URI'],"detail")?"../":""; ?>animation.css">
 		<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
 		
 		<script>
@@ -56,6 +80,13 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 		var timerDropDownMenu;
 		
 		$(document).ready(function(){
+			$(".searchResult .list .item").click(function(e){
+				console.log("<test>:"+e.target);
+				if(!$(e.target).is(".fa-star")){
+					pagenavigation("detail/"+$(this).attr("id"));
+				}
+			});
+			
 			if('serviceWorker' in navigator){				
 				navigator.serviceWorker.register('firebase-messaging-sw.js');
 				const messaging = firebase.messaging();	//not working bcz of service not supported on mobile android
@@ -239,6 +270,9 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 						include "chat.php";
 						break;
 					case "detail":
+						include "detail.php";
+						break;
+					case str_contains($_GET["page"], "detail"):
 						include "detail.php";
 						break;
 					case "favorite":

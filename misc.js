@@ -1,13 +1,14 @@
 function pagenavigation(page){
-	if(Number.isInteger(page)){
-		location.href = page;
-	}
-	else if(page.includes('/')){
-	   	location.href = page;
-   	}
-	else {
-		location.href = "../?page=" + page;
-	}
+	console.log("<pagenavigation>:"+page);
+//	if(Number.isInteger(page)){
+//		location.href = page;
+//	}
+//	else if(page.includes('/')){
+//	   	location.href = page;
+//   	}
+//	else {
+//		location.href = "../?page=" + page;
+//	}
 }
 
 function logout(){

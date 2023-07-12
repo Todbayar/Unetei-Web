@@ -612,13 +612,6 @@ function fetchItems(){
 				}
 			}
 		}
-		$(document).ready(function() {
-			$(".searchResult .list .item").click(function(e){
-				if(!$(e.target).is(".fa-star")){
-					pagenavigation("detail/"+$(this).attr("id"));
-				}
-			});
-		});
 	});
 }
 </script>
