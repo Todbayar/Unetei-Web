@@ -643,7 +643,7 @@ function toggleFavorite(isFav, id){
 					}
 
 					if($row["video"]!=""){
-						echo "<video onClick=\"showBigImage('video','".$path."/".$row["video"]."')\" preload=\"metadata\"><source src=\"".$path."/".$row["video"]."#t=0.5\" type=\"".findTypeOfVideo($row["video"])."\"></video>";
+						echo "<video onClick=\"showBigImage('video','../".$path."/".$row["video"]."')\" preload=\"metadata\"><source src=\"../".$path."/".$row["video"]."#t=0.5\" type=\"".findTypeOfVideo($row["video"])."\"></video>";
 					}
 
 					if(mysqli_num_rows($resultImages)>0){
@@ -653,7 +653,7 @@ function toggleFavorite(isFav, id){
 					}
 					else if($row["video"]!="") {
 						?>
-						<script>showBigImage('video','<?php echo $path."/".$row["video"]; ?>');</script>
+						<script>showBigImage('video','../<?php echo $path."/".$row["video"]; ?>');</script>
 						<?php
 					}
 					?>
@@ -741,7 +741,7 @@ function toggleFavorite(isFav, id){
 							?>
 							<img src="../<?php echo $path."/".$rowOthers["image"]; ?>" onerror="this.onerror=null; this.src='notfound.png'" />
 						</div>
-						<div onClick="javascript:pagenavigation(<?php echo $rowOthers["id"]; ?>)">
+						<div onClick="javascript:pagenavigation(<?php echo $rowOthers["id"]; ?>,'id')">
 							<div class="price"><?php echo convertPriceToText($rowOthers["price"]); ?> ₮</div>
 							<div class="title"><?php echo $rowOthers["title"]; ?></div>
 						</div>

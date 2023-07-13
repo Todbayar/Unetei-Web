@@ -1,5 +1,17 @@
-function pagenavigation(page){
-	console.log("<pagenavigation>:"+page);
+function pagenavigation(page, type){
+	var type = typeof type!=="undefined"?type:null;
+	console.log("<pagenavigation>:"+page+", type:"+type);
+	switch(type){
+		case "slash":
+			location.href = page;
+			break;
+		case "id":
+			location.href = page;
+			break;
+		default:
+			location.href = "../?page=" + page;
+			break;
+	}
 //	if(Number.isInteger(page)){
 //		location.href = page;
 //	}

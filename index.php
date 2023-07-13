@@ -33,17 +33,39 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 				if($i>1) $ogID = $rowCategoryOG["parent"];
 			}
 			$arrCategoriesOG["text"] = array_reverse($arrCategoriesOG["text"]);
+			$price = $rowOG["price"]!=0?" (".convertPriceToText($rowOG["price"])." ₮)":"";
 			?>
 			<meta property="og:type" content="website" />
-			<meta property="og:title" content="<?php echo $rowOG["title"]." (".convertPriceToText($rowOG["price"])." ₮)"; ?>" />
+			<meta property="og:title" content="<?php echo $rowOG["title"].$price; ?>" />
 			<meta property="og:description" content="<?php echo implode('>', $arrCategoriesOG["text"]); ?>" />
-			<meta property="og:image" content="<?php echo $protocol."://".($_SERVER['HTTP_HOST']=="localhost"?($_SERVER['HTTP_HOST']."/".strtolower($domain_title)):$_SERVER['HTTP_HOST'])."/".$path."/".$rowOG["image"]; ?>" />
 			<?php
+			if($rowOG["image"]!=""){
+				?>
+				<meta property="og:image" content="<?php echo $protocol."://".($_SERVER['HTTP_HOST']=="localhost"?($_SERVER['HTTP_HOST']."/".strtolower($domain_title)):$_SERVER['HTTP_HOST'])."/".$path."/".$rowOG["image"]; ?>" />
+				<?php
+			}
+			else if($rowOG["youtube"]!=""){
+				?>
+				<meta property="og:video" content="<?php echo $rowOG["youtube"]; ?>" />
+				<?php
+			}
+			else if($rowOG["video"]!=""){
+				?>
+				<meta property="og:video" content="<?php echo $protocol."://".($_SERVER['HTTP_HOST']=="localhost"?($_SERVER['HTTP_HOST']."/".strtolower($domain_title)):$_SERVER['HTTP_HOST'])."/".$path."/".$rowOG["video"]; ?>" />
+				<meta property="og:video:secure_url" content="<?php echo $protocol."://".($_SERVER['HTTP_HOST']=="localhost"?($_SERVER['HTTP_HOST']."/".strtolower($domain_title)):$_SERVER['HTTP_HOST'])."/".$path."/".$rowOG["video"]; ?>" />
+				<meta property="og:video:type" content="video/mp4" />
+				<?php
+			}
+			else {
+				?>
+				<meta property="og:image" content="<?php echo $protocol."://".($_SERVER['HTTP_HOST']=="localhost"?($_SERVER['HTTP_HOST']."/".strtolower($domain_title)):$_SERVER['HTTP_HOST'])."/notfound.png"; ?>" />
+				<?php
+			}
 		}
 		?>
 		
 		<title><?php echo $domain_title; ?></title>
-		<link rel="icon" type="image/x-icon" href="android-chrome-512x512.png">
+		<link rel="icon" type="image/x-icon" href="<?php echo str_contains($_SERVER['REQUEST_URI'],"detail")?"../android-chrome-512x512.png":"android-chrome-512x512.png"; ?>">
 		
 		<script src="https://www.gstatic.com/firebasejs/9.12.1/firebase-app-compat.js"></script>
 		<script src="https://www.gstatic.com/firebasejs/9.12.1/firebase-auth-compat.js"></script>
@@ -80,15 +102,8 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 		var timerDropDownMenu;
 		
 		$(document).ready(function(){
-			$(".searchResult .list .item").click(function(e){
-				console.log("<test>:"+e.target);
-				if(!$(e.target).is(".fa-star")){
-					pagenavigation("detail/"+$(this).attr("id"));
-				}
-			});
-			
 			if('serviceWorker' in navigator){				
-				navigator.serviceWorker.register('firebase-messaging-sw.js');
+				navigator.serviceWorker.register('<?php echo str_contains($_SERVER['REQUEST_URI'],"detail")?"../firebase-messaging-sw.js":"firebase-messaging-sw.js"; ?>');
 				const messaging = firebase.messaging();	//not working bcz of service not supported on mobile android
 				var eventNotification = new CustomEvent("notificationDone");
 				window.addEventListener("notificationDone", function(){
@@ -288,7 +303,7 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 		</div>
 		<div class="footer">
 			<div class="wrap">
-				<img src="icon.png" width="40" height="40" style="object-fit: contain" />
+				<img src="<?php echo str_contains($_SERVER['REQUEST_URI'],"detail")?"../icon.png":"icon.png"; ?>" width="40" height="40" style="object-fit: contain" />
 				<div class="left">
 					<div class="service" style="color: white">Техникийн тусламж: <?php echo $service_phone; ?></div>
 					<div class="contact" style="color: white">Холбоо барих: <?php echo $contact_phone; ?></div>
@@ -336,7 +351,7 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 				<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('popup myzar_category_enter')[0].style.display='none'; javascript:document.body.style.overflowY='auto'"></i>
 				<div class="header">Ангилал нэмэх</div>
 				<div style="display: flex; margin-left: 5px; margin-right: 5px; margin-top: 5px; min-height: 50px">
-					<img id="myzar_category_enter_icon_image" class="icon_button" src="image-solid.svg" width="32" height="32" onClick="myzar_category_enter_icon_button()" style="cursor: pointer; display: inline-block;
+					<img id="myzar_category_enter_icon_image" class="icon_button" src="<?php echo str_contains($_SERVER['REQUEST_URI'],"detail")?"../image-solid.svg":"image-solid.svg"; ?>" width="32" height="32" onClick="myzar_category_enter_icon_button()" style="cursor: pointer; display: inline-block;
 	vertical-align: top" />
 					<input id="myzar_category_enter_icon_file" class="icon_file" type="file" required="true" accept="image/png, .svg" style="display: none" />
 					<div class="myzar_category_enter_title_container" style="margin-left: 5px; margin-right: 5px; margin-bottom: 5px; width: 95%; display: none">
@@ -641,7 +656,7 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 		
 		<div class="popup profile_qrcrop" style="display: none">
 			<div class="container" style="width: 320px; top: 5vh">
-				<img id="cropbox" class="cropbox img" src="cropBackground.png" style="width: 320px; height: 320px; object-fit: contain">
+				<img id="cropbox" class="cropbox img" src="<?php echo str_contains($_SERVER['REQUEST_URI'],"detail")?"../cropBackground.png":"cropBackground.png"; ?>" style="width: 320px; height: 320px; object-fit: contain">
 				<button id="crop" class="button_yellow" style="margin-top: 10px; margin-left: auto; margin-right: auto" disabled>Тайрах</button>
 			</div>
 		</div>
@@ -701,6 +716,19 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 					</button>
 				</div>
 			</div>
+		</div>
+		
+		<div class="bottomsheet share" style="display: none">
+			<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('bottomsheet share')[0].style.display='none'"></i>
+			<div class="title">Таны зарыг шууд холбоосоор үзэх боломжтой боллоо.</div>
+			<div class="url">
+				<input id="shareUrl" type="url" onclick="this.focus();this.select()" readonly="readonly"/>
+				<div onClick="copyToClipboard()" class="button_yellow" style="margin-left: 5px">
+					<i class="fa-solid fa-copy" style="float:left"></i>
+					<div class="removable" style="margin-left: 5px">Хуулах</div>
+				</div>
+			</div>
+			<div class="info" style="display:none">Хуулагдсан</div>
 		</div>
 	</body>
 </html>

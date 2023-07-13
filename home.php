@@ -289,7 +289,7 @@ var searchPage = 0;
 var searchPageRangeCount = 2;
 var searchPageLast = 0;
 
-$(document).ready(function() {
+$(document).ready(function() {		
 	if(sessionStorage.getItem("searchUserID")!=null){
 		searchUserID = sessionStorage.getItem("searchUserID");
 		sessionStorage.removeItem("searchUserID");
@@ -537,13 +537,13 @@ function fetchItems(){
 				var media = "";
 				if(vObj.data[i].image != null){
 					if(vObj.data[i].status == 2){
-						media = "<div class=\"image\"><div class=\"badge_vip\" data-top=\"VIP\"></div><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i>"+star+"<img src=\"<?php echo $path."/"; ?>"+vObj.data[i].image+"\" onerror=\"this.onerror=null; this.src='image-solid.svg'\" /></div>";
+						media = "<div class=\"image\"><div class=\"badge_vip\" data-top=\"VIP\"></div><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i>"+star+"<img src=\"<?php echo $path."/"; ?>"+vObj.data[i].image+"\" onerror=\"this.onerror=null; this.src='image-solid.svg '\" /></div>";
 					}
 					else if(vObj.data[i].status == 1){
-						media = "<div class=\"image\"><div class=\"badge_special\" data-top=\"Онцгой\"></div><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i>"+star+"<img src=\"<?php echo $path."/"; ?>"+vObj.data[i].image+"\" onerror=\"this.onerror=null; this.src='image-solid.svg'\" /></div>";
+						media = "<div class=\"image\"><div class=\"badge_special\" data-top=\"Онцгой\"></div><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i>"+star+"<img src=\"<?php echo $path."/"; ?>"+vObj.data[i].image+"\" onerror=\"this.onerror=null; this.src='image-solid.svg '\" /></div>";
 					}
 					else if(vObj.data[i].status == 0){
-						media = "<div class=\"image\"><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i>"+star+"<img src=\"<?php echo $path."/"; ?>"+vObj.data[i].image+"\" onerror=\"this.onerror=null; this.src='image-solid.svg'\" /></div>";
+						media = "<div class=\"image\"><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i>"+star+"<img src=\"<?php echo $path."/"; ?>"+vObj.data[i].image+"\" onerror=\"this.onerror=null; this.src='image-solid.svg '\" /></div>";
 					}
 				}
 				else if(vObj.data[i].youtube != ""){
@@ -570,16 +570,16 @@ function fetchItems(){
 				}
 				else {
 					if(vObj.data[i].status == 2){
-						media = "<div class=\"image\"><div class=\"badge_vip\" data-top=\"VIP\"></div><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i>"+star+"<img src=\"notfound.png\" onerror=\"this.onerror=null; this.src='image-solid.svg'\" /></div>";
+						media = "<div class=\"image\"><div class=\"badge_vip\" data-top=\"VIP\"></div><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i>"+star+"<img src=\"notfound.png\" onerror=\"this.onerror=null; this.src='image-solid.svg '\" /></div>";
 					}
 					else if(vObj.data[i].status == 1){
-						media = "<div class=\"image\"><div class=\"badge_special\" data-top=\"Онцгой\"></div><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i>"+star+"<img src=\"notfound.png\" onerror=\"this.onerror=null; this.src='image-solid.svg'\" /></div>";
+						media = "<div class=\"image\"><div class=\"badge_special\" data-top=\"Онцгой\"></div><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i>"+star+"<img src=\"notfound.png\" onerror=\"this.onerror=null; this.src='image-solid.svg '\" /></div>";
 					}
 					else if(vObj.data[i].status == 0){
-						media = "<div class=\"image\"><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i>"+star+"<img src=\"notfound.png\" onerror=\"this.onerror=null; this.src='image-solid.svg'\" /></div>";
+						media = "<div class=\"image\"><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i>"+star+"<img src=\"notfound.png\" onerror=\"this.onerror=null; this.src='image-solid.svg '\" /></div>";
 					}
 				}
-				var html = "<div id=\""+vObj.data[i].id+"\" class=\"item\">"+media+"<div><div class=\"price\">"+convertPriceToTextJS(vObj.data[i].price)+" ₮</div><div class=\"title\">"+vObj.data[i].title+"</div></div></div>";
+				var html = "<div id=\""+vObj.data[i].id+"\" class=\"item\">"+media+"<div><div class=\"price\">"+(vObj.data[i].price!=0?(convertPriceToTextJS(vObj.data[i].price)+" ₮"):"")+"</div><div class=\"title\">"+vObj.data[i].title+"</div></div></div>";
 
 				if(searchType == -1){
 					if(vObj.data[i].status==2){
@@ -611,6 +611,15 @@ function fetchItems(){
 					$("#listRegular").append(html);
 				}
 			}
+			
+			$(document).ready(function() {
+				$(".searchResult .list .item").click(function(e){
+					console.log("<test_click>");
+					if(!$(e.target).is(".fa-star")){
+						pagenavigation("detail/"+$(this).attr("id"),"slash");
+					}
+				});
+			});
 		}
 	});
 }
