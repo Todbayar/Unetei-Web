@@ -43,7 +43,13 @@ $(document).ready(function(){
 			$("#myzar_item_phone").val("");
 			$("#myzar_item_name").val("");
 			$("#myzar_item_email").val("");
+			$(".myzar_item_phone_label.required").show();
+			$(".myzar_item_phone_label.notrequired").hide();
 	   	}
+		else {
+			$(".myzar_item_phone_label.required").hide();
+			$(".myzar_item_phone_label.notrequired").show();
+		}
 	});
 });
 </script>
@@ -218,7 +224,7 @@ $(document).ready(function(){
 			</tr>
 		</table>
 		<hr/>
-		<table width="100%">
+		<table class="myzar_item_isNewUser_table" width="100%">
 			<tr>
 				<td width="115px">Хэрэглэгч:</td>
 				<td valign="middle" align="left">
@@ -246,7 +252,10 @@ $(document).ready(function(){
 		</table>
 		<table width="100%">
 			<tr>
-				<td width="115px">Утас:</td>
+				<td width="115px">
+					<label class="myzar_item_phone_label required" style="display: none">Утас:</label>
+					<label class="myzar_item_phone_label notrequired">Утас:</label>
+				</td>
 				<td valign="middle" align="left">
 					<div style="align-content: center; align-items: center">
 						<label style="margin-right: 5px; font: bold 16px Arial">+976</label>
@@ -263,6 +272,12 @@ $(document).ready(function(){
 						}
 						?>
 					</div>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td style="color: #9F9F9F; font: normal 14px Arial">
+					<div id="myzar_item_phone_error" style="display: none; color: #FF4649">Хоосон байж болохгүй эсвэл алдаатай утасны дугаар байна!</div>
 				</td>
 			</tr>
 		</table>

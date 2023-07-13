@@ -4,9 +4,10 @@ include_once "mysql_misc.php";
 include_once "chat_process.php";
 include_once "info.php";
 
-$isNewUser = $_REQUEST["isNewUser"];
+$isNewUser = (boolean)json_decode(strtolower($_REQUEST["isNewUser"]));
 $phone = (isset($_REQUEST["phone"])) ? $_REQUEST["phone"] : "";
-$userID = $isNewUser ? userNewAdd($phone) : $_COOKIE["userID"];
+$userID = $_COOKIE["userID"];
+if($isNewUser && $phone!="") $userID = userNewAdd($phone);
 $category = $_REQUEST["category"];
 $title = htmlspecialchars(addslashes($_REQUEST["title"]));
 $quality = $_REQUEST["quality"];

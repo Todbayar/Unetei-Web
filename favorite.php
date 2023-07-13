@@ -96,7 +96,7 @@ include_once "mysql_misc.php";
 $(document).ready(function(){
 	$(".favorite .container .item").click(function(e){
 		if(!$(e.target).is(".fa-star")){
-			pagenavigation('detail/'+$(this).attr("id"));
+			pagenavigation('detail/'+$(this).attr("id"),'slash');
 	   	}
 	});
 });

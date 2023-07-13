@@ -51,6 +51,7 @@ function myzar_category_selected_item_edit(id){
 	const reqMyZarItemListData = new XMLHttpRequest();
 	reqMyZarItemListData.onload = function() {
 		const resultItemData = JSON.parse(this.responseText);
+		$(".myzar_item_isNewUser_table").hide();
 		$("#myzar_item_extras").empty();
 		myzar_item_categories(resultItemData.categories, resultItemData.extras);
 		
@@ -116,7 +117,7 @@ function myzar_item_edit_submit(id){
 			window.addEventListener("itemEditDone", function(){
 //				location.reload();
 				sessionStorage.setItem("startItemToDetail", true);
-				pagenavigation("detail/"+itemResponseID);
+				pagenavigation("detail/"+itemResponseID,"slash");
 			});
 
 			confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Зар амжилттай <b>засагдаж</b>, шалгагдаж байна.", eventEditDone);

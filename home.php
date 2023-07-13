@@ -484,7 +484,7 @@ function fetchItems(){
 //		console.log("<mysql_item_list_process>:"+responseText);
 		const vObj = JSON.parse(responseText);
 //		console.log("<mysql_item_list_process1>:"+vObj.query);
-		$("#searchInput").prop("placeholder",vObj.page.countItems+" зар байна");
+//		$("#searchInput").prop("placeholder",vObj.page.countItems+" зар байна");
 		searchPageLast = vObj.page.countPages-1;
 		
 		if(searchPage==0){
@@ -630,8 +630,9 @@ function fetchItems(){
 		<?php
 		$queryCountItems = "SELECT * FROM item WHERE isactive=4";
 		$resultCountItems = $conn->query($queryCountItems);
+		//mysqli_num_rows($resultCountItems) зар байна
 		?>
-		<input id="searchInput" class="searchInput" type="text" placeholder="<?php echo mysqli_num_rows($resultCountItems); ?> зар байна" />
+		<input id="searchInput" class="searchInput" type="text" placeholder="Зар хайх" />
 		<div onClick="showSearch()" class="button_yellow" style="margin-left: 10px; background: #42c200">
 			<i class="fa-solid fa-circle-chevron-down" style="color: white"></i>
 		</div>

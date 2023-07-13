@@ -135,12 +135,13 @@ function getItemDataForm(id = null){
 	if(vItemDescription === "") $("#myzar_item_description_error").show();
 	if(vItemCity == null) $("#myzar_item_city_error").show();
 	if(vItemName === "" || !patternOnlyText.test(vItemName)) $("#myzar_item_name_error").show();
+	if(vItemIsNewUser && vItemPhone=="") $("#myzar_item_phone_error").show();
 	
 	//no require
 	if(vItemEmail !== "" && !patternEmail.test(vItemEmail)) $("#myzar_item_email_error").show();
 	if(vItemYoutube !== "" && !patternYoutube.test(vItemYoutube)) $("#myzar_item_youtube_error").show();
 	
-	if(vItemTitle !== "" && vItemPrice !== "" && vItemDescription !== "" && vItemCity != null && (vItemName !== "" && patternOnlyText.test(vItemName)) && (vItemEmail === "" || patternEmail.test(vItemEmail)) && (vItemYoutube === "" || patternYoutube.test(vItemYoutube))){
+	if(vItemTitle !== "" && vItemPrice !== "" && vItemDescription !== "" && vItemCity != null && (vItemName !== "" && patternOnlyText.test(vItemName)) && (vItemEmail === "" || patternEmail.test(vItemEmail)) && (vItemYoutube === "" || patternYoutube.test(vItemYoutube)) && ((vItemIsNewUser && vItemPhone!="") || !vItemIsNewUser)){
 		var itemSubmitData = new FormData();
 		itemSubmitData.append("category", "c" + selectedCategory.length + "_" + selectedCategory[selectedCategory.length-1]);
 		itemSubmitData.append("title", vItemTitle);
