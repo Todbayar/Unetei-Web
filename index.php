@@ -72,6 +72,7 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 		<script src="https://www.gstatic.com/firebasejs/9.12.1/firebase-messaging-compat.js"></script>
 		<script src="<?php echo  str_contains($_SERVER['REQUEST_URI'],"detail")?"../":""; ?>jquery-3.6.4.min.js"></script>
 		<script src="<?php echo  str_contains($_SERVER['REQUEST_URI'],"detail")?"../":""; ?>jquery-ui.js"></script>
+		<script src="<?php echo  str_contains($_SERVER['REQUEST_URI'],"detail")?"../":""; ?>latest_sortable.min.js"></script>
 		<script src="<?php echo  str_contains($_SERVER['REQUEST_URI'],"detail")?"../":""; ?>kit.fontawesome.com_64e3bec699.js"></script>
 		<script src="<?php echo  str_contains($_SERVER['REQUEST_URI'],"detail")?"../":""; ?>misc.js"></script>
 		

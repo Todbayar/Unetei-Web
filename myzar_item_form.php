@@ -1,6 +1,7 @@
 <?php
 include "mysql_config.php";
 include_once "mysql_misc.php";
+include_once "info.php";
 ?>
 <style>
 /* For Mobile */
@@ -106,15 +107,15 @@ $(document).ready(function(){
 				</td>
 			</tr>
 		</table>
-		<div style="margin-left: 10px; display: flex">
-			<div style="margin-right: 10px">Зураг:
+		<div style="margin: 10px; display: flex">
+			<div style="margin-right: 10px">
+				<div id="imagesBrowseButton" onClick="myzar_item_images_browse()" class="button_yellow">
+					<i class="fa-solid fa-circle-plus"></i>
+					<div class="removable" style="margin-left: 5px">Зураг</div>
+				</div>
 				<input type="file" id="myzar_item_images_input" name="myzar_item_images_input[]" required="true" accept="image/png, image/gif, image/jpeg, .svg" multiple style="display: none" />
 			</div>
-			<div id="myzar_item_images">
-				<div onClick="myzar_item_images_browse()" class="button_yellow" style="background-color:#dddddd; width: 100px; height: 100px; align-items: center; align-content: center; text-align: center; float: left; margin: 5px">
-					<i class="fa-solid fa-plus" style="width: 10px; margin: 0 auto"></i>
-				</div>
-			</div>
+			<div id="myzar_item_images"></div>
 		</div>
 		<table width="100%">
 			<tr>
@@ -130,15 +131,29 @@ $(document).ready(function(){
 				</td>
 			</tr>
 		</table>
-		<div style="margin-left: 10px; display: flex">
-			<div style="margin-right: 10px">Видео:
+		<div style="margin: 10px; display: flex">
+			<div style="margin-right: 10px">
+				<?php
+				if(getUserRole($_COOKIE["userID"])>=3){
+				?>
+				<div id="videoBrowseButton" onClick="myzar_item_video_browse()" class="button_yellow">
+					<i class="fa-solid fa-circle-plus"></i>
+					<div class="removable" style="margin-left: 5px">Видео</div>
+				</div>
+				<?php
+				}
+				else {
+				?>
+				<div id="videoBrowseButton" onClick="javascript:confirmation_ok('Та хэрэглэгчийн эрхээ дээшлүүлнэ үү. <b>Тохиргоо</b> хэсэгт хэрэглэгчийн эрхээ дээшлүүлэх тохиргоо байгаа. (<?php echo $role_rank_superadmin.", ".$role_rank_admin; ?>)')" class="button_yellow">
+					<i class="fa-solid fa-circle-plus"></i>
+					<div class="removable" style="margin-left: 5px">Видео</div>
+				</div>
+				<?php
+				}
+				?>
 				<input type="file" id="myzar_item_video_input" name="myzar_item_video_input" required="true" accept="video/quicktime, video/mp4" multiple style="display: none" />
 			</div>
-			<div id="myzar_item_video">
-				<div id="videoBrowseButton" onClick="myzar_item_video_browse()" class="button_yellow" style="background-color:#dddddd; width: 100px; height: 100px; align-items: center; align-content: center; text-align: center; float: left; margin: 5px">
-					<i class="fa-solid fa-plus" style="width: 10px; margin: 0 auto"></i>
-				</div>
-			</div>
+			<div id="myzar_item_video"></div>
 		</div>
 		<div id="myzar_item_extras"></div>
 		<table width="100%">

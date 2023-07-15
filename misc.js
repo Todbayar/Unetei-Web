@@ -115,15 +115,26 @@ function getItemDataForm(id = null){
 	var vItemQuality = $("#myzar_item_quality").val();
 	var vItemAddress = $("#myzar_item_address").val();
 	var vItemPrice = $("#myzar_item_price").val();
-	var vItemImages = JSON.stringify(selectedImagesNames);
 	var vItemYoutube = $("#myzar_item_youtube").val();
-	var vItemVideo = selectedVideoName;
 	var vItemDescription = $("#myzar_item_description").val();
 	var vItemCity = $("#myzar_item_city").val();
 	var vItemName = $("#myzar_item_name").val();
 	var vItemEmail = $("#myzar_item_email").val();
 	var vItemPhone = $("#myzar_item_phone").val();
 	var vItemIsNewUser = $("#myzar_item_isNewUser").prop("checked");
+	
+	var selectedImages = new Array();
+	$("#myzar_item_images > div.itemImage").each(function(){
+		selectedImages.push({
+			id:$(this).attr("id"), 
+			name:$(this).children("img").attr("name"),
+			type:$(this).children("img").attr("data-type"),
+			data:$(this).children("img").attr("src")
+		});
+	});
+	var vItemImages = JSON.stringify(selectedImages);
+	
+	var vItemVideoFile = $("#myzar_item_video_input")[0].files[0];
 	
 	const patternOnlyText = /^[а-яА-Яa-zA-ZөӨүҮ\s]+$/i;
 	const patternEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i;
@@ -148,9 +159,7 @@ function getItemDataForm(id = null){
 		itemSubmitData.append("quality", vItemQuality);
 		itemSubmitData.append("address", vItemAddress);
 		itemSubmitData.append("price", vItemPrice);
-		itemSubmitData.append("images", vItemImages);
 		itemSubmitData.append("youtube", youtubeUrlEmbed(vItemYoutube));
-		itemSubmitData.append("video", vItemVideo);
 		itemSubmitData.append("extras", JSON.stringify(getItemExtrasForm()));
 		itemSubmitData.append("description", vItemDescription);
 		itemSubmitData.append("city", vItemCity);
@@ -158,6 +167,8 @@ function getItemDataForm(id = null){
 		itemSubmitData.append("email", vItemEmail);
 		itemSubmitData.append("phone", "+976"+vItemPhone);
 		itemSubmitData.append("isNewUser", vItemIsNewUser);
+		itemSubmitData.append("video", vItemVideoFile);
+		itemSubmitData.append("imagesDatas", vItemImages);
 		
 		if(id != null) itemSubmitData.append("itemID", id);
 		

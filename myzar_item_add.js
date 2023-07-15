@@ -1,7 +1,5 @@
 var selectedCategory = [];
 var selectedCategoryTitles = [];
-var selectedImagesIndex = 0;
-var selectedImagesNames = [];
 var selectedVideoName = "";
 var selectedPublishOption;
 var itemData;
@@ -23,7 +21,6 @@ function initMap() {
 window.initMap = initMap;
 
 $(document).ready(function(){
-	selectedImagesIndex = 0;
 	if(sessionStorage.getItem("selectedCategoryHier") != null) {
 		myzar_item_categories(JSON.parse(sessionStorage.getItem("selectedCategoryHier")), null);
 		sessionStorage.removeItem("selectedCategoryHier");
@@ -43,7 +40,92 @@ $(document).ready(function(){
 		if(itemData!=null) itemData.set("status", findSelPubOpt.val());
 		$(".popup.item_publish_option #buttonPublish").attr("disabled", false);
 	});
+	
+	$("#myzar_item_images_input").change(function(){
+		var vImageExtensions = ['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml'];
+		var vImages = $(this)[0].files;
+		var vImagesTotalCount = 20-$("#myzar_item_images").children().length;
+		var vImagesLimit = vImages.length<=vImagesTotalCount?vImages.length:vImagesTotalCount;
+		for(let i=0; i<vImagesLimit; i++){
+			if($.inArray(vImages[i].type.toLowerCase(), vImageExtensions) > -1){
+				var reader = new FileReader();
+				reader.onload = function (e) {
+					$("#myzar_item_images").append("<div class=\"itemImage\" style=\"float:left; width: 121px; height: 121px; margin: 5px; border-radius: 5px; background-color:#dddddd\"><img name=\""+vImages[i].name+"\" data-type=\""+vImages[i].type+"\" src=\""+e.target.result+"\" style=\"width: 100%; height: 100%; border-radius: 5px; object-fit: cover\" /><i class=\"fa-solid fa-xmark\" style=\"position: relative; float:right; top:-123px; right:4px; color: #FF4649; cursor: pointer\"></i><div>");
+					updateOrderItemImages();
+				}
+				reader.readAsDataURL(vImages[i]);
+			}
+		}
+	});
+	
+	$("#myzar_item_video_input").change(function(){
+		var vVideoExtensions = ['video/quicktime', 'video/mp4'];
+		var vVideo = $(this)[0].files[0];
+		if($.inArray(vVideo.type.toLowerCase(), vVideoExtensions) > -1){
+			if(vVideo.size <= 100*1024*1024){	//100MB
+				$("#myzar_item_video").append("<div id=\"video1\" style=\"float:left; width: 121px; height: 121px; margin: 5px; border-radius: 5px; background-color:#dddddd\"><img src=\"Loading.gif\" width=\"24px\" height=\"24px\" style=\"margin-left: 48px; margin-top: 48px\" /><div>");
+				var reader = new FileReader();
+				reader.onload = function (e) {
+					$("#videoBrowseButton").hide();
+					$("#myzar_item_video div#video1 img").remove();
+					$("#myzar_item_video div#video1").html("<video name=\""+vVideo.name+"\" width=\"100%\" height=\"100%\" controls=\"controls\" preload=\"metadata\" style=\"border-radius: 5px\"><source src=\""+e.target.result+"#t=0.5\" type=\""+vVideo.type+"\"></video><i onClick=\"myzar_item_video_remove()\" class=\"fa-solid fa-xmark\" style=\"position: relative; float:right; top:-123px; right:4px; color: #FF4649; cursor: pointer\"></i>");
+				}
+				reader.readAsDataURL(vVideo);
+			}
+			else {
+				alert("Файлын хэмжээ 100MB-аас их байна!");
+			}
+		}
+		else {
+			alert("mp4, mov файл биш байна!")
+		}
+	});
+	
+	const el = document.getElementById('myzar_item_images');
+	new Sortable(el, {
+	  animation: 150,
+	  onEnd: (event) => {
+		updateOrderItemImages();
+	  }
+	});
 });
+
+function myzar_item_images_browse(){
+	$("#myzar_item_images_input").val(null);
+	$("#myzar_item_images_input").trigger("click");
+}
+
+function myzar_item_video_browse(){
+	$("#myzar_item_video_input").val(null);
+	$("#myzar_item_video_input").trigger("click");
+}
+
+function updateOrderItemImages() {
+	var selectedImagesIndex = 0;
+	$("#myzar_item_images > div.itemImage").each(function(){
+		$(this).attr("id",selectedImagesIndex);
+		$(this).children(".fa-solid.fa-xmark").attr("onClick","myzar_item_images_remove("+selectedImagesIndex+")");
+		selectedImagesIndex++;
+	});
+	
+	if($("#myzar_item_images").children().length<20){
+		$("#imagesBrowseButton").show();
+	}
+	else {
+		$("#imagesBrowseButton").hide();
+	}
+}
+
+function myzar_item_images_remove(index){
+  	$("#myzar_item_images div#"+index).remove();
+  	updateOrderItemImages();
+}
+
+function myzar_item_video_remove(){
+	$("#myzar_item_video_input").val(null);
+	$("#video1").remove();
+	$("#videoBrowseButton").show();
+}
 
 function myzar_item_categories(hierCategories, words){
 	$(".myzar_content_add_item_selected_categories").empty();
@@ -85,134 +167,13 @@ function myzar_item_categories(hierCategories, words){
 		};
 
 		reqMyZarItemExtrasSubmit.onerror = function(){
-			console.log("<myzar_item_video_browse>:" + reqMyZarItemExtrasSubmit.status + ", " + reqMyZarItemExtrasSubmit.statusText);
+			console.log("<myzar_item_categories>:" + reqMyZarItemExtrasSubmit.status + ", " + reqMyZarItemExtrasSubmit.statusText);
 		};
 
 		const lastCategory = "c"+selectedCategoryHier.length+"_"+selectedCategoryHier[selectedCategoryHier.length-1].id;
 		reqMyZarItemExtrasSubmit.open("GET", "mysql_myzar_item_extras_process.php?category="+lastCategory, true);
 		reqMyZarItemExtrasSubmit.send();
 	}
-}
-
-function myzar_item_images_browse(){
-	$("#myzar_item_images_input").trigger("click");
-	$("#myzar_item_images_input").change(function(){
-		var vImageExtensions = ['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml'];
-		var vImages = $(this)[0].files;
-		for(let i=0; i<vImages.length; i++){
-			if($.inArray(vImages[i].type.toLowerCase(), vImageExtensions) > -1){
-				var myZarItemAddImageSubmitData = new FormData();
-				myZarItemAddImageSubmitData.append("file", vImages[i]);
-				myZarItemAddImageSubmitData.append("index", selectedImagesIndex);
-
-				const reqMyZarItemImageAddSubmit = new XMLHttpRequest();
-				reqMyZarItemImageAddSubmit.onload = function() {
-					if(!this.responseText.includes("Fail")){
-						var obj = JSON.parse(this.responseText);
-						var index = obj.index;
-						var name = obj.name;
-						var path = obj.path;
-						selectedImagesNames[index] = name;
-						$("#myzar_item_images div#images" + index + " img").remove();
-						$("#myzar_item_images div#images" + index).html("<img name=\""+name+"\" src=\""+path+"/"+name+"\" style=\"width: 100%; height: 100%; border-radius: 5px; object-fit: cover\" /><i onClick=\"myzar_item_images_remove("+index+")\" class=\"fa-solid fa-xmark\" style=\"position: relative; float:right; top:-123px; right:4px; color: #FF4649; cursor: pointer\"></i>");
-					}
-					else {
-						$("#myzar_item_images div#images" + index).remove();
-					}
-				};
-
-				$("#myzar_item_images").append("<div id=\"images"+selectedImagesIndex+"\" style=\"float:left; width: 121px; height: 121px; margin: 5px; border-radius: 5px; background-color:#dddddd\"><img src=\"Loading.gif\" width=\"24px\" height=\"24px\" style=\"margin-left: 48px; margin-top: 48px\" /><div>");
-				selectedImagesIndex++;
-
-				reqMyZarItemImageAddSubmit.open("POST", "file_upload.php", true);
-				reqMyZarItemImageAddSubmit.send(myZarItemAddImageSubmitData);
-			}
-		}
-		$("#myzar_item_images_input").val(null);
-	});
-}
-
-function myzar_item_images_remove(index){
-	var myZarItemAddImageRemoveSubmitData = new FormData();
-	myZarItemAddImageRemoveSubmitData.append("file", selectedImagesNames[index]);
-
-	const reqMyZarItemImageRemoveSubmit = new XMLHttpRequest();
-	reqMyZarItemImageRemoveSubmit.onload = function() {
-		if(!this.responseText.includes("Fail")){
-			$("#images"+index).remove();
-			selectedImagesNames[index] = "";
-			selectedImagesNames.splice(index, 1);
-		}
-	};
-
-	reqMyZarItemImageRemoveSubmit.open("POST", "file_remove.php", true);
-	reqMyZarItemImageRemoveSubmit.send(myZarItemAddImageRemoveSubmitData);
-}
-
-function myzar_item_video_browse(){
-	$("#myzar_item_video_input").trigger("click");
-	$("#myzar_item_video_input").change(function(){
-		var vVideoExtensions = ['video/quicktime', 'video/mp4'];
-		var vVideo = $(this)[0].files[0];
-		if($.inArray(vVideo.type.toLowerCase(), vVideoExtensions) > -1){
-			if(vVideo.size <= 500*1024*1024){					
-				var myZarItemAddVideoSubmitData = new FormData();
-				myZarItemAddVideoSubmitData.append("file", vVideo);
-				myZarItemAddVideoSubmitData.append("index", 1);
-
-				const reqMyZarItemVideoAddSubmit = new XMLHttpRequest();
-				reqMyZarItemVideoAddSubmit.onload = function() {
-					if(!this.responseText.includes("Fail")){
-						var obj = JSON.parse(this.responseText);
-						var index = obj.index;
-						var name = obj.name;
-						var path = obj.path;
-						selectedVideoName = name;
-						$("#myzar_item_video div#video1 img").remove();
-						$("#myzar_item_video div#video1").html("<video name=\""+name+"\" width=\"100%\" height=\"100%\" controls=\"controls\" preload=\"metadata\" style=\"border-radius: 5px\"><source src=\""+path+"/"+name+"#t=0.5\" type=\""+vVideo.type+"\"></video><i onClick=\"myzar_item_video_remove()\" class=\"fa-solid fa-xmark\" style=\"position: relative; float:right; top:-123px; right:4px; color: #FF4649; cursor: pointer\"></i>");
-					}
-					else {
-						$("#myzar_item_video div#video1").remove();
-						$("#videoBrowseButton").show();
-					}
-				};
-
-				reqMyZarItemVideoAddSubmit.onerror = function(){
-					console.log("<myzar_item_video_browse>:" + reqMyZarItemVideoAddSubmit.status + ", " + reqMyZarItemVideoAddSubmit.statusText);
-				};
-
-				$("#videoBrowseButton").hide();
-				$("#myzar_item_video").append("<div id=\"video1\" style=\"float:left; width: 121px; height: 121px; margin: 5px; border-radius: 5px; background-color:#dddddd\"><img src=\"Loading.gif\" width=\"24px\" height=\"24px\" style=\"margin-left: 48px; margin-top: 48px\" /><div>");
-
-				reqMyZarItemVideoAddSubmit.open("POST", "file_upload.php", true);
-				reqMyZarItemVideoAddSubmit.send(myZarItemAddVideoSubmitData);
-			}
-			else {
-				alert("Файлын хэмжээ 500MB-аас их байна!");
-			}
-		}
-		else {
-			alert("mp4, mov файл биш байна!")
-		}
-		$("#myzar_item_video_input").val(null);
-	});
-}
-
-function myzar_item_video_remove(){
-	var myZarItemAddVideoRemoveSubmitData = new FormData();
-	myZarItemAddVideoRemoveSubmitData.append("file", selectedVideoName);
-
-	const reqMyZarItemVideoRemoveSubmit = new XMLHttpRequest();
-	reqMyZarItemVideoRemoveSubmit.onload = function() {
-		if(!this.responseText.includes("Fail")){
-			selectedVideoName = "";
-			$("#video1").remove();
-			$("#videoBrowseButton").show();
-		}
-	};
-
-	reqMyZarItemVideoRemoveSubmit.open("POST", "file_remove.php", true);
-	reqMyZarItemVideoRemoveSubmit.send(myZarItemAddVideoRemoveSubmitData);
 }
 
 function myzar_item_update(itemID, title, categories, role){
@@ -236,6 +197,7 @@ function myzar_item_update(itemID, title, categories, role){
 function myzar_item_add_submit(){
 	itemData = getItemDataForm();
 	if(itemData != ""){
+		itemData.set("status", $(".popup.item_publish_option input[name='publish_option']:checked").val());
 		window.scrollTo(0, 0);
 		$("body").css("overflow-y", "hidden");
 		$(".popup.item_publish_option").show();
@@ -255,7 +217,6 @@ function myzar_item_add_submit(){
 function publishItemUpdate(itemID, title, role){
 	const selPriceOpt = $(".popup.item_publish_option input[name='publish_option']:checked").val();
 	$.post("mysql_myzar_item_update_process.php", {id:itemID,status:selPriceOpt}).done(function(responseText){
-	   console.log("<publishItemUpdate>:"+responseText);
 	   if(responseText!="FAIL"){
 			$(".popup.item_publish_option").hide();
 		   	const itemResponse = JSON.parse(responseText);
@@ -310,6 +271,7 @@ function publishItemUpdate(itemID, title, role){
 function publishItemSubmit(role){
 	const reqMyZarItemAdd = new XMLHttpRequest();
 	reqMyZarItemAdd.onload = function() {
+		console.log("<publishItemSubmit>:"+this.responseText);
 		if(this.responseText == "Fail 58"){
 			alert("Уг гарчиг бүхий зар таны зарын жагсаалтанд байна!");
 		}
@@ -328,7 +290,7 @@ function publishItemSubmit(role){
 				var eventOk = new CustomEvent("itemAddDone");
 				window.addEventListener("itemAddDone", function(){
 					sessionStorage.setItem("startItemToDetail", true);
-					pagenavigation("detail&id="+itemResponse.id);
+					pagenavigation("detail/"+itemResponse.id,"slash");
 				});
 	//			information("success", "fa-solid fa-file-pen", "Зар амжилттай <b>нэмэгдэж</b>, шалгагдаж байна.", 6, eventInfo);
 				confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Зар амжилттай <b>нэмэгдэж</b>, шалгагдаж байна.", eventOk);
@@ -360,7 +322,7 @@ function publishItemSubmit(role){
 					
 					$(".popup.billing .container .button_yellow").click(function(){
 						sessionStorage.setItem("startItemToDetail", true);
-						pagenavigation("detail&id="+itemResponse.id);
+						pagenavigation("detail/"+itemResponse.id,"slash");
 					});
 				});
 			}
