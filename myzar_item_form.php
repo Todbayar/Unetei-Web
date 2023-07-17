@@ -107,11 +107,11 @@ $(document).ready(function(){
 				</td>
 			</tr>
 		</table>
-		<div style="margin: 10px; display: flex">
-			<div style="margin-right: 10px">
-				<div id="imagesBrowseButton" onClick="myzar_item_images_browse()" class="button_yellow">
-					<i class="fa-solid fa-circle-plus"></i>
-					<div class="removable" style="margin-left: 5px">Зураг</div>
+		<div style="display: flex">
+			<div style="margin-right: 5px">
+				<div id="imagesBrowseButton" onClick="myzar_item_images_browse()" class="button_yellow">					
+					<i class="fa-regular fa-image"></i>
+					<div style="margin-left: 5px">Зураг</div>
 				</div>
 				<input type="file" id="myzar_item_images_input" name="myzar_item_images_input[]" required="true" accept="image/png, image/gif, image/jpeg, .svg" multiple style="display: none" />
 			</div>
@@ -131,22 +131,23 @@ $(document).ready(function(){
 				</td>
 			</tr>
 		</table>
-		<div style="margin: 10px; display: flex">
+		<div style="display: flex">
 			<div style="margin-right: 10px">
 				<?php
 				if(getUserRole($_COOKIE["userID"])>=3){
 				?>
 				<div id="videoBrowseButton" onClick="myzar_item_video_browse()" class="button_yellow">
-					<i class="fa-solid fa-circle-plus"></i>
-					<div class="removable" style="margin-left: 5px">Видео</div>
+					<i class="fa-solid fa-video"></i>
+					<div style="margin-left: 5px">Видео</div>
 				</div>
 				<?php
 				}
 				else {
 				?>
 				<div id="videoBrowseButton" onClick="javascript:confirmation_ok('Та хэрэглэгчийн эрхээ дээшлүүлнэ үү. <b>Тохиргоо</b> хэсэгт хэрэглэгчийн эрхээ дээшлүүлэх тохиргоо байгаа. (<?php echo $role_rank_superadmin.", ".$role_rank_admin; ?>)')" class="button_yellow">
-					<i class="fa-solid fa-circle-plus"></i>
-					<div class="removable" style="margin-left: 5px">Видео</div>
+					<i class="fa-solid fa-video"></i>
+<!--					<i class="fa-solid fa-circle-plus"></i>-->
+					<div style="margin-left: 5px">Видео</div>
 				</div>
 				<?php
 				}
