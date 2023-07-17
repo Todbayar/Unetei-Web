@@ -92,10 +92,11 @@ $(document).ready(function(){
 	
 	const el = document.getElementById('myzar_item_images');
 	new Sortable(el, {
-	  animation: 150,
-	  onEnd: (event) => {
-		updateOrderItemImages();
-	  }
+		filter: "i.fa-xmark",
+	  	animation: 150,
+	  	onEnd: (event) => {
+			updateOrderItemImages();
+	  	}
 	});
 });
 

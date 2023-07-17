@@ -50,7 +50,7 @@ function myzar_category_selected_item_edit(id){
 
 	const reqMyZarItemListData = new XMLHttpRequest();
 	reqMyZarItemListData.onload = function() {
-//		console.log("<myzar_category_selected_item_edit>:"+this.responseText);
+		console.log("<myzar_category_selected_item_edit>:"+this.responseText);
 		const resultItemData = JSON.parse(this.responseText);
 		$(".myzar_item_isNewUser_table").hide();
 		$("#myzar_item_extras").empty();
@@ -70,15 +70,16 @@ function myzar_category_selected_item_edit(id){
 		$("#myzar_item_button div").html("Хадгалах");
 		$("#myzar_item_button").attr("onClick", "myzar_item_edit_submit("+id+")");
 		
-		$("#myzar_item_images").find(".selectedimage").each(function(i, el){
+		$("#myzar_item_images").find(".itemImage").each(function(i, el){
 			$(el).remove();
 		});
-		
+
 		for(let i=0; i<resultItemData.images.length; i++){
-			$("#myzar_item_images").append("<div id=\""+resultItemData.images[i].id+"\" class=\"itemImage\" style=\"float:left; width: 121px; height: 121px; margin: 5px; border-radius: 5px; background-color:#dddddd\"><img name=\""+resultItemData.images[i].name+"\" data-type=\""+resultItemData.images[i].type+"\" data-sort=\""+resultItemData.images[i].sort+"\" src=\""+resultItemData.path+"/"+resultItemData.images[i].name+"\" style=\"width: 100%; height: 100%; border-radius: 5px; object-fit: cover\" /><i onClick=\"myzar_item_images_remove(this)\" class=\"fa-solid fa-xmark\" style=\"position: relative; float:right; top:-123px; right:4px; color: #FF4649; cursor: pointer\"></i><div>");
+			$("#myzar_item_images").append("<div id=\""+resultItemData.images[i].id+"\" class=\"itemImage\" style=\"float:left; width: 121px; height: 121px; margin: 5px; border-radius: 5px; background-color:#dddddd\"><img name=\""+resultItemData.images[i].name+"\" data-sort=\""+resultItemData.images[i].sort+"\" src=\""+resultItemData.path+"/"+resultItemData.images[i].name+"\" style=\"width: 100%; height: 100%; border-radius: 5px; object-fit: cover\" /><i onClick=\"myzar_item_images_remove(this)\" class=\"fa-solid fa-xmark\" style=\"position: relative; float:right; top:-123px; right:4px; color: #FF4649; cursor: pointer; font-size:24px\"></i><div>");
 		}
 		
-		$("#myzar_item_video").find(".video").each(function(i, el){
+		//video
+		$("#myzar_item_video").find(".itemVideo").each(function(i, el){
 			$(el).remove();
 		});
 		

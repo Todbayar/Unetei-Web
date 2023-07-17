@@ -39,13 +39,16 @@ if(!is_null($imagesDatas)){
 }
 
 if(!is_null($imagesDatas)){
+	$arrDeleteImages = array();
 	for($i=0; $i<count($imagesDatas); $i++){
 		if(isset($imagesDatas[$i]->action) && $imagesDatas[$i]->action=="delete"){
-			if($conn->query("DELETE FROM images WHERE id=".$imagesDatas[$i]->id)){
-				if(file_exists($path.DIRECTORY_SEPARATOR.$imagesDatas[$i]->name)) @unlink($path.DIRECTORY_SEPARATOR.$imagesDatas[$i]->name);
-				array_splice($imagesDatas,$i,0);
-			}
+			array_push($arrDeleteImages,$imagesDatas[$i]->id);
+			if(file_exists($path.DIRECTORY_SEPARATOR.$imagesDatas[$i]->name)) @unlink($path.DIRECTORY_SEPARATOR.$imagesDatas[$i]->name);
+			array_splice($imagesDatas,$i,0);
 		}
+	}
+	if(count($arrDeleteImages)>0){
+		@$conn->query("DELETE FROM images WHERE id IN (".implode(',',$arrDeleteImages).")");
 	}
 }
 
@@ -72,7 +75,7 @@ if(!is_null($videosDatas)){
 	for($i=0; $i<count($videosDatas); $i++){
 		if(isset($videosDatas[$i]->action) && $videosDatas[$i]->action=="delete"){
 			if(file_exists($path.DIRECTORY_SEPARATOR.$videosDatas[$i]->name)) @unlink($path.DIRECTORY_SEPARATOR.$videosDatas[$i]->name);
-			array_splice($videosDatas,$i,0);
+			array_splice($videosDatas,$i,1);
 		}
 	}
 }

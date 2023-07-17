@@ -612,13 +612,11 @@ function fetchItems(){
 				}
 			}
 			
-			$(document).ready(function() {
-				$(".searchResult .list .item").click(function(e){
-					console.log("<test_click>");
-					if(!$(e.target).is(".fa-star")){
-						pagenavigation("detail/"+$(this).attr("id"),"slash");
-					}
-				});
+			$(".searchResult .list .item").click(function(e){
+				console.log("<test_click>");
+				if(!$(e.target).is(".fa-star")){
+					pagenavigation("detail/"+$(this).attr("id"),"slash");
+				}
 			});
 		}
 	});

@@ -17,8 +17,8 @@ while($rowImages = mysqli_fetch_array($resultImages)){
 	$responseImage = new stdClass;
 	$responseImage->id = $rowImages["id"];
 	$responseImage->sort = $rowImages["sort"];
-	$responseImage->type = image_type_to_mime_type(exif_imagetype($path."/".$rowImages["image"]));
 	$responseImage->name = $rowImages["image"];
+//	$responseImage->type = image_type_to_mime_type(exif_imagetype($path."/".$rowImages["image"]));	
 //	$responseImage->data = "data:".$responseImage->type.";base64,".base64_encode(file_get_contents($path."/".$rowImages["image"]));
 	$arrImages[] = $responseImage;
 }
