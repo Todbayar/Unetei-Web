@@ -85,4 +85,5 @@ define("BOOST_DAYS", 7);
 $protocol = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] != "off") ? "https" : "http";
 
 define("COUNT_ITEM_IMAGES",20);
+define("COUNT_ITEM_VIDEOS",1);
 ?>

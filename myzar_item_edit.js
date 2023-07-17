@@ -50,6 +50,7 @@ function myzar_category_selected_item_edit(id){
 
 	const reqMyZarItemListData = new XMLHttpRequest();
 	reqMyZarItemListData.onload = function() {
+//		console.log("<myzar_category_selected_item_edit>:"+this.responseText);
 		const resultItemData = JSON.parse(this.responseText);
 		$(".myzar_item_isNewUser_table").hide();
 		$("#myzar_item_extras").empty();
@@ -72,27 +73,23 @@ function myzar_category_selected_item_edit(id){
 		$("#myzar_item_images").find(".selectedimage").each(function(i, el){
 			$(el).remove();
 		});
+		
 		for(let i=0; i<resultItemData.images.length; i++){
-			selectedImagesNames[selectedImagesIndex] = resultItemData.images[i].image;
-			$("#myzar_item_images").append("<div class=\"selectedimage\" id=\"images"+selectedImagesIndex+"\" style=\"float:left; width: 121px; height: 121px; margin: 5px; border-radius: 5px; background-color:#dddddd\"><img src=\"Loading.gif\" width=\"24px\" height=\"24px\" style=\"margin-left: 48px; margin-top: 48px\" /><div>");
-			$("#myzar_item_images div#images" + selectedImagesIndex + " img").remove();
-			$("#myzar_item_images div#images" + selectedImagesIndex).html("<img name=\""+resultItemData.images[i].image+"\" src=\"user_files/"+resultItemData.images[i].image+"\" style=\"width: 100%; height: 100%; border-radius: 5px; object-fit: cover\" /><i onClick=\"myzar_item_images_remove("+selectedImagesIndex+")\" class=\"fa-solid fa-xmark\" style=\"position: relative; float:right; top:-123px; right:4px; color: #FF4649; cursor: pointer\"></i>");
-			selectedImagesIndex++;
+			$("#myzar_item_images").append("<div id=\""+resultItemData.images[i].id+"\" class=\"itemImage\" style=\"float:left; width: 121px; height: 121px; margin: 5px; border-radius: 5px; background-color:#dddddd\"><img name=\""+resultItemData.images[i].name+"\" data-type=\""+resultItemData.images[i].type+"\" data-sort=\""+resultItemData.images[i].sort+"\" src=\""+resultItemData.path+"/"+resultItemData.images[i].name+"\" style=\"width: 100%; height: 100%; border-radius: 5px; object-fit: cover\" /><i onClick=\"myzar_item_images_remove(this)\" class=\"fa-solid fa-xmark\" style=\"position: relative; float:right; top:-123px; right:4px; color: #FF4649; cursor: pointer\"></i><div>");
 		}
 		
-		$("#myzar_item_video").find("#video1").each(function(i, el){
+		$("#myzar_item_video").find(".video").each(function(i, el){
 			$(el).remove();
 		});
+		
 		if(resultItemData.video != ""){
 			selectedVideoName = resultItemData.video;
 			var selectedVideoType = selectedVideoName.substring(selectedVideoName.lastIndexOf('.')+1);
 			if(selectedVideoType == "mp4") selectedVideoType = "video/mp4";
 			else if(selectedVideoType == "mov") selectedVideoType = "video/quicktime";
+			
 			$("#videoBrowseButton").hide();
-			$("#myzar_item_video").append("<div id=\"video1\" style=\"float:left; width: 121px; height: 121px; margin: 5px; border-radius: 5px; background-color:#dddddd\"><img src=\"Loading.gif\" width=\"24px\" height=\"24px\" style=\"margin-left: 48px; margin-top: 48px\" /><div>");
-			$("#myzar_item_video div#video1 img").remove();
-
-			$("#myzar_item_video div#video1").html("<video name=\""+selectedVideoName+"\" width=\"100%\" height=\"100%\" controls=\"controls\" preload=\"metadata\" style=\"border-radius: 5px\"><source src=\"user_files/"+selectedVideoName+"#t=0.5\" type=\""+selectedVideoType+"\"></video><i onClick=\"myzar_item_video_remove()\" class=\"fa-solid fa-xmark\" style=\"position: relative; float:right; top:-123px; right:4px; color: #FF4649; cursor: pointer\"></i>");
+			$("#myzar_item_video").append("<div id=\""+resultItemData.id+"\" class=\"itemVideo\" style=\"float:left; width: 121px; height: 121px; margin: 5px; border-radius: 5px; background-color:#dddddd\"><video name=\""+selectedVideoName+"\" width=\"100%\" height=\"100%\" controls=\"controls\" preload=\"metadata\" style=\"border-radius: 5px\"><source src=\""+resultItemData.path+"/"+selectedVideoName+"#t=0.5\" type=\""+selectedVideoType+"\"></video><i onClick=\"myzar_item_video_remove(this)\" class=\"fa-solid fa-xmark\" style=\"position: relative; float:right; top:-123px; right:4px; color: #FF4649; cursor: pointer\"></i><div>");
 		}
 	};
 	reqMyZarItemListData.onerror = function() {
@@ -106,7 +103,7 @@ function myzar_item_edit_submit(id){
 	const reqMyZarItemEdit = new XMLHttpRequest();
 	reqMyZarItemEdit.onload = function() {
 		const itemResponseID = this.responseText;
-//		console.log("<myzar_item_edit_submit>:"+itemResponseID);
+		console.log("<myzar_item_edit_submit>:"+itemResponseID);
 		if(this.responseText == "Fail"){
 			alert("Зарыг нэмэх боломжгүй байна!");
 		}

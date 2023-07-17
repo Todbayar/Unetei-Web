@@ -126,15 +126,26 @@ function getItemDataForm(id = null){
 	var selectedImages = new Array();
 	$("#myzar_item_images > div.itemImage").each(function(){
 		selectedImages.push({
-			id:$(this).attr("id"), 
+			id:$(this).attr("id"),
+			action:$(this).attr("data-action"),
 			name:$(this).children("img").attr("name"),
-			type:$(this).children("img").attr("data-type"),
-			data:$(this).children("img").attr("src")
+			sort:$(this).children("img").attr("data-sort"),
 		});
 	});
-	var vItemImages = JSON.stringify(selectedImages);
+	var vItemImagesDatas = JSON.stringify(selectedImages);
 	
-	var vItemVideoFile = $("#myzar_item_video_input")[0].files[0];
+	console.log(vItemImagesDatas);
+	
+	var selectedVideos = new Array();
+	$("#myzar_item_video > div.itemVideo").each(function(){
+		selectedVideos.push({
+			action:$(this).attr("data-action"),
+			name:$(this).children("video").attr("name"),
+		});
+	});
+	var vItemVideosDatas = JSON.stringify(selectedVideos);
+	
+	console.log(vItemVideosDatas);
 	
 	const patternOnlyText = /^[а-яА-Яa-zA-ZөӨүҮ\s]+$/i;
 	const patternEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i;
@@ -167,8 +178,18 @@ function getItemDataForm(id = null){
 		itemSubmitData.append("email", vItemEmail);
 		itemSubmitData.append("phone", "+976"+vItemPhone);
 		itemSubmitData.append("isNewUser", vItemIsNewUser);
-		itemSubmitData.append("video", vItemVideoFile);
-		itemSubmitData.append("imagesDatas", vItemImages);
+		
+		itemSubmitData.append("imagesDatas", vItemImagesDatas);
+		$.each($("#myzar_item_images_input")[0].files, function(i, file) {
+			console.log(file.name);
+			itemSubmitData.append("imagesFiles[]", file);
+		});
+
+		itemSubmitData.append("videosDatas", vItemVideosDatas);
+		$.each($("#myzar_item_videos_input")[0].files, function(i, file) {
+			console.log(file.name);
+			itemSubmitData.append("videosFiles[]", file);
+		});
 		
 		if(id != null) itemSubmitData.append("itemID", id);
 		

@@ -151,7 +151,7 @@ $(document).ready(function(){
 				<?php
 				}
 				?>
-				<input type="file" id="myzar_item_video_input" name="myzar_item_video_input" required="true" accept="video/quicktime, video/mp4" multiple style="display: none" />
+				<input type="file" id="myzar_item_videos_input" name="myzar_item_videos_input[]" required="true" accept="video/quicktime, video/mp4" style="display: none" />
 			</div>
 			<div id="myzar_item_video"></div>
 		</div>

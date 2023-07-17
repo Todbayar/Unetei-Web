@@ -2,6 +2,8 @@ var selectedCategory = [];
 var selectedCategoryTitles = [];
 var selectedVideoName = "";
 var selectedPublishOption;
+var dataTransferImages;
+var dataTransferVideos;
 var itemData;
 
 function initMap() {
@@ -21,6 +23,9 @@ function initMap() {
 window.initMap = initMap;
 
 $(document).ready(function(){
+	dataTransferImages = new DataTransfer();
+	dataTransferVideos = new DataTransfer();
+	
 	if(sessionStorage.getItem("selectedCategoryHier") != null) {
 		myzar_item_categories(JSON.parse(sessionStorage.getItem("selectedCategoryHier")), null);
 		sessionStorage.removeItem("selectedCategoryHier");
@@ -50,25 +55,29 @@ $(document).ready(function(){
 			if($.inArray(vImages[i].type.toLowerCase(), vImageExtensions) > -1){
 				var reader = new FileReader();
 				reader.onload = function (e) {
-					$("#myzar_item_images").append("<div class=\"itemImage\" style=\"float:left; width: 121px; height: 121px; margin: 5px; border-radius: 5px; background-color:#dddddd\"><img name=\""+vImages[i].name+"\" data-type=\""+vImages[i].type+"\" src=\""+e.target.result+"\" style=\"width: 100%; height: 100%; border-radius: 5px; object-fit: cover\" /><i class=\"fa-solid fa-xmark\" style=\"position: relative; float:right; top:-123px; right:4px; color: #FF4649; cursor: pointer\"></i><div>");
+					$("#myzar_item_images").append("<div id=\""+$("#myzar_item_images").children().length+"\" data-action=\"new\" class=\"itemImage\" style=\"float:left; width: 121px; height: 121px; margin: 5px; border-radius: 5px; background-color:#dddddd\"><img name=\""+vImages[i].name+"\" data-type=\""+vImages[i].type+"\" src=\""+e.target.result+"\" style=\"width: 100%; height: 100%; border-radius: 5px; object-fit: cover\" /><i onClick=\"myzar_item_images_remove(this)\" class=\"fa-solid fa-xmark\" style=\"position: relative; float:right; top:-123px; right:4px; color: #FF4649; cursor: pointer\"></i><div>");
 					updateOrderItemImages();
+					dataTransferImages.items.add(vImages[i]);
+					$("#myzar_item_images_input")[0].files = dataTransferImages.files;
 				}
 				reader.readAsDataURL(vImages[i]);
 			}
 		}
 	});
 	
-	$("#myzar_item_video_input").change(function(){
+	$("#myzar_item_videos_input").change(function(){
 		var vVideoExtensions = ['video/quicktime', 'video/mp4'];
 		var vVideo = $(this)[0].files[0];
 		if($.inArray(vVideo.type.toLowerCase(), vVideoExtensions) > -1){
 			if(vVideo.size <= 100*1024*1024){	//100MB
-				$("#myzar_item_video").append("<div id=\"video1\" style=\"float:left; width: 121px; height: 121px; margin: 5px; border-radius: 5px; background-color:#dddddd\"><img src=\"Loading.gif\" width=\"24px\" height=\"24px\" style=\"margin-left: 48px; margin-top: 48px\" /><div>");
+				$("#myzar_item_video").append("<div id=\""+$("#myzar_item_video").children().length+"\" data-action=\"new\" class=\"itemVideo\" style=\"float:left; width: 121px; height: 121px; margin: 5px; border-radius: 5px; background-color:#dddddd\"><img src=\"Loading.gif\" width=\"24px\" height=\"24px\" style=\"margin-left: 48px; margin-top: 48px\" /><div>");
 				var reader = new FileReader();
 				reader.onload = function (e) {
 					$("#videoBrowseButton").hide();
-					$("#myzar_item_video div#video1 img").remove();
-					$("#myzar_item_video div#video1").html("<video name=\""+vVideo.name+"\" width=\"100%\" height=\"100%\" controls=\"controls\" preload=\"metadata\" style=\"border-radius: 5px\"><source src=\""+e.target.result+"#t=0.5\" type=\""+vVideo.type+"\"></video><i onClick=\"myzar_item_video_remove()\" class=\"fa-solid fa-xmark\" style=\"position: relative; float:right; top:-123px; right:4px; color: #FF4649; cursor: pointer\"></i>");
+					$("#myzar_item_video div.itemVideo[data-action='new'] img").remove();
+					$("#myzar_item_video div.itemVideo[data-action='new']").html("<video name=\""+vVideo.name+"\" width=\"100%\" height=\"100%\" controls=\"controls\" preload=\"metadata\" style=\"border-radius: 5px\"><source src=\""+e.target.result+"#t=0.5\" type=\""+vVideo.type+"\"></video><i onClick=\"myzar_item_video_remove(this)\" class=\"fa-solid fa-xmark\" style=\"position: relative; float:right; top:-123px; right:4px; color: #FF4649; cursor: pointer\"></i>");
+					dataTransferVideos.items.add(vVideo);
+					$("#myzar_item_videos_input")[0].files = dataTransferVideos.files;
 				}
 				reader.readAsDataURL(vVideo);
 			}
@@ -96,16 +105,17 @@ function myzar_item_images_browse(){
 }
 
 function myzar_item_video_browse(){
-	$("#myzar_item_video_input").val(null);
-	$("#myzar_item_video_input").trigger("click");
+	$("#myzar_item_videos_input").val(null);
+	$("#myzar_item_videos_input").trigger("click");
 }
 
 function updateOrderItemImages() {
 	var selectedImagesIndex = 0;
 	$("#myzar_item_images > div.itemImage").each(function(){
-		$(this).attr("id",selectedImagesIndex);
-		$(this).children(".fa-solid.fa-xmark").attr("onClick","myzar_item_images_remove("+selectedImagesIndex+")");
-		selectedImagesIndex++;
+		if($(this).attr("data-action")!="delete"){
+			$(this).children("img").attr("data-sort",selectedImagesIndex);
+			selectedImagesIndex++;
+		}
 	});
 	
 	if($("#myzar_item_images").children().length<20){
@@ -116,15 +126,45 @@ function updateOrderItemImages() {
 	}
 }
 
-function myzar_item_images_remove(index){
-  	$("#myzar_item_images div#"+index).remove();
+function myzar_item_images_remove(el){
+	const parent = $(el).parent();
+	const imageID = parent.attr("id");
+	const action = parent.attr("data-action");
+	
+	dataTransferImages.items.remove(imageID);
+  	$("#myzar_item_images_input")[0].files = dataTransferImages.files;
+	
+	if(action!="new"){
+		parent.attr("data-action","delete");
+		parent.hide();
+   	}
+	else {
+		parent.remove();
+	}
+	
   	updateOrderItemImages();
+	
+	console.log($("#myzar_item_images_input")[0].files.length);
 }
 
-function myzar_item_video_remove(){
-	$("#myzar_item_video_input").val(null);
-	$("#video1").remove();
+function myzar_item_video_remove(el){
+	const parent = $(el).parent();
+	const videoID = parent.attr("id");
+	const action = parent.attr("data-action");
+	
 	$("#videoBrowseButton").show();
+	dataTransferVideos.items.remove(videoID);
+	$("#myzar_item_videos_input")[0].files = dataTransferVideos.files;
+	
+	if(action!="new"){
+		parent.attr("data-action","delete");
+		parent.hide();
+   	}
+	else {
+		parent.remove();
+	}
+	
+	console.log($("#myzar_item_videos_input")[0].files.length);
 }
 
 function myzar_item_categories(hierCategories, words){
@@ -195,6 +235,9 @@ function myzar_item_update(itemID, title, categories, role){
 }
 
 function myzar_item_add_submit(){
+	console.log("<images_count>:"+$("#myzar_item_images_input")[0].files.length);
+	console.log("<videos_count>:"+$("#myzar_item_videos_input")[0].files.length);
+	
 	itemData = getItemDataForm();
 	if(itemData != ""){
 		itemData.set("status", $(".popup.item_publish_option input[name='publish_option']:checked").val());
@@ -223,9 +266,7 @@ function publishItemUpdate(itemID, title, role){
 			if(itemResponse.pay_amount == 0){
 				var eventOk = new CustomEvent("itemUpdateDone");
 				window.addEventListener("itemUpdateDone", function(){
-//					location.reload();
-					sessionStorage.setItem("startItemToDetail", true);
-					pagenavigation("detail/"+itemResponse.id,"slash");
+					location.reload();
 				});
 				confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Зар амжилттай <b>шинэчлэгдэж</b>, шалгагдаж байна.", eventOk);
 			}
@@ -255,9 +296,12 @@ function publishItemUpdate(itemID, title, role){
 					}
 					
 					$(".popup.billing .container .button_yellow").click(function(){
-//						location.reload();
-						sessionStorage.setItem("startItemToDetail", true);
-						pagenavigation("detail/"+itemResponse.id,"slash");
+						$(".popup.billing").hide();
+						var eventOk = new CustomEvent("itemUpdateDone");
+						window.addEventListener("itemUpdateDone", function(){
+							location.reload();
+						});
+						confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Зар амжилттай <b>шинэчлэгдэж</b>, шалгагдаж байна.", eventOk);
 					});
 				});
 			}
@@ -284,7 +328,6 @@ function publishItemSubmit(role){
 		else {
 			$(".myzar_content_add_item").hide();
 			$(".popup.item_publish_option").hide();
-			console.log("<publishItemSubmit>:"+this.responseText);
 			const itemResponse = JSON.parse(this.responseText);
 			if(itemResponse.pay_amount == 0){
 				var eventOk = new CustomEvent("itemAddDone");

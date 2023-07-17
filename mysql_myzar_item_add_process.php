@@ -24,30 +24,38 @@ $status = $_REQUEST["status"];
 //uploading image files with limited count and disk space on server
 $imagesDatas = (isset($_REQUEST["imagesDatas"]) && $_REQUEST["imagesDatas"] != "[]") ? json_decode($_REQUEST["imagesDatas"]) : null;
 if(!is_null($imagesDatas)){
-	for($indexImageData=0; $indexImageData<count($imagesDatas); $indexImageData++){
-		if($indexImageData<COUNT_ITEM_IMAGES){
-			$imageNameNew = date("Ymdhis")."_".$imagesDatas[$indexImageData]->name;
-			$imagesDatas[$indexImageData]->id = $indexImageData;
-			$imagesDatas[$indexImageData]->name = $imageNameNew;
-			$imageTypeReplace = "data:".$imagesDatas[$indexImageData]->type.";base64,";
-			$imageFileData = str_replace($imageTypeReplace, "", $imagesDatas[$indexImageData]->data);
-    		$imageDecodedData = base64_decode($imageFileData);
-			$fp = fopen($path.DIRECTORY_SEPARATOR.$imageNameNew, "w");
-			fwrite($fp, $imageDecodedData);
-			fclose($fp);
-		}
-		else {
-			array_splice($imagesDatas, $indexImageData);
-			break;
+	$totalCountImagesLimit = 1;
+	for($i=0; $i<count($imagesDatas); $i++){
+		if(isset($imagesDatas[$i]->action) && $imagesDatas[$i]->action=="new" && $totalCountImagesLimit<=COUNT_ITEM_IMAGES){
+			for($l=0; $l<count($_FILES["imagesFiles"]["name"]); $l++){
+				if($_FILES["imagesFiles"]["name"][$l]==$imagesDatas[$i]->name){
+					$vImageNewName = date("Ymdhis")."_".$_FILES["imagesFiles"]["name"][$l];
+					if(move_uploaded_file($_FILES["imagesFiles"]["tmp_name"][$l], $path.DIRECTORY_SEPARATOR.$vImageNewName)){
+						$imagesDatas[$i]->name = $vImageNewName;
+					}
+				}
+			}
+			$totalCountImagesLimit++;
 		}
 	}
 }
 
-$video = null;
-if(isset($_FILES["video"])){
-	$videoNameNew = date("Ymdhis")."_".$_FILES["video"]["name"];
-	if(move_uploaded_file($_FILES["video"]["tmp_name"], $path.DIRECTORY_SEPARATOR.$videoNameNew)) {
-		$video = $videoNameNew;
+//uploading video files with limited count and disk space on server
+$videosDatas = (isset($_REQUEST["videosDatas"]) && $_REQUEST["videosDatas"] != "[]") ? json_decode($_REQUEST["videosDatas"]) : null;
+if(!is_null($videosDatas)){
+	$totalCountVideosLimit = 1;
+	for($i=0; $i<count($videosDatas); $i++){
+		if(isset($videosDatas[$i]->action) && $videosDatas[$i]->action=="new" && $totalCountVideosLimit<=COUNT_ITEM_VIDEOS){
+			for($l=0; $l<count($_FILES["videosFiles"]["name"]); $l++){
+				if($_FILES["videosFiles"]["name"][$l]==$videosDatas[$i]->name){
+					$vVideoNewName = date("Ymdhis")."_".$_FILES["videosFiles"]["name"][$l];
+					if(move_uploaded_file($_FILES["videosFiles"]["tmp_name"][$l], $path.DIRECTORY_SEPARATOR.$vVideoNewName)){
+						$videosDatas[$i]->name = $vVideoNewName;
+					}
+				}
+			}
+			$totalCountVideosLimit++;
+		}
 	}
 }
 
@@ -66,14 +74,14 @@ else if($status == 1) {
 
 $payAmount = getPayAmount($status, $userID);
 
-$queryItem = "INSERT INTO item (title, quality, address, price, youtube, video, extras, description, city, name, phone, email, userID, category, item_viewer, phone_viewer, datetime, expire_days, status, isactive) VALUES ('".$title."', ".$quality.", '".$address."', ".$price.", '".$youtube."', '".$video."', '".$extras."', '".$description."', '".$city."', '".$name."', '".$phone."', '".$email."', ".$userID.", '".$category."', 0, 0, '".date("Y-m-d h:i:s")."', ".$days.", ".$status.", 1)";
+$videoName = $videosDatas!=null?$videosDatas[0]->name:null;
+$queryItem = "INSERT INTO item (title, quality, address, price, youtube, video, extras, description, city, name, phone, email, userID, category, item_viewer, phone_viewer, datetime, expire_days, status, isactive) VALUES ('".$title."', ".$quality.", '".$address."', ".$price.", '".$youtube."', '".$videoName."', '".$extras."', '".$description."', '".$city."', '".$name."', '".$phone."', '".$email."', ".$userID.", '".$category."', 0, 0, '".date("Y-m-d h:i:s")."', ".$days.", ".$status.", 1)";
 
-$resultItem = $conn->query($queryItem);
-if($resultItem){
+if($conn->query($queryItem)){
 	$itemID = mysqli_insert_id($conn);
 	if(!is_null($imagesDatas)){
 		for($i=0; $i<count($imagesDatas); $i++){
-			$queryImages = "INSERT INTO images (userID, item, image, sort) VALUES (".$userID.", ".$itemID.", '".$imagesDatas[$i]->name."',".$imagesDatas[$i]->id.")";
+			$queryImages = "INSERT INTO images (userID, item, image, sort) VALUES (".$userID.", ".$itemID.", '".$imagesDatas[$i]->name."',".$imagesDatas[$i]->sort.")";
 			@$conn->query($queryImages);
 		}
 	}
