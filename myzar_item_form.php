@@ -38,16 +38,35 @@ function selectCity(city){
 	$("#myzar_item_city").val(city);
 }
 
+var tmpUserPhone, tmpUserName, tmpUserEmail;
 $(document).ready(function(){
 	$("#myzar_item_isNewUser").change(function(){
 		if($("#myzar_item_isNewUser").is(':checked')){
+			tmpUserPhone = $("#myzar_item_phone").val();
 			$("#myzar_item_phone").val("");
+			$("#myzar_item_phone").prop("disabled",false);
+			
+			tmpUserName = $("#myzar_item_name").val();
 			$("#myzar_item_name").val("");
+			$("#myzar_item_name").prop("disabled",false);
+			
+			tmpUserEmail = $("#myzar_item_email").val();
 			$("#myzar_item_email").val("");
+			$("#myzar_item_email").prop("disabled",false);
+			
 			$(".myzar_item_phone_label.required").show();
 			$(".myzar_item_phone_label.notrequired").hide();
 	   	}
 		else {
+			$("#myzar_item_phone").val(tmpUserPhone);
+			$("#myzar_item_phone").prop("disabled",true);
+			
+			$("#myzar_item_name").val(tmpUserName);
+			$("#myzar_item_name").prop("disabled",true);
+			
+			$("#myzar_item_email").val(tmpUserEmail);
+			$("#myzar_item_email").prop("disabled",true);
+			
 			$(".myzar_item_phone_label.required").hide();
 			$(".myzar_item_phone_label.notrequired").show();
 		}
@@ -255,7 +274,7 @@ $(document).ready(function(){
 			<tr>
 				<td width="115px"><label class="required">Нэр:</label></td>
 				<td>
-					<input id="myzar_item_name" type="text" maxlength="128" value="<?php if($rowFetchProfile["name"]!="") echo $rowFetchProfile["name"]; ?>" style="width: 85%; height: 25px; padding: 5px; font: normal 16px Arial">
+					<input id="myzar_item_name" type="text" maxlength="128" value="<?php if($rowFetchProfile["name"]!="") echo $rowFetchProfile["name"]; ?>" style="width: 85%; height: 25px; padding: 5px; font: normal 16px Arial" disabled>
 				</td>
 			</tr>
 			<tr>
@@ -283,7 +302,7 @@ $(document).ready(function(){
 						}
 						else {
 						?>
-						<input id="myzar_item_phone" type="number" maxlength="12" style="width:60%; height: 25px; padding: 5px; font: normal 16px Arial" value="<?php echo substr(getPhone($_COOKIE["userID"]), 4); ?>">
+						<input id="myzar_item_phone" type="number" maxlength="12" style="width:60%; height: 25px; padding: 5px; font: normal 16px Arial" value="<?php echo substr(getPhone($_COOKIE["userID"]), 4); ?>" disabled>
 						<?php
 						}
 						?>
@@ -301,14 +320,14 @@ $(document).ready(function(){
 			<tr>
 				<td width="115px">Имейл хаяг:</td>
 				<td>
-					<input id="myzar_item_email" type="email" maxlength="128" value="<?php if($rowFetchProfile["email"]!="") echo $rowFetchProfile["email"]; ?>" style="width: 85%; height: 25px; padding: 5px; font: normal 16px Arial">
+					<input id="myzar_item_email" type="email" maxlength="128" value="<?php if($rowFetchProfile["email"]!="") echo $rowFetchProfile["email"]; ?>" style="width: 85%; height: 25px; padding: 5px; font: normal 16px Arial" disabled>
 				</td>
 			</tr>
 			<tr>
 				<td></td>
 				<td style="color: #9F9F9F; font: normal 14px Arial">
 					<div id="myzar_item_email_error" style="display: none; color: #FF4649">Таны оруулсан имейл буруу байна!</div>
-					Таны зарын тухай ирсэн мессэжний тухай мэдэгдэл очих болно.
+					Таны зарын тухай мэдэгдэл имэйл хүлээн авах болно.
 				</td>
 			</tr>
 		</table>

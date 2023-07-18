@@ -3,7 +3,6 @@ include "mysql_config.php";
 include_once "mysql_misc.php";
 include_once "info.php";
 include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expired item
-sendEmail();
 ?>
 <!doctype html>
 <html>
@@ -147,7 +146,7 @@ sendEmail();
 			<?php
 			if(isset($_COOKIE["userID"])){
 				?>
-				$("#myzar_phone").text("+"<?php echo $_COOKIE["phone"]; ?>);
+				$("#myzar_phone").text("+"<?php echo getPhone($_COOKIE["userID"]); ?>);
 				$("#myzar_nav").text("Миний зар");
 				$("#myzar_button").attr("onclick","pagenavigation('myzar')");
 				$("#logoutButton").css("display", "flex");
@@ -198,7 +197,7 @@ sendEmail();
 			});
 			
 			<?php
-			if(isset($_COOKIE["phone"]) && $_COOKIE["phone"]!=$superduperadmin){
+			if(isset($_COOKIE["userID"]) && getPhone($_COOKIE["userID"])!=$superduperadmin){
 				?>
 				if(localStorage.getItem("isBecameFollower")==null){
 					$(".popup.become_follower").show();

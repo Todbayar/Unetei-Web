@@ -39,12 +39,9 @@ else {
 }
 
 function SaveCookie(){
-	global $uID, $uPhone, $userID, $uRole;
+	global $userID;
 	$cookieTime = time() + (86400 * 30);	//30 day, 86400=1
 	setcookie("userID", $userID, $cookieTime, "/");
-	setcookie("uid", $uID, $cookieTime, "/");
-	setcookie("phone", $uPhone, $cookieTime, "/");
-	setcookie("role", $uRole, $cookieTime, "/");
 }
 
 $conn->close();

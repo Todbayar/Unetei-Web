@@ -33,6 +33,22 @@ function getPhone($id){
 	return $row["phone"];
 }
 
+function getEmail($id){
+	global $conn;
+	$query = "SELECT email FROM user WHERE id=".$id;
+	$result = $conn->query($query);
+	$row = mysqli_fetch_array($result);
+	return $row["email"];
+}
+
+function getName($id){
+	global $conn;
+	$query = "SELECT name FROM user WHERE id=".$id;
+	$result = $conn->query($query);
+	$row = mysqli_fetch_array($result);
+	return $row["name"];
+}
+
 function getPayAmount($status, $userID){
 	global $item_vipspecial_count_limit_admin, $item_publish_price_vip, $item_publish_price_special;
 	$payAmount = 0;
@@ -286,8 +302,8 @@ function sendNotification($link, $userID){
     curl_close ($ch);
 }
 
-function sendEmail(){
-	global $smtp_host, $smtp_port, $smtp_username, $smtp_password, $smpt_secure_type, $domain;
+function sendEmail($emailReceiver, $emailSender, $nameReceiver, $nameSender, $phoneReceiver, $phoneSender, $title, $body, $isDebug=null){
+	global $smtp_host, $smtp_port, $smtp_username, $smtp_password, $smpt_secure_type, $domain, $domain_title, $protocol;
 	
 	$mail = new PHPMailer(true);
 	try {
@@ -304,10 +320,9 @@ function sendEmail(){
 		$mail->Username   = $smtp_username;                     	//SMTP username
 		$mail->Password   = $smtp_password;                         //SMTP password
 		
-		//mmxtdaikmwqlgfxb
 		//Recipients
-		$mail->setFrom('misheelgamestudio@gmail.com', $domain);
-		$mail->addAddress('atodko0513@gmail.com', 'Todbayar');      //Add a recipient
+		$mail->setFrom($smtp_username, $domain);
+		$mail->addAddress($emailReceiver, $nameReceiver);      //Add a recipient
 //		$mail->addAddress('ellen@example.com');               		//Name is optional
 //		$mail->addReplyTo('info@example.com', 'Information');
 //		$mail->addCC('cc@example.com');
@@ -320,19 +335,49 @@ function sendEmail(){
 		//Content
 		$mail->isHTML(true);                                  //Set email format to HTML
 		$mail->CharSet = "UTF-8";
-		$mail->Subject = 'Энэ бол гарчиг';
-		$mail->Body    = 'Эх бичиглэл HTML <b>энд!</b>';
-		$mail->AltBody = 'HTML биш хэрэглэгчдэд';
+		$mail->Subject = $title;
+		
+		$url = $protocol."://".($_SERVER['HTTP_HOST']=="localhost"?($_SERVER['HTTP_HOST']."/".strtolower($domain_title)):$_SERVER['HTTP_HOST']);
+		
+		$fromMsg = "";
+		if($nameSender!="" && $emailSender!="" && $nameReceiver!="" && $emailReceiver!=""){
+			$fromMsg = $nameReceiver." таньд <a href='".$url."'>".$domain."</a>-ны хэрэглэгч ".$nameSender."-ээс мэдэгдэл ирлээ.<br/>";
+		}
+		else {
+			$fromMsg = $phoneReceiver." дугаартай хэрэглэгч таньд <a href='".$url."'>".$domain."</a>-ны хэрэглэгч (".$phoneSender.")-ээс мэдэгдэл ирлээ.<br/>";
+		}
+		
+		$bodyFooter = "<br/>Та <a href='".$url."'>".$domain."</a>-руу орж чат хэсгээс мэдэгдлийн талаар илүү дэлгэрэнгүйг харна уу.";
+		
+		$mail->Body    = $fromMsg.$body.$bodyFooter;
+//		$mail->AltBody = 'HTML биш хэрэглэгчдэд';
 
 		$mail->send();
-		?>
-		<script>console.log("Message has been sent");</script>
-		<?php
-	} 
-	catch (Exception $e) {
-		?>
-		<script>console.log("<?php echo "Message could not be sent. Mailer Error:{$mail->ErrorInfo}"; ?>");</script>
-		<?php
+		
+		if($isDebug=="CONSOLE"){
+			?>
+			<script>console.log("Message has been sent to:<?php echo $emailReceiver; ?>, from:<?php echo $emailSender; ?>");</script>
+			<?php
+		}
+		else if($isDebug=="ECHO"){
+			echo "Message has been sent to:{$emailReceiver}, from:{$emailSender}<br/>";
+		}
+		else {
+			return true;	
+		}
+	}
+	catch(Exception $e){
+		if($isDebug=="CONSOLE"){
+			?>
+			<script>console.log("<?php echo "Message could not be sent. Mailer Error:{$mail->ErrorInfo}"; ?>");</script>
+			<?php
+		}
+		else if($isDebug=="ECHO"){
+			"Message could not be sent. Mailer Error:{$mail->ErrorInfo}<br/>";
+		}
+		else {
+			return false;
+		}
 	}
 }
 ?>

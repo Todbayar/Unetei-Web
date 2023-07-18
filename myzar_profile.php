@@ -319,6 +319,7 @@ $(document).ready(function(){
 		</div>
 		<div class="divcontainer">
 			<div>Имейл:</div>
+			<div style="color: #42c200; font-size: 14px">Та имэйлээ доор бичсэнээр мэдэгдэл хүлээн авах боломжтой болно</div>
 			<input id="email" class="email" type="email" maxlength="128" value="<?php echo $row["email"]; ?>">
 			<div id="email_error" style="color: red; margin-top: 5px; font-size: 14px; display: none">Имейл буруу байна!</div>
 		</div>

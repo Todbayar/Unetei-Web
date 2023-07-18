@@ -1,8 +1,9 @@
 <?php
 include "mysql_config.php";
+include_once "mysql_misc.php";
 include_once "info.php";
 
-$phone = ($_POST["affiliate"] != "" && "+976".$_POST["affiliate"] != $_COOKIE["phone"]) ? "+976".$_POST["affiliate"] : $superduperadmin;
+$phone = ($_POST["affiliate"] != "" && "+976".$_POST["affiliate"] != getPhone($_COOKIE["userID"])) ? "+976".$_POST["affiliate"] : $superduperadmin;
 $query = "SELECT * FROM user WHERE phone IN ('".$phone."', '".$superduperadmin."') LIMIT 1";
 $result = $conn->query($query);
 $row = mysqli_fetch_array($result);

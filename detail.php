@@ -393,7 +393,7 @@ $(document).ready(function() {
 	<?php
 	if(isset($_COOKIE["userID"])){
 		?>
-		$("#myzar_phone").text("+"<?php echo $_COOKIE["phone"]; ?>);
+		$("#myzar_phone").text(<?php echo getPhone($_COOKIE["userID"]); ?>);
 		$("#myzar_nav").text("Миний зар");
 		$("#myzar_button").attr("onclick","pagenavigation('myzar')");
 		$("#logoutButton").css("display", "flex");
@@ -688,7 +688,21 @@ function toggleFavorite(isFav, id){
 					}
 					?>
 				</div>
-				<div class="description"><?php echo stripslashes(strip_tags(htmlspecialchars_decode(html_entity_decode($row["description"])))); ?></div>
+				<div class="description">
+				<?php 
+					$desciption = explode(' ', stripslashes(strip_tags(htmlspecialchars_decode(html_entity_decode($row["description"])))));
+					$descSplitWord = "";
+					for($i=0; $i<count($desciption); $i++){
+						if(mb_strlen($desciption[$i])>45){
+							$descSplitWord .= mb_substr($desciption[$i],0,44,"utf-8")."... ";
+						}
+						else {
+							$descSplitWord .= $desciption[$i]." ";
+						}
+					}
+					echo $descSplitWord;
+				?>
+				</div>
 				<?php
 				$queryOthers = "SELECT *, ".$queryFav." (SELECT image FROM images WHERE item.id=images.item LIMIT 1) AS image, (SELECT COUNT(*) FROM images WHERE item.id=images.item) AS count_images FROM item WHERE category IN (".$joinedCategories.") AND id NOT IN (".$detailID.") AND isactive=4 ORDER BY datetime DESC LIMIT 12";
 				$resultOthers = $conn->query($queryOthers);
