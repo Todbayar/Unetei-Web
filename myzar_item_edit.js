@@ -70,6 +70,7 @@ function myzar_category_selected_item_edit(id){
 		$("#myzar_item_button div").html("Хадгалах");
 		$("#myzar_item_button").attr("onClick", "myzar_item_edit_submit("+id+")");
 		
+		$("#myzar_item_images").empty();
 		$("#myzar_item_images").find(".itemImage").each(function(i, el){
 			$(el).remove();
 		});
@@ -79,6 +80,7 @@ function myzar_category_selected_item_edit(id){
 		}
 		
 		//video
+		$("#myzar_item_video").empty();
 		$("#myzar_item_video").find(".itemVideo").each(function(i, el){
 			$(el).remove();
 		});

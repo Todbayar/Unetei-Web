@@ -18,9 +18,10 @@ $category_count_limit_publisher_manager = 10;	//check before remove
 
 //email
 $smtp_host = "smtp.gmail.com";
-$smtp_port = 465;
-$smtp_username = "atodko0513@gmail.com";
-$smtp_password = "Newpass@sd2022";
+$smtp_port = 587;									//tls
+$smpt_secure_type = "tls";
+$smtp_username = "misheelgamestudio@gmail.com";		//app password is enabled in this gmail account
+$smtp_password = "jajavmkuytyynszx";				//this is app password not like regular login password
 
 //role
 $role_rank_superadmin = "Сүпер админ";

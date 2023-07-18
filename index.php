@@ -3,6 +3,7 @@ include "mysql_config.php";
 include_once "mysql_misc.php";
 include_once "info.php";
 include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expired item
+sendEmail();
 ?>
 <!doctype html>
 <html>

@@ -2,6 +2,13 @@
 include_once "mysql_config.php";
 include_once "info.php";
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require_once "./include/PHPMailer/src/Exception.php";
+require_once "./include/PHPMailer/src/PHPMailer.php";
+require_once "./include/PHPMailer/src/SMTP.php";
+
 function update_profile($name, $email, $city, $userID, $image = null){
 	global $conn;
 	$query = "UPDATE user SET name='".$name."', email='".$email."', city='".$city."' WHERE id=".$userID;
@@ -277,5 +284,55 @@ function sendNotification($link, $userID){
 	$curl_error_number = curl_errno($ch);
 	$http_code = curl_getinfo($ch,CURLINFO_HTTP_CODE);
     curl_close ($ch);
+}
+
+function sendEmail(){
+	global $smtp_host, $smtp_port, $smtp_username, $smtp_password, $smpt_secure_type, $domain;
+	
+	$mail = new PHPMailer(true);
+	try {
+		//Server settings
+//		$mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+		$mail->isSMTP(); 
+		$mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+		//Send using SMTP
+		$mail->Host       = $smtp_host;                     		//Set the SMTP server to send through
+		$mail->Port       = $smtp_port;                             //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+		$mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+		$mail->SMTPSecure = $smpt_secure_type;						//ssl/tls
+		
+		$mail->Username   = $smtp_username;                     	//SMTP username
+		$mail->Password   = $smtp_password;                         //SMTP password
+		
+		//mmxtdaikmwqlgfxb
+		//Recipients
+		$mail->setFrom('misheelgamestudio@gmail.com', $domain);
+		$mail->addAddress('atodko0513@gmail.com', 'Todbayar');      //Add a recipient
+//		$mail->addAddress('ellen@example.com');               		//Name is optional
+//		$mail->addReplyTo('info@example.com', 'Information');
+//		$mail->addCC('cc@example.com');
+//		$mail->addBCC('bcc@example.com');
+
+		//Attachments
+//		$mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
+//		$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
+
+		//Content
+		$mail->isHTML(true);                                  //Set email format to HTML
+		$mail->CharSet = "UTF-8";
+		$mail->Subject = 'Энэ бол гарчиг';
+		$mail->Body    = 'Эх бичиглэл HTML <b>энд!</b>';
+		$mail->AltBody = 'HTML биш хэрэглэгчдэд';
+
+		$mail->send();
+		?>
+		<script>console.log("Message has been sent");</script>
+		<?php
+	} 
+	catch (Exception $e) {
+		?>
+		<script>console.log("<?php echo "Message could not be sent. Mailer Error:{$mail->ErrorInfo}"; ?>");</script>
+		<?php
+	}
 }
 ?>
