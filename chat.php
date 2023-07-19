@@ -381,7 +381,7 @@ function chat_action(chatID, action, type, id){
 
 	const reqChatActionSubmit = new XMLHttpRequest();
 	reqChatActionSubmit.onload = function() {
-//		console.log("<chat_action>:"+this.responseText);
+		console.log("<chat_action>:"+this.responseText);
 		if(this.responseText == "OK"){
 			$("div#"+type+""+chatID).hide();
 		}

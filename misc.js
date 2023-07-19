@@ -82,8 +82,8 @@ function confirmation_yesno(message, eventyes, eventno){
 }
 
 function confirmation_ok(message, event){
-	window.scrollTo(0, 0);
 	$("body").css("overflow-y", "hidden");
+	window.scrollTo(0, 0);
 //	$("html, body").animate({ scrollTop: 0 }, "fast");
 	$(".popup.ok").show();
 	$(".popup.ok .container .message").html(message);

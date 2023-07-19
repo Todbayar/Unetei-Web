@@ -74,11 +74,13 @@ $pageCountList = 60;
 $firebase_app = "unetei-bc717";
 $firebase_public_vapid_key = "BKLrbPXG-cbXjadrRFHrKIvJX10ZHwXnlOuBZqMiYIIYVMdihRH_X8KV-FGD1e5xbqt30DMDBXdlqLemx_G3dfg";
 $firebase_auth = "AAAAwjhSlmk:APA91bGU-XYE_yp2023YXoxQA1GFWir8-9t_omVjNAQ5dDxQnSE2L7OIpkB0b8Vbj3Bla_wtYudRc3fjI5QwmPh0j_LbRVhq2xEWKLAOi1_PjZYxl1cDjBMcsssLXW571Ykgjat31Sfr";
+$firebase_auth2_token = "ya29.a0AbVbY6NUK0PiOrqiCV-RHVVsNxIIPtoCthmBPo3TS1Un6WilT4SPQUnZCoMYjwPLi_krxu4ZJO2aefDCUv5xJx1YNZC-2iARxdp5Qmv16Z6IYfxeTRk2zuMENjNg_QpLh6awJefixMqHji863DDoWHt2UEbhaCgYKAZ4SARESFQFWKvPl6qT2lp6DeIcg0SvFimCIZw0163";
 
 define("ADD",0);
 define("EDIT",1);
 define("BOOST",2);
 define("UPDATE",3);
+define("RESPOND",4);
 
 define("BOOST_DAYS", 7);
 

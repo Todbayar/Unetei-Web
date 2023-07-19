@@ -218,8 +218,8 @@ function myzar_item_categories(hierCategories, words){
 }
 
 function myzar_item_update(itemID, title, categories, role){
-	window.scrollTo(0, 0);
 	$("body").css("overflow-y", "hidden");
+	window.scrollTo(0, 0);
 	$(".popup.item_publish_option").show();
 	$(".popup.item_publish_option .title").html(title);
 	$(".popup.item_publish_option .category").empty();
@@ -236,14 +236,11 @@ function myzar_item_update(itemID, title, categories, role){
 }
 
 function myzar_item_add_submit(){
-	console.log("<images_count>:"+$("#myzar_item_images_input")[0].files.length);
-	console.log("<videos_count>:"+$("#myzar_item_videos_input")[0].files.length);
-	
 	itemData = getItemDataForm();
 	if(itemData != ""){
 		itemData.set("status", $(".popup.item_publish_option input[name='publish_option']:checked").val());
-		window.scrollTo(0, 0);
 		$("body").css("overflow-y", "hidden");
+		window.scrollTo(0, 0);
 		$(".popup.item_publish_option").show();
 		$(".popup.item_publish_option .title").html(itemData.get("title"));
 		$(".popup.item_publish_option .category").empty();

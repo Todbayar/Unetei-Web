@@ -20,14 +20,16 @@ if(isset($_REQUEST["action"]) && isset($_REQUEST["type"]) && isset($_REQUEST["id
 			$query .= " SET active=1";
 		}
 		$query .= " WHERE id=".$category[1];
+		
+		@$conn->query("UPDATE chat SET isNotified=0, action=".RESPOND." WHERE id=".$chatID);
 	}
 	else if($type == 1){	//item
 		$rowChat = getChat($chatID);
 		if($rowChat["action"]==EDIT){
-			@$conn->query("UPDATE chat SET action=null WHERE id=".$chatID);
+			@$conn->query("UPDATE chat SET isNotified=0, action=".RESPOND." WHERE id=".$chatID);
 		}
 		else if($rowChat["action"]==BOOST){
-			@$conn->query("UPDATE chat SET action=null WHERE id=".$chatID);
+			@$conn->query("UPDATE chat SET isNotified=0, action=".RESPOND." WHERE id=".$chatID);
 		}
 		else {
 			$note = $rowChat["note"];
@@ -50,7 +52,7 @@ if(isset($_REQUEST["action"]) && isset($_REQUEST["type"]) && isset($_REQUEST["id
 			}
 
 			$note->payment[] = $payment;
-			$conn->query("UPDATE chat SET note='".json_encode($note)."' WHERE id=".$chatID);
+			$conn->query("UPDATE chat SET note='".json_encode($note)."', isNotified=0, action=".RESPOND." WHERE id=".$chatID);
 		}
 		
 		if($action == 0){
@@ -64,7 +66,7 @@ if(isset($_REQUEST["action"]) && isset($_REQUEST["type"]) && isset($_REQUEST["id
 		}
 		$query .= " WHERE id=".$id;
 	}
-	else if($type == 2){	//message
+	else if($type == 2){	//role
 		if($action == 0){
 			$queryFetchRole = "SELECT fromID, message FROM chat WHERE id=".$id;
 			$resultFetchRole = $conn->query($queryFetchRole);
@@ -97,8 +99,8 @@ if(isset($_REQUEST["action"]) && isset($_REQUEST["type"]) && isset($_REQUEST["id
 			$payment = new stdClass();
 			$payment->isPaid = true;
 			$payment->datetime = date("Y-m-d h:i:s");
-			$note->payment[] = $payment;			
-			$query = "UPDATE chat SET isRead=1, note='".json_encode($note)."' WHERE id=".$id;
+			$note->payment[] = $payment;
+			$query = "UPDATE chat SET isRead=1, note='".json_encode($note)."', isNotified=0, action=".RESPOND." WHERE id=".$id;
 		}
 	}
 	

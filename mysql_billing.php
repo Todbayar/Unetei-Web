@@ -5,7 +5,7 @@ include_once "info.php";
 
 if(isset($_POST["type"])){
 	if($_POST["type"] == "role"){
-		$phone = ($_POST["affiliate"] != "" && $_POST["affiliate"] != getPhone($_COOKIE["userID"]) ? $_POST["affiliate"] : $superduperadmin;
+		$phone = ($_POST["affiliate"] != "" && $_POST["affiliate"] != getPhone($_COOKIE["userID"])) ? $_POST["affiliate"] : $superduperadmin;
 		$query = "SELECT * FROM user WHERE phone='".$phone."'";
 		$result = $conn->query($query);
 		$affiliate = mysqli_fetch_array($result);

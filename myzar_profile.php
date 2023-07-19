@@ -122,8 +122,8 @@ $(document).ready(function(){
 	});
 	
 	$("#buttonUpgradeUserRole").click(function(){
-		window.scrollTo(0, 0);
 		$("body").css("overflow-y", "hidden");
+		window.scrollTo(0, 0);
 		$(".popup.myzar_user_upgrade").show();
 		$.post("mysql_fetch_profile.php", {affiliate:$("#affiliate_number").val()}).done(function (response){
 			const res = JSON.parse(response);
@@ -171,6 +171,7 @@ function submitRoleUpgrade(affiliatePhone){
 	$(".popup.myzar_user_upgrade").hide();
 	const selRole = $("input[name='role']:checked").val();
 	$.post("mysql_billing.php", {type:"role", affiliate:affiliatePhone, role:selRole}).done(function (response){
+		console.log("<submitRoleUpgrade>:"+response);
 		$(".popup.billing").show();
 		const res = JSON.parse(response);
 		$(".popup.billing .container #billing_type").html(res.type);

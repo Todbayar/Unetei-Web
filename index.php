@@ -12,6 +12,7 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		
 		<?php
+		//OPEN GRAPH FOR SHARING WEB
 		$queryURL = array();
 		parse_str($_SERVER['QUERY_STRING'], $queryURL);
 		if(isset($queryURL["page"]) && str_contains($queryURL["page"],"detail")){
@@ -103,50 +104,54 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 		var timerDropDownMenu;
 		
 		$(document).ready(function(){
-			if('serviceWorker' in navigator){				
-				navigator.serviceWorker.register('<?php echo str_contains($_SERVER['REQUEST_URI'],"detail")?"../firebase-messaging-sw.js":"firebase-messaging-sw.js"; ?>');
-				const messaging = firebase.messaging();	//not working bcz of service not supported on mobile android
-				var eventNotification = new CustomEvent("notificationDone");
-				window.addEventListener("notificationDone", function(){
-					Notification.requestPermission().then((permission) => {
-						if(permission === 'granted'){
-							console.log('<notification>:Permission granted');
-							messaging.getToken({vapidKey: "<?php echo $firebase_public_vapid_key; ?>"}).then((currentToken) => {
-								if (currentToken) {
-									console.log('<notification>:token received:', currentToken);
-									$.post("mysql_user_fcm.php", {token:currentToken});
-									localStorage.setItem("isNotificationGranted", true);
-								}
-								else {
-									console.log("<notification>:Permission required!");
-								}
-							}).catch((err) => {
-								console.log('<notification>:An error occurred while retrieving token. ', err);
-							});
-						}
-						else {
-							localStorage.setItem("isNotificationGranted", false);
-						}
-					});
-				});
-				<?php
-				if(isset($_COOKIE["userID"])){
-					?>
-					if(localStorage.getItem("isNotificationGranted")==null){	
-						confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i> Та мэдэгдэл хүлээж авхыг зөвшөөрнө үү, ингэснээр цаг алдалгүй таньд ирэх <b>гүйлгээ</b>, <b>хүсэлтүүд</b>, <b>баталгаажуулалт</b> зэрэг чухал мэдээллийн мэдэгдэл хүлээн авах боломжтой болж та <?php echo $domain; ?>-ыг бүрэн удирдах эрхтэй болно.", eventNotification);
-					}
-					<?php
-				}
-				?>
-			}
-			else {
-				console.log('Service Worker not supported');
-			}
+			//this firebase cloud messaging works but not perfect
+			//sendNotification("?page=chat&toID=2", 1);	//php
+//			if('serviceWorker' in navigator){
+//				navigator.serviceWorker.register('<?php echo str_contains($_SERVER['REQUEST_URI'],"detail")?"../firebase-messaging-sw.js":"firebase-messaging-sw.js"; ?>');
+//				const messaging = firebase.messaging();	//not working bcz of service not supported on mobile android
+//				var eventNotification = new CustomEvent("notificationDone");
+//				window.addEventListener("notificationDone", function(){
+//					Notification.requestPermission().then((permission) => {
+//						if(permission === 'granted'){
+//							console.log('<notification>:Permission granted');
+//							messaging.getToken({vapidKey: "<?php echo $firebase_public_vapid_key; ?>"}).then((currentToken) => {
+//								if (currentToken) {
+//									console.log('<notification>:token received:', currentToken);
+//									$.post("mysql_user_fcm.php", {token:currentToken}).done(function(){
+//										console.log("Saved token");
+//									});
+//									localStorage.setItem("isNotificationGranted", true);
+//								}
+//								else {
+//									console.log("<notification>:Permission required!");
+//								}
+//							}).catch((err) => {
+//								console.log('<notification>:An error occurred while retrieving token. ', err);
+//							});
+//						}
+//						else {
+//							localStorage.setItem("isNotificationGranted", false);
+//						}
+//					});
+//				});
+//				<?php
+//				if(isset($_COOKIE["userID"])){
+//					?>
+//					if(localStorage.getItem("isNotificationGranted")==null){	
+//						confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i> Та мэдэгдэл хүлээж авхыг зөвшөөрнө үү, ингэснээр цаг алдалгүй таньд ирэх <b>гүйлгээ</b>, <b>хүсэлтүүд</b>, <b>баталгаажуулалт</b> зэрэг чухал мэдээллийн мэдэгдэл хүлээн авах боломжтой болж та <?php echo $domain; ?>-ыг бүрэн удирдах эрхтэй болно.", eventNotification);
+//					}
+//					<?php
+//				}
+//				?>
+//			}
+//			else {
+//				console.log('Service Worker not supported');
+//			}
 			
 			<?php
 			if(isset($_COOKIE["userID"])){
 				?>
-				$("#myzar_phone").text("+"<?php echo getPhone($_COOKIE["userID"]); ?>);
+				$("#myzar_phone").text("<?php echo getPhone($_COOKIE["userID"]); ?>");
 				$("#myzar_nav").text("Миний зар");
 				$("#myzar_button").attr("onclick","pagenavigation('myzar')");
 				$("#logoutButton").css("display", "flex");
@@ -186,6 +191,7 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 				outputWidth: 400
 			});
 			
+			//becoming follower
 			$(".popup.become_follower input#phone").on('input',function(){
 				var phone = $(this).val();
 				if(phone.length==8){
@@ -196,13 +202,60 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 				}
 			});
 			
-			<?php
-			if(isset($_COOKIE["userID"]) && getPhone($_COOKIE["userID"])!=$superduperadmin){
-				?>
-				if(localStorage.getItem("isBecameFollower")==null){
+			if(localStorage.getItem("isBecameFollower")==null){
+				<?php
+				if(isset($_COOKIE["userID"]) && getPhone($_COOKIE["userID"])!=$superduperadmin){
+					?>
 					$(".popup.become_follower").show();
-					window.scrollTo(0, 0);
 					$("body").css("overflow-y", "hidden");
+					window.scrollTo(0, 0);
+					<?php
+				}
+				?>
+			}
+			
+			//verifying email
+			$(".popup.verify_email input#email").on('input',function(){
+				var email = $(this).val();
+				const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+				if(emailPattern.test(email)){
+				   	$(".popup.verify_email button#yes").prop("disabled",false);
+			    }
+				else {
+					$(".popup.verify_email button#yes").prop("disabled",true);
+				}
+			});
+			
+			<?php
+			if(isset($_GET["emailverificationid"])){
+				?>
+				$.post("mysql_user_email_verification.php",{emailverificationid:<?php echo $_GET["emailverificationid"]; ?>}).done(function(response){
+					console.log("<isVerfication:>:"+response);
+					if(response=="OK"){
+						var eventOk = new CustomEvent("emailVerificationDone");
+						window.addEventListener("emailVerificationDone", function(){
+							location = location.pathname;
+						});
+						confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Таны имэйл <b>амжилттай</b> баталгаажлаа.", eventOk);							
+					}
+			  	});
+				<?php
+			}
+			else {
+				?>
+				if(sessionStorage.getItem("isEmailVerified")==null){
+					<?php
+					if(isset($_COOKIE["userID"])){
+						$vUserEmail = getEmail($_COOKIE["userID"]);
+						if(is_null($vUserEmail) || $vUserEmail==""){
+							?>
+							$(".popup.verify_email").show();
+							$("body").css("overflow-y", "hidden");
+							window.scrollTo(0, 0);
+							<?php
+						}
+					}
+					?>
 				}
 				<?php
 			}
@@ -244,6 +297,27 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 			else if(typeof isBecame === "string") {
 				localStorage.setItem("isBecameFollower",false);
 				pagenavigation(isBecame);
+			}
+		}
+			
+		function verify_email(isValid){
+			if(isValid){
+				$.post("mysql_user_email_verification.php",{email:$(".popup.verify_email input#email").val()}).done(function(response){
+					if(response=="OK"){
+						console.log("Updated user email");
+					}
+					else {
+						console.log("Updateding user email is failed!");
+					}
+				});
+				sessionStorage.setItem("isEmailVerified",true);
+				$(".popup.verify_email").hide();
+				$("body").css("overflow-y", "auto");
+		    }
+			else {
+				sessionStorage.setItem("isEmailVerified",false);
+				$(".popup.verify_email").hide();
+				$("body").css("overflow-y", "auto");
 			}
 		}
 		</script>
@@ -393,7 +467,7 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 		</div>
 		
 		<div class="popup myzar_user_upgrade" style="display: none">
-			<div class="container" style="width: 320px; top: 5vh; height:600px">
+			<div class="container" style="width: 320px; top: 3.5vh; height:600px">
 				<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('popup myzar_user_upgrade')[0].style.display='none'; javascript:document.body.style.overflowY='auto'"></i>
 				<div class="header">Хэрэглэгчийн эрх</div>
 				<div style="height:520px; overflow-y: scroll">
@@ -713,6 +787,30 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 						<i class="fa-solid fa-check"></i>Тийм
 					</button>
 					<button onClick="become_follower(false)" id="no" class="button_yellow">
+						<i class="fa-solid fa-xmark"></i>Алгасах
+					</button>
+				</div>
+			</div>
+		</div>
+		
+		<div class="popup verify_email" style="display: none">
+			<div class="container">
+				<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('popup verify_email')[0].style.display='none'; javascript:document.body.style.overflowY='auto'"></i>
+				<div class="header">Имэйлээ баталгаажуулах</div>
+				<div class="message">
+					<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i> Та имэйлээ бичиж мэдэгдэл хүлээж авхыг зөвшөөрнө үү, ингэснээр цаг алдалгүй таньд ирэх <b>гүйлгээ</b>, <b>хүсэлтүүд</b>, <b>баталгаажуулалт</b> зэрэг чухал мэдээллийн мэдэгдэл хүлээн авах боломжтой болно.<br/>
+					Илүү дэлгэрэнгүйг <a href="javascript:pagenavigation('myzar&myzar=profile')">эндээс</a>
+					<div style="margin-top: 5px; margin-bottom: 5px">
+						<label>Имэйл:</label>
+						<input id="email" type="email" pattern="[^@\s]+@[^@\s]+\.[^@\s]+" placeholder="example@gmail.com" style="width: 160px; height: 25px; border-radius: 10px; font: normal 16px Arial; margin-top: 5px" />
+						<div id="error" style="font-size: 14px; color: red; margin-top: 2px; display: none">Имэйл буруу байна!</div>
+					</div>
+				</div>
+				<div class="action">
+					<button onClick="verify_email(true)" id="yes" class="button_yellow" style="background:#42c200" disabled>
+						<i class="fa-solid fa-check"></i>Тийм
+					</button>
+					<button onClick="verify_email(false)" id="no" class="button_yellow">
 						<i class="fa-solid fa-xmark"></i>Алгасах
 					</button>
 				</div>

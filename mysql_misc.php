@@ -52,6 +52,7 @@ function getName($id){
 function getPayAmount($status, $userID){
 	global $item_vipspecial_count_limit_admin, $item_publish_price_vip, $item_publish_price_special;
 	$payAmount = 0;
+	$userID = $_COOKIE["userID"]!=$userID?$_COOKIE["userID"]:$userID;	//only for adding item to different user
 	switch(getUserRole($userID)){
 		case 4:
 			$payAmount = 0;
@@ -258,7 +259,7 @@ function getUserToken($userID){
 }
 
 function sendNotification($link, $userID){
-	global $domain, $protocol, $firebase_app, $firebase_auth;
+	global $domain, $protocol, $firebase_app, $firebase_auth2_token;
 	
 	$title = $domain;
 	$body = "Таны чатанд мэдэгдэл ирлээ.";
@@ -288,18 +289,24 @@ function sendNotification($link, $userID){
 	curl_setopt($ch, CURLOPT_VERBOSE, true);
 	curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/v1/projects/'.$firebase_app.'/messages:send');
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-
-    $headers = array();
-    $headers[] = 'Content-Type: application/json';
-    $headers[] = "Authorization: Bearer ".$firebase_auth;
+//    curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');	
+	echo $jsonData = json_encode($data);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+	
+    $headers = [
+		"Authorization: Bearer ".$firebase_auth2_token,
+		"Content-Type: application/json",
+	];
     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
     $result = curl_exec($ch);
 	$curl_error = curl_error($ch);
 	$curl_error_number = curl_errno($ch);
 	$http_code = curl_getinfo($ch,CURLINFO_HTTP_CODE);
-    curl_close ($ch);
+    curl_close($ch);
+	echo $result.", ".$curl_error.", ".$curl_error_number.", ".$http_code;
 }
 
 function sendEmail($emailReceiver, $emailSender, $nameReceiver, $nameSender, $phoneReceiver, $phoneSender, $title, $body, $isDebug=null){
@@ -361,6 +368,63 @@ function sendEmail($emailReceiver, $emailSender, $nameReceiver, $nameSender, $ph
 		}
 		else if($isDebug=="ECHO"){
 			echo "Message has been sent to:{$emailReceiver}, from:{$emailSender}<br/>";
+		}
+		else {
+			return true;	
+		}
+	}
+	catch(Exception $e){
+		if($isDebug=="CONSOLE"){
+			?>
+			<script>console.log("<?php echo "Message could not be sent. Mailer Error:{$mail->ErrorInfo}"; ?>");</script>
+			<?php
+		}
+		else if($isDebug=="ECHO"){
+			"Message could not be sent. Mailer Error:{$mail->ErrorInfo}<br/>";
+		}
+		else {
+			return false;
+		}
+	}
+}
+
+function sendEmailVerification($emailReceiver, $title, $body, $isDebug=null){
+	global $smtp_host, $smtp_port, $smtp_username, $smtp_password, $smpt_secure_type, $domain, $domain_title, $protocol;
+	
+	$mail = new PHPMailer(true);
+	try {
+		//Server settings
+//		$mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+		$mail->isSMTP(); 
+		$mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+		//Send using SMTP
+		$mail->Host       = $smtp_host;                     		//Set the SMTP server to send through
+		$mail->Port       = $smtp_port;                             //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+		$mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+		$mail->SMTPSecure = $smpt_secure_type;						//ssl/tls
+		
+		$mail->Username   = $smtp_username;                     	//SMTP username
+		$mail->Password   = $smtp_password;                         //SMTP password
+		
+		//Recipients
+		$mail->setFrom($smtp_username, $domain);
+		$mail->addAddress($emailReceiver, $nameReceiver);      //Add a recipient
+
+		//Content
+		$mail->isHTML(true);                                  //Set email format to HTML
+		$mail->CharSet = "UTF-8";
+		$mail->Subject = $title;
+		
+		$mail->Body    = $body;
+		$mail->send();
+		
+		if($isDebug=="CONSOLE"){
+			?>
+			<script>console.log("Message has been sent to:<?php echo $emailReceiver; ?>");</script>
+			<?php
+		}
+		else if($isDebug=="ECHO"){
+			echo "Message has been sent to:{$emailReceiver}<br/>";
 		}
 		else {
 			return true;	

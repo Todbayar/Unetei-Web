@@ -133,8 +133,8 @@ function myzar_item_edit_submit(id){
 }
 	
 function myzar_category_selected_item_action(id, type, title, price){
-	window.scrollTo(0, 0);
 	$("body").css("overflow-y", "hidden");
+	window.scrollTo(0, 0);
 	$(".popup.myzar_item_survey").show();
 	$(".popup.myzar_item_survey #type").text("Та зараа "+(type=="inactive"?"устгах":"архивлах")+" уу?");
 	$(".popup.myzar_item_survey #title").text(title+" ("+convertPriceToTextJS(price)+" ₮)");

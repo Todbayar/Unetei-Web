@@ -459,8 +459,8 @@ Image.prototype.progressload = function (image_url, progress_callback, done_call
 };
 	
 function showSearch(){
-	window.scrollTo(0, 0);
 	$("body").css("overflow-y", "hidden");
+	window.scrollTo(0, 0);
 	$(".popup.search").show();
 }
 
