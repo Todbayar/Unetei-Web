@@ -188,7 +188,7 @@ mysqli_free_result($resultFetchListItemsStateCountInActive);
 
 <div class="myzar_content_list_items">
 	<?php
-	$queryFetchListItems = "SELECT *, (SELECT role FROM user WHERE id=item.userID) AS role, (SELECT COUNT(*) FROM images WHERE item=item.id) AS count_images, (SELECT image FROM images WHERE item=item.id LIMIT 1) AS image, (SELECT COUNT(*) FROM item i LEFT JOIN chat c ON i.id=c.message WHERE (i.boost IS NOT NULL AND i.boost>NOW()) OR (i.boost IS NULL AND c.action=3)) AS count_boost_total, (SELECT COUNT(*) FROM item i LEFT JOIN chat c ON i.id=c.message WHERE (i.boost IS NOT NULL AND i.boost>NOW() AND i.userID=".$_COOKIE["userID"].") OR (i.boost IS NULL AND c.action=3 AND c.fromID=".$_COOKIE["userID"].")) AS count_boost_user FROM item WHERE userID=".$_COOKIE["userID"];
+	$queryFetchListItems = "SELECT *, (SELECT role FROM user WHERE id=item.userID) AS role, (SELECT COUNT(*) FROM images WHERE item=item.id) AS count_images, (SELECT image FROM images WHERE item=item.id ORDER BY sort ASC LIMIT 1) AS image, (SELECT COUNT(*) FROM item i LEFT JOIN chat c ON i.id=c.message WHERE (i.boost IS NOT NULL AND i.boost>NOW()) OR (i.boost IS NULL AND c.action=3)) AS count_boost_total, (SELECT COUNT(*) FROM item i LEFT JOIN chat c ON i.id=c.message WHERE (i.boost IS NOT NULL AND i.boost>NOW() AND i.userID=".$_COOKIE["userID"].") OR (i.boost IS NULL AND c.action=3 AND c.fromID=".$_COOKIE["userID"].")) AS count_boost_user FROM item WHERE userID=".$_COOKIE["userID"];
 	
 	if((isset($_GET["myzar"]) && $_GET["myzar"] == "item") && (isset($_GET["state"]) && $_GET["state"] == "active")){
 		$queryFetchListItems .= " AND isactive=4";

@@ -71,6 +71,7 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 		<script src="https://www.gstatic.com/firebasejs/9.12.1/firebase-app-compat.js"></script>
 		<script src="https://www.gstatic.com/firebasejs/9.12.1/firebase-auth-compat.js"></script>
 		<script src="https://www.gstatic.com/firebasejs/9.12.1/firebase-messaging-compat.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics-compat.js"></script>
 		<script src="<?php echo  str_contains($_SERVER['REQUEST_URI'],"detail")?"../":""; ?>jquery-3.6.4.min.js"></script>
 		<script src="<?php echo  str_contains($_SERVER['REQUEST_URI'],"detail")?"../":""; ?>jquery-ui.js"></script>
 		<script src="<?php echo  str_contains($_SERVER['REQUEST_URI'],"detail")?"../":""; ?>latest_sortable.min.js"></script>
@@ -100,6 +101,7 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 			measurementId: "G-Q1YLJDB3KC"
 		};
 		firebase.initializeApp(firebaseConfig);
+		const analytics = firebase.analytics();
 		
 		var timerDropDownMenu;
 		
@@ -236,7 +238,7 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 						window.addEventListener("emailVerificationDone", function(){
 							location = location.pathname;
 						});
-						confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Таны имэйл <b>амжилттай</b> баталгаажлаа.", eventOk);							
+						confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Таны имэйл <b>амжилттай</b> баталгаажлаа.", eventOk);
 					}
 			  	});
 				<?php
@@ -304,7 +306,8 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 			if(isValid){
 				$.post("mysql_user_email_verification.php",{email:$(".popup.verify_email input#email").val()}).done(function(response){
 					if(response=="OK"){
-						console.log("Updated user email");
+						confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Таны имэйлрүү <b>баталгаажуулах</b> линк илгээлээ, та имэйлээ шалгана уу!", null);
+						//console.log("Updated user email");
 					}
 					else {
 						console.log("Updateding user email is failed!");

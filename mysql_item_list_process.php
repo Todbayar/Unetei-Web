@@ -121,7 +121,7 @@ if(isset($_POST["type"])){
 		$rowCountItems = mysqli_num_rows($conn->query($queryCountItems));
 		$totalCountItems = $rowCountItems;
 		
-		$queryVip = "SELECT *, ".$favorite." (SELECT COUNT(*) FROM images WHERE item=item.id) AS count_images, (SELECT image FROM images WHERE item=item.id LIMIT 1) AS image FROM item WHERE status=2 AND".substr($search, 0, strrpos($search, "AND")).$order.$orderPlus.$limit;
+		$queryVip = "SELECT *, ".$favorite." (SELECT COUNT(*) FROM images WHERE item=item.id) AS count_images, (SELECT image FROM images WHERE item=item.id ORDER BY sort ASC LIMIT 1) AS image FROM item WHERE status=2 AND".substr($search, 0, strrpos($search, "AND")).$order.$orderPlus.$limit;
 		$resultVip = $conn->query($queryVip);
 		while($rowVip = mysqli_fetch_object($resultVip)){
 			$arr["data"][] = $rowVip;
@@ -133,7 +133,7 @@ if(isset($_POST["type"])){
 		$totalCountItems += $rowCountItemsSpecial;
 		if($rowCountItems<$rowCountItemsSpecial) $rowCountItems=$rowCountItemsSpecial;
 		
-		$querySpecial = "SELECT *, ".$favorite." (SELECT COUNT(*) FROM images WHERE item=item.id) AS count_images, (SELECT image FROM images WHERE item=item.id LIMIT 1) AS image FROM item WHERE status=1 AND".substr($search, 0, strrpos($search, "AND")).$order.$orderPlus.$limit;
+		$querySpecial = "SELECT *, ".$favorite." (SELECT COUNT(*) FROM images WHERE item=item.id) AS count_images, (SELECT image FROM images WHERE item=item.id ORDER BY sort ASC LIMIT 1) AS image FROM item WHERE status=1 AND".substr($search, 0, strrpos($search, "AND")).$order.$orderPlus.$limit;
 		$resultSpecial = $conn->query($querySpecial);
 		while($rowSpecial = mysqli_fetch_object($resultSpecial)){
 			$arr["data"][] = $rowSpecial;
@@ -145,7 +145,7 @@ if(isset($_POST["type"])){
 		$totalCountItems += $rowCountItemsRegular;
 		if($rowCountItems<$rowCountItemsRegular) $rowCountItems=$rowCountItemsRegular;
 		
-		$queryRegular = "SELECT *, ".$favorite." (SELECT COUNT(*) FROM images WHERE item=item.id) AS count_images, (SELECT image FROM images WHERE item=item.id LIMIT 1) AS image FROM item WHERE status=0 AND".substr($search, 0, strrpos($search, "AND")).$order.$orderPlus.$limit;
+		$queryRegular = "SELECT *, ".$favorite." (SELECT COUNT(*) FROM images WHERE item=item.id) AS count_images, (SELECT image FROM images WHERE item=item.id ORDER BY sort ASC LIMIT 1) AS image FROM item WHERE status=0 AND".substr($search, 0, strrpos($search, "AND")).$order.$orderPlus.$limit;
 		$resultRegular = $conn->query($queryRegular);
 		while($rowRegular = mysqli_fetch_object($resultRegular)){
 			$arr["data"][] = $rowRegular;
@@ -176,7 +176,7 @@ if(isset($_POST["type"])){
 		
 		if($order!="") $orderPlus = ",count_images DESC";
 		
-		$query = "SELECT *, ".$favorite." (SELECT COUNT(*) FROM images WHERE item=item.id) AS count_images, (SELECT image FROM images WHERE item=item.id LIMIT 1) AS image FROM item WHERE ".substr($search, 0, strrpos($search, "AND")).$order.$orderPlus.$limit;
+		$query = "SELECT *, ".$favorite." (SELECT COUNT(*) FROM images WHERE item=item.id) AS count_images, (SELECT image FROM images WHERE item=item.id ORDER BY sort ASC LIMIT 1) AS image FROM item WHERE ".substr($search, 0, strrpos($search, "AND")).$order.$orderPlus.$limit;
 //		$arr["query"] = $query;
 		$result = $conn->query($query);
 		while($row = mysqli_fetch_object($result)){

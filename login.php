@@ -41,14 +41,15 @@
 	}
 	
 	function phoneAuth() {
+//		analytics.logEvent('login_phone_click');
 		var vPhoneRegex = new RegExp("^[0-9]{8}$");
 		const vPhone = $("#loginPhone").val();
 		const vAgree = $("#loginAgree").prop('checked');
 		const vError = $("#loginError");
-
 		if(vPhoneRegex.test(vPhone) && vAgree){
 			const vValidPhone = "+976" + vPhone;
 			firebase.auth().signInWithPhoneNumber(vValidPhone, window.recaptchaVerifier).then(function (confirmationResult) {
+//				analytics.logEvent('login_phone_verifying');
 				window.confirmationResult = confirmationResult;
 				coderesult = confirmationResult;
 				$("#phoneentry_container").hide();
@@ -86,6 +87,7 @@
 					loginSubmit.onload = function() {
 						console.log("<phoneCodeVerify>:"+this.responseText);
 						if(!this.responseText.includes("Fail")){
+//							analytics.logEvent('login_phone_verified');
 							location.href = "./";
 						}
 						else {

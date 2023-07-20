@@ -622,7 +622,7 @@ function toggleFavorite(isFav, id){
 					</div>
 				</div>
 				<?php
-				$queryImages = "SELECT * FROM images WHERE item=".$detailID;
+				$queryImages = "SELECT * FROM images WHERE item=".$detailID." ORDER BY sort ASC";
 				$resultImages = $conn->query($queryImages);
 				if(mysqli_num_rows($resultImages)>0 || $row["youtube"]!="" || $row["video"]!=""){
 				?>
@@ -704,7 +704,7 @@ function toggleFavorite(isFav, id){
 				?>
 				</div>
 				<?php
-				$queryOthers = "SELECT *, ".$queryFav." (SELECT image FROM images WHERE item.id=images.item LIMIT 1) AS image, (SELECT COUNT(*) FROM images WHERE item.id=images.item) AS count_images FROM item WHERE category IN (".$joinedCategories.") AND id NOT IN (".$detailID.") AND isactive=4 ORDER BY datetime DESC LIMIT 12";
+				$queryOthers = "SELECT *, ".$queryFav." (SELECT image FROM images WHERE item.id=images.item ORDER BY sort ASC LIMIT 1) AS image, (SELECT COUNT(*) FROM images WHERE item.id=images.item) AS count_images FROM item WHERE category IN (".$joinedCategories.") AND id NOT IN (".$detailID.") AND isactive=4 ORDER BY datetime DESC LIMIT 12";
 				$resultOthers = $conn->query($queryOthers);
 				if(mysqli_num_rows($resultOthers)>0){
 				?>
@@ -752,8 +752,23 @@ function toggleFavorite(isFav, id){
 								<i onClick="pagenavigation('login')" class="fa-solid fa-star"></i>
 								<?php
 							}
+							
+							if($rowOthers["image"]!="" && !is_null($rowOthers["image"])){
+								?>
+								<img src="../<?php echo $path."/".$rowOthers["image"]; ?>" onerror="this.onerror=null; this.src='notfound.png'" />
+								<?php
+							}
+							else if($rowOthers["youtube"]!=""){
+								?>
+								<iframe src="<?php echo $rowOthers["youtube"]; ?>" allowfullscreen></iframe>
+								<?php
+							}
+							else if($rowOthers["video"]!=""){
+								?>
+								<video controls=\"controls\" preload=\"metadata\" style=\"border-radius: 5px\"><source src="<?php echo $path."/".$rowOthers["video"]; ?>"#t=0.5" type="<?php echo findTypeOfVideo($rowOthers["video"]); ?>"></video>
+								<?php
+							}
 							?>
-							<img src="../<?php echo $path."/".$rowOthers["image"]; ?>" onerror="this.onerror=null; this.src='notfound.png'" />
 						</div>
 						<div onClick="javascript:pagenavigation(<?php echo $rowOthers["id"]; ?>,'id')">
 							<div class="price"><?php echo convertPriceToText($rowOthers["price"]); ?> ₮</div>
