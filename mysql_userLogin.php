@@ -1,48 +1,37 @@
 <?php
 include "mysql_config.php";
 
-date_default_timezone_set("Asia/Ulaanbaatar");
+if(isset($_REQUEST["uid"]) && isset($_REQUEST["phone"])){
+	echo UserLogin($_REQUEST["phone"], $_REQUEST["uid"]);
+}
 
-$uID = $_REQUEST["uid"];
-$uPhone = $_REQUEST["phone"];
-$userID = 0;
-$uRole = 0;
-
-if(isset($uID) && isset($uPhone)){
-	$query = "SELECT * FROM user WHERE phone='".$uPhone."'";
+function UserLogin($phone, $uid){
+	global $conn;
+	$query = "SELECT * FROM user WHERE phone='".$phone."'";
 	$result = $conn->query($query);
-	if ($result->num_rows > 0) {
+	if($result->num_rows > 0){
 		$row = mysqli_fetch_array($result);
 		$userID = $row["id"];
-		$uRole = $row["role"];
-		SaveCookie();
-		
-		@$conn->query("UPDATE user SET uid='".$uID."', lastlogged='".date("Y-m-d h:i:s")."' WHERE phone='".$uPhone."'");
-		
+		SaveCookie($userID);
+		@$conn->query("UPDATE user SET uid='".$uid."', lastlogged='".date("Y-m-d h:i:s")."' WHERE phone='".$phone."'");
 		echo $_COOKIE["userID"];
 	}
 	else {
-		$query = "INSERT INTO user (uid, phone, role, status, signed, lastlogged) values ('".$uID."','".$uPhone."', 0, 1, '".date("Y-m-d")."','".date("Y-m-d h:i:s")."')";
+		$query = "INSERT INTO user (uid, phone, role, status, signed, lastlogged) values ('".$uid."','".$phone."', 0, 1, '".date("Y-m-d h:i:s")."','".date("Y-m-d h:i:s")."')";
 		$result = $conn->query($query);
 		if ($result) {
 			$userID = mysqli_insert_id($conn);
-			SaveCookie();
+			SaveCookie($userID);
 			echo $_COOKIE["userID"];
 		}
 		else {
-			echo "Fail";
+			echo "{'response':'fail'}";
 		}
 	}
 }
-else {
-	echo "Fail";
-}
 
-function SaveCookie(){
-	global $userID;
+function SaveCookie($userID){
 	$cookieTime = time() + (86400 * 30);	//30 day, 86400=1
 	setcookie("userID", $userID, $cookieTime, "/");
 }
-
-$conn->close();
 ?>

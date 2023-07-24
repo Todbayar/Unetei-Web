@@ -8,6 +8,7 @@ $domain_title = "Zarchi";
 $domain = "zarchi.mn";
 $contact_phone = "(+976)99213557";
 $superduperadmin = "+97699213557";
+$phone_validater_superduperadmin = "+97699213557";
 
 //files
 $path = "user_files";

@@ -10,7 +10,12 @@ if(isset($_POST["email"])){
 	$link = $url."/?emailverificationid=".$_COOKIE["userID"];
 	$body = "Сайн байна уу? Энэ өдрийн мэнд хүргье.<br/>";
 	$body .= "Та <a href='".$link."'>энд дарж<a> имэйлээ баталгаажуулна уу.";
-	sendEmailVerification($_POST["email"], "Имэйл баталгаажуулалт", $body, "CONSOLE");
+	if(sendEmailVerification($_POST["email"], "Имэйл баталгаажуулалт", $body)){
+		echo "OK";
+	}
+	else {
+		echo "FAIL";
+	}
 }
 
 if(isset($_POST["emailverificationid"])){

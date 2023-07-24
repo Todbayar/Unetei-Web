@@ -305,6 +305,7 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 		function verify_email(isValid){
 			if(isValid){
 				$.post("mysql_user_email_verification.php",{email:$(".popup.verify_email input#email").val()}).done(function(response){
+					console.log("<verify_email>:"+response);
 					if(response=="OK"){
 						confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Таны имэйлрүү <b>баталгаажуулах</b> линк илгээлээ, та имэйлээ шалгана уу!", null);
 						//console.log("Updated user email");

@@ -430,6 +430,7 @@ function showBigImage(type,id){
 }
 
 function showPhone(){
+	analytics.logEvent('phone_number_click');
 	if($("div[id='phoneFull']").css('display')=='none'){
 		$("div[id='phoneHidden']").hide();
 		$("div[id='phoneFull']").show();
