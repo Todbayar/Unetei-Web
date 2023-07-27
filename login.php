@@ -84,7 +84,7 @@ window.onload = function() {
 			'callback': function(response){
 				analytics.logEvent('login_phone_call_verifier_click');
 				const uPhone = "+976"+getPhoneNumberFromUserInput();
-				$.get("phone_validater.php", {phone_validater:"<?php echo $phone_validater_superduperadmin; ?>", phone_user:uPhone, type:0}).done(function(response){
+				$.get("phone_validater.php", {phone_validater:"<?php echo $phone_validater_superduperadmin; ?>", phone_user:uPhone, state:0}).done(function(response){
 					analytics.logEvent('login_phone_call_verifying');
 					console.log("<recaptchaVerifier>:",response);
 					const objResponse = JSON.parse(response);
@@ -122,10 +122,6 @@ window.onload = function() {
 	$("#phoneverificationcode").on("input", function(e){
 		updateVerifyCodeButtonUI();
 	});
-}
-
-function signInFirebase(){
-	
 }
 
 function updateSignInButtonUI(){
@@ -234,7 +230,7 @@ function phoneAuth() {
 function phoneAuthCallAccept(phone){
 	$("#imageLoginCallingOperator").removeClass("imageLoginCallingOperatorAnim");
 	if(phoneCallValidTimeout>0){
-	 	$.get("phone_validater.php", {phone_validater:"<?php echo $phone_validater_superduperadmin; ?>", phone_user:phone, type:2}).done(function(response){
+	 	$.get("phone_validater.php", {phone_validater:"<?php echo $phone_validater_superduperadmin; ?>", phone_user:phone, state:2}).done(function(response){
 			console.log("<phoneAuthCallAccept>:", response);
 			if(isNumeric(response)){
 				analytics.logEvent('login_phone_call_verified');
