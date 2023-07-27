@@ -14,7 +14,7 @@ function UserLogin($phone, $uid){
 		$userID = $row["id"];
 		SaveCookie($userID);
 		@$conn->query("UPDATE user SET uid='".$uid."', lastlogged='".date("Y-m-d h:i:s")."' WHERE phone='".$phone."'");
-		echo $_COOKIE["userID"];
+		echo $userID;
 	}
 	else {
 		$query = "INSERT INTO user (uid, phone, role, status, signed, lastlogged) values ('".$uid."','".$phone."', 0, 1, '".date("Y-m-d h:i:s")."','".date("Y-m-d h:i:s")."')";
@@ -22,10 +22,10 @@ function UserLogin($phone, $uid){
 		if ($result) {
 			$userID = mysqli_insert_id($conn);
 			SaveCookie($userID);
-			echo $_COOKIE["userID"];
+			echo $userID;
 		}
 		else {
-			echo "{'response':'fail'}";
+			echo '{"response":"fail"}';
 		}
 	}
 }

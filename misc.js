@@ -26,8 +26,12 @@ function pagenavigation(page, type){
 function logout(){
 	const reqLogout = new XMLHttpRequest();
 	reqLogout.onload = function() {
-		firebase.auth().signOut();
-		location.href = "./";
+		firebase.auth().signOut().then(()=>{
+			location.href = "./";
+		}).catch((error) => {
+			console.log("<logout>:",error);
+			location.href = "./";
+		});
 	};
 	reqLogout.open("POST", "logout.php", true);
 	reqLogout.send();

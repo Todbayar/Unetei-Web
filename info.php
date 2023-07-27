@@ -8,7 +8,7 @@ $domain_title = "Zarchi";
 $domain = "zarchi.mn";
 $contact_phone = "(+976)99213557";
 $superduperadmin = "+97699213557";
-$phone_validater_superduperadmin = "+97699213557";
+$phone_validater_superduperadmin = "+97695525128";
 
 //files
 $path = "user_files";
@@ -90,4 +90,9 @@ $protocol = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] != "off") ? "https" :
 
 define("COUNT_ITEM_IMAGES",20);
 define("COUNT_ITEM_VIDEOS",1);
+
+//AUTHENTICATION METHOD
+define("AUTH_FIREBASE",0);
+define("AUTH_CALL",1);
+$auth_method = AUTH_CALL;
 ?>
