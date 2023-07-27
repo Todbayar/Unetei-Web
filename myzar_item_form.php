@@ -268,13 +268,13 @@ $(document).ready(function(){
 						if(getUserRole($_COOKIE["userID"])>=3){
 							?>
 							<input id="myzar_item_isNewUser" type="checkbox" style="border: 2px solid #c1c1c1; width: 10px; height: 10px; border-radius: 5px; transform:scale(2); margin:5px"></input>
-							<label style="margin-left: 5px; font: normal 16px Arial">Өөр хүний нэр (шинэ хэрэглэгч/дагагч) дээр барааг нэмэх</label>
+							<label style="margin-left: 5px; font: normal 16px Arial">Өөр хүний нэр (шинэ хэрэглэгч/дагагч) дээр зарыг нэмэх</label>
 							<?php
 						}
 						else {
 							?>
 							<input id="myzar_item_isNewUser" type="checkbox" style="border: 2px solid #c1c1c1; width: 10px; height: 10px; border-radius: 5px; transform:scale(2); margin:5px" disabled></input>
-							<label style="margin-left: 5px; font: normal 16px Arial">Өөр хүний нэр (шинэ хэрэглэгч/дагагч) дээр барааг нэмэх <i onClick="javascript:confirmation_ok('Та энэ үйлдэлийг хийхийн тулд хэрэглэгчийн эрхээ дээшлүүлнэ үү. <b>Тохиргоо</b> хэсэгт хэрэглэгчийн эрхээ дээшлүүлэх тохиргоо байгаа. <small>(<?php echo $role_rank_superadmin.", ".$role_rank_admin; ?>)</small>')" class="fa-solid fa-circle-info" style="color: #FFA718; margin-left: 5px"></i></label>
+							<label style="margin-left: 5px; font: normal 16px Arial">Өөр хүний нэр (шинэ хэрэглэгч/дагагч) дээр зарыг нэмэх <i onClick="javascript:confirmation_ok('Та энэ үйлдэлийг хийхийн тулд хэрэглэгчийн эрхээ дээшлүүлнэ үү. <b>Тохиргоо</b> хэсэгт хэрэглэгчийн эрхээ дээшлүүлэх тохиргоо байгаа. <small>(<?php echo $role_rank_superadmin.", ".$role_rank_admin; ?>)</small>')" class="fa-solid fa-circle-info" style="color: #FFA718; margin-left: 5px"></i></label>
 							<?php
 						}
 						?>

@@ -23,8 +23,8 @@
 </style>
 
 <script>
-var intervalPhoneCallvalid;
-	
+var intervalPhoneCallvalid, phoneCallValidTimeout;
+
 window.onload = function() {
 	<?php
 	if($auth_method == AUTH_FIREBASE){
@@ -81,9 +81,11 @@ window.onload = function() {
 		?>
 		window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('loginButtonCall', {
 			'size': 'invisible',
-			'callback': function(response) {
+			'callback': function(response){
+				analytics.logEvent('login_phone_call_verifier_click');
 				const uPhone = "+976"+getPhoneNumberFromUserInput();
 				$.get("phone_validater.php", {phone_validater:"<?php echo $phone_validater_superduperadmin; ?>", phone_user:uPhone, type:0}).done(function(response){
+					analytics.logEvent('login_phone_call_verifying');
 					console.log("<recaptchaVerifier>:",response);
 					const objResponse = JSON.parse(response);
 					if(objResponse.response == "ok"){
@@ -91,7 +93,8 @@ window.onload = function() {
 						$("#phonecallverifier_container").show();
 						$("#phoneverifier_number").text(uPhone);
 						$("#imageLoginCallingOperator").addClass("imageLoginCallingOperatorAnim");
-						intervalPhoneCallvalid = setInterval(function(){phoneAuthCallAccept(uPhone);}, 3000);
+						phoneCallValidTimeout = 30;
+						intervalPhoneCallvalid = setInterval(function(){phoneAuthCallAccept(uPhone);}, 1500);
 					}
 					else {
 						$("#loginError").val("Та утасны дугаараа зөв оруулна уу!");
@@ -230,27 +233,42 @@ function phoneAuth() {
 
 function phoneAuthCallAccept(phone){
 	$("#imageLoginCallingOperator").removeClass("imageLoginCallingOperatorAnim");
-	$.get("phone_validater.php", {phone_validater:"<?php echo $phone_validater_superduperadmin; ?>", phone_user:phone, type:2}).done(function(response){
-		console.log("<phoneAuthCallAccept>:", response);
-		if(isNumeric(response)){
-		   	analytics.logEvent('login_phone_verified');
-			location.href = "./";
-	   	}
-		else {
-			const objResponse = JSON.parse(response);
-			if(objResponse.response=="waiting"){
-			   	$("#imageLoginCallingOperator").addClass("imageLoginCallingOperatorAnim");
-		   	}
-			else {
-				clearInterval(intervalPhoneCallvalid);
-				var eventLoginTryAgain = new CustomEvent("loginTryAgain");
-				window.addEventListener("loginTryAgain", function(){
-					pagenavigation('login');
-				});
-				confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Алдаа гарлаа та дахин оролдоно уу", eventLoginTryAgain);
+	if(phoneCallValidTimeout>0){
+	 	$.get("phone_validater.php", {phone_validater:"<?php echo $phone_validater_superduperadmin; ?>", phone_user:phone, type:2}).done(function(response){
+			console.log("<phoneAuthCallAccept>:", response);
+			if(isNumeric(response)){
+				analytics.logEvent('login_phone_call_verified');
+				location.href = "./";
 			}
-		}
-	});
+			else {
+				const objResponse = JSON.parse(response);
+				if(objResponse.response=="waiting"){
+					$("#imageLoginCallingOperator").addClass("imageLoginCallingOperatorAnim");
+				}
+				else {
+					analytics.logEvent('login_phone_call_verifying_failed');
+					clearInterval(intervalPhoneCallvalid);
+					var eventLoginTryAgain = new CustomEvent("loginTryAgain");
+					window.addEventListener("loginTryAgain", function(){
+						pagenavigation('login');
+					});
+					confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Алдаа гарлаа та дахин оролдоно уу", eventLoginTryAgain);
+				}
+			}
+		});
+    }
+	else {
+		analytics.logEvent('login_phone_call_verifying_failed');
+		clearInterval(intervalPhoneCallvalid);
+		var eventLoginTryAgain = new CustomEvent("loginTryAgain");
+		window.addEventListener("loginTryAgain", function(){
+			pagenavigation('login');
+		});
+		confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Алдаа гарлаа та дахин оролдоно уу", eventLoginTryAgain);
+	}
+	
+	$("#phonecallverifier_container #error").text("Та дуудлага хийнэ үү... ("+phoneCallValidTimeout+")");
+	phoneCallValidTimeout--;
 }
 	
 function isNumeric(value) {
@@ -312,6 +330,6 @@ function isNumeric(value) {
 	<div id="phonecallverifier_container" style="text-align: center; display: none">
 		<div style="margin-bottom: 10px"><i class="fa-solid fa-phone-volume" style="margin-right: 5px"></i>Та автомат баталгаажуулагч <?php echo substr($phone_validater_superduperadmin,0,4)."<b>".substr($phone_validater_superduperadmin,4)."</b>"; ?> дугаарлуу дуудлага хийж <b id="phoneverifier_number"></b> дугаараа баталгаажуулна уу?<br/> Автомат баталгаажуулагч дуудлага ирэнгүүт салгах болно.</div>
 		<img id="imageLoginCallingOperator" src="arduino.gif" width="100px" height="100px" style="object-fit: contain; border-radius: 100%" />
-		<div style="margin-top: 10px">Та дуудлага хийнэ үү...</div>
+		<div id="error" style="margin-top: 10px">Та дуудлага хийнэ үү...</div>
 	</div>
 </div>

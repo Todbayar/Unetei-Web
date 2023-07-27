@@ -31,10 +31,10 @@ $role_rank_manager = "Менежер";
 $role_rank_publisher = "Нийтлэгч";
 $role_rank_user = "Хэрэглэгч";
 
-$role_price_superadmin = 1000000;
-$role_price_admin = 300000;
-$role_price_manager = 100000;
-$role_price_publisher = 50000;
+$role_price_superadmin = 300000;
+$role_price_admin = 50000;
+$role_price_manager = 20000;
+$role_price_publisher = 10000;
 
 //category limit
 //-1 (not accepted), 0 (unlimited), 0<n (accepted but limited)
@@ -59,8 +59,8 @@ $item_regular_count_limit_publisher = 0;
 $item_vipspecial_count_limit_publisher = -1;
 
 //item publish option prices
-$item_publish_price_vip = number_format("20000");
-$item_publish_price_special = number_format("10000");
+$item_publish_price_vip = number_format("5000");
+$item_publish_price_special = number_format("3000");
 
 //item facebook boost request counts
 $item_boost_total = 10;

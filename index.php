@@ -569,10 +569,12 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 				<div style="margin: 10px">
 					<label for="searchOrder">Эрэбмэ:</label>
 					<select id="searchOrder" style="width: 180px; height: 30px; font: normal 15px Arial; border-radius: 10px">
-						<option value="0" selected>Огноогоор шинэ</option>
-						<option value="1">Огноогоор хуучин</option>
-						<option value="2">Хямд нь эхэндээ</option>
-						<option value="3">Үнэтэй нь эхэндээ</option>
+						<option value="0" selected>Эрэлтээр их</option>
+						<option value="1">Эрэлтээр бага</option>
+						<option value="2">Огноогоор шинэ</option>
+						<option value="3">Огноогоор хуучин</option>
+						<option value="4">Хямд нь эхэндээ</option>
+						<option value="5">Үнэтэй нь эхэндээ</option>
 					</select>
 				</div>
 				<?php
@@ -645,6 +647,7 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 						<option value="Хэнтий">Хэнтий</option>
 					</select>
 				</div>
+<!--
 				<div style="margin: 10px">
 					<label for="searchRate">Эрэлт:</label>
 					<select id="searchRate" style="width: 120px; height: 30px; font: normal 15px Arial; border-radius: 10px">
@@ -653,6 +656,7 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 						<option value="1">Бага</option>
 					</select>
 				</div>
+-->
 				<div style="display: flex; margin-top: 10px; justify-content: center">
 					<button onClick="javascript:document.getElementsByClassName('popup search')[0].style.display='none'; javascript:document.body.style.overflowY='auto'; fetchItems()" class="button_yellow">За</button>
 					<button onClick="clearSearch()" class="button_yellow" style="margin-left: 10px; background:rgb(240,85,87)">Арилгах</button>

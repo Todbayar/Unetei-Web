@@ -147,6 +147,21 @@ include_once "info.php";
 	height: 450px;
 	border-radius: 10px;
 }
+	
+/* For Mobile */
+@media screen and (max-width: 540px) {
+	.detailMain .left .images .big {
+		height: 300px;
+	}
+
+	.detailMain .left .images .big img {
+		height: 300px;
+	}
+
+	.detailMain .left .images .big video {
+		height: 300px;
+	}
+}
 
 .detailMain .left .images .thumbnails {
 	margin-top: 5px;
@@ -393,7 +408,7 @@ $(document).ready(function() {
 	<?php
 	if(isset($_COOKIE["userID"])){
 		?>
-		$("#myzar_phone").text(<?php echo getPhone($_COOKIE["userID"]); ?>);
+		$("#myzar_phone").text("<?php echo getPhone($_COOKIE["userID"]); ?>");
 		$("#myzar_nav").text("Миний зар");
 		$("#myzar_button").attr("onclick","pagenavigation('myzar')");
 		$("#logoutButton").css("display", "flex");
@@ -502,7 +517,7 @@ function toggleFavorite(isFav, id){
 	if(isset($queryURL["page"]) && str_contains($queryURL["page"],"detail")){
 		$detailID = $queryURL["id"];
 		$queryFav = isset($_COOKIE["userID"])?"(SELECT IF(COUNT(*)>0, 1, 0) FROM favorite WHERE itemID=item.id AND userID=".$_COOKIE["userID"].") AS isFavorite,":"";
-		$query = "SELECT *, ".$queryFav." item.phone AS item_phone FROM item RIGHT JOIN user ON user.id=item.userID WHERE item.id=".$detailID;
+		$query = "SELECT *, ".$queryFav." item.phone AS item_phone, item.id AS itemNumber FROM item RIGHT JOIN user ON user.id=item.userID WHERE item.id=".$detailID;
 		$result = $conn->query($query);
 		$row = mysqli_fetch_array($result);
 
@@ -571,7 +586,7 @@ function toggleFavorite(isFav, id){
 				<div><?php echo $row["city"]; ?></div>
 				<div class="data1" style="margin-top: 5px; display: flex">
 					<div>Нийтэлсэн: <?php echo $row["datetime"]; ?></div>
-					<div style="color: #a4a4a4; margin-left: 10px">Зарын дугаар: #<?php echo $row["id"]; ?></div>
+					<div style="color: #a4a4a4; margin-left: 10px">Зарын дугаар: #<?php echo $row["itemNumber"]; ?></div>
 				</div>
 				<div class="data2" style="margin-top: 5px; display: flex; color: #a4a4a4">
 					<div>Үзсэн: <i class="fa-solid fa-eye"></i> <?php echo $row["item_viewer"]; ?> <i class="fa-solid fa-phone"></i> <?php echo $row["phone_viewer"]; ?>,</div>
@@ -766,7 +781,7 @@ function toggleFavorite(isFav, id){
 							}
 							else if($rowOthers["video"]!=""){
 								?>
-								<video controls=\"controls\" preload=\"metadata\" style=\"border-radius: 5px\"><source src="<?php echo $path."/".$rowOthers["video"]; ?>"#t=0.5" type="<?php echo findTypeOfVideo($rowOthers["video"]); ?>"></video>
+								<video controls="controls" preload="metadata" style="border-radius: 5px"><source src="../<?php echo $path."/".$rowOthers["video"]; ?>#t=0.5" type="<?php echo findTypeOfVideo($rowOthers["video"]); ?>"></video>
 								<?php
 							}
 							?>
@@ -797,7 +812,7 @@ function toggleFavorite(isFav, id){
 					<?php
 					if(isset($_COOKIE["userID"])){
 						?>
-						<div onClick="startChat(<?php echo $row["userID"]; ?>,'<?php echo $message; ?>')" class="button_yellow chatlah" style="margin-top: 10px; background: #e60803">
+						<div onClick="startChat(<?php echo $row["userID"]; ?>,'<?php echo $message; ?>')" class="button_yellow chatlah" style="margin-top: 10px; margin-bottom: 10px; background: #e60803">
 							<i class="fa-solid fa-comments"></i>
 							<div style="margin-left: 10px">Чатлах</div>
 						</div>
@@ -805,7 +820,7 @@ function toggleFavorite(isFav, id){
 					}
 					else {
 						?>
-						<div onClick="pagenavigation('login')" class="button_yellow chatlah" style="margin-top: 10px; background: #e60803">
+						<div onClick="pagenavigation('login')" class="button_yellow chatlah" style="margin-top: 10px; margin-bottom: 10px; background: #e60803">
 							<i class="fa-solid fa-comments"></i>
 							<div style="margin-left: 10px">Чатлах</div>
 						</div>

@@ -37,15 +37,21 @@ if(isset($_POST["category"]) && $_POST["category"] != ""){
 if(isset($_POST["order"]) && $_POST["order"] != ""){
 	switch($_POST["order"]){
 		case 0:
-			$order .= " ORDER BY datetime DESC";
+			$order .= " ORDER BY ((item_viewer+phone_viewer)/2) DESC";
 			break;
 		case 1:
-			$order .= " ORDER BY datetime ASC";
+			$order .= " ORDER BY ((item_viewer+phone_viewer)/2) ASC";
 			break;
 		case 2:
-			$order .= " ORDER BY price ASC";
+			$order .= " ORDER BY datetime DESC";
 			break;
 		case 3:
+			$order .= " ORDER BY datetime ASC";
+			break;
+		case 4:
+			$order .= " ORDER BY price ASC";
+			break;
+		case 5:
 			$order .= " ORDER BY price DESC";
 			break;
 	}
@@ -62,16 +68,16 @@ if(isset($_POST["quality"]) && $_POST["quality"] != ""){
 	}
 }
 
-if(isset($_POST["rate"]) && $_POST["rate"] != ""){
-	if($_POST["rate"] == 0){
-		if($order!="") $order .= ",((item_viewer+phone_viewer)/2) DESC";
-		else $order = "ORDER BY ((item_viewer+phone_viewer)/2) DESC";
-	}
-	else if($_POST["rate"] == 1){
-		if($order!="") $order .= ",((item_viewer+phone_viewer)/2) ASC";
-		else $order = "ORDER BY ((item_viewer+phone_viewer)/2) ASC";
-	}
-}
+//if(isset($_POST["rate"]) && $_POST["rate"] != ""){
+//	if($_POST["rate"] == 0){
+//		if($order!="") $order .= ",((item_viewer+phone_viewer)/2) DESC";
+//		else $order = "ORDER BY ((item_viewer+phone_viewer)/2) DESC";
+//	}
+//	else if($_POST["rate"] == 1){
+//		if($order!="") $order .= ",((item_viewer+phone_viewer)/2) ASC";
+//		else $order = "ORDER BY ((item_viewer+phone_viewer)/2) ASC";
+//	}
+//}
 
 if(isset($_POST["type"])){
 	switch($_POST["type"]){
