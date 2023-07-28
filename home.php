@@ -70,8 +70,14 @@ include_once "info.php";
 }
 
 .searchResult .list {
-	float: left;
-	width: 100%;
+	column-count: 4;
+}
+	
+@media screen and (max-width: 540px) {
+	.searchResult .list {
+		column-count: 2;
+		column-gap:5px;
+	}	
 }
 
 .searchResult .list .item {
@@ -79,9 +85,25 @@ include_once "info.php";
 	margin-right: 5px;
 	margin-top: 5px;
 	margin-bottom: 10px;
+	cursor: pointer;
 	display: inline-block;
 	vertical-align: top;
-	cursor: pointer;
+}
+
+/* For Mobile */
+@media screen and (max-width: 540px) {
+	.searchResult .list .item {
+		width: 170px;
+		height: 220px;
+	}
+}
+
+/* For Tablets and Desktop */
+@media screen and (min-width: 540px) {
+	.searchResult .list .item {
+		width: 225px;
+		height: 249px;
+	}
 }
 	
 .searchResult .list .item .badge_vip {
@@ -153,10 +175,21 @@ include_once "info.php";
 
 .searchResult .list .item .image {
 	width: 100%;
-	height: 152px;
-	background: #f3f3f3;
-	border-radius: 10px;
 	position: relative;
+}
+	
+/* For Mobile */
+@media screen and (max-width: 540px) {
+	.searchResult .list .item .image {
+		height: 145px;
+	}
+}
+
+/* For Tablets and Desktop */
+@media screen and (min-width: 540px) {
+	.searchResult .list .item .image {
+		height: 173px;
+	}
 }
 	
 .searchResult .list .item .image img {
@@ -176,20 +209,6 @@ include_once "info.php";
 	width: 100%;
 	height: 100%;
 	border-radius: 10px;
-}
-
-/* For Mobile */
-@media screen and (max-width: 540px) {
-	.searchResult .list .item {
-		width: 165px;
-	}
-}
-
-/* For Tablets and Desktop */
-@media screen and (min-width: 540px) {
-	.searchResult .list .item {
-		width: 190px;	
-	}
 }
 	
 .searchResult .list .item .image .count {
@@ -241,8 +260,8 @@ include_once "info.php";
 */
 	overflow: hidden;
 	display: -webkit-box;
-	-webkit-line-clamp: 3; /* number of lines to show */
-		   line-clamp: 3; 
+	-webkit-line-clamp: 2; /* number of lines to show */
+		   line-clamp: 2; 
 	-webkit-box-orient: vertical;
 }
 
@@ -537,13 +556,13 @@ function fetchItems(){
 				var media = "";
 				if(vObj.data[i].image != null){
 					if(vObj.data[i].status == 2){
-						media = "<div class=\"image\"><div class=\"badge_vip\" data-top=\"VIP\"></div><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i>"+star+"<img src=\"<?php echo $path."/"; ?>"+vObj.data[i].image+"\" onerror=\"this.onerror=null; this.src='image-solid.svg '\" /></div>";
+						media = "<div class=\"image\"><div class=\"badge_vip\" data-top=\"VIP\"></div><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i>"+star+"<img src=\"<?php echo $path."/"; ?>"+vObj.data[i].image+"\" onerror=\"this.onerror=null; this.src='notfound.png'\" /></div>";
 					}
 					else if(vObj.data[i].status == 1){
-						media = "<div class=\"image\"><div class=\"badge_special\" data-top=\"Онцгой\"></div><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i>"+star+"<img src=\"<?php echo $path."/"; ?>"+vObj.data[i].image+"\" onerror=\"this.onerror=null; this.src='image-solid.svg '\" /></div>";
+						media = "<div class=\"image\"><div class=\"badge_special\" data-top=\"Онцгой\"></div><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i>"+star+"<img src=\"<?php echo $path."/"; ?>"+vObj.data[i].image+"\" onerror=\"this.onerror=null; this.src='notfound.png'\" /></div>";
 					}
 					else if(vObj.data[i].status == 0){
-						media = "<div class=\"image\"><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i>"+star+"<img src=\"<?php echo $path."/"; ?>"+vObj.data[i].image+"\" onerror=\"this.onerror=null; this.src='image-solid.svg '\" /></div>";
+						media = "<div class=\"image\"><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i>"+star+"<img src=\"<?php echo $path."/"; ?>"+vObj.data[i].image+"\" onerror=\"this.onerror=null; this.src='notfound.png'\" /></div>";
 					}
 				}
 				else if(vObj.data[i].youtube != ""){
@@ -559,24 +578,24 @@ function fetchItems(){
 				}
 				else if(vObj.data[i].video != ""){
 					if(vObj.data[i].status == 2){
-						media = "<div class=\"image\"><div class=\"badge_vip\" data-top=\"VIP\"></div>"+star+"<video controls=\"controls\" preload=\"metadata\" style=\"border-radius: 5px\"><source src=\"<?php echo $path."/"; ?>"+vObj.data[i].video+"#t=0.5\" type=\""+findTypeOfVideo(vObj.data[i].video)+"\"></video></div>";
+						media = "<div class=\"image\"><div class=\"badge_vip\" data-top=\"VIP\"></div>"+star+"<video controls=\"controls\" preload=\"metadata\"><source src=\"<?php echo $path."/"; ?>"+vObj.data[i].video+"#t=0.5\" type=\""+findTypeOfVideo(vObj.data[i].video)+"\"></video></div>";
 					}
 					else if(vObj.data[i].status == 1){
-						media = "<div class=\"image\"><div class=\"badge_special\" data-top=\"Онцгой\"></div>"+star+"<video controls=\"controls\" preload=\"metadata\" style=\"border-radius: 5px\"><source src=\"<?php echo $path."/"; ?>"+vObj.data[i].video+"#t=0.5\" type=\""+findTypeOfVideo(vObj.data[i].video)+"\"></video></div>";
+						media = "<div class=\"image\"><div class=\"badge_special\" data-top=\"Онцгой\"></div>"+star+"<video controls=\"controls\" preload=\"metadata\"><source src=\"<?php echo $path."/"; ?>"+vObj.data[i].video+"#t=0.5\" type=\""+findTypeOfVideo(vObj.data[i].video)+"\"></video></div>";
 					}
 					else if(vObj.data[i].status == 0){
-						media = "<div class=\"image\">"+star+"<video controls=\"controls\" preload=\"metadata\" style=\"border-radius: 5px\"><source src=\"<?php echo $path."/"; ?>"+vObj.data[i].video+"#t=0.5\" type=\""+findTypeOfVideo(vObj.data[i].video)+"\"></video></div>";
+						media = "<div class=\"image\">"+star+"<video controls=\"controls\" preload=\"metadata\"><source src=\"<?php echo $path."/"; ?>"+vObj.data[i].video+"#t=0.5\" type=\""+findTypeOfVideo(vObj.data[i].video)+"\"></video></div>";
 					}
 				}
 				else {
 					if(vObj.data[i].status == 2){
-						media = "<div class=\"image\"><div class=\"badge_vip\" data-top=\"VIP\"></div><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i>"+star+"<img src=\"notfound.png\" onerror=\"this.onerror=null; this.src='image-solid.svg '\" /></div>";
+						media = "<div class=\"image\"><div class=\"badge_vip\" data-top=\"VIP\"></div><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i>"+star+"<img src=\"notfound.png\" onerror=\"this.onerror=null; this.src='image-solid.svg'\" /></div>";
 					}
 					else if(vObj.data[i].status == 1){
-						media = "<div class=\"image\"><div class=\"badge_special\" data-top=\"Онцгой\"></div><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i>"+star+"<img src=\"notfound.png\" onerror=\"this.onerror=null; this.src='image-solid.svg '\" /></div>";
+						media = "<div class=\"image\"><div class=\"badge_special\" data-top=\"Онцгой\"></div><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i>"+star+"<img src=\"notfound.png\" onerror=\"this.onerror=null; this.src='image-solid.svg'\" /></div>";
 					}
 					else if(vObj.data[i].status == 0){
-						media = "<div class=\"image\"><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i>"+star+"<img src=\"notfound.png\" onerror=\"this.onerror=null; this.src='image-solid.svg '\" /></div>";
+						media = "<div class=\"image\"><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i>"+star+"<img src=\"notfound.png\" onerror=\"this.onerror=null; this.src='image-solid.svg'\" /></div>";
 					}
 				}
 				var html = "<div id=\""+vObj.data[i].id+"\" class=\"item\">"+media+"<div><div class=\"price\">"+(vObj.data[i].price!=0?(convertPriceToTextJS(vObj.data[i].price)+" ₮"):"")+"</div><div class=\"title\">"+vObj.data[i].title+"</div></div></div>";
