@@ -423,13 +423,14 @@ function recursiveFetchCategory(tableID, parentID, title, icon){
 				   	html += " onClick=\"recursiveFetchCategory("+(tableID+1)+","+objCategoryList[i].id+",'"+objCategoryList[i].title+"','"+objCategoryList[i].icon+"')\"";
 				   	html += " class=\"button_yellow\" style=\"float:left; margin:5px; height:18px; background: #f3f3f3\">";
 				   	if(objCategoryList[i].icon != null){
-						var img = new Image();
-						img.progressload("./<?php echo $path; ?>/"+objCategoryList[i].icon, function (percent) {
-//							console.log("<download>:"+objCategoryList[i].icon+" ("+Math.round(percent)+"/100%)")
-						}, function (image) {
-							$("#categoryImage"+objCategoryList[i].id).attr("src", image);
-						});
-						html += "<img id=\"categoryImage"+objCategoryList[i].id+"\" src=\"Loading.gif\" width=\"32px\" height=\"32px\">";
+//						var img = new Image();
+//						img.progressload("./<?php echo $path; ?>/"+objCategoryList[i].icon, function (percent) {
+////							console.log("<download>:"+objCategoryList[i].icon+" ("+Math.round(percent)+"/100%)")
+//						}, function (image) {
+//							$("#categoryImage"+objCategoryList[i].id).attr("src", image);
+//						});
+//						html += "<img id=\"categoryImage"+objCategoryList[i].id+"\" src=\"Loading.gif\" width=\"32px\" height=\"32px\">";
+						html += "<img id=\"categoryImage"+objCategoryList[i].id+"\" src=\"<?php echo $path."/"; ?>"+objCategoryList[i].icon+"\" width=\"32px\" height=\"32px\">";
 					}
 				   	html += "<div style=\"margin-left: 5px\">"+objCategoryList[i].title+"</div></div>";
 				   	$(".searchCategoryListAvailable").append(html);

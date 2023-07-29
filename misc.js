@@ -274,7 +274,6 @@ function findTypeOfVideo(name){
 
 function convertPriceToTextJS(number){
 	var vNumber = parseFloat(number).toLocaleString("en-US").toString().split(",");
-	console.log("<convertPriceToTextJS>:"+parseInt(vNumber[0])+", "+parseInt(vNumber[1])+", "+vNumber[1]);
 	switch(vNumber.length-1){
 		case 4:
 			return vNumber[0]+(parseInt(vNumber[1].substr(0,1))!=0?("."+vNumber[1].substr(0,1)):"")+" ихнаяд";

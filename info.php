@@ -32,9 +32,9 @@ $role_rank_publisher = "Нийтлэгч";
 $role_rank_user = "Хэрэглэгч";
 
 $role_price_superadmin = 300000;
-$role_price_admin = 50000;
-$role_price_manager = 20000;
-$role_price_publisher = 10000;
+$role_price_admin = 150000;
+$role_price_manager = 50000;
+$role_price_publisher = 20000;
 
 //category limit
 //-1 (not accepted), 0 (unlimited), 0<n (accepted but limited)

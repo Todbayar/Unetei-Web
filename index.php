@@ -90,6 +90,9 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 		<link rel="stylesheet" href="<?php echo  str_contains($_SERVER['REQUEST_URI'],"detail")?"../":""; ?>animation.css">
 		<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
 		
+		<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1072207883073754" crossorigin="anonymous"></script>
+		<script async src="https://fundingchoicesmessages.google.com/i/pub-1072207883073754?ers=1" nonce="PO6kR1zJogD8YhBe921qUQ"></script><script nonce="PO6kR1zJogD8YhBe921qUQ">(function() {function signalGooglefcPresent() {if (!window.frames['googlefcPresent']) {if (document.body) {const iframe = document.createElement('iframe'); iframe.style = 'width: 0; height: 0; border: none; z-index: -1000; left: -1000px; top: -1000px;'; iframe.style.display = 'none'; iframe.name = 'googlefcPresent'; document.body.appendChild(iframe);} else {setTimeout(signalGooglefcPresent, 0);}}}signalGooglefcPresent();})();</script>
+		
 		<script>
 		const firebaseConfig = {
 			apiKey: "AIzaSyAJxCfAZKgG4vy_nd6UVX3UKhZAF0iyKl4",
