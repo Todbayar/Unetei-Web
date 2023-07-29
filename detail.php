@@ -458,6 +458,9 @@ function incrementRate(type){
 }
 
 function startChat(toID, message){
+	message = message.replaceAll(" &&& ", "<i class=\"fas fa-angle-right\" style=\"font-size:10px; margin-left:2px; margin-right:2px\"></i>");
+	message = message.replaceAll(" ^^^ ", "<div style=\"font-size:12px; color:gray; margin-top:2px\">");
+	message = message.replaceAll(" ^^ ", "</div>");
 	var chatSubmitData = new FormData();
 	chatSubmitData.append("fromID", <?php echo isset($_COOKIE["userID"])?$_COOKIE["userID"]:0; ?>);
 	chatSubmitData.append("toID", toID);
@@ -608,7 +611,9 @@ function toggleFavorite(isFav, id){
 						<?php
 						$message = $row["title"]." (#".$row["id"].")<br/>";
 						$message .= convertPriceToText($row["price"])." ₮<br/>";
-						$message .= implode(" > ", $arrCategories["text"]);
+						$message .= " ^^^ ";
+						$message .= implode(" &&& ", $arrCategories["text"]);
+						$message .= " ^^ ";
 						if(isset($_COOKIE["userID"])){
 							?>
 							<div onClick="startChat(<?php echo $row["userID"]; ?>,'<?php echo $message; ?>')" class="button_yellow chatlah" style="margin-top: 10px; background: #e60803">
@@ -716,7 +721,7 @@ function toggleFavorite(isFav, id){
 							$descSplitWord .= $desciption[$i]." ";
 						}
 					}
-					echo $descSplitWord;
+					echo str_replace("\r\n","<br/>",$descSplitWord);
 				?>
 				</div>
 				<?php

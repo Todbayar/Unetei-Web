@@ -286,7 +286,6 @@ function chat_list_item(chatID, sender, body, datetime, isEdit, note, isBoost){
 }
 
 function chat_list_message(sender, body, datetime){
-	body = body.replaceAll(">", "<i class=\"fas fa-angle-right\" style=\"font-size:10px; margin-left:2px; margin-right:2px\"></i>");
 	if(sender.id == <?php echo $_COOKIE["userID"]; ?>){
 		$(".chat .right .top").append("<div class=\"message me\"><div class=\"container\"><div class=\"text\">"+body+"</div><div class=\"datetime\">"+datetime+"</div></div>"+chat_profile_image_show(sender.image)+"</div>");
 	}

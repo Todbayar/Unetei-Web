@@ -274,15 +274,16 @@ function findTypeOfVideo(name){
 
 function convertPriceToTextJS(number){
 	var vNumber = parseFloat(number).toLocaleString("en-US").toString().split(",");
+	console.log("<convertPriceToTextJS>:"+parseInt(vNumber[0])+", "+parseInt(vNumber[1])+", "+vNumber[1]);
 	switch(vNumber.length-1){
 		case 4:
-			return vNumber[0]+" ихнаяд";
+			return vNumber[0]+(parseInt(vNumber[1].substr(0,1))!=0?("."+vNumber[1].substr(0,1)):"")+" ихнаяд";
 		case 3:
-			return vNumber[0]+" тэрбум";
+			return vNumber[0]+(parseInt(vNumber[1].substr(0,1))!=0?("."+vNumber[1].substr(0,1)):"")+" тэрбум";
 		case 2:
-			return vNumber[0]+" сая";
+			return vNumber[0]+(parseInt(vNumber[1].substr(0,1))!=0?("."+vNumber[1].substr(0,1)):"")+" сая";
 		case 1:
-			return vNumber[0]+",000";
+			return vNumber[0]+","+vNumber[1];
 		case 0:
 			return parseFloat(number).toLocaleString("en-US");
 	}

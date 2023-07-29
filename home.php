@@ -57,7 +57,8 @@ include_once "info.php";
 .searchResult .type {
 	font: bold 20px Arial;
 	padding-left: 5px;
-	margin-bottom: 5px;
+	margin-bottom: 10px;
+	margin-top: 10px;
 	display: flex;
 }
 	
@@ -71,37 +72,38 @@ include_once "info.php";
 
 .searchResult .list {
 	column-count: 4;
+	column-gap:12px;
+	margin-left: 5px;
+	margin-right: 5px;
 }
 	
 @media screen and (max-width: 540px) {
 	.searchResult .list {
 		column-count: 2;
-		column-gap:5px;
 	}	
 }
 
 .searchResult .list .item {
-	margin-left: 5px;
-	margin-right: 5px;
-	margin-top: 5px;
-	margin-bottom: 10px;
 	cursor: pointer;
 	display: inline-block;
 	vertical-align: top;
+	margin-bottom: 10px;
+	margin-top: 5px;
 }
 
 /* For Mobile */
 @media screen and (max-width: 540px) {
 	.searchResult .list .item {
-		width: 170px;
+		width: 100%;
 		height: 220px;
+		
 	}
 }
 
 /* For Tablets and Desktop */
 @media screen and (min-width: 540px) {
 	.searchResult .list .item {
-		width: 225px;
+		width: 100%;
 		height: 249px;
 	}
 }

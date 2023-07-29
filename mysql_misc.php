@@ -117,13 +117,13 @@ function convertPriceToText($price){
 	$digits = explode(',', number_format($price));
 	switch(count($digits)-1){
 		case 4:
-			return $digits[0]." ихнаяд";
+			return $digits[0].(substr($digits[1],0,1)!=0?".".substr($digits[1],0,1):"")." ихнаяд";
 		case 3:
-			return $digits[0]." тэрбум";
+			return $digits[0].(substr($digits[1],0,1)!=0?".".substr($digits[1],0,1):"")." тэрбум";
 		case 2:
-			return $digits[0]." сая";
+			return $digits[0].(substr($digits[1],0,1)!=0?".".substr($digits[1],0,1):"")." сая";
 		case 1:
-			return $digits[0].",000";
+			return $digits[0].",".$digits[1];
 		case 0:
 			return number_format($price);
 		default:
