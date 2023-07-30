@@ -5,11 +5,25 @@ include_once "info.php";
 include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expired item
 ?>
 <!doctype html>
-<html>
+<html lang="en-US">
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="Permissions-Policy" content="interest-cohort=()">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+		
+		<script type="text/javascript">
+		function googleTranslateElementInit() {
+			console.log("<timezone>:"+Intl.DateTimeFormat().resolvedOptions().timeZone);
+			if(Intl.DateTimeFormat().resolvedOptions().timeZone!="Asia/Ulaanbaatar"){
+				new google.translate.TranslateElement(
+					{pageLanguage: 'mn'},
+					'google_translate_element'
+				);
+				$($('span:contains("Select Language")')[1]).html('English');
+			}
+		}
+		</script>
 		
 		<?php
 		//OPEN GRAPH FOR SHARING WEB
@@ -91,7 +105,7 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 		<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
 		
 		<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1072207883073754" crossorigin="anonymous"></script>
-		<script async src="https://fundingchoicesmessages.google.com/i/pub-1072207883073754?ers=1" nonce="PO6kR1zJogD8YhBe921qUQ"></script><script nonce="PO6kR1zJogD8YhBe921qUQ">(function() {function signalGooglefcPresent() {if (!window.frames['googlefcPresent']) {if (document.body) {const iframe = document.createElement('iframe'); iframe.style = 'width: 0; height: 0; border: none; z-index: -1000; left: -1000px; top: -1000px;'; iframe.style.display = 'none'; iframe.name = 'googlefcPresent'; document.body.appendChild(iframe);} else {setTimeout(signalGooglefcPresent, 0);}}}signalGooglefcPresent();})();</script>
+		<script async src="https://fundingchoicesmessages.google.com/i/pub-1072207883073754?ers=1" nonce="PO6kR1zJogD8YhBe921qUQ"></script><script nonce="PO6kR1zJogD8YhBe921qUQ">(function(){function signalGooglefcPresent() {if (!window.frames['googlefcPresent']) {if (document.body) {const iframe = document.createElement('iframe'); iframe.style = 'width: 0; height: 0; border: none; z-index: -1000; left: -1000px; top: -1000px;'; iframe.style.display = 'none'; iframe.name = 'googlefcPresent'; document.body.appendChild(iframe);} else {setTimeout(signalGooglefcPresent, 0);}}}signalGooglefcPresent();})();</script>
 		
 		<script>
 		const firebaseConfig = {
@@ -328,9 +342,25 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 			}
 		}
 		</script>
+		
+		<style>
+			#google_translate_element {
+				display: none;
+			}
+			.goog-te-gadget img{
+				display:none !important;
+			}
+			body > .skiptranslate {
+				display: none;
+			}
+			body {
+				top: 0px !important;
+			}
+		</style>
 	</head>
 	
 	<body>
+		<div id="google_translate_element"></div>
 		<div class="topbar">
 			<div class="wrap">
 			<?php include "topbar.php"; ?>
