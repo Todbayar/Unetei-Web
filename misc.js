@@ -301,3 +301,10 @@ function toggleFavorite(isFav, id){
 	}
 	$.post("mysql_item_toggle_favorite.php", {id:id});
 }
+
+function copyToClipboardBankAccountNumber(){
+	$(".popup.billing #copyToClipboard").css("color","#FFA718");
+	var copyText = document.getElementById("account");
+	console.log("<copyToClipboardBankAccountNumber>:"+copyText.text);
+	navigator.clipboard.writeText(copyText.text);
+}

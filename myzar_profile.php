@@ -1,5 +1,6 @@
 <?php
 include "mysql_config.php";
+include_once "mysql_misc.php";
 include_once "info.php";
 ?>
 
@@ -320,7 +321,7 @@ $(document).ready(function(){
 		</div>
 		<div class="divcontainer">
 			<div>Имейл:</div>
-			<div style="color: #42c200; font-size: 14px">Та имэйлээ доор бичсэнээр мэдэгдэл хүлээн авах боломжтой болно</div>
+			<div style="color: #9F9F9F; font-size: 14px">Та имэйлээ доор бичсэнээр мэдэгдэл хүлээн авах боломжтой болно</div>
 			<input id="email" class="email" type="email" maxlength="128" value="<?php echo $row["email"]; ?>">
 			<div id="email_error" style="color: red; margin-top: 5px; font-size: 14px; display: none">Имейл буруу байна!</div>
 		</div>
@@ -377,8 +378,10 @@ $(document).ready(function(){
 		</div>
 		<hr/>
 		<div class="divcontainer" style="width: 100%; display: flex; align-items: center">
-			<div style="margin-right: 5px">Дагагч болох</div>
-			<i id="buttonUpgradeUserRole" class="fa-solid fa-plus" style="float: left; font-size: 14px; background: #FFA718; border-radius: 100%; padding: 5px; cursor: pointer"></i>
+			<div class="button_yellow" id="buttonUpgradeUserRole" style="height: 10px; width: 136px">
+				<div style="margin-left: 5px; font-size: 16px">Дагагч болох</div>
+				<i class="fa-solid fa-user-plus" style="font-size: 16px; margin-left: 8px"></i>
+			</div>
 		</div>
 		<div class="divcontainer">
 			<div>Таны хэрэглэгчийн эрх мэдэл:
@@ -403,21 +406,31 @@ $(document).ready(function(){
 			?>
 			</div>
 		</div>
-		<div class="divcontainer" style="color: #42c200; font-size: 14px">
+		<div class="divcontainer" style="color: #9F9F9F; font-size: 14px">
 			<div>Таньд <?php echo $domain; ?>-ыг санал болгосон хүний утасны дугаар. Хоосон тохиолдолд сүпер дүпер админы дагагч болохыг анхаарна уу.</div>
 		</div>
-		<div class="divcontainer" style="width: 60%">
+		<div class="divcontainer" style="width: 60%; margin-bottom: 20px">
 			<div>Утасны дугаар:</div>
 			<div style="display: flex; align-items: center">
 				<label for="affiliate_number" style="margin-right: 5px">+976</label>
 				<input id="affiliate_number" type="number" maxlength="200" value="<?php echo substr($row["affiliate"],4); ?>" />
 			</div>
 		</div>
-		<div class="divcontainer" style="color: #42c200; font-size: 14px">
-			<div>Орлого хүлээн авах таны банкны дансны дугаар</div>
+		<hr>
+		<div class="divcontainer" style="display: flex; align-items: center">
+			<img src="income_bw.png" width="30px" height="30px" style="margin-right: 5px" />
+			Орлого авах
+			<?php
+			if(getUserRole($_COOKIE["userID"])<2){
+			?>
+			<i onclick="javascript:confirmation_ok('Та энэ үйлдэлийг хийхийн тулд хэрэглэгчийн эрхээ дээшлүүлнэ үү. <b>Дагагч болох</b> дээр дарж үзнэ үү!')" class="fa-solid fa-circle-info" style="color: #FFA718; margin-left: 5px; cursor: pointer"></i>
+			<?php
+			}
+			?>
 		</div>
 		<div class="divcontainer">
-			<div>Банкны нэр:</div>	
+			<div>Банкны нэр:</div>
+			<div style="color:#9F9F9F; font-size: 14px; margin-top: 2px; margin-bottom: 2px">Орлого хүлээн авах таны банкны дансны дугаар</div>
 			<select id="bank_name" style="width: 60%; height: 35px; font: normal 16px Arial; border-radius: 10px; margin-top: 5px" onchange="javascript:selectBank(this.value, true)">
 				<option value="" disabled selected>Сонгох</option>
 				<option value="Худалдаа хөгжлийн банк">Худалдаа хөгжлийн банк</option>
@@ -449,8 +462,12 @@ $(document).ready(function(){
 		}
 		?>
 		<div class="divcontainer qrcode">
-			<div>Socialpay QRCode:</div>
-			<div style="color: #42c200; font-size: 14px">Голомт банкны Socialpay аппнаас өөрийнхөө дансны QRCode-ийг скрийншот хийгээд тайрч энэ хэсэгт оруулах.</div>
+			<div style="display: flex; align-items: center">
+				<img src="socialpay.png" width="40px" height="40px" style="margin-right: 5px" />Socialpay QRCode:
+			</div>
+			<div style="color:#9F9F9F; font-size: 14px">
+				Голомт банкны Socialpay аппнаас өөрийнхөө дансны QRCode-ийг скрийншот хийгээд тайрч энэ хэсэгт оруулсанаар орлого хүлээн авах боломжтой болно.
+			</div>
 			<div style="width: 200px; height: 200px; margin-left: auto; margin-right: auto">
 				<?php
 				if($row["socialpay"] != ""){

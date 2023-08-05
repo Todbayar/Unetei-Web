@@ -355,10 +355,10 @@ function sendEmail($emailReceiver, $emailSender, $nameReceiver, $nameSender, $ph
 		
 		$fromMsg = "";
 		if($nameSender!="" && $emailSender!="" && $nameReceiver!="" && $emailReceiver!=""){
-			$fromMsg = $nameReceiver." таньд <a href='".$url."'>".$domain."</a>-ны хэрэглэгч ".$nameSender."-ээс мэдэгдэл ирлээ.<br/>";
+			$fromMsg = $nameReceiver." таньд <a href='".$url."'>".$domain."</a>-ны хэрэглэгч ".$nameSender."-ээс мэдэгдэл ирлээ.<br/><br/>";
 		}
 		else {
-			$fromMsg = $phoneReceiver." дугаартай хэрэглэгч таньд <a href='".$url."'>".$domain."</a>-ны хэрэглэгч (".$phoneSender.")-ээс мэдэгдэл ирлээ.<br/>";
+			$fromMsg = $phoneReceiver." дугаартай хэрэглэгч таньд <a href='".$url."'>".$domain."</a>-ны хэрэглэгч (".$phoneSender.")-ээс мэдэгдэл ирлээ.<br/><br/>";
 		}
 		
 		$bodyFooter = "<br/>Та <a href='".$url."'>".$domain."</a>-руу орж чат хэсгээс мэдэгдлийн талаар илүү дэлгэрэнгүйг харна уу.";

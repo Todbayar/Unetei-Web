@@ -212,11 +212,11 @@ mysqli_free_result($resultFetchListItemsStateCountInActive);
 	while($rowFetchListItems = mysqli_fetch_array($resultFetchListItems)){
 		$expire_datetime = date("Y-m-d H:i:s", strtotime("+".$rowFetchListItems["expire_days"]." day", strtotime($rowFetchListItems["datetime"])));
 		$days_remain = "";
-		if($rowFetchListItems["isactive"]==4){
+		if($rowFetchListItems["isactive"]==4 || $rowFetchListItems["isactive"]==0){
 			$days_diff = (new DateTime($expire_datetime))->diff(new DateTime("now"));
 			if($days_diff->invert != 1){
 				?>
-				<script>myzar_category_selected_item_inactive(<?php echo $rowFetchListItems["id"]; ?>)</script>
+<!--			<script>myzar_category_selected_item_inactive(<?php echo $rowFetchListItems["id"]; ?>)</script>-->
 				<?php
 			}
 			else {
@@ -234,17 +234,18 @@ mysqli_free_result($resultFetchListItemsStateCountInActive);
 					<div class="myzar_item_list_image">
 						<?php
 						if($rowFetchListItems["image"] != ""){
-						?>
-							<img src="user_files/<?php echo $rowFetchListItems["image"]; ?>" />
-							<i style="position: absolute; left: 12px; color: white; opacity: 0.73; font-size: 13px"><i class="fa-solid fa-camera"></i> <?php echo $rowFetchListItems["count_images"]; ?></i>
-						<?php
+							?>
+							<img src="<?php echo $path."/".$rowFetchListItems["image"]; ?>" />
+							<i style="position: absolute; left: 12px; color: white; opacity: 0.73; font-size: 13px">
+								<i class="fa-solid fa-camera"></i> <?php echo $rowFetchListItems["count_images"]; ?>
+							</i>
+							<?php
 						}
 						else if($rowFetchListItems["video"] != ""){
-							$vVideoType = substr($rowFetchListItems["video"], strrpos($rowFetchListItems["video"], ".")+1);
-							if($vVideoType == "mp4") $vVideoType = "video/mp4";
-							else if($vVideoType == "mov") $vVideoType = "video/quicktime";
 							?>
-							<video controls="controls" preload="metadata" style="border-radius: 5px"><source src="<?php echo $path."/".$rowFetchListItems["video"]; ?>#t=0.5" type="<?php echo $vVideoType; ?>"></video>
+							<video controls="controls" preload="metadata" style="border-radius: 5px">
+								<source src="<?php echo $path."/".$rowFetchListItems["video"]; ?>#t=0.5" type="<?php echo findTypeOfVideo($rowFetchListItems["video"]); ?>">
+							</video>
 							<?php
 						}
 						else if($rowFetchListItems["youtube"] != ""){
@@ -280,31 +281,33 @@ mysqli_free_result($resultFetchListItemsStateCountInActive);
 						}
 						?>
 					</div>
-					<div class="myzar_content_list_item_expire" style="font: normal 14px Arial; color: #6ab001">Дуусах огноо: <?php echo $expire_datetime; ?>. <?php if(isset($days_remain)) echo $days_remain; ?></div>
-					<div class="myzar_content_list_item_category" style="font: normal 14px Arial; color: #999999">
-						<?php
-						$category = explode("_", $rowFetchListItems["category"]);
-						$iteration = substr($category[0], 1, strlen($category[0]));
-						$parent = 0;
-						$hierCategory = array();
-						for($i=$iteration; $i>=1; $i--){
-							if($parent == 0){
-								$queryFetchListItemCategory = "SELECT * FROM category".$i." WHERE id=".$category[1];
-							}
-							else {
-								$queryFetchListItemCategory = "SELECT * FROM category".$i." WHERE id=".$parent;
-							}
-							
-							$resultFetchListItemCategory = $conn->query($queryFetchListItemCategory);
-							$rowFetchListItemCategory = mysqli_fetch_array($resultFetchListItemCategory);
-							if($i>1) $parent = $rowFetchListItemCategory["parent"];
-							$hierCategory[$i-1] = $rowFetchListItemCategory["title"];
-						}
-						for($i=0; $i<count($hierCategory); $i++){
-							if($i<count($hierCategory)-1) echo $hierCategory[$i]." <i class=\"fas fa-angle-right\" style=\"font-size: 12px\"></i> ";
-							else echo $hierCategory[$i];
-						}
+					<?php
+					if($rowFetchListItems["isactive"]==4){
 						?>
+						<div class="myzar_content_list_item_expire" style="font: normal 14px Arial; color: #6ab001">
+						<?php echo "Дуусах огноо:".$expire_datetime.".<br/>"; if(isset($days_remain)) echo $days_remain; ?>
+						</div>
+						<?php
+					}
+					else if($rowFetchListItems["isactive"]==0){
+						?>
+						<div class="myzar_content_list_item_expire" style="font: normal 14px Arial; color:red">
+						<?php echo "Устгагдах хугацаа:".$expire_datetime.".<br/>"; if(isset($days_remain)) echo $days_remain; ?>
+						</div>
+						<?php
+					}
+					else if($rowFetchListItems["isactive"]==1){
+						?>
+						<div class="myzar_content_list_item_expire" style="font: normal 14px Arial; color:#666666">
+						<?php echo "Дуусах огноо:".$expire_datetime.".<br/><i class=\"fa-regular fa-clock\" style=\"margin-right:2px\"></i>Шалгагдаж байна."; ?>
+						</div>
+						<?php
+					}
+					?>
+					<div class="myzar_content_list_item_category" style="font: normal 14px Arial; color: #999999">
+					<?php 
+					echo implode(" <i class=\"fas fa-angle-right\" style=\"font-size: 12px\"></i> ", harvestCategory($rowFetchListItems["category"])); 
+					?>
 					</div>
 				</td>
 			</tr>

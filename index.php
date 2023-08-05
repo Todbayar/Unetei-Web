@@ -2,7 +2,9 @@
 include "mysql_config.php";
 include_once "mysql_misc.php";
 include_once "info.php";
-include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expired item
+//include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expired item
+
+setcookie('googtrans', '/mn/en');
 ?>
 <!doctype html>
 <html lang="en-US">
@@ -10,19 +12,17 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 		<meta charset="utf-8">
 		<meta http-equiv="Permissions-Policy" content="interest-cohort=()">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+		<meta name="facebook-domain-verification" content="qizqpj55lnc4ms6rcojpn16hp079ax" />
+		
+<!--		<script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>-->
 		
 		<script type="text/javascript">
-		function googleTranslateElementInit() {
-			console.log("<timezone>:"+Intl.DateTimeFormat().resolvedOptions().timeZone);
-			if(Intl.DateTimeFormat().resolvedOptions().timeZone!="Asia/Ulaanbaatar"){
-				new google.translate.TranslateElement(
-					{pageLanguage: 'mn'},
-					'google_translate_element'
-				);
-				$($('span:contains("Select Language")')[1]).html('English');
-			}
-		}
+//		function googleTranslateElementInit() {
+//			console.log("<timezone>:"+Intl.DateTimeFormat().resolvedOptions().timeZone);
+//			if(Intl.DateTimeFormat().resolvedOptions().timeZone!="Asia/Ulaanbaatar"){
+//				new google.translate.TranslateElement({pageLanguage: 'mn'}, 'google_translate_element');
+//			}
+//		}
 		</script>
 		
 		<?php
@@ -417,6 +417,7 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 			<div class="wrap">
 				<img src="<?php echo str_contains($_SERVER['REQUEST_URI'],"detail")?"../icon.png":"icon.png"; ?>" width="40" height="40" style="object-fit: contain" />
 				<div class="left">
+					<div class="title" style="color: white"><?php echo $domain; ?></div>
 					<div class="service" style="color: white">Техникийн тусламж: <?php echo $service_phone; ?></div>
 					<div class="contact" style="color: white">Холбоо барих: <?php echo $contact_phone; ?></div>
 				</div>
@@ -540,6 +541,7 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 							<li>Хязгааргүй Энгийн зар нэмэх</li>
 						</ul>
 					</div>
+<!--
 					<div class="selection">
 						<div style="font: bold 16px Arial"><input type="radio" id="role" name="role" value="1"> Нийтлэгч</div>
 						<div style="margin-left: 25px"><?php echo number_format($role_price_publisher); ?> ₮</div>
@@ -548,6 +550,7 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 							<li>Хязгааргүй Энгийн зар нэмэх</li>
 						</ul>
 					</div>
+-->
 				</div>
 				<button id="buttonSubmit" disabled class="button_yellow" style="margin-top: 10px; margin-left: auto; margin-right: auto">Илгээх</button>
 			</div>
@@ -566,7 +569,10 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 				<div>
 					<div id="billing_bank" style="font-size: 14px; margin-left: 10px">
 						Дараах данс руу илгээнэ үү.<br/>
-						<a id="name" style="font-size: 16px"></a>ны данс: <a id="account" style="font-size: 16px"></a><br/>
+						<a id="name" style="font-size: 16px"></a>ны данс: 
+						<a id="account" style="font-size: 16px"></a>
+						<i id="copyToClipboard" onclick="copyToClipboardBankAccountNumber()" class="fa-solid fa-copy" style="margin-left: 5px; font-size: 16px; cursor: pointer"></i>
+						<br/>
 						Хүлээн авагч: <a id="owner" style="font-size: 16px"></a>
 					</div>
 					<div id="billing_qr">
@@ -843,7 +849,7 @@ include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expire
 					Илүү дэлгэрэнгүйг <a href="javascript:pagenavigation('myzar&myzar=profile')">эндээс</a>
 					<div style="margin-top: 5px; margin-bottom: 5px">
 						<label>Имэйл:</label>
-						<input id="email" type="email" pattern="[^@\s]+@[^@\s]+\.[^@\s]+" placeholder="example@gmail.com" style="width: 160px; height: 25px; border-radius: 10px; font: normal 16px Arial; margin-top: 5px" />
+						<input id="email" type="email" pattern="[^@\s]+@[^@\s]+\.[^@\s]+" style="width: 160px; height: 25px; border-radius: 10px; font: normal 16px Arial; margin-top: 5px" />
 						<div id="error" style="font-size: 14px; color: red; margin-top: 2px; display: none">Имэйл буруу байна!</div>
 					</div>
 				</div>
