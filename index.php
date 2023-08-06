@@ -415,13 +415,16 @@ setcookie('googtrans', '/mn/en');
 		</div>
 		<div class="footer">
 			<div class="wrap">
-				<img src="<?php echo str_contains($_SERVER['REQUEST_URI'],"detail")?"../icon.png":"icon.png"; ?>" width="40" height="40" style="object-fit: contain" />
-				<div class="left">
-					<div class="title" style="color: white"><?php echo $domain; ?></div>
+				<div style="display: flex; align-items: center; margin-left:10px; margin-top:5px">
+					<img src="<?php echo str_contains($_SERVER['REQUEST_URI'],"detail")?"../icon.png":"icon.png"; ?>" width="35" height="35" style="object-fit: contain" />
+					<a href="https://www.hipay.mn/"><img src="<?php echo str_contains($_SERVER['REQUEST_URI'],"detail")?"../hipay.png":"hipay.png"; ?>" width="40" height="40" style="object-fit: contain" /></a>
+					<a href="https://www.arduino.cc/"><img src="<?php echo str_contains($_SERVER['REQUEST_URI'],"detail")?"../arduino.gif":"arduino.gif"; ?>" width="35" height="35" style="object-fit: contain" /></a>
+				</div>
+				<div class="left" style="margin-left:10px; margin-top:5px">
 					<div class="service" style="color: white">Техникийн тусламж: <?php echo $service_phone; ?></div>
 					<div class="contact" style="color: white">Холбоо барих: <?php echo $contact_phone; ?></div>
 				</div>
-				<div class="center" style="font-size: 14px">
+				<div class="center" style="font-size: 14px; margin-left: 10px">
 					<div><a href="policy.php" style="text-decoration: none; color: white">Үйлчилгээний нөхцөл</a></div>
 					<div><a href="rule.php" style="text-decoration: none; color: white">Зар нийтлэх журам</a></div>
 					<div><a href="agreement.php" style="text-decoration: none; color: white">Аюулгүй ажиллагаа</a></div>
@@ -469,7 +472,7 @@ setcookie('googtrans', '/mn/en');
 					<input id="myzar_category_enter_icon_file" class="icon_file" type="file" required="true" accept="image/png, .svg" style="display: none" />
 					<div class="myzar_category_enter_title_container" style="margin-left: 5px; margin-right: 5px; margin-bottom: 5px; width: 95%; display: none">
 						<textarea id="myzar_category_enter_title" placeholder="Гарчигууд" style="font: normal 14px Arial; border-radius:10px; padding: 5px; min-height: 95px; width: 95%"></textarea>
-						<div style="color: gray; font-size: 12px">Олоны гарчигыг дунд нь ; (цэг таслал) таслан бичнэ үү, жишээ нь: Audi;Nissan;Mercedes Benz</div>
+						<div style="color: gray; font-size: 12px">Олон гарчигыг дунд нь ; (цэг таслал) таслан бичнэ үү, жишээ нь: Audi;Nissan;Mercedes Benz</div>
 					</div>
 					<input id="myzar_category_enter_title" type="text" maxlength="128" placeholder="Гарчиг" style="margin-left: 5px; margin-right: 5px; width: 95%; height: 20px; padding: 5px; font: normal 14px Arial; border-radius:10px" />
 					<i class="fa-solid fa-square-plus myzar_category_enter_title_toggle_multi" onClick="toggleCategoryEntryLines()" style="font-size: 32px; color: #FFA718; cursor: pointer"></i>
@@ -576,7 +579,9 @@ setcookie('googtrans', '/mn/en');
 						Хүлээн авагч: <a id="owner" style="font-size: 16px"></a>
 					</div>
 					<div id="billing_qr">
-						<div style="margin-left: 10px; margin-top: 10px">Socialpay-аар төлөх:</div>
+						<div style="margin-left: 10px; margin-top: 10px; display: flex; align-items: center">
+							<img src="hipay.png" width="40px" height="40px" style="margin-right: 5px" />HiPay-аар төлөх:
+						</div>
 						<div id="billing_socialpay" style="font-size: 14px; margin-left: 10px; margin-top: 10px; text-align: center">
 							<img style="width: 200px; height: 200px" />
 						</div>

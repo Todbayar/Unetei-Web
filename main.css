@@ -44,18 +44,16 @@ body::-webkit-scrollbar-thumb {
 
 .footer {
 	width: 100%;
-	padding-top: 10px;
 	padding-bottom: 10px;
 	background: #42c200;
 	margin-top: auto;
-}
-
-.footer .wrap .left div {
-	margin-left: 10px;
-	margin-right: 10px;
 	color: #174400;
 	font-family: RobotoRegular;
 	font-size: 14px;
+}
+
+.footer .wrap {
+	display: block;
 }
 
 .wrap {

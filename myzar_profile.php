@@ -463,10 +463,10 @@ $(document).ready(function(){
 		?>
 		<div class="divcontainer qrcode">
 			<div style="display: flex; align-items: center">
-				<img src="socialpay.png" width="40px" height="40px" style="margin-right: 5px" />Socialpay QRCode:
+				<img src="hipay.png" width="40px" height="40px" style="margin-right: 5px" />HiPay QR:
 			</div>
 			<div style="color:#9F9F9F; font-size: 14px">
-				Голомт банкны Socialpay аппнаас өөрийнхөө дансны QRCode-ийг скрийншот хийгээд тайрч энэ хэсэгт оруулсанаар орлого хүлээн авах боломжтой болно.
+				HiPay аппнаас өөрийнхөө дансны QRCode-ийг скрийншот хийгээд тайрч энэ хэсэгт оруулсанаар орлого хүлээн авах боломжтой болно.
 			</div>
 			<div style="width: 200px; height: 200px; margin-left: auto; margin-right: auto">
 				<?php
