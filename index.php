@@ -5,6 +5,10 @@ include_once "info.php";
 //include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expired item
 
 setcookie('googtrans', '/mn/en');
+
+if($protocol=="http"){
+	header("Location:https://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+}
 ?>
 <!doctype html>
 <html lang="en-US">

@@ -14,11 +14,11 @@ if(isset($_POST["email"])){
 			echo "OK";
 		}
 		else {
-			echo "FAIL";
+			echo "FAIL 1";
 		}
 	}
 	else {
-		echo "FAIL";
+		echo "FAIL 2";
 	}
 }
 
@@ -34,11 +34,11 @@ if(isset($_POST["emailverificationid"])){
 			echo "OK";
 		}
 		else {
-			echo "FAIL";
+			echo "FAIL 3";
 		}
 	}
 	else {
-		echo "FAIL";
+		echo "FAIL 4";
 	}
 }
 ?>

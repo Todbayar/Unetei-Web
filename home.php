@@ -30,8 +30,15 @@ include_once "info.php";
 .searchCategoryList .searchCategoryListAvailable {
 	float: left;
 	width: 100%;
-	max-height: 145px;
+	max-height: 240px;
 	overflow-y: auto;
+}
+	
+/* For Mobile */
+@media screen and (max-width: 540px) {
+	.searchCategoryList .searchCategoryListAvailable {
+		max-height: 145px;
+	}
 }
 	
 .searchCategoryList .searchCategoryListAvailable::-webkit-scrollbar {
@@ -76,7 +83,8 @@ include_once "info.php";
 	margin-left: 5px;
 	margin-right: 5px;
 }
-	
+
+/* For Mobile */
 @media screen and (max-width: 540px) {
 	.searchResult .list {
 		column-count: 2;
@@ -96,7 +104,6 @@ include_once "info.php";
 	.searchResult .list .item {
 		width: 100%;
 		height: 220px;
-		
 	}
 }
 

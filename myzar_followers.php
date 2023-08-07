@@ -18,23 +18,41 @@ include_once "mysql_misc.php";
 	display:block;
 }
 
-.myzar_followers .container .followers_list {
-	text-align: center;
-	margin: 10px;
-	cursor: pointer;
-	width: 140px;
-	display: inline-block;
-	vertical-align: top;
+.myzar_followers .container .followers_list_container {
+	margin-left: 5px;
+	margin-right: 5px;
 }
 	
-.myzar_followers .container .followers_list .image {
-	width: 82px;
-	height: 82px;
+.myzar_followers .container .followers_list_container .followers_list {
+	text-align: center;
+	margin: 5px;
+	cursor: pointer;
+	width: 108px;
+	display: inline-block;
+	vertical-align: top;
+	font-size: 14px;
+}
+	
+.myzar_followers .container .followers_list_container .followers_list .image {
+	width: 60px;
+	height: 60px;
 	border-radius: 100%;
+}
+
+.myzar_followers .container .followers_list_container .followers_list .button_yellow {
+	margin-top: 5px;
+	width: 80px; 
+	height: 10px; 
+	margin-left: auto; 
+	margin-right: auto;
 }
 </style>
 
 <script>
+$(document).ready(function() {
+	fetchUsersList();
+});
+	
 function startChat(toID, message){
 	var chatSubmitData = new FormData();
 	chatSubmitData.append("fromID", <?php echo $_COOKIE["userID"]; ?>);
@@ -61,74 +79,79 @@ function showOtherItems(userID){
 	sessionStorage.setItem("searchUserID", userID);
 	location.href = "./";
 }
+	
+function fetchUsersList(){
+	$.post("mysql_myzar_followers_list_process.php").done(function(response){
+		const usersObj = JSON.parse(response);
+		if(usersObj.followers.direct.length>0){
+		   	$(".myzar_followers .container.direct").show();
+			$(".myzar_followers .container.direct .followers_list_container.direct").empty();
+			usersObj.followers.direct.forEach(function(obj){
+				var html = "<div class=\"followers_list\">";
+				html += "<img class=\"image\" src=\"<?php echo $path."/"; ?>"+obj.image+"\" onerror=\"this.onerror=null; this.src='user.png'\" />";
+				html += "<div class=\"name\">"+(obj.name!=null?obj.name:"")+"</div>";
+				html += "<div class=\"role\">"+convertRoleInString(obj.role)+"</div>";
+				html += "<div class=\"phone\">"+obj.phone.substr(4)+"</div>";
+				html += "<div onclick=\"startChat("+obj.id+",'Сайн байна уу?')\" class=\"button_yellow\"><i class=\"fa-solid fa-comments\"></i><div style=\"margin-left: 5px\">Чатлах</div></div>";
+				html += "<div onClick=\"showOtherItems("+obj.id+")\" class=\"button_yellow\"><i class=\"fa-solid fa-cart-shopping\"></i><div style=\"margin-left: 5px\">Зарууд</div></div>";
+				html += "</div>";
+				$(".myzar_followers .container.direct .followers_list_container.direct").append(html);
+			});
+	   	}
+		if(usersObj.followers.indirect.length>0){
+		   	$(".myzar_followers .container.indirect").show();
+			$(".myzar_followers .container.indirect .followers_list_container.indirect").empty();
+			usersObj.followers.indirect.forEach(function(obj){
+				var html = "<div class=\"followers_list\">";
+				html += "<img class=\"image\" src=\"<?php echo $path."/"; ?>"+obj.image+"\" onerror=\"this.onerror=null; this.src='user.png'\" />";
+				html += "<div class=\"name\">"+(obj.name!=null?obj.name:"")+"</div>";
+				html += "<div class=\"role\">"+convertRoleInString(obj.role)+"</div>";
+				html += "<div class=\"phone\">"+obj.phone.substr(4)+"</div>";
+				html += "<div onclick=\"startChat("+obj.id+",'Сайн байна уу?')\" class=\"button_yellow\"><i class=\"fa-solid fa-comments\"></i><div style=\"margin-left: 5px\">Чатлах</div></div>";
+				html += "<div onClick=\"showOtherItems("+obj.id+")\" class=\"button_yellow\"><i class=\"fa-solid fa-cart-shopping\"></i><div style=\"margin-left: 5px\">Зарууд</div></div>";
+				html += "</div>";
+				$(".myzar_followers .container.indirect .followers_list_container.indirect").append(html);
+			});
+	   	}
+		if(usersObj.users.length>0){
+		   	$(".myzar_followers .container.users").show();
+			$(".myzar_followers .container.users .followers_list_container.users").empty();
+			usersObj.users.forEach(function(obj){
+				var html = "<div class=\"followers_list\">";
+				html += "<img class=\"image\" src=\"<?php echo $path."/"; ?>"+obj.image+"\" onerror=\"this.onerror=null; this.src='user.png'\" />";
+				html += "<div class=\"name\">"+(obj.name!=null?obj.name:"")+"</div>";
+				html += "<div class=\"role\">"+convertRoleInString(obj.role)+"</div>";
+				html += "<div class=\"phone\">"+obj.phone.substr(4)+"</div>";
+				html += "<div onclick=\"startChat("+obj.id+",'Сайн байна уу?')\" class=\"button_yellow\"><i class=\"fa-solid fa-comments\"></i><div style=\"margin-left: 5px\">Чатлах</div></div>";
+				html += "<div onClick=\"showOtherItems("+obj.id+")\" class=\"button_yellow\"><i class=\"fa-solid fa-cart-shopping\"></i><div style=\"margin-left: 5px\">Зарууд</div></div>";
+				html += "</div>";
+				$(".myzar_followers .container.users .followers_list_container.users").append(html);
+			});
+	   	}
+	});
+}
 </script>
 
 <div class="myzar_followers">
-	<?php
-	$queryFollowers = "SELECT * FROM user WHERE affiliate=(SELECT phone FROM user WHERE id=".$_COOKIE["userID"].")";
-	$resultFollowers = $conn->query($queryFollowers);
-	if(mysqli_num_rows($resultFollowers)>0){
-	?>
-	<div class="container">
-		<div style="font-family: RobotoBold; margin-left: 10px">
-			Шууд дагагчид <a style="color: gray; font-family: RobotoRegular; font-size: 14px">(Таны утасны дугаараар дагагч болсон хүмүүс)</a>
+	<div class="container direct" style="display:none">
+		<div style="font-family: RobotoBold; margin-left:10px">
+			Дагагчид 
+			<a style="color: gray; font-family: RobotoRegular; font-size: 14px">(Таны утасны дугаараар дагагч болсон хүмүүс)</a>
 		</div>
 		<hr/>
-		<?php
-		while($rowFollowers = mysqli_fetch_array($resultFollowers)){
-		?>
-		<div class="followers_list">
-			<img class="image" src="<?php echo $path."/".$rowFollowers["image"]; ?>" onerror="this.onerror=null; this.src='user.png'" />
-			<div class="name"><?php echo $rowFollowers["name"]; ?></div>
-			<div class="role"><?php echo convertRoleInString($rowFollowers["role"]); ?></div>
-			<div class="phone"><?php echo substr($rowFollowers["phone"],4); ?></div>
-			<div onclick="startChat(<?php echo $rowFollowers["id"]; ?>,'Сайн байна уу?')" class="button_yellow" style="margin-top: 5px">
-				<i class="fa-solid fa-comments"></i>
-				<div style="margin-left: 5px">Чатлах</div>
-			</div>
-			<div onClick="showOtherItems(<?php echo $rowFollowers["id"]; ?>)" class="button_yellow" style="margin-top: 5px">
-				<i class="fa-solid fa-cart-shopping"></i>
-				<div style="margin-left: 5px">Зарууд</div>
-			</div>
-		</div>
-		<?php 
-		}
-		?>
+		<div class="followers_list_container direct"></div>
 	</div>
-	<?php
-	}
-		
-	if(getPhone($_COOKIE["userID"])==$superduperadmin){
-		$queryFollowers = "SELECT * FROM user WHERE affiliate='' AND phone!='".$superduperadmin."'";
-		$resultFollowers = $conn->query($queryFollowers);
-		if(mysqli_num_rows($resultFollowers)>0){
-		?>
-		<div class="container" style="margin-top: 10px">
-			<div style="font-family: RobotoBold; margin-left: 10px">Шууд бус дагагчид</div>
-			<hr/>
-			<?php
-			while($rowFollowers = mysqli_fetch_array($resultFollowers)){
-			?>
-			<div class="followers_list">
-				<img class="image" src="<?php echo $path."/".$rowFollowers["image"]; ?>" onerror="this.onerror=null; this.src='user.png'" />
-				<div class="name"><?php echo $rowFollowers["name"]; ?></div>
-				<div class="role"><?php echo convertRoleInString($rowFollowers["role"]); ?></div>
-				<div class="phone"><?php echo substr($rowFollowers["phone"],4); ?></div>
-				<div onclick="startChat(<?php echo $rowFollowers["id"]; ?>,'Сайн байна уу?')" class="button_yellow" style="margin-top: 5px">
-					<i class="fa-solid fa-comments"></i>
-					<div style="margin-left: 5px">Чатлах</div>
-				</div>
-				<div onClick="showOtherItems(<?php echo $rowFollowers["id"]; ?>)" class="button_yellow" style="margin-top: 5px">
-					<i class="fa-solid fa-cart-shopping"></i>
-					<div style="margin-left: 5px">Зарууд</div>
-				</div>
-			</div>
-			<?php
-			}
-			?>
+	<div class="container indirect" style="display:none; margin-top:10px">
+		<div style="font-family: RobotoBold; margin-left: 10px">
+			Шууд бус дагагчид 
+			<a style="color: gray; font-family: RobotoRegular; font-size: 14px">(Дагагч болох утасны дугаар хоосон)</a>
 		</div>
-		<?php
-		}
-	}
-	?>
+		<hr/>
+		<div class="followers_list_container indirect"></div>
+	</div>
+	<div class="container users" style="display:none; margin-top:10px">
+		<div style="font-family: RobotoBold; margin-left: 10px">Хэрэглэгчид</div>
+		<hr/>
+		<div class="followers_list_container users"></div>
+	</div>
 </div>

@@ -415,7 +415,7 @@ function sendEmailVerification($emailReceiver, $title, $body, $isDebug=null){
 		
 		//Recipients
 		$mail->setFrom($smtp_username, $domain);
-		$mail->addAddress($emailReceiver, $nameReceiver);      //Add a recipient
+		$mail->addAddress($emailReceiver, "");      //Add a recipient
 
 		//Content
 		$mail->isHTML(true);                                  //Set email format to HTML
