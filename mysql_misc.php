@@ -404,9 +404,11 @@ function sendEmailVerification($emailReceiver, $title, $body, $isDebug=null){
 //		$mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
 		$mail->isSMTP(); 
 		$mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+		
 		//Send using SMTP
 		$mail->Host       = $smtp_host;                     		//Set the SMTP server to send through
 		$mail->Port       = $smtp_port;                             //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+		
 		$mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
 		$mail->SMTPSecure = $smpt_secure_type;						//ssl/tls
 		

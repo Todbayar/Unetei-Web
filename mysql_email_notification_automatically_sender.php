@@ -4,7 +4,6 @@ include_once "mysql_misc.php";
 include_once "info.php";
 
 if(isset($_GET["superduperadminphone"]) && $_GET["superduperadminphone"]==$superduperadmin){
-	echo "works";
 	$query = "SELECT * FROM chat WHERE isNotified=0";
 	$result = $conn->query($query);
 	while($row = mysqli_fetch_array($result)){

@@ -1,14 +1,12 @@
-<?php 
+<?php
 include "mysql_config.php";
 include_once "mysql_misc.php";
 include_once "info.php";
 //include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expired item
 
-setcookie('googtrans', '/mn/en');
+//setcookie('googtrans', '/mn/en');
 
-if($protocol=="http"){
-	header("Location:https://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
-}
+if($protocol=="http" && $_SERVER['HTTP_HOST']!="localhost") header("Location:https://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
 ?>
 <!doctype html>
 <html lang="en-US">
@@ -516,10 +514,10 @@ if($protocol=="http"){
 				<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('popup myzar_user_upgrade')[0].style.display='none'; javascript:document.body.style.overflowY='auto'"></i>
 				<div class="header">Хэрэглэгчийн эрх</div>
 				<div style="height:520px; overflow-y: scroll">
-					<div style="font-size: 14px; margin-bottom: 5px; margin-top: 10px; margin-left: 10px; margin-right: 10px"><a id="affiliate"></a><br/><a style="font-size: 12px; color: red">Өөрчлөхийг хүсвэл уг цонхыг хаагаад Миний зар->Тохиргоо-ны "Дагагч болох"-ын доор утасны дугаарыг нь оруулаад дахин энэ цонхыг нээнэ үү.</a></div>
-					<div class="selection">
+					<div class="affiliate" style="font-size: 14px; margin-bottom: 5px; margin-top: 10px; margin-left: 10px; margin-right: 10px"><a id="affiliate"></a><br/><a style="font-size: 12px; color: red">Өөрчлөхийг хүсвэл уг цонхыг хаагаад (Миний зар <i class="fas fa-angle-right"></i> Тохиргоо)-ны "Дагагч болох"-ын доор утасны дугаарыг нь оруулаад дахин энэ цонхыг нээнэ үү.</a></div>
+					<div class="selection superadmin">
 						<div style="font: bold 16px Arial"><input type="radio" id="role" name="role" value="4"> Сүпер админ</div>
-						<div style="margin-left: 25px"><?php echo number_format($role_price_superadmin); ?> ₮</div>
+						<div class="price" style="margin-left: 25px"><?php echo number_format($role_price_superadmin); ?> ₮</div>
 						<ul style="font-size: 14px">
 							<li>Сүпер дүпер админд <?php echo $item_boost_superadmin; ?> удаа Facebook Boost хийх хүсэлт илгээх</li>
 							<li>Өөрийн дагагчдаас <i>орлого</i> хүлээн авах</li>
@@ -528,9 +526,9 @@ if($protocol=="http"){
 							<li>Удирдах <i>бүрэн эрх</i>, хүсэлтүүдийг хянах</li>
 						</ul>
 					</div>
-					<div class="selection">
+					<div class="selection admin">
 						<div style="font: bold 16px Arial"><input type="radio" id="role" name="role" value="3"> Админ</div>
-						<div style="margin-left: 25px"><?php echo number_format($role_price_admin); ?> ₮</div>
+						<div class="price" style="margin-left: 25px"><?php echo number_format($role_price_admin); ?> ₮</div>
 						<ul style="font-size: 14px">
 							<li>Сүпер дүпер админд <?php echo $item_boost_admin; ?> удаа Facebook Boost хийх хүсэлт илгээх</li>
 							<li>Өөрийн дагагчдаас <i>орлого</i> хүлээн авах</li>
@@ -539,17 +537,16 @@ if($protocol=="http"){
 							<li>Удирдах <i>хязгаарлагдмал эрх</i>, хүсэлтүүдийг хянах</li>
 						</ul>
 					</div>
-					<div class="selection">
+					<div class="selection manager">
 						<div style="font: bold 16px Arial"><input type="radio" id="role" name="role" value="2"> Менежер</div>
-						<div style="margin-left: 25px"><?php echo number_format($role_price_manager); ?> ₮</div>
+						<div class="price" style="margin-left: 25px"><?php echo number_format($role_price_manager); ?> ₮</div>
 						<ul style="font-size: 14px">
 							<li>Өөрийн дагагчдаас <i>орлого</i> хүлээн авах</li>
 							<li>10 ангилал нэмэх</li>
 							<li>Хязгааргүй Энгийн зар нэмэх</li>
 						</ul>
 					</div>
-<!--
-					<div class="selection">
+					<div class="selection publisher" style="display: none">
 						<div style="font: bold 16px Arial"><input type="radio" id="role" name="role" value="1"> Нийтлэгч</div>
 						<div style="margin-left: 25px"><?php echo number_format($role_price_publisher); ?> ₮</div>
 						<ul style="font-size: 14px">
@@ -557,7 +554,6 @@ if($protocol=="http"){
 							<li>Хязгааргүй Энгийн зар нэмэх</li>
 						</ul>
 					</div>
--->
 				</div>
 				<button id="buttonSubmit" disabled class="button_yellow" style="margin-top: 10px; margin-left: auto; margin-right: auto">Илгээх</button>
 			</div>

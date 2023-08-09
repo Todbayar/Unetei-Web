@@ -70,6 +70,7 @@ $item_boost_superadmin = 6;
 //pages
 $pageCountHome = 12;
 $pageCountList = 60;
+$pageCountFollowers = 14;
 
 //firebase
 $firebase_app = "unetei-bc717";
