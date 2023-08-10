@@ -10,7 +10,7 @@ if(isset($_COOKIE["userID"])){
 	$pageOffset = $_POST["page"]*$pageCount;
 	$limit = " LIMIT ".$pageOffset.",".$pageCount;
 	
-	$queryDirect = "SELECT * FROM user WHERE affiliate=(SELECT phone FROM user WHERE id=".$_COOKIE["userID"].") ORDER BY id DESC ".$limit;
+	$queryDirect = "SELECT * FROM user WHERE affiliate=(SELECT phone FROM user WHERE id=".$_COOKIE["userID"].") AND phone!=(SELECT phone FROM user WHERE id=".$_COOKIE["userID"].") ORDER BY id DESC ".$limit;
 	$resultDirect = $conn->query($queryDirect);
 	$users->followers = new stdClass();
 	$rowCountFollowers = mysqli_num_rows($resultDirect);

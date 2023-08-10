@@ -142,7 +142,6 @@ $(document).ready(function() {
 	});
 	
 	$("#pageNext").click(function(){
-		console.log("<pageNext>:"+followersPage+", "+followersPageLast);
 		if(followersPage<followersPageLast){
 			followersPage++;
 			fetchFollowersList();
@@ -178,7 +177,6 @@ function fetchFollowersList(){
 	$(".myzar_followers .container.users").hide();
 	
 	$.post("mysql_myzar_followers_list_process.php",{page:followersPage}).done(function(response){
-//		console.log("<fetchFollowersList>:"+response);
 		if(response!="{}"){
 			const usersObj = JSON.parse(response);
 			
@@ -226,7 +224,7 @@ function fetchFollowersList(){
 				$(".followersPage").hide();
 			}
 			
-			if(usersObj.followers.direct.length>0){
+			if(typeof usersObj.followers.direct !== "undefined" && usersObj.followers.direct.length>0){
 				$(".myzar_followers .container.direct").show();
 				usersObj.followers.direct.forEach(function(obj){
 					var html = "<div class=\"followers_list\">";
@@ -242,7 +240,7 @@ function fetchFollowersList(){
 					$(".myzar_followers .container.direct .followers_list_container.direct").append(html);
 				});
 			}
-			if(usersObj.followers.indirect.length>0){
+			if(typeof usersObj.followers.indirect !== "undefined" && usersObj.followers.indirect.length>0){
 				$(".myzar_followers .container.indirect").show();
 				usersObj.followers.indirect.forEach(function(obj){
 					var html = "<div class=\"followers_list\">";
@@ -258,7 +256,7 @@ function fetchFollowersList(){
 					$(".myzar_followers .container.indirect .followers_list_container.indirect").append(html);
 				});
 			}
-			if(usersObj.users.length>0){
+			if(typeof usersObj.users !== "undefined" && usersObj.users.length>0){
 				$(".myzar_followers .container.users").show();
 				usersObj.users.forEach(function(obj){
 					var html = "<div class=\"followers_list\">";
@@ -314,6 +312,7 @@ function showFollowerDetail(userID){
 	$(".myzar_follower_detail .container #city").val("");
 	$(".myzar_follower_detail .container #phone").val("");
 	$(".myzar_follower_detail .container #role").text("");
+	$(".myzar_follower_detail .container #buttonUpgradeFollowerRole i").show();
 	$(".myzar_follower_detail .container #affiliate_number").val("");
 	$(".myzar_follower_detail .container #bank_name").val("");
 	$(".myzar_follower_detail .container #bank_owner").val("");
@@ -321,12 +320,11 @@ function showFollowerDetail(userID){
 	$(".myzar_follower_detail .container #socialpay").attr("src","image-solid.svg");
 	
 	$.post("mysql_myzar_follower_detail_process.php",{id:userID}).done(function(response){
-		console.log("<showFollowerDetail>:"+response);
 		const followerObj = JSON.parse(response);
 		$(".myzar_follower_detail").show();
 		$(".myzar_follower_detail .container #number").val(followerObj.id);
-		var followerImage = (followerObj.image!=null && followerObj.image!="")?followerObj.image:"user.png";
-		$(".myzar_follower_detail .container #image").attr("src",followerImage);
+		var followerImage = (followerObj.image!=null && followerObj.image!="")?("<?php echo $path; ?>/"+followerObj.image):"user.png";
+		$(".myzar_follower_detail .container #image").attr("src", followerImage);
 		$(".myzar_follower_detail .container #name").val(followerObj.name);
 		$(".myzar_follower_detail .container #email").val(followerObj.email);
 		$(".myzar_follower_detail .container #city").val(followerObj.city);
@@ -336,67 +334,72 @@ function showFollowerDetail(userID){
 		$(".myzar_follower_detail .container #bank_name").val(followerObj.bank_name);
 		$(".myzar_follower_detail .container #bank_owner").val(followerObj.bank_owner);
 		$(".myzar_follower_detail .container #bank_account").val(followerObj.bank_account);
-		var followerQR = (followerObj.socialpay!=null && followerObj.socialpay!="")?followerObj.socialpay:"image-solid.svg";
+		var followerQR = (followerObj.socialpay!=null && followerObj.socialpay!="")?("<?php echo $path; ?>/"+followerObj.socialpay):"image-solid.svg";
 		$(".myzar_follower_detail .container #socialpay").attr("src",followerQR);
 		$(".myzar_follower_detail .container #buttonUpgradeFollowerRole").unbind('click');
 		
-		console.log("<role>:<?php echo getUserRole($_COOKIE["userID"]); ?>,"+parseInt(followerObj.role))
-		if(<?php echo getUserRole($_COOKIE["userID"]); ?>>parseInt(followerObj.role)){
-			$(".myzar_follower_detail .container #buttonUpgradeFollowerRole").css("background-color","#FFA718");
-			$(".myzar_follower_detail .container #buttonUpgradeFollowerRole").click(function(){
-				$(".popup.myzar_user_upgrade .container .affiliate").hide();
-				$(".popup.myzar_user_upgrade .container .price").hide();
-				$("body").css("overflow-y", "hidden");
-				window.scrollTo(0, 0);
-				$(".popup.myzar_user_upgrade").show();
-				$(".popup.myzar_user_upgrade .container .selection.superadmin").show();
-				$(".popup.myzar_user_upgrade .container .selection.admin").show();
-				$(".popup.myzar_user_upgrade .container .selection.manager").show();
-				$(".popup.myzar_user_upgrade .container .selection.publisher").hide();
-				switch(parseInt(followerObj.role)){
-					case 3:
-						$(".popup.myzar_user_upgrade .container .selection.admin").hide();
-						$(".popup.myzar_user_upgrade .container .selection.manager").hide();
-						$(".popup.myzar_user_upgrade .container .selection.publisher").hide();
-						break;
-					case 2:
-						$(".popup.myzar_user_upgrade .container .selection.manager").hide();
-						$(".popup.myzar_user_upgrade .container .selection.publisher").hide();
-						break;
-					case 1:
-						$(".popup.myzar_user_upgrade .container .selection.publisher").hide();
-						break;
-				}
-				switch(<?php echo getUserRole($_COOKIE["userID"]); ?>){
-					case 3:
-						$(".popup.myzar_user_upgrade .container .selection.superadmin #role").prop("disabled",true);
-						$(".popup.myzar_user_upgrade .container .selection.superadmin").css("color","#9F9F9F");
-						break;
-					case 2:
-						$(".popup.myzar_user_upgrade .container .selection.superadmin #role").prop("disabled",true);
-						$(".popup.myzar_user_upgrade .container .selection.superadmin").css("color","#9F9F9F");
-						$(".popup.myzar_user_upgrade .container .selection.admin #role").prop("disabled",true);
-						$(".popup.myzar_user_upgrade .container .selection.admin").css("color","#9F9F9F");
-						break;
-					case 1:
-						$(".popup.myzar_user_upgrade .container .selection.superadmin #role").prop("disabled",true);
-						$(".popup.myzar_user_upgrade .container .selection.superadmin").css("color","#9F9F9F");
-						$(".popup.myzar_user_upgrade .container .selection.admin #role").prop("disabled",true);
-						$(".popup.myzar_user_upgrade .container .selection.admin").css("color","#9F9F9F");
-						$(".popup.myzar_user_upgrade .container .selection.manager #role").prop("disabled",true);
-						$(".popup.myzar_user_upgrade .container .selection.manager").css("color","#9F9F9F");
-						break;
-				}
-				
-				$(".popup.myzar_user_upgrade #buttonSubmit").val("Батлах");
-				$(".popup.myzar_user_upgrade #buttonSubmit").attr("onclick", "submitFollowerRoleUpgrade(<?php echo $_COOKIE["userID"]; ?>,"+followerObj.id+")");
-			});
-	   	}
+		if(parseInt(followerObj.role)<4){
+			if(<?php echo getUserRole($_COOKIE["userID"]); ?>>parseInt(followerObj.role)){
+				$(".myzar_follower_detail .container #buttonUpgradeFollowerRole").css("background-color","#FFA718");
+				$(".myzar_follower_detail .container #buttonUpgradeFollowerRole").click(function(){
+					$(".popup.myzar_user_upgrade .container .affiliate").hide();
+					$(".popup.myzar_user_upgrade .container .price").hide();
+					$("body").css("overflow-y", "hidden");
+					window.scrollTo(0, 0);
+					$(".popup.myzar_user_upgrade").show();
+					$(".popup.myzar_user_upgrade .container .selection.superadmin").show();
+					$(".popup.myzar_user_upgrade .container .selection.admin").show();
+					$(".popup.myzar_user_upgrade .container .selection.manager").show();
+					$(".popup.myzar_user_upgrade .container .selection.publisher").hide();
+					switch(parseInt(followerObj.role)){
+						case 3:
+							$(".popup.myzar_user_upgrade .container .selection.admin").hide();
+							$(".popup.myzar_user_upgrade .container .selection.manager").hide();
+							$(".popup.myzar_user_upgrade .container .selection.publisher").hide();
+							break;
+						case 2:
+							$(".popup.myzar_user_upgrade .container .selection.manager").hide();
+							$(".popup.myzar_user_upgrade .container .selection.publisher").hide();
+							break;
+						case 1:
+							$(".popup.myzar_user_upgrade .container .selection.publisher").hide();
+							break;
+					}
+					switch(<?php echo getUserRole($_COOKIE["userID"]); ?>){
+						case 3:
+							$(".popup.myzar_user_upgrade .container .selection.superadmin #role").prop("disabled",true);
+							$(".popup.myzar_user_upgrade .container .selection.superadmin").css("color","#9F9F9F");
+							break;
+						case 2:
+							$(".popup.myzar_user_upgrade .container .selection.superadmin #role").prop("disabled",true);
+							$(".popup.myzar_user_upgrade .container .selection.superadmin").css("color","#9F9F9F");
+							$(".popup.myzar_user_upgrade .container .selection.admin #role").prop("disabled",true);
+							$(".popup.myzar_user_upgrade .container .selection.admin").css("color","#9F9F9F");
+							break;
+						case 1:
+							$(".popup.myzar_user_upgrade .container .selection.superadmin #role").prop("disabled",true);
+							$(".popup.myzar_user_upgrade .container .selection.superadmin").css("color","#9F9F9F");
+							$(".popup.myzar_user_upgrade .container .selection.admin #role").prop("disabled",true);
+							$(".popup.myzar_user_upgrade .container .selection.admin").css("color","#9F9F9F");
+							$(".popup.myzar_user_upgrade .container .selection.manager #role").prop("disabled",true);
+							$(".popup.myzar_user_upgrade .container .selection.manager").css("color","#9F9F9F");
+							break;
+					}
+
+					$(".popup.myzar_user_upgrade #buttonSubmit").text("Батлах");
+					$(".popup.myzar_user_upgrade #buttonSubmit").attr("onclick", "submitFollowerRoleUpgrade("+followerObj.id+")");
+				});
+			}
+			else {
+				$(".myzar_follower_detail .container #buttonUpgradeFollowerRole").css("background-color","#ccc");
+				$(".myzar_follower_detail .container #buttonUpgradeFollowerRole").click(function(){
+					confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Та энэ үйлдэлийг хийхийн тулд тохиргооруу орж хэрэглэгчийн эрх мэдлээ дээшлүүлнэ үү!", null);
+				});
+			}
+		}
 		else {
 			$(".myzar_follower_detail .container #buttonUpgradeFollowerRole").css("background-color","#ccc");
-			$(".myzar_follower_detail .container #buttonUpgradeFollowerRole").click(function(){
-				confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Та энэ үйлдэлийг хийхийн тулд тохиргооруу орж хэрэглэгчийн эрх мэдлээ дээшлүүлнэ үү!", null);
-			});
+			$(".myzar_follower_detail .container #buttonUpgradeFollowerRole i").hide();
 		}
 	});
 }
@@ -406,9 +409,24 @@ function backToFollowersList(){
 	$(".myzar_follower_detail").hide();
 }
 	
-function submitFollowerRoleUpgrade(userID, followerID){
+function submitFollowerRoleUpgrade(followerID){
+	$(".popup.myzar_user_upgrade").hide();
+	$("body").css("overflow-y", "auto");
 	
-	console.log("<submitFollowerRoleUpgrade>:"+userID+", "+followerID);
+	const roleOption = $(".popup.myzar_user_upgrade input[name='role']:checked").val();
+	$.post("mysql_myzar_follower_upgrade_process.php",{id:followerID, role:roleOption}).done(function(response){
+		if(response == "OK"){
+			const roleText = convertRoleInString(roleOption);
+			$(".myzar_follower_detail .container #role").text(roleText);
+			confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Хэрэглэгчийн эрх амжилттай ("+roleText+") боллоо", null);
+	   	}
+		else if(response == "FAIL"){
+			confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Алдаа гарлаа!", null);
+		}
+		else if(response == "FAIL_ROLE"){
+			confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Та энэ үйлдэлийг хийхийн тулд тохиргооруу орж хэрэглэгчийн эрх мэдлээ дээшлүүлнэ үү!", null);
+		}
+	});
 }
 </script>
 
