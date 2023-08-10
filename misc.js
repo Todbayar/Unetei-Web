@@ -75,14 +75,22 @@ function information(type, icon, message, timer, event){
 }
 
 function confirmation_yesno(message, eventyes, eventno){
+	$("body").css("overflow-y", "hidden");
+	window.scrollTo(0, 0);
 	$(".popup.yesno").show();
 	$(".popup.yesno .container .message").html(message);
-	if(eventyes != null){
-		if(eventyes != null) window.dispatchEvent(eventyes);
-	}
-	if(eventno != null){
-		if(eventno != null) window.dispatchEvent(eventno);
-	}
+	
+	$(".popup.yesno .container .action #yes").click(function(){
+		$(".popup.yesno").hide();
+		$("body").css("overflow-y", "auto");
+		if(event != null) window.dispatchEvent(eventyes);
+	});
+	
+	$(".popup.yesno .container .action #no").click(function(){
+		$(".popup.yesno").hide();
+		$("body").css("overflow-y", "auto");
+		if(event != null) window.dispatchEvent(eventno);
+	});
 }
 
 function confirmation_ok(message, event){

@@ -26,12 +26,9 @@
 var intervalPhoneCallvalid, phoneCallValidTimeout;
 
 window.onload = function() {
-	<?php
-	if($auth_method == AUTH_FIREBASE){
-		?>
-		firebase.auth().onAuthStateChanged(function(user) {
-			if (user) {
-				console.log("<user>:",user.phoneNumber,user.uid);
+	firebase.auth().onAuthStateChanged(function(user) {
+		if (user) {
+			console.log("<user>:",user.phoneNumber,user.uid);
 //				firebase.auth().signOut();
 //				var uid = user.uid;
 //				var email = user.email;
@@ -40,76 +37,67 @@ window.onload = function() {
 //				var displayName = user.displayName;
 //				var providerData = user.providerData;
 //				var emailVerified = user.emailVerified;
-				const loginSubmit = new XMLHttpRequest();
-				loginSubmit.onload = function(){
-					console.log("<phone code verifying>:"+this.responseText);
-					if(!this.responseText.includes("Fail")){
-						analytics.logEvent('login_phone_verified');
-						location.href = "./";
-					}
-					else {
-						$("#loginVerificationError").text("Нэвтрэх үед алдаа гарлаа!");
-					}
-				};
+			const loginSubmit = new XMLHttpRequest();
+			loginSubmit.onload = function(){
+				console.log("<phone code verifying>:"+this.responseText);
+				if(!this.responseText.includes("Fail")){
+					analytics.logEvent('login_phone_verified');
+					location.href = "./";
+				}
+				else {
+					$("#loginVerificationError").text("Нэвтрэх үед алдаа гарлаа!");
+				}
+			};
 
-				loginSubmit.onerror = function(){
-					$("#loginVerificationError").text(loginSubmit.status);
-				};
+			loginSubmit.onerror = function(){
+				$("#loginVerificationError").text(loginSubmit.status);
+			};
 
-				loginSubmit.open("POST", "mysql_userLogin.php", true);
+			loginSubmit.open("POST", "mysql_userLogin.php", true);
 
-				var loginData = new FormData();
-				loginData.append("uid", user.uid);
-				loginData.append("phone", user.phoneNumber);
+			var loginData = new FormData();
+			loginData.append("uid", user.uid);
+			loginData.append("phone", user.phoneNumber);
 //				loginSubmit.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-				loginSubmit.send(loginData);
-			}
-			updateSignInButtonUI();
-			updateSignInFormUI();
-			updateVerificationCodeFormUI();
-		});
+			loginSubmit.send(loginData);
+		}
+		updateSignInButtonUI();
+		updateSignInFormUI();
+		updateVerificationCodeFormUI();
+	});
 
-		window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('loginButtonFirebase', {
-			'size': 'invisible',
-			'callback': function(response) {
-				phoneAuth();
-			}
-		});
-		<?php
-	}
-	else if($auth_method == AUTH_CALL){
-		?>
-		window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('loginButtonCall', {
-			'size': 'invisible',
-			'callback': function(response){
-				analytics.logEvent('login_phone_call_verifier_click');
-				const uPhone = "+976"+getPhoneNumberFromUserInput();
-				$.get("phone_validater.php", {phone_validater:"<?php echo $phone_validater_superduperadmin; ?>", phone_user:uPhone, state:0}).done(function(response){
-					analytics.logEvent('login_phone_call_verifying');
-					console.log("<recaptchaVerifier>:",response);
-					const objResponse = JSON.parse(response);
-					if(objResponse.response == "ok"){
-						$("#phoneentry_container").hide();
-						$("#phonecallverifier_container").show();
-						$("#phoneverifier_number").text(uPhone);
-						$("#imageLoginCallingOperator").addClass("imageLoginCallingOperatorAnim");
-						phoneCallValidTimeout = 30;
-						intervalPhoneCallvalid = setInterval(function(){phoneAuthCallAccept(uPhone);}, 1500);
-					}
-					else {
-						$("#loginError").val("Та утасны дугаараа зөв оруулна уу!");
-					}
-				});
-			}
-		});
-		<?php
-	}
-	?>
+	window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('loginButtonFirebase', {
+		'size': 'invisible',
+		'callback': function(response) {
+			phoneAuth();
+		}
+	});
 	
 	recaptchaVerifier.render().then(function(widgetId){
 		window.recaptchaWidgetId = widgetId;
 		updateSignInButtonUI();
     });
+	
+	$("#loginButtonCall").click(function(){
+		analytics.logEvent('login_phone_call_verifier_click');
+		const uPhone = "+976"+getPhoneNumberFromUserInput();
+		$.get("phone_validater.php", {phone_validater:"<?php echo $phone_validater_superduperadmin; ?>", phone_user:uPhone, state:0}).done(function(response){
+			analytics.logEvent('login_phone_call_verifying');
+			console.log("<recaptchaVerifier>:",response);
+			const objResponse = JSON.parse(response);
+			if(objResponse.response == "ok"){
+				$("#phoneentry_container").hide();
+				$("#phonecallverifier_container").show();
+				$("#phoneverifier_number").text(uPhone);
+				$("#imageLoginCallingOperator").addClass("imageLoginCallingOperatorAnim");
+				phoneCallValidTimeout = 30;
+				intervalPhoneCallvalid = setInterval(function(){phoneAuthCallAccept(uPhone);}, 1500);
+			}
+			else {
+				$("#loginError").val("Та утасны дугаараа зөв оруулна уу!");
+			}
+		});
+	});
 	
 	$("#loginPhone").on("input", function(e){
 		updateSignInButtonUI();
@@ -136,11 +124,11 @@ function updateVerifyCodeButtonUI(){
 	document.getElementById('loginVerify').disabled = !isCodeValid() || !!window.verifyingCode;
 }
 	
-function updateVerificationCodeFormUI(pPhone) {
+function updateVerificationCodeFormUI() {
 	if (!firebase.auth().currentUser && window.confirmationResult) {
 		$("#phoneverifier_container").show();
-		$("#phoneverifier_number").text(pPhone);
-	} 
+		$("#phoneverifier_number").text("+976"+getPhoneNumberFromUserInput());
+	}
 	else {
 		$("#phoneverifier_container").hide();
 	}
@@ -244,11 +232,7 @@ function phoneAuthCallAccept(phone){
 				else {
 					analytics.logEvent('login_phone_call_verifying_failed');
 					clearInterval(intervalPhoneCallvalid);
-					var eventLoginTryAgain = new CustomEvent("loginTryAgain");
-					window.addEventListener("loginTryAgain", function(){
-						pagenavigation('login');
-					});
-					confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Алдаа гарлаа та дахин оролдоно уу", eventLoginTryAgain);
+					showLoginTryAgainOnCall();
 				}
 			}
 		});
@@ -256,15 +240,29 @@ function phoneAuthCallAccept(phone){
 	else {
 		analytics.logEvent('login_phone_call_verifying_failed');
 		clearInterval(intervalPhoneCallvalid);
-		var eventLoginTryAgain = new CustomEvent("loginTryAgain");
-		window.addEventListener("loginTryAgain", function(){
-			pagenavigation('login');
-		});
-		confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Алдаа гарлаа та дахин оролдоно уу", eventLoginTryAgain);
+		showLoginTryAgainOnCall();
 	}
 	
 	$("#phonecallverifier_container #error").text("Та дуудлага хийнэ үү... ("+phoneCallValidTimeout+")");
 	phoneCallValidTimeout--;
+}
+	
+function showLoginTryAgainOnCall(){
+//	var eventLoginTryAgainWithSMS = new CustomEvent("loginTryAgainWithSMS");
+//	window.addEventListener("loginTryAgainWithSMS", function(){
+//		$("#phonecallverifier_container").hide();
+//		phoneAuth();
+//	});
+//	var eventLoginTryAgain = new CustomEvent("loginTryAgain");
+//	window.addEventListener("loginTryAgain", function(){
+//		pagenavigation('login');
+//	});
+//	confirmation_yesno("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Алдаа гарлаа!<br/>Та <i class='fa-solid fa-comment-sms' style='margin-right: 5px; font-size: 18px; color:#9F9F9F'></i>мессежээр нэвтрэх үү?", eventLoginTryAgainWithSMS, eventLoginTryAgain);
+	var eventLoginTryAgain = new CustomEvent("loginTryAgain");
+	window.addEventListener("loginTryAgain", function(){
+		pagenavigation('login');
+	});
+	confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Алдаа гарлаа! Та дахин оролдоно уу.", eventLoginTryAgain);
 }
 	
 function isNumeric(value) {
@@ -295,23 +293,13 @@ function isNumeric(value) {
 		<div>
 			<p id="loginError" style="color: #FF0004">Та үйлчилгээний нөхцөлийг зөвшөөрснөө баталж чагтална уу мөн өөрийгөө хүн гэдгээ батална уу!</p>
 			<div style="display: flex">
-				<?php
-				if($auth_method == AUTH_FIREBASE){
-					?>
-					<button disabled id="loginButtonFirebase" class="button_yellow loginButton" type="button" style="font: normal 16px Arial; margin-left: 5px; margin-right: 5px">
-						<img src="firebase_logo.png" width="24px" height="24px" style="margin-right: 5px; object-fit: contain" />Мессежээр нэвтрэх
-					</button>
-					<?php
-				}
-				else if($auth_method == AUTH_CALL){
-					?>
-					<button disabled id="loginButtonCall" class="button_yellow loginButton" type="button" style="font: normal 16px Arial; margin-left: 5px; margin-right: 5px"> 
-						<i class="fa-solid fa-phone-volume" style="margin-right: 5px; font-size: 18px"></i>Дуудлагаар нэвтрэх
-					</button>
-					<?php
-				}
-				?>
-<!--			<i class="fa-solid fa-comment-sms" style="margin-right: 5px; font-size: 18px"></i>-->
+				<button disabled id="loginButtonCall" class="button_yellow loginButton" type="button" style="font: normal 16px Arial; margin-left: 5px; margin-right: 5px"> 
+					<i class="fa-solid fa-phone-volume" style="margin-right: 5px; font-size: 18px"></i>Дуудлагаар нэвтрэх
+				</button>
+				<button disabled id="loginButtonFirebase" class="button_yellow loginButton" type="button" style="font: normal 16px Arial; margin-left: 5px; margin-right: 5px">
+					<i class="fa-solid fa-comment-sms" style="margin-right: 5px; font-size: 18px"></i>Мессежээр нэвтрэх
+				</button>
+<!--			<img src="firebase_logo.png" width="24px" height="24px" style="margin-right: 5px; object-fit: contain" />-->
 			</div>
 		</div>
 	</div>

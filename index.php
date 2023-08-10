@@ -9,13 +9,14 @@ include_once "info.php";
 if($protocol=="http" && $_SERVER['HTTP_HOST']!="localhost") header("Location:https://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
 ?>
 <!doctype html>
-<html lang="en-US">
+<html lang="mn-MN">
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="Permissions-Policy" content="interest-cohort=()">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta name="facebook-domain-verification" content="qizqpj55lnc4ms6rcojpn16hp079ax" />
-		
+		<meta property="fb:app_id" content="941510830473804" /> 
+		<meta property="og:site_name" content="<?php echo $domain; ?>" />
 <!--		<script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>-->
 		
 		<script type="text/javascript">
@@ -52,36 +53,62 @@ if($protocol=="http" && $_SERVER['HTTP_HOST']!="localhost") header("Location:htt
 			$arrCategoriesOG["text"] = array_reverse($arrCategoriesOG["text"]);
 			$price = $rowOG["price"]!=0?" (".convertPriceToText($rowOG["price"])." ₮)":"";
 			?>
-			<meta property="og:type" content="website" />
+			<title><?php echo $rowOG["title"]; ?></title>
 			<meta property="og:title" content="<?php echo $rowOG["title"].$price; ?>" />
-			<meta property="og:description" content="<?php echo implode('>', $arrCategoriesOG["text"]); ?>" />
+			<meta property="og:description" content="<?php echo implode(' > ', $arrCategoriesOG["text"]); ?>" />
+			<meta property="og:image:alt" content="<?php echo stripslashes(strip_tags(htmlspecialchars_decode(html_entity_decode($rowOG["description"])))); ?>" />
 			<?php
 			if($rowOG["image"]!=""){
+				$ogImage = $protocol."://".($_SERVER['HTTP_HOST']=="localhost"?($_SERVER['HTTP_HOST']."/".strtolower($domain_title)):$_SERVER['HTTP_HOST'])."/".$path."/".$rowOG["image"];
 				?>
-				<meta property="og:image" content="<?php echo $protocol."://".($_SERVER['HTTP_HOST']=="localhost"?($_SERVER['HTTP_HOST']."/".strtolower($domain_title)):$_SERVER['HTTP_HOST'])."/".$path."/".$rowOG["image"]; ?>" />
+				<meta property="og:type" content="website" />
+				<meta property="og:image" content="<?php echo $ogImage; ?>" />
+				<meta property="og:image:secure_url" content="<?php echo $ogImage; ?>" />
 				<?php
 			}
 			else if($rowOG["youtube"]!=""){
+				$ogImage = $protocol."://".($_SERVER['HTTP_HOST']=="localhost"?($_SERVER['HTTP_HOST']."/".strtolower($domain_title)):$_SERVER['HTTP_HOST'])."/watermark.png";
 				?>
+				<meta property="og:type" content="video.movie" />
 				<meta property="og:video" content="<?php echo $rowOG["youtube"]; ?>" />
+				<meta property="og:image" content="<?php echo $ogImage; ?>" />
+				<meta property="og:image:secure_url" content="<?php echo $ogImage; ?>" />
 				<?php
 			}
 			else if($rowOG["video"]!=""){
+				$ogVideo = $protocol."://".($_SERVER['HTTP_HOST']=="localhost"?($_SERVER['HTTP_HOST']."/".strtolower($domain_title)):$_SERVER['HTTP_HOST'])."/".$path."/".$rowOG["video"];
+				$ogImage = $protocol."://".($_SERVER['HTTP_HOST']=="localhost"?($_SERVER['HTTP_HOST']."/".strtolower($domain_title)):$_SERVER['HTTP_HOST'])."/watermark.png";
 				?>
-				<meta property="og:video" content="<?php echo $protocol."://".($_SERVER['HTTP_HOST']=="localhost"?($_SERVER['HTTP_HOST']."/".strtolower($domain_title)):$_SERVER['HTTP_HOST'])."/".$path."/".$rowOG["video"]; ?>" />
-				<meta property="og:video:secure_url" content="<?php echo $protocol."://".($_SERVER['HTTP_HOST']=="localhost"?($_SERVER['HTTP_HOST']."/".strtolower($domain_title)):$_SERVER['HTTP_HOST'])."/".$path."/".$rowOG["video"]; ?>" />
-				<meta property="og:video:type" content="video/mp4" />
+				<meta property="og:type" content="video.movie" />
+				<meta property="og:video" content="<?php echo $ogVideo; ?>" />
+				<meta property="og:video:secure_url" content="<?php echo $ogVideo; ?>" />
+				<meta property="og:video:type" content="<?php echo findTypeOfVideo($rowOG["video"]); ?>" />
+				<meta property="og:image" content="<?php echo $ogImage; ?>" />
+				<meta property="og:image:secure_url" content="<?php echo $ogImage; ?>" />
 				<?php
 			}
 			else {
 				?>
+				<meta property="og:type" content="website" />
 				<meta property="og:image" content="<?php echo $protocol."://".($_SERVER['HTTP_HOST']=="localhost"?($_SERVER['HTTP_HOST']."/".strtolower($domain_title)):$_SERVER['HTTP_HOST'])."/notfound.png"; ?>" />
 				<?php
 			}
 		}
-		?>
 		
-		<title><?php echo $domain_title; ?></title>
+		if(isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING']==""){
+			$ogImage = $protocol."://".($_SERVER['HTTP_HOST']=="localhost"?($_SERVER['HTTP_HOST']."/".strtolower($domain_title)):$_SERVER['HTTP_HOST'])."/logo_200.png";
+			?>
+			<meta property="og:type" content="website" />
+			<meta property="og:title" content="<?php echo $domain_title; ?>" />
+			<meta property="og:description" content="Зараа оруул, Брэндээ үүсгэ, Дэлгүүрээ нээ, Түгээ, Орлого ол, Удирд" />
+			<meta property="og:image" content="<?php echo $ogImage; ?>" />
+			<meta property="og:image:secure_url" content="<?php echo $ogImage; ?>" />
+			<meta property="og:image:width" content="158" />
+			<meta property="og:image:height" content="47" />
+			<title><?php echo $domain_title; ?></title>
+			<?php
+		}
+		?>
 		<link rel="icon" type="image/x-icon" href="<?php echo str_contains($_SERVER['REQUEST_URI'],"detail")?"../android-chrome-512x512.png":"android-chrome-512x512.png"; ?>">
 		
 		<script src="https://www.gstatic.com/firebasejs/9.12.1/firebase-app-compat.js"></script>

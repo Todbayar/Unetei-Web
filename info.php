@@ -91,9 +91,4 @@ $protocol = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] != "off") ? "https" :
 
 define("COUNT_ITEM_IMAGES",20);
 define("COUNT_ITEM_VIDEOS",1);
-
-//AUTHENTICATION METHOD
-define("AUTH_FIREBASE",0);
-define("AUTH_CALL",1);
-$auth_method = AUTH_CALL;
 ?>
