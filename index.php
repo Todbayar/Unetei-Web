@@ -459,8 +459,13 @@ if($protocol=="http" && $_SERVER['HTTP_HOST']!="localhost") header("Location:htt
 			<div class="wrap">
 				<div style="display: flex; align-items: center; margin-left:10px; margin-top:5px">
 					<img src="<?php echo str_contains($_SERVER['REQUEST_URI'],"detail")?"../icon.png":"icon.png"; ?>" width="35" height="35" style="object-fit: contain" />
+<!--
 					<a href="https://www.hipay.mn/"><img src="<?php echo str_contains($_SERVER['REQUEST_URI'],"detail")?"../hipay.png":"hipay.png"; ?>" width="40" height="40" style="object-fit: contain" /></a>
 					<a href="https://www.arduino.cc/"><img src="<?php echo str_contains($_SERVER['REQUEST_URI'],"detail")?"../arduino.gif":"arduino.gif"; ?>" width="35" height="35" style="object-fit: contain" /></a>
+-->
+					<a href="https://www.facebook.com/profile.php?id=100094657236167" style="margin-left: 5px; margin-top: 2px">
+						<img src="<?php echo str_contains($_SERVER['REQUEST_URI'],"detail")?"../facebook_logo.png":"facebook_logo.png"; ?>" width="32" height="32" style="object-fit: contain" />
+					</a>
 				</div>
 				<div class="left" style="margin-left:10px; margin-top:5px">
 					<div class="service" style="color: white">Техникийн тусламж: <?php echo $service_phone; ?></div>
@@ -481,6 +486,7 @@ if($protocol=="http" && $_SERVER['HTTP_HOST']!="localhost") header("Location:htt
 			$rowPopupUser["item_publish_option"] = getCountItem($_COOKIE["userID"]);
 		}
 		?>
+		
 		<div class="popup yesno" style="display: none">
 			<div class="container">
 				<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('popup yesno')[0].style.display='none'; javascript:document.body.style.overflowY='auto'"></i>
