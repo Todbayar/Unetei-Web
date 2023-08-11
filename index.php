@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 include "mysql_config.php";
 include_once "mysql_misc.php";
 include_once "info.php";
@@ -29,6 +31,14 @@ if($protocol=="http" && $_SERVER['HTTP_HOST']!="localhost") header("Location:htt
 		</script>
 		
 		<?php
+		//LOGGING LAST ACTIVE DATETIME OF USER
+		if(!isset($_SESSION['lastactive']) && isset($_COOKIE["userID"])){
+			$lastactiveDateTime = date("Y-m-d h:i:s");
+			$_SESSION['lastactive'] = $lastactiveDateTime;
+			$queryLastActive = "UPDATE user SET lastactive='".$lastactiveDateTime."' WHERE id=".$_COOKIE["userID"];
+			@$conn->query($queryLastActive);
+		}
+		
 		//OPEN GRAPH FOR SHARING WEB
 		$queryURL = array();
 		parse_str($_SERVER['QUERY_STRING'], $queryURL);
@@ -418,6 +428,9 @@ if($protocol=="http" && $_SERVER['HTTP_HOST']!="localhost") header("Location:htt
 				switch($_GET["page"]){
 					case "login":
 						include "login.php";
+						break;
+					case "loginsms":
+						include "loginsms.php";
 						break;
 					case "myzar":
 						include "myzar.php";

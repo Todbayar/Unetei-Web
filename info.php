@@ -91,4 +91,6 @@ $protocol = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] != "off") ? "https" :
 
 define("COUNT_ITEM_IMAGES",20);
 define("COUNT_ITEM_VIDEOS",1);
+
+define("GOOGLE_RECAPTCHA_SITE_KEY","6LdW8JgnAAAAAFeoWqGS0wa1hVkCJrdQCvk0Y_aV");
 ?>
