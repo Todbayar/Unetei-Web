@@ -252,7 +252,7 @@ function convertRoleInString(role){
 	var vRole;
 	switch(parseInt(role)){
 		case 0:
-			vRole = "Хэрэглэгч";
+			vRole = "Энгийн";
 			break;
 		case 1:
 			vRole = "Нийтлэгч";

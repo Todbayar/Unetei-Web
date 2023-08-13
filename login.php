@@ -26,6 +26,7 @@
 
 <script>
 var intervalPhoneCallvalid, phoneCallValidTimeout;
+const intervalWaitTime = 30;
 
 window.onload = function() {
 	window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('loginButtonCall', {
@@ -42,7 +43,7 @@ window.onload = function() {
 					$("#phonecallverifier_container").show();
 					$("#phoneverifier_number").text(uPhone);
 					$("#imageLoginCallingOperator").addClass("imageLoginCallingOperatorAnim");
-					phoneCallValidTimeout = 30;
+					phoneCallValidTimeout = intervalWaitTime;
 					intervalPhoneCallvalid = setInterval(function(){phoneAuthCallAccept(uPhone);}, 1500);
 				}
 				else {
@@ -125,6 +126,7 @@ function phoneAuthCallAccept(phone){
 	}
 	
 	$("#phonecallverifier_container #error").text("Та дуудлага хийнэ үү... ("+phoneCallValidTimeout+")");
+	if(phoneCallValidTimeout==intervalWaitTime/2) $("#loginSmsMethodOption").show();
 	phoneCallValidTimeout--;
 }
 	
@@ -201,6 +203,6 @@ function jumpLoginSmsMethod(){
 		<div style="margin-bottom: 10px"><i class="fa-solid fa-phone-volume" style="margin-right: 5px"></i>Та автомат баталгаажуулагч <?php echo substr($phone_validater_superduperadmin,0,4)."<b>".substr($phone_validater_superduperadmin,4)."</b>"; ?> дугаарлуу дуудлага хийж <b id="phoneverifier_number"></b> дугаараа баталгаажуулна уу?<br/> Автомат баталгаажуулагч дуудлага ирэнгүүт салгах болно.</div>
 		<img id="imageLoginCallingOperator" src="arduino.gif" width="100px" height="100px" style="object-fit: contain; border-radius: 100%" />
 		<div id="error" style="margin-top: 10px">Та дуудлага хийнэ үү...</div>
-		<div style="margin-top: 20px">Эсвэл та <i class="fa-solid fa-comment-sms" style="font-size: 18px; color:#9F9F9F"></i> мессежээр нэвтрэх бол <a href="javascript:jumpLoginSmsMethod()">энд</a> дарна уу.</div>
+		<div id="loginSmsMethodOption" style="margin-top: 20px; display: none">Эсвэл та <i class="fa-solid fa-comment-sms" style="font-size: 18px; color:#9F9F9F"></i> мессежээр нэвтрэх бол <a href="javascript:jumpLoginSmsMethod()">энд</a> дарна уу.</div>
 	</div>
 </div>

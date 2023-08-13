@@ -177,10 +177,11 @@ function fetchFollowersList(){
 	$(".myzar_followers .container.users").hide();
 	
 	$.post("mysql_myzar_followers_list_process.php",{page:followersPage}).done(function(response){
+//		console.log("<fetchFollowersList>:"+response);
 		if(response!="{}"){
 			const usersObj = JSON.parse(response);
 			
-			followersPageLast = usersObj.page.countPages;
+			followersPageLast = usersObj.page.countPages-1;
 			
 			if(followersPage==0){
 				$("#pagePrev").hide();
@@ -197,9 +198,9 @@ function fetchFollowersList(){
 			}
 			
 			if(usersObj.page.countPages>0){
-				$(".followersPage").show();
+				if(usersObj.page.countPages>1) $(".followersPage").show();
 				$(".followersPage #pageNumbers").empty();
-				for(var offset=0; offset<usersObj.page.countPages+1; offset++){
+				for(var offset=0; offset<usersObj.page.countPages; offset++){
 					const beforeRange = Math.sign(followersPage-followersPageRangeCount)>-1?followersPage-followersPageRangeCount:0;
 					const afterRange = (followersPage+followersPageRangeCount)<usersObj.page.countPages?followersPage+followersPageRangeCount:usersObj.page.countPages;
 					if(offset>=beforeRange && offset<=afterRange){
@@ -232,8 +233,9 @@ function fetchFollowersList(){
 					html += "<img class=\"image\" src=\"<?php echo $path."/"; ?>"+obj.image+"\" onerror=\"this.onerror=null; this.src='user.png'\" />";
 					html += "<div class=\"name text\">"+(obj.name!=null?obj.name:"")+"</div>";
 					html += "<div class=\"role text\">"+convertRoleInString(obj.role)+"</div>";
-					html += "<div class=\"phone text\">"+obj.phone.substr(4)+"</div>";
+					if(obj.lastactive!=null) html += "<div class=\"lastactive text\" style=\"font-size:10px; color:#9F9F9F\">"+obj.lastactive+"</div>";
 					html += "</div>";
+					html += "<div class=\"button_yellow\"><i class=\"fa-solid fa-phone\"></i><div style=\"margin-left: 5px\">"+obj.phone.substr(4)+"</div></div>";
 					html += "<div onclick=\"startChat("+obj.id+",'Сайн байна уу?')\" class=\"button_yellow\"><i class=\"fa-solid fa-comments\"></i><div style=\"margin-left: 5px\">Чатлах</div></div>";
 					html += "<div onClick=\"showOtherItems("+obj.id+")\" class=\"button_yellow\"><i class=\"fa-solid fa-cart-shopping\"></i><div style=\"margin-left: 5px\">Зарууд</div></div>";
 					html += "</div>";
@@ -243,35 +245,42 @@ function fetchFollowersList(){
 			if(typeof usersObj.followers.indirect !== "undefined" && usersObj.followers.indirect.length>0){
 				$(".myzar_followers .container.indirect").show();
 				usersObj.followers.indirect.forEach(function(obj){
+					var showDetailEl = "";
+					if(<?php echo getUserRole($_COOKIE["userID"]); ?>>=3){
+					   showDetailEl = "onClick=\"showFollowerDetail("+obj.id+")\"";
+				   	}
 					var html = "<div class=\"followers_list\">";
-					html += "<div class=\"user\" onClick=\"showFollowerDetail("+obj.id+")\">";
+					html += "<div class=\"user\">";
 					html += "<img class=\"image\" src=\"<?php echo $path."/"; ?>"+obj.image+"\" onerror=\"this.onerror=null; this.src='user.png'\" />";
-					html += "<div class=\"name text\">"+(obj.name!=null?obj.name:"")+"</div>";
-					html += "<div class=\"role text\">"+convertRoleInString(obj.role)+"</div>";
-					html += "<div class=\"phone text\">"+obj.phone.substr(4)+"</div>";
+					html += "<div class=\"name\">"+(obj.name!=null?obj.name:"")+"</div>";
+					html += "<div class=\"role\">"+convertRoleInString(obj.role)+"</div>";
+					if(obj.lastactive!=null) html += "<div class=\"lastactive text\" style=\"font-size:10px; color:#9F9F9F\">"+obj.lastactive+"</div>";
 					html += "</div>";
+					html += "<div class=\"button_yellow\"><i class=\"fa-solid fa-phone\"></i><div style=\"margin-left: 5px\">"+obj.phone.substr(4)+"</div></div>";
 					html += "<div onclick=\"startChat("+obj.id+",'Сайн байна уу?')\" class=\"button_yellow\"><i class=\"fa-solid fa-comments\"></i><div style=\"margin-left: 5px\">Чатлах</div></div>";
 					html += "<div onClick=\"showOtherItems("+obj.id+")\" class=\"button_yellow\"><i class=\"fa-solid fa-cart-shopping\"></i><div style=\"margin-left: 5px\">Зарууд</div></div>";
+					
 					html += "</div>";
+					
 					$(".myzar_followers .container.indirect .followers_list_container.indirect").append(html);
 				});
 			}
-			if(typeof usersObj.users !== "undefined" && usersObj.users.length>0){
-				$(".myzar_followers .container.users").show();
-				usersObj.users.forEach(function(obj){
-					var html = "<div class=\"followers_list\">";
-					html += "<div class=\"user\" onClick=\"showFollowerDetail("+obj.id+")\">";
-					html += "<img class=\"image\" src=\"<?php echo $path."/"; ?>"+obj.image+"\" onerror=\"this.onerror=null; this.src='user.png'\" />";
-					html += "<div class=\"name text\">"+(obj.name!=null?obj.name:"")+"</div>";
-					html += "<div class=\"role text\">"+convertRoleInString(obj.role)+"</div>";
-					html += "<div class=\"phone text\">"+obj.phone.substr(4)+"</div>";
-					html += "</div>";
-					html += "<div onclick=\"startChat("+obj.id+",'Сайн байна уу?')\" class=\"button_yellow\"><i class=\"fa-solid fa-comments\"></i><div style=\"margin-left: 5px\">Чатлах</div></div>";
-					html += "<div onClick=\"showOtherItems("+obj.id+")\" class=\"button_yellow\"><i class=\"fa-solid fa-cart-shopping\"></i><div style=\"margin-left: 5px\">Зарууд</div></div>";
-					html += "</div>";
-					$(".myzar_followers .container.users .followers_list_container.users").append(html);
-				});
-			}
+//			if(typeof usersObj.users !== "undefined" && usersObj.users.length>0){
+//				$(".myzar_followers .container.users").show();
+//				usersObj.users.forEach(function(obj){
+//					var html = "<div class=\"followers_list\">";
+//					html += "<div class=\"user\" onClick=\"showFollowerDetail("+obj.id+")\">";
+//					html += "<img class=\"image\" src=\"<?php echo $path."/"; ?>"+obj.image+"\" onerror=\"this.onerror=null; this.src='user.png'\" />";
+//					html += "<div class=\"name text\">"+(obj.name!=null?obj.name:"")+"</div>";
+//					html += "<div class=\"role text\">"+convertRoleInString(obj.role)+"</div>";
+//					html += "<div class=\"phone text\">"+obj.phone.substr(4)+"</div>";
+//					html += "</div>";
+//					html += "<div onclick=\"startChat("+obj.id+",'Сайн байна уу?')\" class=\"button_yellow\"><i class=\"fa-solid fa-comments\"></i><div style=\"margin-left: 5px\">Чатлах</div></div>";
+//					html += "<div onClick=\"showOtherItems("+obj.id+")\" class=\"button_yellow\"><i class=\"fa-solid fa-cart-shopping\"></i><div style=\"margin-left: 5px\">Зарууд</div></div>";
+//					html += "</div>";
+//					$(".myzar_followers .container.users .followers_list_container.users").append(html);
+//				});
+//			}
 		}
 	});
 }
@@ -330,7 +339,7 @@ function showFollowerDetail(userID){
 		$(".myzar_follower_detail .container #city").val(followerObj.city);
 		$(".myzar_follower_detail .container #phone").val(followerObj.phone.substr(4));
 		$(".myzar_follower_detail .container #role").text(convertRoleInString(followerObj.role));
-		$(".myzar_follower_detail .container #affiliate_number").val(followerObj.affiliate.substr(4));
+		if(followerObj.affiliate!=null) $(".myzar_follower_detail .container #affiliate_number").val(followerObj.affiliate.substr(4));
 		$(".myzar_follower_detail .container #bank_name").val(followerObj.bank_name);
 		$(".myzar_follower_detail .container #bank_owner").val(followerObj.bank_owner);
 		$(".myzar_follower_detail .container #bank_account").val(followerObj.bank_account);
@@ -441,8 +450,8 @@ function submitFollowerRoleUpgrade(followerID){
 	</div>
 	<div class="container indirect" style="display:none; margin-top:10px">
 		<div style="font-family: RobotoBold; margin-left: 10px">
-			Шууд бус дагагчид 
-			<a style="color: gray; font-family: RobotoRegular; font-size: 14px">(Дагагч болох утасны дугаар хоосон)</a>
+			Хэрэглэгчид
+			<a style="color: gray; font-family: RobotoRegular; font-size: 14px">(Дагагч болоогүй хүмүүс)</a>
 		</div>
 		<hr/>
 		<div class="followers_list_container indirect"></div>

@@ -29,7 +29,7 @@ $role_rank_superadmin = "Сүпер админ";
 $role_rank_admin = "Админ";
 $role_rank_manager = "Менежер";
 $role_rank_publisher = "Нийтлэгч";
-$role_rank_user = "Хэрэглэгч";
+$role_rank_user = "Энгийн";
 
 $role_price_superadmin = 300000;
 $role_price_admin = 150000;
@@ -70,7 +70,7 @@ $item_boost_superadmin = 6;
 //pages
 $pageCountHome = 12;
 $pageCountList = 60;
-$pageCountFollowers = 14;
+$pageCountFollowers = 13;
 
 //firebase
 $firebase_app = "unetei-bc717";
