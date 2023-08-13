@@ -22,6 +22,47 @@
 		box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
 	}
 }
+	
+@-webkit-keyframes animateHeart {
+  0% {
+    -webkit-transform: scale(0.8);
+  }
+  5% {
+    -webkit-transform: scale(0.9);
+  }
+  10% {
+    -webkit-transform: scale(0.8);
+  }
+  15% {
+    -webkit-transform: scale(1);
+  }
+  50% {
+    -webkit-transform: scale(0.8);
+  }
+  100% {
+    -webkit-transform: scale(0.8);
+  }
+}
+@keyframes animateHeart {
+  0% {
+    transform: scale(0.8);
+  }
+  5% {
+    transform: scale(0.9);
+  }
+  10% {
+    transform: scale(0.8);
+  }
+  15% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.8);
+  }
+  100% {
+    transform: scale(0.8);
+  }
+}
 </style>
 
 <script>
@@ -184,7 +225,7 @@ function jumpLoginSmsMethod(){
 				<button id="loginButtonCall" type="button" class="button_yellow loginButton" style="font: normal 16px Arial; margin-left: 5px; margin-right: 5px" disabled>
 					<i class="fa-solid fa-phone-volume" style="margin-right: 5px; font-size: 18px"></i>Дуудлагаар нэвтрэх
 				</button>
-				<button id="loginButtonFirebase" type="button" class="button_yellow loginButton" style="font: normal 16px Arial; margin-left: 5px; margin-right: 5px" disabled>
+				<button id="loginButtonFirebase" type="button" class="button_yellow loginButton" style="font: normal 16px Arial; margin-left: 5px; margin-right: 5px; background-color: #ffc15b" disabled>
 					<i class="fa-solid fa-comment-sms" style="margin-right: 5px; font-size: 18px"></i>Мессежээр нэвтрэх
 				</button>
 <!--			<img src="firebase_logo.png" width="24px" height="24px" style="margin-right: 5px; object-fit: contain" />-->
@@ -202,6 +243,7 @@ function jumpLoginSmsMethod(){
 	<div id="phonecallverifier_container" style="text-align: center; display: none">
 		<div style="margin-bottom: 10px"><i class="fa-solid fa-phone-volume" style="margin-right: 5px"></i>Та автомат баталгаажуулагч <?php echo substr($phone_validater_superduperadmin,0,4)."<b>".substr($phone_validater_superduperadmin,4)."</b>"; ?> дугаарлуу дуудлага хийж <b id="phoneverifier_number"></b> дугаараа баталгаажуулна уу?<br/> Автомат баталгаажуулагч дуудлага ирэнгүүт салгах болно.</div>
 		<img id="imageLoginCallingOperator" src="arduino.gif" width="100px" height="100px" style="object-fit: contain; border-radius: 100%" />
+<!--		<img src="arduino1.gif" width="200px" height="200px" style="object-fit: contain" />-->
 		<div id="error" style="margin-top: 10px">Та дуудлага хийнэ үү...</div>
 		<div id="loginSmsMethodOption" style="margin-top: 20px; display: none">Эсвэл та <i class="fa-solid fa-comment-sms" style="font-size: 18px; color:#9F9F9F"></i> мессежээр нэвтрэх бол <a href="javascript:jumpLoginSmsMethod()">энд</a> дарна уу.</div>
 	</div>

@@ -67,6 +67,9 @@ if($protocol=="http" && $_SERVER['HTTP_HOST']!="localhost") header("Location:htt
 			<meta property="og:title" content="<?php echo $rowOG["title"].$price; ?>" />
 			<meta property="og:description" content="<?php echo implode(' > ', $arrCategoriesOG["text"]); ?>" />
 			<meta property="og:image:alt" content="<?php echo stripslashes(strip_tags(htmlspecialchars_decode(html_entity_decode($rowOG["description"])))); ?>" />
+			<meta name="description" content="<?php echo stripslashes(strip_tags(htmlspecialchars_decode(html_entity_decode($rowOG["description"])))); ?>">
+		  	<meta name="keywords" content="<?php echo $website_keywords.", ".$rowOG["title"]; ?>">
+		  	<meta name="author" content="<?php echo $rowOG["title"]; ?>">
 			<?php
 			if($rowOG["image"]!=""){
 				$ogImage = $protocol."://".($_SERVER['HTTP_HOST']=="localhost"?($_SERVER['HTTP_HOST']."/".strtolower($domain_title)):$_SERVER['HTTP_HOST'])."/".$path."/".$rowOG["image"];
@@ -115,10 +118,41 @@ if($protocol=="http" && $_SERVER['HTTP_HOST']!="localhost") header("Location:htt
 			<meta property="og:image:secure_url" content="<?php echo $ogImage; ?>" />
 			<meta property="og:image:width" content="158" />
 			<meta property="og:image:height" content="47" />
+			<meta name="description" content="<?php echo $website_description; ?>">
+		  	<meta name="keywords" content="<?php echo $website_keywords; ?>">
+		  	<meta name="author" content="<?php echo $domain_title; ?>">
 			<title><?php echo $domain_title; ?></title>
 			<?php
 		}
+		else if(isset($_SERVER['QUERY_STRING']) && isset($queryURL["page"]) && !str_contains($queryURL["page"],"detail")) {
+			if($queryURL["page"]=="myzar"){
+				$varTitle = "Миний зар - ";
+				switch($queryURL["myzar"]){
+					case "item":
+						$varTitle .= "Зар";
+						break;
+					case "category":
+						$varTitle .= "Ангилал";
+						break;
+					case "followers":
+						$varTitle .= "Дагагчид";
+						break;
+					case "profile":
+						$varTitle .= "Тохиргоо";
+						break;
+				}
+				?>
+				<title><?php echo $varTitle; ?></title>
+				<?php
+			}
+			else {
+				?>
+				<title><?php echo $queryURL["page"]; ?></title>
+				<?php
+			}
+		}
 		?>
+		
 		<link rel="icon" type="image/x-icon" href="<?php echo str_contains($_SERVER['REQUEST_URI'],"detail")?"../android-chrome-512x512.png":"android-chrome-512x512.png"; ?>">
 		
 		<script src="https://www.gstatic.com/firebasejs/9.12.1/firebase-app-compat.js"></script>
@@ -626,7 +660,7 @@ if($protocol=="http" && $_SERVER['HTTP_HOST']!="localhost") header("Location:htt
 					</div>
 					<div id="billing_qr">
 						<div style="margin-left: 10px; margin-top: 10px; display: flex; align-items: center">
-							<img src="hipay.png" width="40px" height="40px" style="margin-right: 5px" />HiPay-аар төлөх:
+							<img src="<?php echo str_contains($_SERVER['REQUEST_URI'],"detail")?"../hipay.png":"hipay.png"; ?>" width="40px" height="40px" style="margin-right: 5px" />HiPay-аар төлөх:
 						</div>
 						<div id="billing_socialpay" style="font-size: 14px; margin-left: 10px; margin-top: 10px; text-align: center">
 							<img style="width: 200px; height: 200px" />
