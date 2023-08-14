@@ -1,5 +1,3 @@
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
 <style>
 .imageLoginCallingOperatorAnim {
 	animation: pulse 1s infinite;

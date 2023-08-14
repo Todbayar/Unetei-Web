@@ -560,7 +560,7 @@ function submitFollowerRoleUpgrade(followerID){
 		</div>
 		<hr>
 		<div class="divcontainer">
-			<div style="display: flex; align-items: center">Хэрэглэгчийн эрх мэдэл: 
+			<div style="display: flex; align-items: center">Хэрэглэгчийн эрх мэдэл:
 				<div class="button_yellow" id="buttonUpgradeFollowerRole" style="height: 10px; margin-left: 5px">
 					<div id="role" style="margin-left: 5px; font-size: 16px"></div>
 					<i class="fa-solid fa-angle-up" style="font-size: 16px; margin-left: 8px"></i>

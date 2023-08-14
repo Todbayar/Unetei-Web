@@ -7,8 +7,7 @@ include_once "info.php";
 <style>
 .profile {
 	width: 100%;
-	padding-top: 40px;
-	padding-bottom: 40px;
+	padding-top: 30px;
 }
 
 .profile .container {
@@ -43,7 +42,7 @@ include_once "info.php";
 	margin-top: 5px;
 }
 	
-#buttonUpgradeUserRole {
+.buttonUpgradeUserRole {
 	animation: pulse 1s infinite;
 	animation-iteration-count: 3;
 }
@@ -122,16 +121,23 @@ $(document).ready(function(){
 		}
 	});
 	
-	$("#buttonUpgradeUserRole").click(function(){
-		$("body").css("overflow-y", "hidden");
-		window.scrollTo(0, 0);
-		$(".popup.myzar_user_upgrade").show();
-		$.post("mysql_fetch_profile.php", {affiliate:$("#affiliate_number").val()}).done(function (response){
-			const res = JSON.parse(response);
-			$(".popup.myzar_user_upgrade #affiliate").html("Та "+res.phone+" ("+res.name+", "+convertRoleInString(res.role)+")-ын дагагч болох гэж байна.");
-			$(".popup.myzar_user_upgrade #buttonSubmit").attr("onclick", "submitRoleUpgrade('"+res.phone+"')");
+	if(<?php echo getUserRole($_COOKIE["userID"]); ?><4){
+		$("#buttonUpgradeUserRole").click(function(){
+			$("body").css("overflow-y", "hidden");
+			window.scrollTo(0, 0);
+			$(".popup.myzar_user_upgrade").show();
+			$.post("mysql_fetch_profile.php", {affiliate:$("#affiliate_number").val()}).done(function (response){
+				const res = JSON.parse(response);
+				$(".popup.myzar_user_upgrade #affiliate").html("Та "+res.phone+" ("+res.name+", "+convertRoleInString(res.role)+")-ын дагагч болох гэж байна.");
+				$(".popup.myzar_user_upgrade #buttonSubmit").attr("onclick", "submitRoleUpgrade('"+res.phone+"')");
+			});
 		});
-	});
+	}
+	else {
+		$("#buttonUpgradeUserRole").removeClass("buttonUpgradeUserRole");
+		$("#buttonUpgradeUserRole").css("background-color","#ccc");
+		$("#buttonUpgradeUserRole i").hide();
+	}
 	
 	$(".popup.myzar_user_upgrade input[name='role']").change(function(){
 		lastSelectionRoleUpgradeOption = $(this);
@@ -298,31 +304,34 @@ $(document).ready(function(){
 <div class="profile">
 	<div class="container" style="margin-bottom: 20px">
 		<div class="divimage">
-			<?php
-			if($row["image"] != ""){
-			?>
-			<img id="image" src="<?php echo $path.DIRECTORY_SEPARATOR.$row["image"]; ?>" onClick="profile_image_button()" onerror="this.onerror=null; this.src='user.png'" />
-			<?php
-			}
-			else {
-			?>
-			<img id="image" src="user.png" onClick="profile_image_button()" />
-			<?php
-			}
-			?>
+			<div style="width: 80px; height: 80px; margin-left: auto; margin-right: auto; position: relative">
+				<?php
+				if($row["image"] != ""){
+				?>
+				<img id="image" src="<?php echo $path.DIRECTORY_SEPARATOR.$row["image"]; ?>" onClick="profile_image_button()" onerror="this.onerror=null; this.src='user.png'" />
+				<?php
+				}
+				else {
+				?>
+				<img id="image" src="user.png" onClick="profile_image_button()" />
+				<?php
+				}
+				?>
+				<i class="fa-solid fa-camera" style="color: #FFA718; position: absolute; bottom: 5px; right: 5px"></i>
+			</div>
 			<input type="file" id="image_file" accept="image/png, image/gif, image/jpeg, .svg" style="display: none">
 		</div>
 		<div class="divcontainer">
 			<div>Нэр:</div>
 			<div>
-				<input id="name" class="name" type="text" maxlength="128" value="<?php echo $row["name"]; ?>">
+				<input id="name" class="name" type="text" maxlength="128" value="<?php echo $row["name"]; ?>" style="width: 98%">
 				<div id="name_error" style="color: red; margin-top: 5px; font-size: 14px; display: none">Тоо эсвэл тусгай тэмдэгт оруулж болохгүй!</div>
 			</div>
 		</div>
 		<div class="divcontainer">
 			<div>Имейл:</div>
 			<div style="color: #9F9F9F; font-size: 14px">Та имэйлээ доор бичсэнээр мэдэгдэл хүлээн авах боломжтой болно</div>
-			<input id="email" class="email" type="email" maxlength="128" value="<?php echo $row["email"]; ?>">
+			<input id="email" class="email" type="email" maxlength="128" value="<?php echo $row["email"]; ?>" style="width: 98%">
 			<div id="email_error" style="color: red; margin-top: 5px; font-size: 14px; display: none">Имейл буруу байна!</div>
 		</div>
 		<div class="divcontainer">
@@ -378,32 +387,14 @@ $(document).ready(function(){
 		</div>
 		<hr/>
 		<div class="divcontainer" style="width: 100%; display: flex; align-items: center">
-			<div class="button_yellow" id="buttonUpgradeUserRole" style="height: 10px; width: 136px">
-				<div style="margin-left: 5px; font-size: 16px">Дагагч болох</div>
-				<i class="fa-solid fa-user-plus" style="font-size: 16px; margin-left: 8px"></i>
-			</div>
+			
 		</div>
 		<div class="divcontainer">
-			<div>Таны хэрэглэгчийн эрх мэдэл:
-			<?php 
-			switch($row["role"]){
-				case 0:
-					echo "Хэрэглэгч";
-					break;
-				case 1:
-					echo "Нийтлэгч";
-					break;
-				case 2:
-					echo "Менежер";
-					break;
-				case 3:
-					echo "Админ";
-					break;
-				case 4:
-					echo "Сүпер админ";
-					break;
-			}
-			?>
+			<div style="display: flex; align-items: center">Таны эрх мэдэл:
+				<div class="button_yellow buttonUpgradeUserRole" id="buttonUpgradeUserRole" style="margin-left:5px; height: 10px">
+					<div style="margin-left: 5px; font-size: 16px"><?php echo convertRoleInString(getUserRole($_COOKIE["userID"])); ?></div>
+					<i class="fa-solid fa-angle-up" style="font-size: 16px; margin-left: 8px"></i>
+				</div>
 			</div>
 		</div>
 		<div class="divcontainer" style="color: #9F9F9F; font-size: 14px">
@@ -466,7 +457,7 @@ $(document).ready(function(){
 				<img src="hipay.png" width="40px" height="40px" style="margin-right: 5px" />HiPay QR:
 			</div>
 			<div style="color:#9F9F9F; font-size: 14px">
-				HiPay аппнаас өөрийнхөө дансны QRCode-ийг скрийншот хийгээд тайрч энэ хэсэгт оруулсанаар орлого хүлээн авах боломжтой болно.
+				HiPay аппнаас өөрийнхөө дансны QR кодыг скрийншот хийгээд тайрч доорх хар цагаан зурган дээр дарж файлаа сонгон оруулсанаар орлого хүлээн авах боломжтой болно.
 			</div>
 			<div style="width: 200px; height: 200px; margin-left: auto; margin-right: auto">
 				<?php
@@ -491,7 +482,7 @@ $(document).ready(function(){
 			</div>
 		</div>
 		<hr/>
-		<div style="width: 100%; float: left; margin-top: 10px; justify-content: center; display: flex">
+		<div style="width: 100%; float: left; margin-top: 10px; justify-content: center; display: flex; margin-bottom:20px">
 			<div onClick="logout()" class="button_yellow" style="background: red; color: white">
 				<div style="font-size: 16px; margin-right: 10px; font-family: RobotoBold">Гарах</div>
 				<i class="fa-solid fa-right-from-bracket"></i>
