@@ -22,11 +22,13 @@ if(isset($_COOKIE["userID"])){
 	while($rowDirect = mysqli_fetch_array($resultDirect)){
 		$userDirect = new stdClass();
 		$userDirect->id = $rowDirect["id"];
+		$userDirect->uid = $rowDirect["uid"];
 		$userDirect->image = $rowDirect["image"];
 		$userDirect->name = $rowDirect["name"];
 		$userDirect->role = $rowDirect["role"];
 		$userDirect->phone = $rowDirect["phone"];
 		$userDirect->lastactive = $rowDirect["lastactive"];
+		$userDirect->lastlogged = $rowDirect["lastlogged"];
 		$users->followers->direct[] = $userDirect;
 	}
 	
@@ -42,11 +44,13 @@ if(isset($_COOKIE["userID"])){
 	while($rowIndirect = mysqli_fetch_array($resultIndirect)){
 		$userIndirect = new stdClass();
 		$userIndirect->id = $rowIndirect["id"];
+		$userIndirect->uid = $rowIndirect["uid"];
 		$userIndirect->image = $rowIndirect["image"];
 		$userIndirect->name = $rowIndirect["name"];
 		$userIndirect->role = $rowIndirect["role"];
 		$userIndirect->phone = $rowIndirect["phone"];
 		$userIndirect->lastactive = $rowIndirect["lastactive"];
+		$userIndirect->lastlogged = $rowIndirect["lastlogged"];
 		$users->followers->indirect[] = $userIndirect;
 	}
 	

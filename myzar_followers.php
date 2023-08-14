@@ -233,7 +233,22 @@ function fetchFollowersList(){
 					html += "<img class=\"image\" src=\"<?php echo $path."/"; ?>"+obj.image+"\" onerror=\"this.onerror=null; this.src='user.png'\" />";
 					html += "<div class=\"name text\">"+(obj.name!=null?obj.name:"")+"</div>";
 					html += "<div class=\"role text\">"+convertRoleInString(obj.role)+"</div>";
-					if(obj.lastactive!=null) html += "<div class=\"lastactive text\" style=\"font-size:10px; color:#9F9F9F\">"+obj.lastactive+"</div>";
+					var lastLoggedInMethod = "";
+					const patternUID = new RegExp("^[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}$");
+					if(patternUID.test(obj.uid)){
+						lastLoggedInMethod = "<i class=\"fa-solid fa-phone-volume\" style=\"margin-right:2px\"></i>";
+					}
+					else if(obj.uid!="" && obj.uid!=null){
+						lastLoggedInMethod = "<i class=\"fa-solid fa-comment-sms\" style=\"margin-right:2px\"></i>";
+					}
+					var lastLoggedInDatetime = "";
+					if(obj.lastactive!=null && obj.lastactive!=""){
+						lastLoggedInDatetime = obj.lastactive;
+					}
+					else if(obj.lastlogged!=null && obj.lastlogged!=""){
+						lastLoggedInDatetime = obj.lastlogged;
+					}
+					html += "<div class=\"lastactive text\" style=\"font-size:10px; color:#9F9F9F\">"+lastLoggedInMethod+lastLoggedInDatetime+"</div>";
 					html += "</div>";
 					html += "<div class=\"button_yellow\"><i class=\"fa-solid fa-phone\"></i><div style=\"margin-left: 5px\">"+obj.phone.substr(4)+"</div></div>";
 					html += "<div onclick=\"startChat("+obj.id+",'Сайн байна уу?')\" class=\"button_yellow\"><i class=\"fa-solid fa-comments\"></i><div style=\"margin-left: 5px\">Чатлах</div></div>";
@@ -254,7 +269,22 @@ function fetchFollowersList(){
 					html += "<img class=\"image\" src=\"<?php echo $path."/"; ?>"+obj.image+"\" onerror=\"this.onerror=null; this.src='user.png'\" />";
 					html += "<div class=\"name\">"+(obj.name!=null?obj.name:"")+"</div>";
 					html += "<div class=\"role\">"+convertRoleInString(obj.role)+"</div>";
-					if(obj.lastactive!=null) html += "<div class=\"lastactive text\" style=\"font-size:10px; color:#9F9F9F\">"+obj.lastactive+"</div>";
+					var lastLoggedInMethod = "";
+					const patternUID = new RegExp("^[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}$");
+					if(patternUID.test(obj.uid)){
+						lastLoggedInMethod = "<i class=\"fa-solid fa-phone-volume\" style=\"margin-right:2px\"></i>";
+					}
+					else if(obj.uid!="" && obj.uid!=null){
+						lastLoggedInMethod = "<i class=\"fa-solid fa-comment-sms\" style=\"margin-right:2px\"></i>";
+					}
+					var lastLoggedInDatetime = "";
+					if(obj.lastactive!=null && obj.lastactive!=""){
+						lastLoggedInDatetime = obj.lastactive;
+					}
+					else if(obj.lastlogged!=null && obj.lastlogged!=""){
+						lastLoggedInDatetime = obj.lastlogged;
+					}
+					if(obj.lastactive!=null) html += "<div class=\"lastactive text\" style=\"font-size:10px; color:#9F9F9F\">"+lastLoggedInMethod+lastLoggedInDatetime+"</div>";
 					html += "</div>";
 					html += "<div class=\"button_yellow\"><i class=\"fa-solid fa-phone\"></i><div style=\"margin-left: 5px\">"+obj.phone.substr(4)+"</div></div>";
 					html += "<div onclick=\"startChat("+obj.id+",'Сайн байна уу?')\" class=\"button_yellow\"><i class=\"fa-solid fa-comments\"></i><div style=\"margin-left: 5px\">Чатлах</div></div>";

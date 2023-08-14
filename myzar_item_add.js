@@ -277,7 +277,7 @@ function publishItemUpdate(itemID, title, role){
 					$(".popup.billing .container #billing_title").html(title);
 					$(".popup.billing .container #billing_price").html(itemResponse.pay_amount + " ₮");
 					
-					if(res.bank_account!=""){
+					if(res.bank_account!="" && res.bank_account!=null){
 						$(".popup.billing .container #billing_bank #name").html("<b>" + res.bank_name + "</b>");
 						$(".popup.billing .container #billing_bank #account").html("<b>" + res.bank_account + "</b>");
 						$(".popup.billing .container #billing_bank #owner").html("<b>" + res.bank_owner + "</b>");
@@ -286,7 +286,7 @@ function publishItemUpdate(itemID, title, role){
 						$(".popup.billing .container #billing_bank").hide();
 					}
 					
-					if(res.socialpay!=""){
+					if(res.socialpay!="" && res.socialpay!=null){
 						$(".popup.billing .container #billing_socialpay img").attr("src", "user_files/"+res.socialpay);
 					}
 					else {
@@ -345,7 +345,7 @@ function publishItemSubmit(role){
 					$(".popup.billing .container #billing_title").html(itemData.get("title"));
 					$(".popup.billing .container #billing_price").html(itemResponse.pay_amount + " ₮");
 					
-					if(res.bank_account!=""){
+					if(res.bank_account!="" && res.bank_account!=null){
 						$(".popup.billing .container #billing_bank #name").html("<b>" + res.bank_name + "</b>");
 						$(".popup.billing .container #billing_bank #account").html("<b>" + res.bank_account + "</b>");
 						$(".popup.billing .container #billing_bank #owner").html("<b>" + res.bank_owner + "</b>");
@@ -354,7 +354,7 @@ function publishItemSubmit(role){
 						$(".popup.billing .container #billing_bank").hide();
 					}
 					
-					if(res.socialpay!=""){
+					if(res.socialpay!="" && res.socialpay!=null){
 						$(".popup.billing .container #billing_socialpay img").attr("src", "user_files/"+res.socialpay);
 					}
 					else {

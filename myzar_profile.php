@@ -180,7 +180,7 @@ function submitRoleUpgrade(affiliatePhone){
 		$(".popup.billing .container #billing_title").html(res.title);
 		$(".popup.billing .container #billing_price").html(res.price + " ₮");
 		
-		if(res.bank_account!=""){
+		if(res.bank_account!="" && res.bank_account!=null){
 			$(".popup.billing .container #billing_bank #name").html("<b>" + res.bank_name + "</b>");
 			$(".popup.billing .container #billing_bank #account").html("<b>" + res.bank_account + "</b>");
 			$(".popup.billing .container #billing_bank #owner").html("<b>" + res.bank_owner + "</b>");
@@ -189,7 +189,7 @@ function submitRoleUpgrade(affiliatePhone){
 			$(".popup.billing .container #billing_bank").hide();
 		}
 		
-		if(res.socialpay!=""){
+		if(res.socialpay!="" && res.socialpay!=null){
 			$(".popup.billing .container #billing_socialpay img").attr("src", "user_files/"+res.socialpay);
 		}
 		else {
