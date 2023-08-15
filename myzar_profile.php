@@ -360,6 +360,10 @@ function submitProfile(){
 		reqProfileSubmit.send(profileSubmitData);
 	}
 }
+	
+function switchFollower(){
+	confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #58d518'></i>Одоогоор өөрчлөх боломжгүй байна!", null);
+}
 </script>
 
 <?php
@@ -480,7 +484,19 @@ $(document).ready(function(){
 			<div>Утасны дугаар:</div>
 			<div style="display: flex; align-items: center">
 				<label for="affiliate_number" style="margin-right: 5px">+976</label>
-				<input id="affiliate_number" type="tel" pattern="[0-9]{8}" maxlength="8" value="<?php echo substr($row["affiliate"],4); ?>" style="width: 60%" />
+				<?php
+				if($row["affiliate"]!="" && $row["affiliate"]!=null){
+					?>
+					<input id="affiliate_number" type="tel" pattern="[0-9]{8}" maxlength="8" value="<?php echo substr($row["affiliate"],4); ?>" style="width: 194px" disabled />
+					<a href="javascript:switchFollower()" style="margin-left: 5px; color: #FFA718; cursor: pointer"><i class="fa-solid fa-lock"></i></a>
+					<?php
+				}
+				else {
+					?>
+					<input id="affiliate_number" type="tel" pattern="[0-9]{8}" maxlength="8" value="<?php echo substr($row["affiliate"],4); ?>" style="width: 194px" />
+					<?php
+				}
+				?>
 			</div>
 			<div id="affiliateSearchResult"></div>
 		</div>
@@ -531,22 +547,29 @@ $(document).ready(function(){
 		?>
 		<div class="divcontainer qrcode">
 			<div style="display: flex; align-items: center">
-				<img src="hipay.png" width="40px" height="40px" style="margin-right: 5px" />HiPay QR:
+				<a href="https://www.hipay.mn"><img src="hipay.png" width="40px" height="40px" style="margin-right: 5px" /></a><a href="https://www.hipay.mn" style="margin-right: 5px">HiPay</a> QR:
 			</div>
 			<div style="color:#9F9F9F; font-size: 14px">
-				HiPay аппнаас өөрийнхөө дансны QR кодыг скрийншот хийгээд тайрч доорх хар цагаан зурган дээр дарж файлаа сонгон оруулсанаар орлого хүлээн авах боломжтой болно.
+				HiPay аппнаас өөрийнхөө дансны QR кодыг скрийншот хийгээд тайрч доорх саарал зурган дээр дарж файлаа сонгон оруулсанаар орлого хүлээн авах боломжтой болно.
 			</div>
-			<div style="width: 200px; height: 200px; margin-left: auto; margin-right: auto">
+			<div style="width: 200px; height: 200px; margin-left: auto; margin-right: auto; margin-top: 10px">
 				<?php
-				if($row["socialpay"] != ""){
+				if($row["socialpay"]!="" && !is_null($row["socialpay"])){
 				?>
 				<img id="socialpay" src="<?php echo $path.DIRECTORY_SEPARATOR.$row["socialpay"]; ?>" onClick="profile_socialpay_button()" style="cursor: pointer; object-fit:contain; width: 100%; height: 100%" onerror="this.onerror=null; this.src='image-solid.svg'" />
 				<?php
 				}
 				else {
-				?>
-				<img id="socialpay" src="image-solid.svg" onClick="profile_socialpay_button()" style="cursor: pointer; object-fit:contain; width: 100%; height: 100%" />
-				<?php
+					if($row["role"]>1){
+						?>
+						<img id="socialpay" src="image-solid_gray.png" onClick="profile_socialpay_button()" style="cursor: pointer; object-fit:contain; width: 100%; height: 100%" />
+						<?php
+					}
+					else {
+						?>
+						<a href="javascript:confirmation_ok('Та энэ үйлдэлийг хийхийн тулд хэрэглэгчийн эрх мэдлээ дээшлүүлнэ үү!')"><img id="socialpay" src="image-solid_gray.png" style="cursor: pointer; object-fit:contain; width: 100%; height: 100%" /></a>
+						<?php
+					}
 				}
 				?>
 				<input type="file" id="socialpay_file" accept="image/png, image/jpeg" style="display: none">

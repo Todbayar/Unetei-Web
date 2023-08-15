@@ -1,5 +1,6 @@
 <?php
 include "mysql_config.php";
+include_once "mysql_misc.php";
 include_once "info.php";
 
 if(isset($_REQUEST["userID"]) && isset($_REQUEST["name"]) && isset($_REQUEST["email"]) && isset($_REQUEST["city"])){
@@ -7,7 +8,10 @@ if(isset($_REQUEST["userID"]) && isset($_REQUEST["name"]) && isset($_REQUEST["em
 	$vNewFile = isset($_FILES["image"]) ? date("Ymdhis")."_".$_FILES["image"]["name"] : "";
 	$vSocialPay = (isset($_FILES["socialpay"])) ? date("Ymdhis")."_".$_FILES["socialpay"]["name"] : "";
 	
-	$affiliate = isset($_REQUEST["affiliate"]) && $_REQUEST["affiliate"] != "" ? "+976".$_REQUEST["affiliate"] : "";
+	$patternPhone = "/^[0-9]{8}$/i";
+	
+	$affiliate = (isset($_REQUEST["affiliate"]) && $_REQUEST["affiliate"]!="" && getPhone($_COOKIE["userID"])!="+976".$_REQUEST["affiliate"] && preg_match($patternPhone, $_REQUEST["affiliate"]) && getUserIDFromPhone("+976".$_REQUEST["affiliate"])>-1) ? "+976".$_REQUEST["affiliate"] : "";
+	
 	$bank_name = isset($_REQUEST["bank_name"]) && $_REQUEST["bank_name"] != "null" ? $_REQUEST["bank_name"] : "";
 	
 	$query = "UPDATE user SET name='".$_REQUEST["name"]."', email='".$_REQUEST["email"]."', city='".$_REQUEST["city"]."', affiliate='".$affiliate."', bank_name='".$bank_name."', bank_owner='".$_REQUEST["bank_owner"]."', bank_account='".$_REQUEST["bank_account"]."'";

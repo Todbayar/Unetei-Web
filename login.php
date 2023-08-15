@@ -221,7 +221,7 @@ function jumpLoginSmsMethod(){
 			<p id="loginError" style="color: #FF0004">Та үйлчилгээний нөхцөлийг зөвшөөрснөө баталж чагтална уу мөн өөрийгөө хүн гэдгээ батална уу!</p>
 			<div style="display: flex">
 				<button id="loginButtonCall" type="button" class="button_yellow loginButton" style="font: normal 16px Arial; margin-left: 5px; margin-right: 5px" disabled>
-					<i class="fa-solid fa-phone-volume" style="margin-right: 5px; font-size: 18px"></i>Дуудлагаар нэвтрэх
+					<i class="fa-solid fa-phone-volume" style="margin-right: 5px; font-size: 18px"></i>Дуудлагаар Нэвтрэх
 				</button>
 				<button id="loginButtonFirebase" type="button" class="button_yellow loginButton" style="font: normal 16px Arial; margin-left: 5px; margin-right: 5px; background-color: #ffc15b" disabled>
 					<i class="fa-solid fa-comment-sms" style="margin-right: 5px; font-size: 18px"></i>Мессежээр нэвтрэх

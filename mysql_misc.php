@@ -109,8 +109,13 @@ function getUserIDFromPhone($phone){
 	global $conn;
 	$query = "SELECT id FROM user WHERE phone='".$phone."'";
 	$result = $conn->query($query);
-	$row = mysqli_fetch_array($result);
-	return $row["id"];
+	if(mysqli_num_rows($result)>0){
+		$row = mysqli_fetch_array($result);
+		return $row["id"];
+	}
+	else {
+		return -1;
+	}
 }
 
 function convertPriceToText($price){
