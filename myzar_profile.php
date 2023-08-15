@@ -63,6 +63,54 @@ include_once "info.php";
 		box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
 	}
 }
+	
+#affiliateSearchResult {
+	overflow-x: auto;
+	margin-top: 10px;
+	display: flex;
+	padding-bottom: 10px;
+}
+	
+#affiliateSearchResult::-webkit-scrollbar {
+	height: 1px;
+}
+ 
+#affiliateSearchResult::-webkit-scrollbar-track {
+  	box-shadow: inset 0 0 1px rgba(0, 0, 0, 0);
+}
+ 
+#affiliateSearchResult::-webkit-scrollbar-thumb {
+  	background-color: #FFA718;
+  	outline: 2px solid #FFA718;
+	border-radius: 10px;
+}
+
+#affiliateSearchResult .user {
+	width: 80px;
+	text-align: center;
+	margin-left: 2px;
+	margin-right: 2px;
+	cursor: pointer;
+}
+	
+#affiliateSearchResult .user img {
+	width: 70px;
+	height: 70px;
+	object-fit: contain;
+	border-radius: 100%;
+}
+	
+#affiliateSearchResult .user .text {
+	font-size: 12px;
+}
+	
+#affiliateSearchResult .user .text .role {
+	color: #9F9F9F;	
+}
+
+#affiliateSearchResult .user .text .phone {
+	color: #9F9F9F;	
+}
 </style>
 
 <script src="misc.js"></script>
@@ -172,7 +220,35 @@ $(document).ready(function(){
 		reqCropImageSubmit.open("POST", "image-crop.php", true);		
 		reqCropImageSubmit.send(imageCropData);
 	});
+	
+	$("#affiliate_number").keyup(function(){
+		$("#affiliateSearchResult").empty();
+		if($(this).val()=="") $("#affiliateSearchResult").hide(100);
+		$.post("mysql_fetch_profile_search_by_phone.php",{phone:("+976"+$(this).val())}).done(function(response){
+//			console.log("<mysql_fetch_profile_search_by_phone>:"+response);
+			if(response!="[]"){
+				$("#affiliateSearchResult").show(100);
+				JSON.parse(response).users.forEach(function(searchResultUser){
+					var html = "<div class=\"user\" onClick=\"fillAffiliatePhone('"+searchResultUser.phone.substr(4)+"')\">";
+					html += "<img src=\"<?php echo $path."/"; ?>"+searchResultUser.image+"\" onerror=\"this.src='user.png'\">";
+					html += "<div class=\"text\">";
+					if(searchResultUser.name!=null && searchResultUser.name!="") html += "<div class=\"name\">"+searchResultUser.name+"</div>";
+					html += "<div class=\"role\">"+convertRoleInString(searchResultUser.role)+"</div>";
+					html += "<div class=\"phone\">"+searchResultUser.phone.substr(4)+"</div>";
+					html += "</div>";
+					html += "</div>";
+					$("#affiliateSearchResult").append(html);
+				});
+			}
+		});
+	});
 });
+	
+function fillAffiliatePhone(phone){
+	$("#affiliate_number").val(phone);
+	$("#affiliateSearchResult").empty();
+	$("#affiliateSearchResult").hide(100);
+}
 	
 function submitRoleUpgrade(affiliatePhone){
 	$(".popup.myzar_user_upgrade").hide();
@@ -400,12 +476,13 @@ $(document).ready(function(){
 		<div class="divcontainer" style="color: #9F9F9F; font-size: 14px">
 			<div>Таньд <?php echo $domain; ?>-ыг санал болгосон хүний утасны дугаар. Хоосон тохиолдолд сүпер дүпер админы дагагч болохыг анхаарна уу.</div>
 		</div>
-		<div class="divcontainer" style="width: 60%; margin-bottom: 20px">
+		<div class="divcontainer" style="width: 98%; margin-bottom: 20px">
 			<div>Утасны дугаар:</div>
 			<div style="display: flex; align-items: center">
 				<label for="affiliate_number" style="margin-right: 5px">+976</label>
-				<input id="affiliate_number" type="number" maxlength="200" value="<?php echo substr($row["affiliate"],4); ?>" />
+				<input id="affiliate_number" type="tel" pattern="[0-9]{8}" maxlength="8" value="<?php echo substr($row["affiliate"],4); ?>" style="width: 60%" />
 			</div>
+			<div id="affiliateSearchResult"></div>
 		</div>
 		<hr>
 		<div class="divcontainer" style="display: flex; align-items: center">
@@ -414,7 +491,7 @@ $(document).ready(function(){
 			<?php
 			if(getUserRole($_COOKIE["userID"])<2){
 			?>
-			<i onclick="javascript:confirmation_ok('Та энэ үйлдэлийг хийхийн тулд хэрэглэгчийн эрхээ дээшлүүлнэ үү. <b>Дагагч болох</b> дээр дарж үзнэ үү!')" class="fa-solid fa-circle-info" style="color: #FFA718; margin-left: 5px; cursor: pointer"></i>
+			<i onclick="javascript:confirmation_ok('Та энэ үйлдэлийг хийхийн тулд хэрэглэгчийн эрх мэдлээ дээшлүүлнэ үү!')" class="fa-solid fa-circle-info" style="color: #FFA718; margin-left: 5px; cursor: pointer"></i>
 			<?php
 			}
 			?>
