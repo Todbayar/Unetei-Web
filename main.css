@@ -224,6 +224,8 @@ body::-webkit-scrollbar-thumb {
 }
 
 .chat .left .user .container .box img {
+	min-width: 40px;
+	min-height: 40px; 
 	max-width: 40px;
 	max-height: 40px; 
 	border-radius: 100%;
@@ -293,6 +295,8 @@ body::-webkit-scrollbar-thumb {
 }
 
 .chat .right .top .message img {
+	min-width: 40px;
+	min-height: 40px; 
 	max-width: 40px;
 	max-height: 40px; 
 	border-radius: 100%;
