@@ -7,13 +7,13 @@ if(isset($_REQUEST["tableID"]) && isset($_REQUEST["parentID"])){
 	$query = "";
 
 	if($tableID == 1){
-		$query = "SELECT *, (SELECT COUNT(*) FROM category2 WHERE parent=category1.id) AS count_category_children, (SELECT COUNT(*) FROM item WHERE category=CONCAT('c1_', category1.id)) AS count_item_children FROM category1";
+		$query = "SELECT *, (SELECT COUNT(*) FROM category2 WHERE parent=category1.id AND active=2) AS count_category_children, (SELECT COUNT(*) FROM item WHERE category=CONCAT('c1_', category1.id) AND isactive=4) AS count_item_children FROM category1";
 	}
 	else if($tableID == 4){
-		$query = "SELECT *, 0 AS count_category_children, (SELECT COUNT(*) FROM item WHERE category=CONCAT('c4_', category4.id)) AS count_item_children  FROM category".$tableID." WHERE parent=".$parentID;
+		$query = "SELECT *, 0 AS count_category_children, (SELECT COUNT(*) FROM item WHERE category=CONCAT('c4_', category4.id) AND isactive=4) AS count_item_children FROM category".$tableID." WHERE parent=".$parentID;
 	}
 	else {
-		$query = "SELECT *, (SELECT COUNT(*) FROM category".($tableID+1)." WHERE parent=category".$tableID.".id) AS count_category_children, (SELECT COUNT(*) FROM item WHERE category=CONCAT('c".$tableID."_', category".$tableID.".id)) AS count_item_children FROM category".$tableID." WHERE parent=".$parentID;
+		$query = "SELECT *, (SELECT COUNT(*) FROM category".($tableID+1)." WHERE parent=category".$tableID.".id AND active=2) AS count_category_children, (SELECT COUNT(*) FROM item WHERE category=CONCAT('c".$tableID."_', category".$tableID.".id) AND isactive=4) AS count_item_children FROM category".$tableID." WHERE parent=".$parentID;
 	}
 	
 	if(isset($_COOKIE["userID"])) $query .= " ORDER BY FIELD(userID, ".$_COOKIE["userID"].") DESC, status DESC";
