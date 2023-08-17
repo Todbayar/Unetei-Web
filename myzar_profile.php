@@ -465,10 +465,6 @@ $(document).ready(function(){
 				</div>
 			</div>
 		</div>
-		<hr/>
-		<div class="divcontainer" style="width: 100%; display: flex; align-items: center">
-			
-		</div>
 		<div class="divcontainer">
 			<div style="display: flex; align-items: center">Таны эрх мэдэл:
 				<div class="button_yellow buttonUpgradeUserRole" id="buttonUpgradeUserRole" style="margin-left:5px; height: 10px">
@@ -477,12 +473,11 @@ $(document).ready(function(){
 				</div>
 			</div>
 		</div>
-		<div class="divcontainer" style="color: #9F9F9F; font-size: 14px">
-			<div>Таньд <?php echo $domain; ?>-ыг санал болгосон хүний утасны дугаар. Хоосон тохиолдолд сүпер дүпер админы дагагч болохыг анхаарна уу.</div>
-		</div>
+		<hr/>
 		<div class="divcontainer" style="width: 98%; margin-bottom: 20px">
 			<div>Утасны дугаар:</div>
-			<div style="display: flex; align-items: center">
+			<div style="color: #9F9F9F; font-size: 14px; margin-top: 5px;">Таньд <?php echo $domain; ?>-ыг санал болгосон хүний утасны дугаар.</div>
+			<div style="display: flex; align-items: center; margin-top: 5px;">
 				<label for="affiliate_number" style="margin-right: 5px">+976</label>
 				<?php
 				if($row["affiliate"]!="" && $row["affiliate"]!=null){

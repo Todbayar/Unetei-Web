@@ -10,7 +10,7 @@ if(isset($_REQUEST["userID"]) && isset($_REQUEST["name"]) && isset($_REQUEST["em
 	
 	$patternPhone = "/^[0-9]{8}$/i";
 	
-	$affiliate = (isset($_REQUEST["affiliate"]) && $_REQUEST["affiliate"]!="" && getPhone($_COOKIE["userID"])!="+976".$_REQUEST["affiliate"] && preg_match($patternPhone, $_REQUEST["affiliate"]) && getUserIDFromPhone("+976".$_REQUEST["affiliate"])>-1) ? "+976".$_REQUEST["affiliate"] : "";
+	$affiliate = (isset($_REQUEST["affiliate"]) && $_REQUEST["affiliate"]!="" && getPhone($_COOKIE["userID"])!="+976".$_REQUEST["affiliate"] && preg_match($patternPhone, $_REQUEST["affiliate"])>0 && getUserIDFromPhone("+976".$_REQUEST["affiliate"])>-1) ? "+976".$_REQUEST["affiliate"] : "";
 	
 	$bank_name = isset($_REQUEST["bank_name"]) && $_REQUEST["bank_name"] != "null" ? $_REQUEST["bank_name"] : "";
 	
