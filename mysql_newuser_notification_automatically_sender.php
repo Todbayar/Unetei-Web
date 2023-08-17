@@ -28,7 +28,7 @@ if(isset($_GET["superduperadminphone"]) && $_GET["superduperadminphone"]==$super
 			}
 			$message .= "Шинээр энгийн (".$row["phone"].") хэрэглэгч боллоо.<br/>";
 			$message .= "Та өөртөө дагагч болгож элсүүлэх үү?<br/>";
-			$message .= "Хэрэв тийм бол <b>Дагагчид</b> хэсэгт, эсвэл <b>Чат</b>анд шинэ хэрэглэгчтэй холбоо бариж болно.<br/>";
+			$message .= "Хэрэв тийм бол <b>Дагагчид</b> хэсэгт шинэ хэрэглэгчтэй холбоо барьж болно.<br/>";
 			$message .= "Амжилт хүсье!";
 			chat_send(getUserIDFromPhone($superduperadmin), $rowLastActiveUser["id"], 0, $message, false);
 		}

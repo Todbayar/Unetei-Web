@@ -146,10 +146,10 @@ function chat_list_role(chatID, sender, body, datetime, isEdit, note){
 function chat_list_role_action_show(chatID, isactive, id, isMe){
 	if(isactive == 0){	//review
 		if(!isMe){
-			return "<div id=\"2"+chatID+"\" class=\"action\"><div onClick=\"chat_action("+chatID+",0,2,"+id+")\" class=\"button_yellow\" style=\"float: left\"><i class=\"fa-solid fa-check\"></i></div></div>";
+			return "<div id=\"2"+chatID+"\" class=\"action\"><div onClick=\"chat_action("+chatID+",0,2,"+id+")\" class=\"button_yellow\" style=\"float: left\"><i class=\"fa-solid fa-check\"></i></div><div onClick=\"chat_action("+chatID+",1,2,"+id+")\" class=\"button_yellow\" style=\"float: left; margin-left: 5px\"><i class=\"fa-solid fa-xmark\"></i></div></div>";
 	   	}
 		else {
-			return "<div id=\"2"+chatID+"\" class=\"action\" style=\"display:flex; justify-content: flex-end\"><div onClick=\"chat_action("+chatID+",0,2,"+id+")\" class=\"button_yellow\" style=\"float: left\"><i class=\"fa-solid fa-check\"></i></div></div>";
+			return "<div id=\"2"+chatID+"\" class=\"action\" style=\"display:flex; justify-content: flex-end\"><div onClick=\"chat_action("+chatID+",0,2,"+id+")\" class=\"button_yellow\" style=\"float: left\"><i class=\"fa-solid fa-check\"></i></div><div onClick=\"chat_action("+chatID+",1,2,"+id+")\" class=\"button_yellow\" style=\"float: left; margin-left: 5px\"><i class=\"fa-solid fa-xmark\"></i></div></div>";
 		}
 	}
 	else {
@@ -383,6 +383,9 @@ function chat_action(chatID, action, type, id){
 		console.log("<chat_action>:"+this.responseText);
 		if(this.responseText == "OK"){
 			$("div#"+type+""+chatID).hide();
+		}
+		else if(this.responseText == "FAIL_ROLE"){
+			confirmation_ok('Та хэрэглэгчийн эрхээ дээшлүүлнэ үү. <b>Тохиргоо</b> хэсэгт харна уу!');	
 		}
 	};
 	reqChatActionSubmit.onerror = function(){

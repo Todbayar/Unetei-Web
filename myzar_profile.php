@@ -173,10 +173,37 @@ $(document).ready(function(){
 		$("#buttonUpgradeUserRole").click(function(){
 			$("body").css("overflow-y", "hidden");
 			window.scrollTo(0, 0);
-			$(".popup.myzar_user_upgrade").show();
 			$.post("mysql_fetch_profile.php", {affiliate:$("#affiliate_number").val()}).done(function (response){
 				const res = JSON.parse(response);
 				$(".popup.myzar_user_upgrade #affiliate").html("Та "+res.phone+" ("+res.name+", "+convertRoleInString(res.role)+")-ын дагагч болох гэж байна.");
+				$(".popup.myzar_user_upgrade .container .affiliate").hide();
+				$("body").css("overflow-y", "hidden");
+				window.scrollTo(0, 0);
+				$(".popup.myzar_user_upgrade").show();
+				$(".popup.myzar_user_upgrade .container .selection.superadmin").show();
+				$(".popup.myzar_user_upgrade .container .selection.admin").show();
+				$(".popup.myzar_user_upgrade .container .selection.manager").show();
+				$(".popup.myzar_user_upgrade .container .selection.publisher").hide();
+				switch(<?php echo getUserRole($_COOKIE["userID"]); ?>){
+					case 3:
+					   	$(".popup.myzar_user_upgrade .container .selection.admin #role").prop("disabled",true);
+						$(".popup.myzar_user_upgrade .container .selection.admin").css("color","#9F9F9F");
+						$(".popup.myzar_user_upgrade .container .selection.manager #role").prop("disabled",true);
+						$(".popup.myzar_user_upgrade .container .selection.manager").css("color","#9F9F9F");
+						$(".popup.myzar_user_upgrade .container .selection.publisher #role").prop("disabled",true);
+						$(".popup.myzar_user_upgrade .container .selection.publisher").css("color","#9F9F9F");
+						break;
+					case 2:
+						$(".popup.myzar_user_upgrade .container .selection.manager #role").prop("disabled",true);
+						$(".popup.myzar_user_upgrade .container .selection.manager").css("color","#9F9F9F");
+						$(".popup.myzar_user_upgrade .container .selection.publisher #role").prop("disabled",true);
+						$(".popup.myzar_user_upgrade .container .selection.publisher").css("color","#9F9F9F");
+						break;
+					case 1:
+						$(".popup.myzar_user_upgrade .container .selection.publisher #role").prop("disabled",true);
+						$(".popup.myzar_user_upgrade .container .selection.publisher").css("color","#9F9F9F");
+						break;
+				}
 				$(".popup.myzar_user_upgrade #buttonSubmit").attr("onclick", "submitRoleUpgrade('"+res.phone+"')");
 			});
 		});
@@ -190,12 +217,14 @@ $(document).ready(function(){
 	$(".popup.myzar_user_upgrade input[name='role']").change(function(){
 		lastSelectionRoleUpgradeOption = $(this);
 	});
-	
+				
 	$(".popup.myzar_user_upgrade .selection").click(function(){
-		if(lastSelectionRoleUpgradeOption != null) lastSelectionRoleUpgradeOption.find("input").prop("checked", false);
-		lastSelectionRoleUpgradeOption = $(this);
-		lastSelectionRoleUpgradeOption.find("input").prop("checked", true);
-		$(".popup.myzar_user_upgrade #buttonSubmit").attr("disabled", false);
+		if($(this).find("input").prop("disabled")==false){
+			if(lastSelectionRoleUpgradeOption != null) lastSelectionRoleUpgradeOption.find("input").prop("checked", false);
+			lastSelectionRoleUpgradeOption = $(this);
+			lastSelectionRoleUpgradeOption.find("input").prop("checked", true);
+			$(".popup.myzar_user_upgrade #buttonSubmit").attr("disabled", false);
+		}
 	});
 
 	$("#crop").click(function(){
