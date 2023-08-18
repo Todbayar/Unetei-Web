@@ -5,7 +5,7 @@ include_once "info.php";
 include_once "chat_process.php";
 
 if(isset($_GET["superduperadminphone"]) && $_GET["superduperadminphone"]==$superduperadmin){
-	$query = "SELECT *, u.id AS userID FROM user AS u LEFT JOIN chat AS c ON u.id=c.toID WHERE u.signed=u.lastactive AND SUBSTRING(u.signed,1,10)=DATE_FORMAT(NOW(),'%Y-%m-%d') AND u.role=0 AND u.affiliate IS NULL AND c.toID IS NULL";
+	$query = "SELECT *, u.id AS userID FROM user AS u LEFT JOIN chat AS c ON u.id=c.toID WHERE u.signed=u.lastactive AND DATE_FORMAT(u.signed,'%Y-%m-%d')=DATE_FORMAT(NOW(),'%Y-%m-%d') AND u.role=0 AND u.affiliate IS NULL AND c.toID IS NULL";
 	$result = $conn->query($query);
 	while($row = mysqli_fetch_array($result)){
 		$queryLastActiveUser = "SELECT * FROM user WHERE email IS NOT NULL AND role>1 ORDER BY lastactive DESC LIMIT 3";

@@ -48,6 +48,7 @@ include_once "info.php";
 -->
 		</div>
 	</div>
+	<i onClick="pagenavigation('team')" class="fa-brands fa-teamspeak" style="font-size: 24px; color: #FFFFFF; font: normal; margin-left: 10px; cursor: pointer"></i>
 	<?php
 	if(isset($_COOKIE["userID"])){
 		if(!isset($_GET["page"]) || $_GET["page"] != "favorite"){

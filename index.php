@@ -19,15 +19,16 @@ if($protocol=="http" && $_SERVER['HTTP_HOST']!="localhost") header("Location:htt
 		<meta name="facebook-domain-verification" content="qizqpj55lnc4ms6rcojpn16hp079ax" />
 		<meta property="fb:app_id" content="941510830473804" /> 
 		<meta property="og:site_name" content="<?php echo $domain; ?>" />
-<!--		<script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>-->
 		
+		<!--Google Translate-->
+<!--		<script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>-->
 		<script type="text/javascript">
-//		function googleTranslateElementInit() {
-//			console.log("<timezone>:"+Intl.DateTimeFormat().resolvedOptions().timeZone);
-//			if(Intl.DateTimeFormat().resolvedOptions().timeZone!="Asia/Ulaanbaatar"){
-//				new google.translate.TranslateElement({pageLanguage: 'mn'}, 'google_translate_element');
-//			}
-//		}
+		function googleTranslateElementInit() {
+			console.log("<timezone>:"+Intl.DateTimeFormat().resolvedOptions().timeZone);
+			//if(Intl.DateTimeFormat().resolvedOptions().timeZone!="Asia/Ulaanbaatar"){
+				new google.translate.TranslateElement({pageLanguage: 'mn'}, 'google_translate_element');
+			//}
+		}
 		</script>
 		
 		<?php
@@ -109,7 +110,7 @@ if($protocol=="http" && $_SERVER['HTTP_HOST']!="localhost") header("Location:htt
 		}
 		
 		if(isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING']==""){
-			$ogImage = $protocol."://".($_SERVER['HTTP_HOST']=="localhost"?($_SERVER['HTTP_HOST']."/".strtolower($domain_title)):$_SERVER['HTTP_HOST'])."/logo_200.png";
+			$ogImage = $protocol."://".($_SERVER['HTTP_HOST']=="localhost"?($_SERVER['HTTP_HOST']."/".strtolower($domain_title)):$_SERVER['HTTP_HOST'])."/logo_200.jpg";
 			?>
 			<meta property="og:type" content="website" />
 			<meta property="og:title" content="<?php echo $domain_title; ?>" />
@@ -152,7 +153,9 @@ if($protocol=="http" && $_SERVER['HTTP_HOST']!="localhost") header("Location:htt
 			}
 		}
 		?>
+		
 		<meta name="robots" content="index, follow" />
+		
 		<link rel="shortcut icon" type="image/icon" href="<?php echo str_contains($_SERVER['REQUEST_URI'],"detail")?"../android-chrome-512x512.png":"android-chrome-512x512.png"; ?>" />
 		<link rel="icon" type="image/x-icon" href="<?php echo str_contains($_SERVER['REQUEST_URI'],"detail")?"../android-chrome-512x512.png":"android-chrome-512x512.png"; ?>">
 		
@@ -178,9 +181,15 @@ if($protocol=="http" && $_SERVER['HTTP_HOST']!="localhost") header("Location:htt
 		<link rel="stylesheet" href="<?php echo  str_contains($_SERVER['REQUEST_URI'],"detail")?"../":""; ?>animation.css">
 		<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
 		
+		<!--Google Adsense-->
 		<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1072207883073754" crossorigin="anonymous"></script>
-		<script async src="https://fundingchoicesmessages.google.com/i/pub-1072207883073754?ers=1" nonce="PO6kR1zJogD8YhBe921qUQ"></script><script nonce="PO6kR1zJogD8YhBe921qUQ">(function(){function signalGooglefcPresent() {if (!window.frames['googlefcPresent']) {if (document.body) {const iframe = document.createElement('iframe'); iframe.style = 'width: 0; height: 0; border: none; z-index: -1000; left: -1000px; top: -1000px;'; iframe.style.display = 'none'; iframe.name = 'googlefcPresent'; document.body.appendChild(iframe);} else {setTimeout(signalGooglefcPresent, 0);}}}signalGooglefcPresent();})();</script>
+<!--
+		<script async src="https://fundingchoicesmessages.google.com/i/pub-1072207883073754?ers=1" nonce="PO6kR1zJogD8YhBe921qUQ">
+		</script>
+		<script nonce="PO6kR1zJogD8YhBe921qUQ">(function(){function signalGooglefcPresent() {if (!window.frames['googlefcPresent']) {if (document.body) {const iframe = document.createElement('iframe'); iframe.style = 'width: 0; height: 0; border: none; z-index: -1000; left: -1000px; top: -1000px;'; iframe.style.display = 'none'; iframe.name = 'googlefcPresent'; document.body.appendChild(iframe);} else {setTimeout(signalGooglefcPresent, 0);}}}signalGooglefcPresent();})();</script>
+-->
 		
+		<!--Firebase-->
 		<script>
 		const firebaseConfig = {
 			apiKey: "AIzaSyAJxCfAZKgG4vy_nd6UVX3UKhZAF0iyKl4",
@@ -418,18 +427,18 @@ if($protocol=="http" && $_SERVER['HTTP_HOST']!="localhost") header("Location:htt
 		</script>
 		
 		<style>
-			#google_translate_element {
-				display: none;
-			}
-			.goog-te-gadget img{
-				display:none !important;
-			}
-			body > .skiptranslate {
-				display: none;
-			}
-			body {
-				top: 0px !important;
-			}
+		#google_translate_element {
+			display: none;
+		}
+		.goog-te-gadget img{
+			display:none !important;
+		}
+		body > .skiptranslate {
+			display: none;
+		}
+		body {
+			top: 0px !important;
+		}
 		</style>
 	</head>
 	
@@ -481,6 +490,9 @@ if($protocol=="http" && $_SERVER['HTTP_HOST']!="localhost") header("Location:htt
 						break;
 					case "favorite":
 						include "favorite.php";
+						break;
+					case "team":
+						include "team.php";
 						break;
 				}
 			}
