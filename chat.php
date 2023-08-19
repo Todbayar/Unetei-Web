@@ -385,7 +385,7 @@ function chat_action(chatID, action, type, id){
 			$("div#"+type+""+chatID).hide();
 		}
 		else if(this.responseText == "FAIL_ROLE"){
-			confirmation_ok('Та хэрэглэгчийн эрхээ дээшлүүлнэ үү. <b>Тохиргоо</b> хэсэгт харна уу!');	
+			confirmation_ok('Та хэрэглэгчийн эрхээ дээшлүүлнэ үү. <b>Тохиргоо</b> хэсэгт харна уу!');
 		}
 	};
 	reqChatActionSubmit.onerror = function(){

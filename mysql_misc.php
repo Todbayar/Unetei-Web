@@ -16,6 +16,13 @@ function update_profile($name, $email, $city, $userID, $image = null){
 	$conn->query($query);
 }
 
+function getProfileByPhone($phone){
+	global $conn;
+	$resultProfile = $conn->query("SELECT * FROM user WHERE phone='".$phone."'");
+	$rowProfile = mysqli_fetch_object($resultProfile);
+	return $rowProfile;
+}
+
 function getAffiliateID($id){
 	global $superduperadmin, $conn;
 	$resultAffiliate = $conn->query("SELECT (SELECT id FROM user WHERE phone=u.affiliate) AS affiliate_id FROM user AS u WHERE id=".$id);
@@ -23,6 +30,13 @@ function getAffiliateID($id){
 	$resultSuperDuper = $conn->query("SELECT id FROM user WHERE phone=".$superduperadmin);
 	$rowSuperDuper = mysqli_fetch_array($resultSuperDuper);
 	return ($rowAffiliate["affiliate_id"] != null && $rowAffiliate["affiliate_id"] != "") ? $rowAffiliate["affiliate_id"] : $rowSuperDuper["id"];
+}
+
+function getAffiliatePhone($id){
+	global $conn;
+	$resultAffiliatePhone = $conn->query("SELECT affiliate FROM user WHERE id=".$id);
+	$rowAffiliatePhone = mysqli_fetch_array($resultAffiliatePhone);
+	return $rowAffiliatePhone["affiliate"];
 }
 
 function getPhone($id){

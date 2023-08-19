@@ -103,12 +103,25 @@ function startChat(toID, message){
 	}
 	?>
 }
+	
+function teamBecomeFollower(affiliate){
+	$.post("mysql_user_follower.php", {phone:affiliate}).done(function(response){
+		console.log("<teamBecomeFollower>:"+response);
+		if(response=="OK"){
+			$(".button_yellow.teamBecomeFollower").hide();
+			confirmation_ok("<i class='fa-solid fa-circle-info' style='margin-right: 5px; color: #FFA718'></i>Та амжилттай дагагч боллоо");
+		}
+		else {
+			confirmation_ok("<i class='fa-solid fa-circle-exclamation' style='margin-right: 5px; color: red'></i>Дагагч болход алдаа гарлаа!");
+		}
+	});
+}
 </script>
 
 <div class="team">
 	<div style="margin-left: 10px; margin-right: 10px; color: #9F9F9F; font-size: 14px">
 		Таньд асуух зүйл байвал доорх хүмүүстэй холбоо барина уу. Бид таньд хариулхад бэлэн байна.<br/>
-		<?php if(isset($_COOKIE["userID"])) echo "Мөн таньд доорх хүмүүсийн аль нэгийг нь дагаснаар давуу тал бий болно.<br/><a href=\"javascript:confirmation_ok('Дараах шаардлагуудыг хангасан байх<br/><i class=\'fa-solid fa-gear\'></i> Тохиргоо хэсэгт мэдээллээ бүрэн бөгөлсөн байх<br/>1. Өөрийн зургаа оруулсан байх<br/>2. Нэрээ бичих<br/>3. Имейлээ зөв бичсэн байх<br/>4. Банкны дансны нэрээ бичих<br/>5. Банкны дансны дугаараа бичих<br/>6. Санал болгосон хүний дугаарыг оруулсан байх<br/>Мөн өдөрт нэг удаа ".$domain."-рүү зочилсон байх буюу идэвхтэй байх.',null)\" style=\"color:#FFA718\">Харин би энд хэрхэн мөр зэрэгцэх вэ <i class='fa-solid fa-question'></i></a>"; ?>
+		<?php if(isset($_COOKIE["userID"])) echo "Мөн доорх хүмүүсийн аль нэгийг нь дагаснаар таньд давуу тал бий болно.<br/><a href=\"javascript:confirmation_ok('Дараах шаардлагуудыг хангасан байх<br/><i class=\'fa-solid fa-gear\'></i> Тохиргоо хэсэгт мэдээллээ бүрэн бөгөлсөн байх<br/>1. Өөрийн зургаа оруулсан байх<br/>2. Нэрээ бичих<br/>3. Имейлээ зөв бичсэн байх<br/>4. Банкны дансны нэрээ бичих<br/>5. Банкны дансны дугаараа бичих<br/>6. Санал болгосон хүний дугаарыг оруулсан байх<br/>Мөн өдөрт нэг удаа ".$domain."-рүү зочилсон байх буюу идэвхтэй байх.',null)\" style=\"color:#FFA718\">Энд хэрхэн мөр зэрэгцэх вэ <i class='fa-solid fa-question'></i></a>"; ?>
 	</div>
 	<div class="container_users">
 		<?php
@@ -130,6 +143,19 @@ function startChat(toID, message){
 					<i class="fa-solid fa-comments"></i>
 					<div style="margin-left: 5px">Чатлах</div>
 				</div>
+				<?php
+				if(isset($_COOKIE["userID"]) && $row["phone"]!=getPhone($_COOKIE["userID"])){
+					$myaffiliate = getAffiliatePhone($_COOKIE["userID"]);
+					if(is_null($myaffiliate) || $myaffiliate==""){
+						?>
+						<div onclick="teamBecomeFollower('<?php echo $row["phone"]; ?>')" class="button_yellow teamBecomeFollower">
+							<i class="fa-solid fa-user-plus"></i>
+							<div style="margin-left: 5px">Дагах</div>
+						</div>
+						<?php
+					}
+				}
+				?>
 			</div>
 			<?php
 		}

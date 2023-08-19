@@ -304,17 +304,17 @@ if($protocol=="http" && $_SERVER['HTTP_HOST']!="localhost") header("Location:htt
 				}
 			});
 			
-			if(localStorage.getItem("isBecameFollower")==null){
-				<?php
-				if(isset($_COOKIE["userID"]) && getPhone($_COOKIE["userID"])!=$superduperadmin){
-					?>
-					$(".popup.become_follower").show();
-					$("body").css("overflow-y", "hidden");
-					window.scrollTo(0, 0);
-					<?php
-				}
-				?>
-			}
+//			if(localStorage.getItem("isBecameFollower")==null){
+//				<?php
+//				if(isset($_COOKIE["userID"]) && getPhone($_COOKIE["userID"])!=$superduperadmin){
+//					?>
+//					$(".popup.become_follower").show();
+//					$("body").css("overflow-y", "hidden");
+//					window.scrollTo(0, 0);
+//					<?php
+//				}
+//				?>
+//			}
 			
 			//verifying email
 			$(".popup.verify_email input#email").on('input',function(){
