@@ -3,6 +3,50 @@ include "mysql_config.php";
 include_once "mysql_misc.php";
 include_once "info.php";
 ?>
+
+<style>
+#myzar_category_selected_add_item_button {
+	border-radius: 10px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 2px;
+	padding-right: 5px;
+	background: #FFA718;
+	margin-left: 5px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.pulsate_button {
+	animation: pulse 0.7s infinite;
+	animation-iteration-count: 2;
+}
+	
+@keyframes pulse {
+	0% {
+		transform: scale(0.95);
+		box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7);
+	}
+
+	70% {
+		transform: scale(1);
+		box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+	}
+
+	100% {
+		transform: scale(0.95);
+		box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+	}
+}
+
+.categoryButtonTitle {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+</style>
+
 <script>
 var isMyZarCategoryAddIconValid = false;
 var isMyZarCategoryAddTitleValid = false;
@@ -281,8 +325,14 @@ function myzar_category_fetch_list(tableID, parentID, title, icon, hasChildren, 
 		$("#myzar_category_add_button").show();
 	}
 
-	//removes hierarchical depth after current selected category
+	//backward, removes hierarchical depth after current selected category
 	if(tableID < categoryTableID){
+		$("#topbarInsertAdButton").attr("onclick","javascript:location.href='<?php echo str_contains($_SERVER['REQUEST_URI'],"detail")?"../?page=myzar&myzar=category":"?page=myzar&myzar=category"; ?>'");
+		$("#topbarInsertAdButton i").removeClass("fa-circle-plus");
+		$("#topbarInsertAdButton i").addClass("fa-plus");
+		$("#topbarInsertAdButton div").text("Зар нэмэх");
+		$("#topbarInsertAdButton").removeClass("pulsate_button");
+		
 		for(let i=tableID; i<=4; i++){
 			selectedCategories.splice(tableID-1, 1);
 			if($("#myZarSelectCategory" + i).length) $("#myZarSelectCategory" + i).remove();
@@ -294,28 +344,63 @@ function myzar_category_fetch_list(tableID, parentID, title, icon, hasChildren, 
 		const selectedCategory = {id:parentID, tableID:tableID, title:title, icon:icon};
 		selectedCategories[tableID-2] = selectedCategory;
 
+		$("#topbarInsertAdButton").attr("onclick","javascript:location.href='<?php echo str_contains($_SERVER['REQUEST_URI'],"detail")?"../?page=myzar&myzar=category":"?page=myzar&myzar=category"; ?>'");
+		$("#topbarInsertAdButton i").removeClass("fa-circle-plus");
+		$("#topbarInsertAdButton i").addClass("fa-plus");
+		$("#topbarInsertAdButton div").text("Зар нэмэх");
+		$("#topbarInsertAdButton").removeClass("pulsate_button");
 		$("#myZarSelectCategory"+(categoryTableID-1)+" #myzar_category_selected_add_item_button").hide();	//removing item add button from previos selected category
 
+		const insertAdButton = "<div onClick=\"myzar_category_selected_add_item()\" id=\"myzar_category_selected_add_item_button\"><i class=\"fa-solid fa-circle-plus\" style=\"margin-left: 5px; color:black\"></i> Зар оруулах</div>";
+		
 		if(icon!="" && icon!=null){
 			if(hasChildren && !isNewCategoryEntry){
-				$(".myzar_category_container_selected").append("<div id=\"myZarSelectCategory"+(tableID-1)+"\" class=\"button_yellow\" style=\"margin-left:10px; margin-bottom: 10px; float: left; background: #e1e5e8; height:18px\"><div onClick=\"myzar_category_fetch_list("+(tableID-1)+", "+categoryParentID+", '"+title+"', false)\" style=\"display:flex; align-items: center\"><i class=\"fa-solid fa-angle-left\" style=\"color:#aeaeae\"></i><img src=\"./user_files/"+icon+"\" width=\"32px\" height=\"32px\" style=\"margin-left: 5px\" /><div style=\"margin-left: 5px\">"+title+"</div></div></div>");
+				$(".myzar_category_container_selected").append("<div id=\"myZarSelectCategory"+(tableID-1)+"\" class=\"button_yellow\" style=\"margin-left:10px; margin-bottom: 10px; float: left; background: #e1e5e8; height:18px\"><div onClick=\"myzar_category_fetch_list("+(tableID-1)+", "+categoryParentID+", '"+title+"', false)\" style=\"display:flex; align-items: center\"><i class=\"fa-solid fa-angle-left\" style=\"color:#aeaeae\"></i><img src=\"./user_files/"+icon+"\" width=\"32px\" height=\"32px\" style=\"margin-left: 5px\" /><div class=\"categoryButtonTitle\" style=\"margin-left: 5px\">"+title+"</div></div></div>");
 			}
 			else if(hasChildren && isNewCategoryEntry){
-				$(".myzar_category_container_selected").append("<div id=\"myZarSelectCategory"+(tableID-1)+"\" class=\"button_yellow\" style=\"margin-left:10px; margin-bottom: 10px; float: left; background: #FFA718; height:18px\"><div onClick=\"myzar_category_fetch_list("+(tableID-1)+", "+categoryParentID+", '"+title+"', false)\" style=\"display:flex; align-items: center\"><i class=\"fa-solid fa-angle-left\" style=\"color:black\"></i><img src=\"./user_files/"+icon+"\" width=\"32px\" height=\"32px\" style=\"margin-left: 5px\" /><div style=\"margin-left: 5px\">"+title+"</div></div><i onClick=\"myzar_category_selected_add_item()\" id=\"myzar_category_selected_add_item_button\" class=\"fa-solid fa-circle-plus\" style=\"margin-left: 5px; color:black\"></i></div>");
+				$("#topbarInsertAdButton").attr("onclick","myzar_category_selected_add_item()");
+				$("#topbarInsertAdButton i").removeClass("fa-plus");
+				$("#topbarInsertAdButton i").addClass("fa-circle-plus");
+				$("#topbarInsertAdButton div").text("Зар оруулах");
+				$("#topbarInsertAdButton").addClass("pulsate_button");
+				
+				$(".myzar_category_container_selected").append("<div id=\"myZarSelectCategory"+(tableID-1)+"\" class=\"button_yellow\" style=\"margin-left:10px; margin-bottom: 10px; float: left; background: #e1e5e8; height:18px\"><div onClick=\"myzar_category_fetch_list("+(tableID-1)+", "+categoryParentID+", '"+title+"', false)\" style=\"display:flex; align-items: center\"><i class=\"fa-solid fa-angle-left\" style=\"color:black\"></i><img src=\"./user_files/"+icon+"\" width=\"32px\" height=\"32px\" style=\"margin-left: 5px\" /><div class=\"categoryButtonTitle\" style=\"margin-left: 5px\">"+title+"</div></div>"+insertAdButton+"</div>");
+				$("#myzar_category_selected_add_item_button").addClass("pulsate_button");
 			}
 			else {
-				$(".myzar_category_container_selected").append("<div id=\"myZarSelectCategory"+(tableID-1)+"\" class=\"button_yellow\" style=\"margin-left:10px; margin-bottom: 10px; float: left; background: #FFA718; height:18px\"><div onClick=\"myzar_category_fetch_list("+(tableID-1)+", "+categoryParentID+", '"+title+"', false)\" style=\"display:flex; align-items: center\"><i class=\"fa-solid fa-angle-left\" style=\"color:black\"></i><img src=\"./user_files/"+icon+"\" width=\"32px\" height=\"32px\" style=\"margin-left: 5px\" /><div style=\"margin-left: 5px\">"+title+"</div></div><i onClick=\"myzar_category_selected_add_item()\" id=\"myzar_category_selected_add_item_button\" class=\"fa-solid fa-circle-plus\" style=\"margin-left: 5px; color:black\"></i></div>");
+				$("#topbarInsertAdButton").attr("onclick","myzar_category_selected_add_item()");
+				$("#topbarInsertAdButton i").removeClass("fa-plus");
+				$("#topbarInsertAdButton i").addClass("fa-circle-plus");
+				$("#topbarInsertAdButton div").text("Зар оруулах");
+				$("#topbarInsertAdButton").addClass("pulsate_button");
+				
+				$(".myzar_category_container_selected").append("<div id=\"myZarSelectCategory"+(tableID-1)+"\" class=\"button_yellow\" style=\"margin-left:10px; margin-bottom: 10px; float: left; background: #e1e5e8; height:18px\"><div onClick=\"myzar_category_fetch_list("+(tableID-1)+", "+categoryParentID+", '"+title+"', false)\" style=\"display:flex; align-items: center\"><i class=\"fa-solid fa-angle-left\" style=\"color:black\"></i><img src=\"./user_files/"+icon+"\" width=\"32px\" height=\"32px\" style=\"margin-left: 5px\" /><div class=\"categoryButtonTitle\" style=\"margin-left: 5px\">"+title+"</div></div>"+insertAdButton+"</div>");
+				$("#myzar_category_selected_add_item_button").addClass("pulsate_button");
 			}
 		}
 		else {
 			if(hasChildren && !isNewCategoryEntry){
-				$(".myzar_category_container_selected").append("<div id=\"myZarSelectCategory"+(tableID-1)+"\" class=\"button_yellow\" style=\"margin-left:10px; margin-bottom: 10px; float: left; background: #e1e5e8; height:18px\"><div onClick=\"myzar_category_fetch_list("+(tableID-1)+", "+categoryParentID+", '"+title+"', false)\" style=\"display:flex; align-items: center\"><i class=\"fa-solid fa-angle-left\" style=\"color:#aeaeae\"></i><div style=\"margin-left: 5px\">"+title+"</div></div></div>");
+				$(".myzar_category_container_selected").append("<div id=\"myZarSelectCategory"+(tableID-1)+"\" class=\"button_yellow\" style=\"margin-left:10px; margin-bottom: 10px; float: left; background: #e1e5e8; height:18px\"><div onClick=\"myzar_category_fetch_list("+(tableID-1)+", "+categoryParentID+", '"+title+"', false)\" style=\"display:flex; align-items: center\"><i class=\"fa-solid fa-angle-left\" style=\"color:#aeaeae\"></i><div class=\"categoryButtonTitle\" style=\"margin-left: 5px\">"+title+"</div></div></div>");
 			}
 			else if(hasChildren && isNewCategoryEntry){
-				$(".myzar_category_container_selected").append("<div id=\"myZarSelectCategory"+(tableID-1)+"\" class=\"button_yellow\" style=\"margin-left:10px; margin-bottom: 10px; float: left; background: #FFA718; height:18px\"><div onClick=\"myzar_category_fetch_list("+(tableID-1)+", "+categoryParentID+", '"+title+"', false)\" style=\"display:flex; align-items: center\"><i class=\"fa-solid fa-angle-left\" style=\"color:black\"></i><div style=\"margin-left: 5px\">"+title+"</div></div><i onClick=\"myzar_category_selected_add_item()\" id=\"myzar_category_selected_add_item_button\" class=\"fa-solid fa-circle-plus\" style=\"margin-left: 5px; color:black\"></i></div>");	
+				$("#topbarInsertAdButton").attr("onclick","myzar_category_selected_add_item()");
+				$("#topbarInsertAdButton i").removeClass("fa-plus");
+				$("#topbarInsertAdButton i").addClass("fa-circle-plus");
+				$("#topbarInsertAdButton div").text("Зар оруулах");
+				$("#topbarInsertAdButton").addClass("pulsate_button");
+				
+				$(".myzar_category_container_selected").append("<div id=\"myZarSelectCategory"+(tableID-1)+"\" class=\"button_yellow\" style=\"margin-left:10px; margin-bottom: 10px; float: left; background: #e1e5e8; height:18px\"><div onClick=\"myzar_category_fetch_list("+(tableID-1)+", "+categoryParentID+", '"+title+"', false)\" style=\"display:flex; align-items: center\"><i class=\"fa-solid fa-angle-left\" style=\"color:black\"></i><div class=\"categoryButtonTitle\" style=\"margin-left: 5px\">"+title+"</div></div>"+insertAdButton+"</div>");
+				$("#myzar_category_selected_add_item_button").addClass("pulsate_button");
 			}
 			else {
-				$(".myzar_category_container_selected").append("<div id=\"myZarSelectCategory"+(tableID-1)+"\" class=\"button_yellow\" style=\"margin-left:10px; margin-bottom: 10px; float: left; background: #FFA718; height:18px\"><div onClick=\"myzar_category_fetch_list("+(tableID-1)+", "+categoryParentID+", '"+title+"', false)\" style=\"display:flex; align-items: center\"><i class=\"fa-solid fa-angle-left\" style=\"color:black\"></i><div style=\"margin-left: 5px\">"+title+"</div></div><i onClick=\"myzar_category_selected_add_item()\" id=\"myzar_category_selected_add_item_button\" class=\"fa-solid fa-circle-plus\" style=\"margin-left: 5px; color:black\"></i></div>");
+				$("#topbarInsertAdButton").attr("onclick","myzar_category_selected_add_item()");
+				$("#topbarInsertAdButton i").removeClass("fa-plus");
+				$("#topbarInsertAdButton i").addClass("fa-circle-plus");
+				$("#topbarInsertAdButton div").text("Зар оруулах");
+				$("#topbarInsertAdButton").addClass("pulsate_button");
+				
+				$(".myzar_category_container_selected").append("<div id=\"myZarSelectCategory"+(tableID-1)+"\" class=\"button_yellow\" style=\"margin-left:10px; margin-bottom: 10px; float: left; background: #e1e5e8; height:18px\"><div onClick=\"myzar_category_fetch_list("+(tableID-1)+", "+categoryParentID+", '"+title+"', false)\" style=\"display:flex; align-items: center\"><i class=\"fa-solid fa-angle-left\" style=\"color:black\"></i><div class=\"categoryButtonTitle\" style=\"margin-left: 5px\">"+title+"</div></div>"+insertAdButton+"</div>");
+				$("#myzar_category_selected_add_item_button").addClass("pulsate_button");
 			}
 		}
 	}
@@ -452,7 +537,7 @@ function toggleCategoryEntryLines(){
 </script>
 
 <div class="myzar_content_category">
-	<div id="information" style="margin-top: 10px; margin-left: 10px; display: flex; font-size: 16px; align-content: center"><div class="removable">Мэдээлэл</div><i class="fa-solid fa-circle-info" style="color: #FFA718; margin-left: 5px"></i><div style="margin-left: 5px">:</div><div style="color: #878787; margin-left: 5px">Ангиллаа сонгож зар нэмэх <i class="fa-solid fa-circle-plus"></i> тэмдэг дээр даран зараа оруулна уу.</div></div>
+	<div id="information" style="margin-top: 10px; margin-left: 10px; display: flex; font-size: 16px; align-content: center"><div class="removable">Мэдээлэл</div><i class="fa-solid fa-circle-info" style="color: #FFA718; margin-left: 5px"></i><div style="margin-left: 5px">:</div><div style="color: #878787; margin-left: 5px">Ангиллаа сонгож зар оруулах <i class="fa-solid fa-circle-plus"></i> тэмдэг дээр даран зараа оруулна уу.</div></div>
 	<div class="myzar_category_container_selected" style="float: left; padding-top: 10px; width: 100%;"></div>
 	<hr/>
 	<div style="margin: 10px; font-size: 15px">
@@ -467,14 +552,14 @@ function toggleCategoryEntryLines(){
 		if($rowUser["role"]==0){
 			?>
 			<div id="myzar_category_add_button" onClick="javascript:confirmation_ok('Та хэрэглэгчийн эрхээ дээшлүүлнэ үү. <b>Тохиргоо</b> хэсэгт хэрэглэгчийн эрхээ дээшлүүлэх тохиргоо байгаа.')" class="button_yellow" style="background-color: #ccc; margin-left:10px; margin-bottom: 10px; width: 75px; float: left; height: 18px">
-				<div style="margin-left: 5px">Ангилал нэмэх</div>
+				<div style="margin-left: 5px; text-align: center">Ангилал нэмэх</div>
 			</div>
 			<?php
 		}
 		else if($rowUser["role"]>0){
 			?>
 			<div id="myzar_category_add_button" onClick="myzar_category_add_show()" class="button_yellow" style="margin-left:10px; margin-bottom: 10px; width: 75px; float: left; height: 18px">
-				<div style="margin-left: 5px">Ангилал нэмэх</div>
+				<div style="margin-left: 5px; text-align: center">Ангилал нэмэх</div>
 			</div>
 			<?php
 		}

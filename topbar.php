@@ -93,7 +93,7 @@ include_once "info.php";
 		<?php
 		}
 		?>
-		<div class="button_yellow" style="margin-left: 10px" onClick="javascript:location.href='<?php echo str_contains($_SERVER['REQUEST_URI'],"detail")?"../?page=myzar&myzar=category":"?page=myzar&myzar=category"; ?>'">
+		<div id="topbarInsertAdButton" class="button_yellow" style="margin-left: 10px" onClick="javascript:location.href='<?php echo str_contains($_SERVER['REQUEST_URI'],"detail")?"../?page=myzar&myzar=category":"?page=myzar&myzar=category"; ?>'">
 			<i class="fa-solid fa-plus"></i>
 			<div class="removable" style="margin-left: 5px">Зар нэмэх</div>
 		</div>

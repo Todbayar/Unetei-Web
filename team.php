@@ -106,7 +106,10 @@ function startChat(toID, message){
 </script>
 
 <div class="team">
-	<div style="margin-left: 10px; margin-right: 10px; color: #9F9F9F; font-size: 14px">Таньд асуух зүйл байвал доорх хүмүүстэй холбоо барина уу. Бид таньд хариулхад бэлэн байна.<br/><?php if(isset($_COOKIE["userID"])) echo "Мөн таньд доорх хүмүүсийн аль нэгийг нь дагаснаар давуу тал бий болно.<br/><a href=\"javascript:confirmation_ok('Дараах шаардлагуудыг хангасан байх<br/><i class=\'fa-solid fa-gear\'></i> Тохиргоо хэсэгт мэдээллээ бүрэн бөгөлсөн байх<br/>1. Өөрийн зургаа оруулсан байх<br/>2. Нэрээ бичих<br/>3. Имейлээ зөв бичсэн байх<br/>4. Банкны дансны нэрээ бичих<br/>5. Банкны дансны дугаараа бичих<br/>6. Санал болгосон хүний дугаарыг оруулсан байх<br/>Мөн өдөрт нэг удаа ".$domain."-рүү зочилсон байх буюу идэвхтэй байх.',null)\" style=\"color:#FFA718\">Харин би энд хэрхэн мөр зэрэгцэх вэ <i class='fa-solid fa-question'></i></a>"; ?></div>
+	<div style="margin-left: 10px; margin-right: 10px; color: #9F9F9F; font-size: 14px">
+		Таньд асуух зүйл байвал доорх хүмүүстэй холбоо барина уу. Бид таньд хариулхад бэлэн байна.<br/>
+		<?php if(isset($_COOKIE["userID"])) echo "Мөн таньд доорх хүмүүсийн аль нэгийг нь дагаснаар давуу тал бий болно.<br/><a href=\"javascript:confirmation_ok('Дараах шаардлагуудыг хангасан байх<br/><i class=\'fa-solid fa-gear\'></i> Тохиргоо хэсэгт мэдээллээ бүрэн бөгөлсөн байх<br/>1. Өөрийн зургаа оруулсан байх<br/>2. Нэрээ бичих<br/>3. Имейлээ зөв бичсэн байх<br/>4. Банкны дансны нэрээ бичих<br/>5. Банкны дансны дугаараа бичих<br/>6. Санал болгосон хүний дугаарыг оруулсан байх<br/>Мөн өдөрт нэг удаа ".$domain."-рүү зочилсон байх буюу идэвхтэй байх.',null)\" style=\"color:#FFA718\">Харин би энд хэрхэн мөр зэрэгцэх вэ <i class='fa-solid fa-question'></i></a>"; ?>
+	</div>
 	<div class="container_users">
 		<?php
 		$query = "SELECT * FROM user WHERE name IS NOT NULL AND name!='' AND image IS NOT NULL AND image!='' AND email IS NOT NULL AND email!='' AND bank_owner IS NOT NULL AND bank_owner!='' AND bank_account IS NOT NULL AND bank_account!='' AND ((affiliate IS NOT NULL AND affiliate!='') OR ((affiliate IS NULL OR affiliate='') AND phone='".$superduperadmin."')) AND affiliate!=phone AND role>1 AND DATE_FORMAT(lastactive, '%Y-%m-%d')=DATE_FORMAT(NOW(),'%Y-%m-%d') ORDER BY lastactive DESC";
