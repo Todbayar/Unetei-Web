@@ -41,10 +41,10 @@ $role_rank_manager = "Менежер";
 $role_rank_publisher = "Нийтлэгч";
 $role_rank_user = "Энгийн";
 
-$role_price_superadmin = 300000;
-$role_price_admin = 150000;
-$role_price_manager = 50000;
-$role_price_publisher = 20000;
+$role_price_superadmin = 50000;
+$role_price_admin = 35000;
+$role_price_manager = 20000;
+$role_price_publisher = 10000;
 
 //category limit
 //-1 (not accepted), 0 (unlimited), 0<n (accepted but limited)

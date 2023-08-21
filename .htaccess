@@ -1,3 +1,3 @@
-RewriteEngine on
-RewriteRule ^detail/([0-9]+)$ index.php?page=detail%{QUERY_STRING}&id=$1 [QSA,L]
-RewriteRule ^detail/([0-9]+)/share$ index.php?page=detail%{QUERY_STRING}&id=$1&action=share [QSA,L]
+RewriteEngine On
+RewriteRule ^detail/([0-9]+)$ index.php?page=detail&id=$1 [QSA,L]
+RewriteRule ^detail/([0-9]+)/share$ index.php?page=detail&id=$1&action=share [QSA,L]

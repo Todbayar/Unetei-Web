@@ -289,7 +289,7 @@ function makingFollowerFromShare($sharedItemID, $currentUserID){
 			if(setAffiliatePhone(getPhone($itemObj->userID),$currentUserID)){
 				$message = "Баяр хүргье! Таны шэйрэлсэн<br/>";
 				$message .= $itemObj->title." (#".$itemObj->id.") зараар<br/>";
-				$message .= "Хэрэгллэгч ".convertRoleInString($userObj->role)." ".$userObj->name." (".$userObj->phone.") таны дагагч боллоо<br/>";
+				$message .= "Хэрэглэгч ".convertRoleInString($userObj->role)." ".$userObj->name." (".$userObj->phone.") таны дагагч боллоо<br/>";
 				$message .= "Амжилт хүсье";
 				chat_send(getUserIDFromPhone($superduperadmin), $itemObj->userID, 0, $message, false);
 				unset($_SESSION["share"]);
