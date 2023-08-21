@@ -13,6 +13,16 @@ $phone_validater_superduperadmin = "+97695525128";
 //files
 $path = "user_files";
 
+//url path depth
+$queryURL = array();
+parse_str($_SERVER['QUERY_STRING'], $queryURL);
+$urlDepth = "";
+if(count($queryURL)>0){
+	for($i=1; $i<=count($queryURL); $i++){
+		$urlDepth .= "../";
+	}
+}
+
 //variables
 $days_item_remove = 7;
 $category_count_limit_publisher_manager = 10;	//check before remove
@@ -109,4 +119,6 @@ Zarchi.mn нь бүх төрлийн зарын веб сайт юм.
 Доорх зурган дээр хэрэглэгчээс ирсэн хүсэлт харагдаж байна, хэдэн төгрөгний орлого олох зэрэг мэдээлэл агуулсан бас батлах товчыг яаран бүү дараарай эхлээд орлогоо авах хэрэгтэй.";
 
 $website_keywords = "Зарлал, зар, зарлав, үнэгүй зар, үнэгүй зарлал, онцгой зар, VIP зар, vip зар, зарчи, ".$domain.", ".$domain_title;
+
+$isLoginFirebase = false;
 ?>

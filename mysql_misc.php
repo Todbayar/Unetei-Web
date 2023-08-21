@@ -9,6 +9,34 @@ require_once "./include/PHPMailer/src/Exception.php";
 require_once "./include/PHPMailer/src/PHPMailer.php";
 require_once "./include/PHPMailer/src/SMTP.php";
 
+function urlDepthShift($depth, $shift){
+	$depthArr = explode('/',$depth);
+	$depthNew = "";
+	if($shift<0){
+		for($i=0; $i<count($depthArr)-$shift; $i++){
+			$depthNew .= "../";
+		}
+	}
+	else if($shift>0) {
+		for($i=0; $i<count($depthArr)+$shift; $i++){
+			$depth .= "../";
+		}
+	}
+	return $depth;
+}
+
+function isItemOwner($itemID, $userID){
+	global $conn;
+	$query = "SELECT * FROM item WHERE userID=".$userID." AND id=".$itemID;
+	$result = $conn->query($query);
+	if(mysqli_num_rows($result)>0){
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
 function update_profile($name, $email, $city, $userID, $image = null){
 	global $conn;
 	$query = "UPDATE user SET name='".$name."', email='".$email."', city='".$city."' WHERE id=".$userID;
@@ -66,7 +94,7 @@ function getName($id){
 function getPayAmount($status, $userID){
 	global $item_vipspecial_count_limit_admin, $item_publish_price_vip, $item_publish_price_special;
 	$payAmount = 0;
-	$userID = $_COOKIE["userID"]!=$userID?$_COOKIE["userID"]:$userID;	//only for adding item to different user
+//	$userID = $_COOKIE["userID"]!=$userID?$_COOKIE["userID"]:$userID;	//only for adding item to different user
 	switch(getUserRole($userID)){
 		case 4:
 			$payAmount = 0;

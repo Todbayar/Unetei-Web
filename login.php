@@ -165,7 +165,8 @@ function phoneAuthCallAccept(phone){
 	}
 	
 	$("#phonecallverifier_container #error").text("Та дуудлага хийнэ үү... ("+phoneCallValidTimeout+")");
-	if(phoneCallValidTimeout==intervalWaitTime/2) $("#loginSmsMethodOption").show();
+//	if(phoneCallValidTimeout==intervalWaitTime/2) $("#loginSmsMethodOption").show();	
+	if(phoneCallValidTimeout==25) $("#loginSmsMethodOption").show();		
 	phoneCallValidTimeout--;
 }
 	
@@ -223,9 +224,15 @@ function jumpLoginSmsMethod(){
 				<button id="loginButtonCall" type="button" class="button_yellow loginButton" style="font: normal 16px Arial; margin-left: 5px; margin-right: 5px" disabled>
 					<i class="fa-solid fa-phone-volume" style="margin-right: 5px; font-size: 18px"></i>Дуудлагаар Нэвтрэх
 				</button>
+				<?php
+				if($isLoginFirebase){
+				?>
 				<button id="loginButtonFirebase" type="button" class="button_yellow loginButton" style="font: normal 16px Arial; margin-left: 5px; margin-right: 5px; background-color: #ffc15b" disabled>
 					<i class="fa-solid fa-comment-sms" style="margin-right: 5px; font-size: 18px"></i>Мессежээр нэвтрэх
 				</button>
+				<?php
+				}
+				?>
 <!--			<img src="firebase_logo.png" width="24px" height="24px" style="margin-right: 5px; object-fit: contain" />-->
 			</div>
 		</div>

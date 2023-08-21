@@ -144,15 +144,18 @@ function teamBecomeFollower(affiliate){
 					<div style="margin-left: 5px">Чатлах</div>
 				</div>
 				<?php
-				if(isset($_COOKIE["userID"]) && $row["phone"]!=getPhone($_COOKIE["userID"])){
-					$myaffiliate = getAffiliatePhone($_COOKIE["userID"]);
-					if(is_null($myaffiliate) || $myaffiliate==""){
-						?>
-						<div onclick="teamBecomeFollower('<?php echo $row["phone"]; ?>')" class="button_yellow teamBecomeFollower">
-							<i class="fa-solid fa-user-plus"></i>
-							<div style="margin-left: 5px">Дагах</div>
-						</div>
-						<?php
+				if(isset($_COOKIE["userID"])){
+					$phone = getPhone($_COOKIE["userID"]);
+					if($row["phone"]!=$phone && $phone!=$superduperadmin){
+						$myaffiliate = getAffiliatePhone($_COOKIE["userID"]);
+						if(is_null($myaffiliate) || $myaffiliate==""){
+							?>
+							<div onclick="teamBecomeFollower('<?php echo $row["phone"]; ?>')" class="button_yellow teamBecomeFollower">
+								<i class="fa-solid fa-user-plus"></i>
+								<div style="margin-left: 5px">Дагах</div>
+							</div>
+							<?php
+						}
 					}
 				}
 				?>

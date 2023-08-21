@@ -41,8 +41,6 @@ if($protocol=="http" && $_SERVER['HTTP_HOST']!="localhost") header("Location:htt
 		}
 		
 		//OPEN GRAPH FOR SHARING WEB
-		$queryURL = array();
-		parse_str($_SERVER['QUERY_STRING'], $queryURL);
 		if(isset($queryURL["page"]) && str_contains($queryURL["page"],"detail")){
 			$ogDetailID = $queryURL["id"];
 			$queryOG = "SELECT *, (SELECT image FROM images WHERE item=item.id LIMIT 1) AS image FROM item RIGHT JOIN user ON user.id=item.userID WHERE item.id=".$ogDetailID;
@@ -156,29 +154,31 @@ if($protocol=="http" && $_SERVER['HTTP_HOST']!="localhost") header("Location:htt
 		
 		<meta name="robots" content="index, follow" />
 		
-		<link rel="shortcut icon" type="image/icon" href="<?php echo str_contains($_SERVER['REQUEST_URI'],"detail")?"../android-chrome-512x512.png":"android-chrome-512x512.png"; ?>" />
-		<link rel="icon" type="image/x-icon" href="<?php echo str_contains($_SERVER['REQUEST_URI'],"detail")?"../android-chrome-512x512.png":"android-chrome-512x512.png"; ?>">
+		<link rel="shortcut icon" type="image/icon" href="<?php echo $urlDepth; ?>android-chrome-512x512.png" />
+		<link rel="icon" type="image/x-icon" href="<?php echo $urlDepth; ?>android-chrome-512x512.png">
 		
 		<script src="https://www.gstatic.com/firebasejs/9.12.1/firebase-app-compat.js"></script>
 		<script src="https://www.gstatic.com/firebasejs/9.12.1/firebase-auth-compat.js"></script>
 		<script src="https://www.gstatic.com/firebasejs/9.12.1/firebase-messaging-compat.js"></script>
 		<script src="https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics-compat.js"></script>
-		<script src="<?php echo  str_contains($_SERVER['REQUEST_URI'],"detail")?"../":""; ?>jquery-3.6.4.min.js"></script>
-		<script src="<?php echo  str_contains($_SERVER['REQUEST_URI'],"detail")?"../":""; ?>jquery-ui.js"></script>
-		<script src="<?php echo  str_contains($_SERVER['REQUEST_URI'],"detail")?"../":""; ?>latest_sortable.min.js"></script>
-		<script src="<?php echo  str_contains($_SERVER['REQUEST_URI'],"detail")?"../":""; ?>kit.fontawesome.com_64e3bec699.js"></script>
-		<script src="<?php echo  str_contains($_SERVER['REQUEST_URI'],"detail")?"../":""; ?>misc.js"></script>
 		
-		<script src="<?php echo  str_contains($_SERVER['REQUEST_URI'],"detail")?"../":""; ?>jquery.Jcrop.min.js"></script>
-		<link rel="stylesheet" href="<?php echo  str_contains($_SERVER['REQUEST_URI'],"detail")?"../":""; ?>jquery.Jcrop.min.css" type="text/css" />
+		<script src="<?php echo $urlDepth; ?>jquery-3.6.4.min.js"></script>
+		<script src="<?php echo $urlDepth; ?>jquery-ui.js"></script>
+		<script src="<?php echo $urlDepth; ?>latest_sortable.min.js"></script>
+		<script src="<?php echo $urlDepth; ?>kit.fontawesome.com_64e3bec699.js"></script>
+		<script src="<?php echo $urlDepth; ?>misc.js"></script>
 		
-		<script src="<?php echo  str_contains($_SERVER['REQUEST_URI'],"detail")?"../":""; ?>jquery.watermark.min.js" type="text/javascript"></script>
+		<script src="<?php echo $urlDepth; ?>jquery.Jcrop.min.js"></script>
+		<link rel="stylesheet" href="<?php echo $urlDepth; ?>jquery.Jcrop.min.css" type="text/css" />
 		
-		<link rel="stylesheet" href="<?php echo  str_contains($_SERVER['REQUEST_URI'],"detail")?"../":""; ?>main.css">
-		<link rel="stylesheet" href="<?php echo  str_contains($_SERVER['REQUEST_URI'],"detail")?"../":""; ?>topbar.css">
-		<link rel="stylesheet" href="<?php echo  str_contains($_SERVER['REQUEST_URI'],"detail")?"../":""; ?>buttons.css">
-		<link rel="stylesheet" href="<?php echo  str_contains($_SERVER['REQUEST_URI'],"detail")?"../":""; ?>dropdowns.css">
-		<link rel="stylesheet" href="<?php echo  str_contains($_SERVER['REQUEST_URI'],"detail")?"../":""; ?>animation.css">
+		<script src="<?php echo $urlDepth; ?>jquery.watermark.min.js" type="text/javascript"></script>
+		
+		<link rel="stylesheet" href="<?php echo $urlDepth; ?>main.css">
+		<link rel="stylesheet" href="<?php echo $urlDepth; ?>topbar.css">
+		<link rel="stylesheet" href="<?php echo $urlDepth; ?>buttons.css">
+		<link rel="stylesheet" href="<?php echo $urlDepth; ?>dropdowns.css">
+		<link rel="stylesheet" href="<?php echo $urlDepth; ?>animation.css">
+		
 		<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
 		
 		<!--Google Adsense-->
@@ -209,7 +209,7 @@ if($protocol=="http" && $_SERVER['HTTP_HOST']!="localhost") header("Location:htt
 			//this firebase cloud messaging works but not perfect
 			//sendNotification("?page=chat&toID=2", 1);	//php
 //			if('serviceWorker' in navigator){
-//				navigator.serviceWorker.register('<?php echo str_contains($_SERVER['REQUEST_URI'],"detail")?"../firebase-messaging-sw.js":"firebase-messaging-sw.js"; ?>');
+//				navigator.serviceWorker.register('<?php echo $urlDepth; ?>firebase-messaging-sw.js');
 //				const messaging = firebase.messaging();	//not working bcz of service not supported on mobile android
 //				var eventNotification = new CustomEvent("notificationDone");
 //				window.addEventListener("notificationDone", function(){
@@ -485,9 +485,6 @@ if($protocol=="http" && $_SERVER['HTTP_HOST']!="localhost") header("Location:htt
 					case "detail":
 						include "detail.php";
 						break;
-					case str_contains($_GET["page"], "detail"):
-						include "detail.php";
-						break;
 					case "favorite":
 						include "favorite.php";
 						break;
@@ -505,13 +502,13 @@ if($protocol=="http" && $_SERVER['HTTP_HOST']!="localhost") header("Location:htt
 		<div class="footer">
 			<div class="wrap">
 				<div style="display: flex; align-items: center; margin-left:10px; margin-top:5px">
-					<img src="<?php echo str_contains($_SERVER['REQUEST_URI'],"detail")?"../icon.png":"icon.png"; ?>" width="35" height="35" style="object-fit: contain" />
+					<img src="<?php echo $urlDepth; ?>icon.png" width="35" height="35" style="object-fit: contain" />
 <!--
-					<a href="https://www.hipay.mn/"><img src="<?php echo str_contains($_SERVER['REQUEST_URI'],"detail")?"../hipay.png":"hipay.png"; ?>" width="40" height="40" style="object-fit: contain" /></a>
-					<a href="https://www.arduino.cc/"><img src="<?php echo str_contains($_SERVER['REQUEST_URI'],"detail")?"../arduino.gif":"arduino.gif"; ?>" width="35" height="35" style="object-fit: contain" /></a>
+					<a href="https://www.hipay.mn/"><img src="<?php echo $urlDepth; ?>hipay.png" width="40" height="40" style="object-fit: contain" /></a>
+					<a href="https://www.arduino.cc/"><img src="<?php echo $urlDepth; ?>arduino.gif" width="35" height="35" style="object-fit: contain" /></a>
 -->
 					<a href="https://www.facebook.com/profile.php?id=100094657236167" style="margin-left: 5px; margin-top: 2px">
-						<img src="<?php echo str_contains($_SERVER['REQUEST_URI'],"detail")?"../facebook_logo.png":"facebook_logo.png"; ?>" width="32" height="32" style="object-fit: contain" />
+						<img src="<?php echo $urlDepth; ?>facebook_logo.png" width="32" height="32" style="object-fit: contain" />
 					</a>
 				</div>
 				<div class="left" style="margin-left:10px; margin-top:5px">
@@ -562,7 +559,7 @@ if($protocol=="http" && $_SERVER['HTTP_HOST']!="localhost") header("Location:htt
 				<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('popup myzar_category_enter')[0].style.display='none'; javascript:document.body.style.overflowY='auto'"></i>
 				<div class="header">Ангилал нэмэх</div>
 				<div style="display: flex; margin-left: 5px; margin-right: 5px; margin-top: 5px; min-height: 50px">
-					<img id="myzar_category_enter_icon_image" class="icon_button" src="<?php echo str_contains($_SERVER['REQUEST_URI'],"detail")?"../image-solid.svg":"image-solid.svg"; ?>" width="32" height="32" onClick="myzar_category_enter_icon_button()" style="cursor: pointer; display: inline-block;
+					<img id="myzar_category_enter_icon_image" class="icon_button" src="<?php echo $urlDepth; ?>image-solid.svg" width="32" height="32" onClick="myzar_category_enter_icon_button()" style="cursor: pointer; display: inline-block;
 	vertical-align: top" />
 					<input id="myzar_category_enter_icon_file" class="icon_file" type="file" required="true" accept="image/png, .svg" style="display: none" />
 					<div class="myzar_category_enter_title_container" style="margin-left: 5px; margin-right: 5px; margin-bottom: 5px; width: 95%; display: none">
@@ -674,7 +671,7 @@ if($protocol=="http" && $_SERVER['HTTP_HOST']!="localhost") header("Location:htt
 					</div>
 					<div id="billing_qr">
 						<div style="margin-left: 10px; margin-top: 10px; display: flex; align-items: center">
-							<img src="<?php echo str_contains($_SERVER['REQUEST_URI'],"detail")?"../hipay.png":"hipay.png"; ?>" width="40px" height="40px" style="margin-right: 5px" />HiPay-аар төлөх:
+							<img src="<?php echo $urlDepth; ?>hipay.png" width="40px" height="40px" style="margin-right: 5px" />HiPay-аар төлөх:
 						</div>
 						<div id="billing_socialpay" style="font-size: 14px; margin-left: 10px; margin-top: 10px; text-align: center">
 							<img style="width: 150px; height: 150px" />
@@ -877,7 +874,7 @@ if($protocol=="http" && $_SERVER['HTTP_HOST']!="localhost") header("Location:htt
 		
 		<div class="popup profile_qrcrop" style="display: none">
 			<div class="container" style="width: 320px; top: 5vh">
-				<img id="cropbox" class="cropbox img" src="<?php echo str_contains($_SERVER['REQUEST_URI'],"detail")?"../cropBackground.png":"cropBackground.png"; ?>" style="width: 320px; height: 320px; object-fit: contain">
+				<img id="cropbox" class="cropbox img" src="<?php echo $urlDepth; ?>cropBackground.png" style="width: 320px; height: 320px; object-fit: contain">
 				<button id="crop" class="button_yellow" style="margin-top: 10px; margin-left: auto; margin-right: auto" disabled>Тайрах</button>
 			</div>
 		</div>

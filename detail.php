@@ -391,11 +391,6 @@ include_once "info.php";
 }
 </style>
 
-<?php
-$queryURL = array();
-parse_str($_SERVER['QUERY_STRING'], $queryURL);
-?>
-
 <script>
 $(document).ready(function() {
 	incrementRate("item");
@@ -410,7 +405,7 @@ $(document).ready(function() {
 		?>
 		$("#myzar_phone").text("<?php echo getPhone($_COOKIE["userID"]); ?>");
 		$("#myzar_nav").text("Миний зар");
-		$("#myzar_button").attr("onclick","pagenavigation('myzar')");
+		$("#myzar_button").attr("onclick","javascript:location.href='<?php echo $urlDepth."?page=myzar"; ?>'");
 		$("#logoutButton").css("display", "flex");
 		<?php
 	}
@@ -454,7 +449,7 @@ function showPhone(){
 }
 
 function incrementRate(type){
-	$.post("../mysql_item_increment.php",{type:type,id:<?php echo $queryURL["id"]; ?>});
+	$.post("<?php echo $urlDepth; ?>mysql_item_increment.php",{type:type,id:<?php echo $queryURL["id"]; ?>});
 }
 
 function startChat(toID, message){
@@ -471,20 +466,20 @@ function startChat(toID, message){
 	reqChatSubmit.onload = function() {
 		if(this.responseText=="OK"){
 			sessionStorage.setItem("startChatToID", toID);
-			pagenavigation("chat");
+			location.href='<?php echo $urlDepth; ?>?page=chat';
 		}
 	};
 	reqChatSubmit.onerror = function(){
 		console.log("<chat_send>:" + reqChatSubmit.status);
 	};
 
-	reqChatSubmit.open("POST", "../chat_process.php", true);
+	reqChatSubmit.open("POST", "<?php echo $urlDepth; ?>chat_process.php", true);
 	reqChatSubmit.send(chatSubmitData);		
 }
 
 function showOtherItems(userID){
 	sessionStorage.setItem("searchUserID", userID);
-	location.href = "../";
+	location.href = "<?php echo $urlDepth; ?>";
 }
 
 function copyToClipboard(){
@@ -497,7 +492,32 @@ function copyToClipboard(){
 
 function showShareBottomSheet(){
 	$(".bottomsheet.share").show();
-	$(".bottomsheet.share #shareUrl").val(window.location.href);
+	<?php
+	if(isset($_COOKIE["userID"])){
+		if(isItemOwner($queryURL["id"],$_COOKIE["userID"])){
+			if(!isset($queryURL["action"])){
+				?>
+				$(".bottomsheet.share #shareUrl").val(window.location.href+"/share");
+				<?php
+			}
+			else {
+				?>
+				$(".bottomsheet.share #shareUrl").val(window.location.href);
+				<?php	
+			}
+		}
+		else {
+			?>
+			$(".bottomsheet.share #shareUrl").val(window.location.href);
+			<?php
+		}
+	}
+	else {
+		?>
+		$(".bottomsheet.share #shareUrl").val(window.location.href);
+		<?php
+	}
+	?>
 }
 
 function toggleFavorite(isFav, id){
@@ -511,7 +531,7 @@ function toggleFavorite(isFav, id){
 		$("#itemStar"+id).css("color", "gray");
 		$("#itemStar"+id).attr("onclick", "toggleFavorite(false, "+id+")");
 	}
-	$.post("../mysql_item_toggle_favorite.php", {id:id});
+	$.post("<?php echo $urlDepth; ?>mysql_item_toggle_favorite.php", {id:id});
 }
 </script>
 
@@ -581,7 +601,7 @@ function toggleFavorite(isFav, id){
 					}
 					else {
 						?>
-						<i onClick="pagenavigation('login')" class="fa-solid fa-star"></i>
+						<i onClick="javascript:location.href='<?php echo $urlDepth; ?>?page=login'" class="fa-solid fa-star"></i>
 						<?php
 					}
 					?>
@@ -624,7 +644,7 @@ function toggleFavorite(isFav, id){
 						}
 						else {
 							?>
-							<div onClick="pagenavigation('login')" class="button_yellow chatlah" style="margin-top: 10px; background: #e60803">
+							<div onClick="javascript:location.href='<?php echo $urlDepth; ?>?page=login')" class="button_yellow chatlah" style="margin-top: 10px; background: #e60803">
 								<i class="fa-solid fa-comments"></i>
 								<div style="margin-left: 10px">Чатлах</div>
 							</div>
@@ -654,7 +674,7 @@ function toggleFavorite(isFav, id){
 					$i = 1;
 					while($rowImages = mysqli_fetch_array($resultImages)){
 						?>
-						<img id="thumbnail<?php echo $i; ?>" onClick="showBigImage('image',<?php echo $i; ?>)" src="../<?php echo $path; ?>/<?php echo $rowImages["image"]; ?>" />
+						<img id="thumbnail<?php echo $i; ?>" onClick="showBigImage('image',<?php echo $i; ?>)" src="<?php echo $urlDepth.$path."/".$rowImages["image"]; ?>" />
 						<?php
 						$i++;
 					}
@@ -664,7 +684,7 @@ function toggleFavorite(isFav, id){
 					}
 
 					if($row["video"]!=""){
-						echo "<video onClick=\"showBigImage('video','../".$path."/".$row["video"]."')\" preload=\"metadata\"><source src=\"../".$path."/".$row["video"]."#t=0.5\" type=\"".findTypeOfVideo($row["video"])."\"></video>";
+						echo "<video onClick=\"showBigImage('video','".$urlDepth.$path."/".$row["video"]."')\" preload=\"metadata\"><source src=\"".$urlDepth.$path."/".$row["video"]."#t=0.5\" type=\"".findTypeOfVideo($row["video"])."\"></video>";
 					}
 
 					if(mysqli_num_rows($resultImages)>0){
@@ -674,7 +694,7 @@ function toggleFavorite(isFav, id){
 					}
 					else if($row["video"]!="") {
 						?>
-						<script>showBigImage('video','../<?php echo $path."/".$row["video"]; ?>');</script>
+						<script>showBigImage('video','<?php echo $urlDepth.$path."/".$row["video"]; ?>');</script>
 						<?php
 					}
 					?>
@@ -770,13 +790,13 @@ function toggleFavorite(isFav, id){
 							}
 							else {
 								?>
-								<i onClick="pagenavigation('login')" class="fa-solid fa-star"></i>
+								<i onClick="javascript:location.href='<?php echo $urlDepth; ?>?page=login')" class="fa-solid fa-star"></i>
 								<?php
 							}
 							
 							if($rowOthers["image"]!="" && !is_null($rowOthers["image"])){
 								?>
-								<img src="../<?php echo $path."/".$rowOthers["image"]; ?>" onerror="this.onerror=null; this.src='notfound.png'" />
+								<img src="<?php echo $urlDepth.$path."/".$rowOthers["image"]; ?>" onerror="this.onerror=null; this.src='notfound.png'" />
 								<?php
 							}
 							else if($rowOthers["youtube"]!=""){
@@ -786,12 +806,12 @@ function toggleFavorite(isFav, id){
 							}
 							else if($rowOthers["video"]!=""){
 								?>
-								<video controls="controls" preload="metadata" style="border-radius: 5px"><source src="../<?php echo $path."/".$rowOthers["video"]; ?>#t=0.5" type="<?php echo findTypeOfVideo($rowOthers["video"]); ?>"></video>
+								<video controls="controls" preload="metadata" style="border-radius: 5px"><source src="<?php echo $urlDepth.$path."/".$rowOthers["video"]; ?>#t=0.5" type="<?php echo findTypeOfVideo($rowOthers["video"]); ?>"></video>
 								<?php
 							}
 							?>
 						</div>
-						<div onClick="javascript:pagenavigation(<?php echo $rowOthers["id"]; ?>,'id')">
+						<div onClick="javascript:location.href='<?php echo (isset($queryURL["action"]))?"../".$rowOthers["id"]:$rowOthers["id"]; ?>'">
 							<div class="price"><?php echo convertPriceToText($rowOthers["price"]); ?> ₮</div>
 							<div class="title"><?php echo $rowOthers["title"]; ?></div>
 						</div>
@@ -825,7 +845,7 @@ function toggleFavorite(isFav, id){
 					}
 					else {
 						?>
-						<div onClick="pagenavigation('login')" class="button_yellow chatlah" style="margin-top: 10px; margin-bottom: 10px; background: #e60803">
+						<div onClick="javascript:location.href='?page=login'" class="button_yellow chatlah" style="margin-top: 10px; margin-bottom: 10px; background: #e60803">
 							<i class="fa-solid fa-comments"></i>
 							<div style="margin-left: 10px">Чатлах</div>
 						</div>
