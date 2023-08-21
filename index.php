@@ -4,6 +4,7 @@ session_start();
 include "mysql_config.php";
 include_once "mysql_misc.php";
 include_once "info.php";
+include_once "chat_process.php";
 //include_once "mysql_myzar_item_remove_process.php";	//for auto removal of expired item
 
 //setcookie('googtrans', '/mn/en');
@@ -40,8 +41,18 @@ if($protocol=="http" && $_SERVER['HTTP_HOST']!="localhost") header("Location:htt
 			@$conn->query($queryLastActive);
 		}
 		
-		//OPEN GRAPH FOR SHARING WEB
-		if(isset($queryURL["page"]) && str_contains($queryURL["page"],"detail")){
+		if(isset($queryURL["page"]) && $queryURL["page"]=="detail"){
+			/* MAKING FOLLOWER */
+			if(isset($queryURL["action"]) && $queryURL["action"]=="share"){
+				if(isset($_COOKIE["userID"])){
+					makingFollowerFromShare($queryURL["id"], $_COOKIE["userID"]);
+				}
+				else {
+					$_SESSION["share"] = $queryURL["id"];
+				}
+			}
+			
+			/* OPEN GRAPH FOR SHARING WEB */
 			$ogDetailID = $queryURL["id"];
 			$queryOG = "SELECT *, (SELECT image FROM images WHERE item=item.id LIMIT 1) AS image FROM item RIGHT JOIN user ON user.id=item.userID WHERE item.id=".$ogDetailID;
 			$resultOG = $conn->query($queryOG);
@@ -108,6 +119,12 @@ if($protocol=="http" && $_SERVER['HTTP_HOST']!="localhost") header("Location:htt
 		}
 		
 		if(isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING']==""){
+			//MAKING FOLLOWER
+			if(isset($_SESSION["share"]) && isset($_COOKIE["userID"])){
+				makingFollowerFromShare($_SESSION["share"], $_COOKIE["userID"]);
+			}
+			
+			//OPEN GRAPH
 			$ogImage = $protocol."://".($_SERVER['HTTP_HOST']=="localhost"?($_SERVER['HTTP_HOST']."/".strtolower($domain_title)):$_SERVER['HTTP_HOST'])."/logo_200.jpg";
 			?>
 			<meta property="og:type" content="website" />

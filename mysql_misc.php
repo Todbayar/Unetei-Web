@@ -51,6 +51,20 @@ function getProfileByPhone($phone){
 	return $rowProfile;
 }
 
+function getProfileByID($userID){
+	global $conn;
+	$resultProfile = $conn->query("SELECT * FROM user WHERE id=".$userID);
+	$rowProfile = mysqli_fetch_object($resultProfile);
+	return $rowProfile;
+}
+
+function getItemByID($itemID){
+	global $conn;
+	$resultItem = $conn->query("SELECT * FROM item WHERE id=".$itemID);
+	$rowItem = mysqli_fetch_object($resultItem);
+	return $rowItem;
+}
+
 function getAffiliateID($id){
 	global $superduperadmin, $conn;
 	$resultAffiliate = $conn->query("SELECT (SELECT id FROM user WHERE phone=u.affiliate) AS affiliate_id FROM user AS u WHERE id=".$id);
@@ -65,6 +79,16 @@ function getAffiliatePhone($id){
 	$resultAffiliatePhone = $conn->query("SELECT affiliate FROM user WHERE id=".$id);
 	$rowAffiliatePhone = mysqli_fetch_array($resultAffiliatePhone);
 	return $rowAffiliatePhone["affiliate"];
+}
+
+function setAffiliatePhone($phone, $userID){
+	global $conn;
+	if($conn->query("UPDATE user SET affiliate='".$phone."' WHERE id=".$userID)){
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 
 function getPhone($id){
@@ -253,6 +277,24 @@ function findTypeOfVideo($name){
    	}
 	else if($type == "mov"){
 		return "video/quicktime";
+	}
+}
+
+function makingFollowerFromShare($sharedItemID, $currentUserID){
+	global $superduperadmin;
+	if(!isItemOwner($sharedItemID,$currentUserID)){
+		$userObj = getProfileByID($currentUserID);
+		if(is_null($userObj->affiliate) || $userObj->affiliate==""){
+			$itemObj = getItemByID($sharedItemID);
+			if(setAffiliatePhone(getPhone($itemObj->userID),$currentUserID)){
+				$message = "Баяр хүргье! Таны шэйрэлсэн<br/>";
+				$message .= $itemObj->title." (#".$itemObj->id.") зараар<br/>";
+				$message .= "Хэрэгллэгч ".convertRoleInString($userObj->role)." ".$userObj->name." (".$userObj->phone.") таны дагагч боллоо<br/>";
+				$message .= "Амжилт хүсье";
+				chat_send(getUserIDFromPhone($superduperadmin), $itemObj->userID, 0, $message, false);
+				unset($_SESSION["share"]);
+			}
+		}
 	}
 }
 
