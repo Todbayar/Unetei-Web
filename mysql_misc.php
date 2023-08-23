@@ -9,6 +9,42 @@ require_once "./include/PHPMailer/src/Exception.php";
 require_once "./include/PHPMailer/src/PHPMailer.php";
 require_once "./include/PHPMailer/src/SMTP.php";
 
+function get_client_ip() {
+    $ipaddress = '';
+    if (isset($_SERVER['HTTP_CLIENT_IP']))
+        $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
+    else if(isset($_SERVER['HTTP_X_FORWARDED_FOR']))
+        $ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    else if(isset($_SERVER['HTTP_X_FORWARDED']))
+        $ipaddress = $_SERVER['HTTP_X_FORWARDED'];
+    else if(isset($_SERVER['HTTP_FORWARDED_FOR']))
+        $ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
+    else if(isset($_SERVER['HTTP_FORWARDED']))
+        $ipaddress = $_SERVER['HTTP_FORWARDED'];
+    else if(isset($_SERVER['REMOTE_ADDR']))
+        $ipaddress = $_SERVER['REMOTE_ADDR'];
+    else
+        $ipaddress = 'UNKNOWN';
+    return $ipaddress;
+}
+
+function update_client_ip(){
+	global $conn;
+	$ip = get_client_ip();
+	$query = "INSERT INTO ipaddress (address, datetime) VALUES ('".$ip."',CURRENT_TIMESTAMP()) ON DUPLICATE KEY UPDATE datetime=CURRENT_TIMESTAMP()";
+	if($conn->query($query)){
+		if(isset($_COOKIE["userID"])){
+			$queryUpdate = "UPDATE ipaddress SET phone='".getPhone($_COOKIE["userID"])."' WHERE address='".$ip."'";
+			if($conn->query($queryUpdate)){
+				return true;		
+			}
+			else {
+				return false;
+			}
+		}
+	}
+}
+
 function urlDepthShift($depth, $shift){
 	$depthArr = explode('/',$depth);
 	$depthNew = "";

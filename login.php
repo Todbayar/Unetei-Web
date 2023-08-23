@@ -165,8 +165,8 @@ function phoneAuthCallAccept(phone){
 	}
 	
 	$("#phonecallverifier_container #error").text("Та дуудлага хийнэ үү... ("+phoneCallValidTimeout+")");
-//	if(phoneCallValidTimeout==intervalWaitTime/2) $("#loginSmsMethodOption").show();	
-	if(phoneCallValidTimeout==25) $("#loginSmsMethodOption").show();		
+	if(phoneCallValidTimeout==intervalWaitTime/2) $("#loginSmsMethodOption").show();	
+//	if(phoneCallValidTimeout==25) $("#loginSmsMethodOption").show();		
 	phoneCallValidTimeout--;
 }
 	
@@ -246,7 +246,7 @@ function jumpLoginSmsMethod(){
 		<button disabled id="loginVerify" class="button_yellow" type="button" style="font: normal 18px Arial" onClick="onVerifyCodeSubmit(this)">Үргэлжлүүлэх</button>
 	</div>
 	<div id="phonecallverifier_container" style="text-align: center; display: none">
-		<div style="margin-bottom: 10px"><i class="fa-solid fa-phone-volume" style="margin-right: 5px"></i>Та автомат баталгаажуулагч <?php echo substr($phone_validater_superduperadmin,0,4)."<b>".substr($phone_validater_superduperadmin,4)."</b>"; ?> дугаарлуу дуудлага хийж <b id="phoneverifier_number"></b> дугаараа баталгаажуулна уу?<br/> Автомат баталгаажуулагч дуудлага ирэнгүүт салгах болно.</div>
+		<div style="margin-bottom: 10px"><i class="fa-solid fa-phone-volume" style="margin-right: 5px"></i>Та автомат баталгаажуулагч <a href="tel:<?php echo $phone_validater_superduperadmin; ?>"><?php echo substr($phone_validater_superduperadmin,0,4)."<b>".substr($phone_validater_superduperadmin,4)."</b>"; ?></a> дугаарлуу дуудлага хийж <b id="phoneverifier_number"></b> дугаараа баталгаажуулна уу?<br/> Автомат баталгаажуулагч дуудлага ирэнгүүт салгах болно.</div>
 		<img id="imageLoginCallingOperator" src="arduino.gif" width="100px" height="100px" style="object-fit: contain; border-radius: 100%" />
 <!--		<img src="arduino1.gif" width="200px" height="200px" style="object-fit: contain" />-->
 		<div id="error" style="margin-top: 10px">Та дуудлага хийнэ үү...</div>
