@@ -1,0 +1,2 @@
+*/2	*	*	*	*	curl https://zarchi.mn/mysql_email_notification_automatically_sender.php?superduperadminphone=+97699213557	    
+*/2	*	*	*	*	curl https://zarchi.mn/mysql_newuser_notification_automatically_sender.php?superduperadminphone=+97699213557
