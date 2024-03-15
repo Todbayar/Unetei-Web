@@ -104,6 +104,7 @@ include_once "info.php";
 	.searchResult .list .item {
 		width: 100%;
 		height: 220px;
+		
 	}
 }
 
@@ -405,7 +406,7 @@ function recursiveFetchCategory(tableID, parentID, title, icon){
 		var html = "<div id=\"selectedCategory"+categoryTableID+"\"";
 		html += " onClick=\"recursiveFetchCategory("+categoryTableID+","+categoryParentID+")\"";
 		html += " class=\"button_yellow\" style=\"float:left; margin:5px; height:18px; background: #ddf0ff\">";
-		if(icon != "null") html += "<img src=\"./<?php echo $path; ?>/"+icon+"\" width=\"32px\" height=\"32px\">";
+		if(icon != "null") html += "<img src=\"./<?php echo $path; ?>/"+icon+"\" width=\"32px\" height=\"32px\" alt=\"menu\">";
 		html += "<div style=\"margin-left: 5px\">"+title+"</div><i class=\"fa-solid fa-xmark\" style=\"margin-left: 5px; color:#adcfea\"></i></div>";
 		$(".searchCategoryListSelected").append(html);
 		searchPage = 0;
@@ -437,7 +438,7 @@ function recursiveFetchCategory(tableID, parentID, title, icon){
 //							$("#categoryImage"+objCategoryList[i].id).attr("src", image);
 //						});
 //						html += "<img id=\"categoryImage"+objCategoryList[i].id+"\" src=\"Loading.gif\" width=\"32px\" height=\"32px\">";
-						html += "<img id=\"categoryImage"+objCategoryList[i].id+"\" src=\"<?php echo $path."/"; ?>"+objCategoryList[i].icon+"\" width=\"32px\" height=\"32px\">";
+						html += "<img id=\"categoryImage"+objCategoryList[i].id+"\" src=\"<?php echo $path."/"; ?>"+objCategoryList[i].icon+"\" width=\"32px\" height=\"32px\" alt=\"menu\">";
 					}
 				   	html += "<div style=\"margin-left: 5px\">"+objCategoryList[i].title+"</div></div>";
 				   	$(".searchCategoryListAvailable").append(html);
@@ -566,13 +567,13 @@ function fetchItems(){
 				var media = "";
 				if(vObj.data[i].image != null){
 					if(vObj.data[i].status == 2){
-						media = "<div class=\"image\"><div class=\"badge_vip\" data-top=\"VIP\"></div><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i>"+star+"<img src=\"<?php echo $path."/"; ?>"+vObj.data[i].image+"\" onerror=\"this.onerror=null; this.src='notfound.png'\" /></div>";
+						media = "<div class=\"image\"><div class=\"badge_vip\" data-top=\"VIP\"></div><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i>"+star+"<img src=\"<?php echo $path."/"; ?>"+vObj.data[i].image+"\" onerror=\"this.onerror=null; this.src='notfound.png'\" alt=\""+vObj.data[i].title+"\" /></div>";
 					}
 					else if(vObj.data[i].status == 1){
-						media = "<div class=\"image\"><div class=\"badge_special\" data-top=\"Онцгой\"></div><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i>"+star+"<img src=\"<?php echo $path."/"; ?>"+vObj.data[i].image+"\" onerror=\"this.onerror=null; this.src='notfound.png'\" /></div>";
+						media = "<div class=\"image\"><div class=\"badge_special\" data-top=\"Онцгой\"></div><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i>"+star+"<img src=\"<?php echo $path."/"; ?>"+vObj.data[i].image+"\" onerror=\"this.onerror=null; this.src='notfound.png'\" alt=\""+vObj.data[i].title+"\" /></div>";
 					}
 					else if(vObj.data[i].status == 0){
-						media = "<div class=\"image\"><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i>"+star+"<img src=\"<?php echo $path."/"; ?>"+vObj.data[i].image+"\" onerror=\"this.onerror=null; this.src='notfound.png'\" /></div>";
+						media = "<div class=\"image\"><i class=\"count\"><i class=\"fa-solid fa-camera\"></i> "+vObj.data[i].count_images+"</i>"+star+"<img src=\"<?php echo $path."/"; ?>"+vObj.data[i].image+"\" onerror=\"this.onerror=null; this.src='notfound.png'\" alt=\""+vObj.data[i].title+"\" /></div>";
 					}
 				}
 				else if(vObj.data[i].youtube != ""){

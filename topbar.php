@@ -17,12 +17,12 @@ include_once "info.php";
 </style>
 
 <div onClick="javascript:location.href='<?php echo $urlDepth; ?>'" style="display: flex; align-items: center; cursor: pointer">
-	<img src="<?php echo $urlDepth; ?>icon.png" width="40" height="40" style="object-fit: contain" />
+	<img src="<?php echo $urlDepth; ?>icon.png" width="40" height="40" style="object-fit: contain" alt="icon" />
 	<div class="title"><?php echo strtoupper($domain); ?></div>
 </div>
 <div class="control">
 	<div class="myzar">
-		<div id="myzar_button" onClick="javascript:location.href='<?php echo $urlDepth; ?>?page=login'" style="display: flex; align-items: center; height: 70px; cursor: pointer; position: relative">
+		<div id="myzar_button" onClick="javascript:location.href='<?php echo $urlDepth; ?>?page=loginsms'" style="display: flex; align-items: center; height: 70px; cursor: pointer; position: relative">
 			<?php
 			if(!isset($_GET["page"]) || $_GET["page"] != "myzar"){
 			?>
@@ -102,7 +102,7 @@ include_once "info.php";
 	}
 	else {
 		?>
-		<div class="button_yellow" style="margin-left: 10px" onClick="javascript:location.href='<?php echo $urlDepth; ?>?page=login'">
+		<div class="button_yellow" style="margin-left: 10px" onClick="javascript:location.href='<?php echo $urlDepth; ?>?page=loginsms'">
 			<i class="fa-solid fa-plus"></i>
 			<div class="removable" style="margin-left: 5px">Зар нэмэх</div>
 		</div>

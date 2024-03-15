@@ -506,13 +506,13 @@
 		<div class="footer">
 			<div class="wrap">
 				<div style="display: flex; align-items: center; margin-left:10px; margin-top:5px">
-					<img src="<?php echo $urlDepth; ?>icon.png" width="35" height="35" style="object-fit: contain" />
+					<img src="<?php echo $urlDepth; ?>icon.png" width="35" height="35" style="object-fit: contain" alt="icon" />
 <!--
 					<a href="https://www.hipay.mn/"><img src="<?php echo $urlDepth; ?>hipay.png" width="40" height="40" style="object-fit: contain" /></a>
 					<a href="https://www.arduino.cc/"><img src="<?php echo $urlDepth; ?>arduino.gif" width="35" height="35" style="object-fit: contain" /></a>
 -->
 					<a href="https://www.facebook.com/profile.php?id=100094657236167" style="margin-left: 5px; margin-top: 2px">
-						<img src="<?php echo $urlDepth; ?>facebook_logo.png" width="32" height="32" style="object-fit: contain" />
+						<img src="<?php echo $urlDepth; ?>facebook_logo.png" width="32" height="32" style="object-fit: contain" alt="facebook" />
 					</a>
 				</div>
 				<div class="left" style="margin-left:10px; margin-top:5px">
@@ -608,7 +608,7 @@
 				<i class="fa-solid fa-xmark close" onClick="javascript:document.getElementsByClassName('popup myzar_user_upgrade')[0].style.display='none'; javascript:document.body.style.overflowY='auto'"></i>
 				<div class="header">Хэрэглэгчийн эрх</div>
 				<div style="height:520px; overflow-y: scroll">
-					<div class="affiliate" style="font-size: 14px; margin-bottom: 5px; margin-top: 10px; margin-left: 10px; margin-right: 10px; display: none"><a id="affiliate"></a><br/><a style="font-size: 12px; color: red">Өөрчлөхийг хүсвэл уг цонхыг хаагаад (Миний зар <i class="fas fa-angle-right"></i> Тохиргоо)-ны "Дагагч болох"-ын доор утасны дугаарыг нь оруулаад дахин энэ цонхыг нээнэ үү.</a></div>
+					<div class="affiliate" style="font-size: 14px; margin-bottom: 5px; margin-top: 10px; margin-left: 10px; margin-right: 10px; display: none"><p id="affiliate"></p><br/><p href="#" style="font-size: 12px; color: red">Өөрчлөхийг хүсвэл уг цонхыг хаагаад (Миний зар <i class="fas fa-angle-right"></i> Тохиргоо)-ны "Дагагч болох"-ын доор утасны дугаарыг нь оруулаад дахин энэ цонхыг нээнэ үү.</p></div>
 					<div class="selection superadmin">
 						<div style="font: bold 16px Arial"><input type="radio" id="role" name="role" value="4"> Сүпер админ</div>
 						<div class="price" style="margin-left: 25px"><?php echo number_format($role_price_superadmin); ?> ₮</div>
@@ -683,7 +683,7 @@
 					</div>
 					<div style="font-size: 14px">
 						<ul>
-							<li><a style="text-decoration: underline">Гүйлгээний утга</a> дээр заавал: <b style="color: red">УТАСНЫ ДУГААР</b> оруулна уу.</li>
+							<li><a href="#" style="text-decoration: underline">Гүйлгээний утга</a> дээр заавал: <b style="color: red">УТАСНЫ ДУГААР</b> оруулна уу.</li>
 							<li>Таны захиалсан үйлчилгээ (онцгой зар, зар шинэчлэх, хэрэглэгчийн эрхээ дээшлүүлэх гэх мэт) мөнгө шилжсэний дараа идэвхжинэ.</li>
 <!--							<li>Хэрвээ та заасан төлбөрөөс илүүг шилжүүлбэл хариулт мөнгө тань таны сайтны дансанд орох болно.</li>-->
 						</ul>
